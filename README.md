@@ -1,8 +1,10 @@
 MJExtension
 ===========
+Conversion between JSON and modle
+
 一、MJ友情提醒
 -----------
- * MJExtension是一套“字典和模型之间互相转换”的轻量级框架(Conversion between JSON and modle)
+ * MJExtension是一套“字典和模型之间互相转换”的轻量级框架
  * MJExtension能完成的功能
   * 字典（JSON） --> 模型（model）
   * 模型（model） --> 字典（JSON）
