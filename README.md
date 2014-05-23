@@ -4,14 +4,14 @@ MJExtension
 Conversion between JSON and model
 
  MJ友情提醒：
- 1.MJExtension是一套“字典和模型之间互相转换”的轻量级框架
- 2.MJExtension能完成的功能
- * 字典 --> 模型
- * 模型 --> 字典
- * 字典数组 --> 模型数组
- * 模型数组 --> 字典数组
- 3.具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
- 4.希望各位大神能用得爽
+ * MJExtension是一套“字典和模型之间互相转换”的轻量级框架
+ * MJExtension能完成的功能
+  * 字典 --> 模型
+  * 模型 --> 字典
+  * 字典数组 --> 模型数组
+  * 模型数组 --> 字典数组
+ * 具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
+ * 希望各位大神能用得爽
  
  /**
  *  KeyValue协议
