@@ -1,0 +1,342 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D9CAF2B192FA6020011F500 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9CAF2A192FA6020011F500 /* Foundation.framework */; };
+		2D9CAF2E192FA6020011F500 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF2D192FA6020011F500 /* main.m */; };
+		2D9CAF32192FA6020011F500 /* MJExtensionExample.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */; };
+		2D9CAF52192FA60E0011F500 /* MJArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF3A192FA60E0011F500 /* MJArgument.m */; };
+		2D9CAF53192FA60E0011F500 /* MJIvar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF3D192FA60E0011F500 /* MJIvar.m */; };
+		2D9CAF54192FA60E0011F500 /* MJMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF3F192FA60E0011F500 /* MJMember.m */; };
+		2D9CAF55192FA60E0011F500 /* MJMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF41192FA60E0011F500 /* MJMethod.m */; };
+		2D9CAF56192FA60E0011F500 /* MJType.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF43192FA60E0011F500 /* MJType.m */; };
+		2D9CAF57192FA60E0011F500 /* MJTypeEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */; };
+		2D9CAF58192FA60E0011F500 /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF47192FA60E0011F500 /* NSObject+MJCoding.m */; };
+		2D9CAF59192FA60E0011F500 /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */; };
+		2D9CAF5A192FA60E0011F500 /* NSObject+MJMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF4B192FA60E0011F500 /* NSObject+MJMember.m */; };
+		2D9CAF5B192FA60E0011F500 /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF4D192FA60E0011F500 /* Status.m */; };
+		2D9CAF5C192FA60E0011F500 /* StatusResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF4F192FA60E0011F500 /* StatusResult.m */; };
+		2D9CAF5D192FA60E0011F500 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF51192FA60E0011F500 /* User.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D9CAF25192FA6020011F500 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D9CAF32192FA6020011F500 /* MJExtensionExample.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2D9CAF27192FA6020011F500 /* MJExtensionExample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MJExtensionExample; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D9CAF2A192FA6020011F500 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2D9CAF2D192FA6020011F500 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2D9CAF30192FA6020011F500 /* MJExtensionExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionExample-Prefix.pch"; sourceTree = "<group>"; };
+		2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = MJExtensionExample.1; sourceTree = "<group>"; };
+		2D9CAF39192FA60E0011F500 /* MJArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJArgument.h; sourceTree = "<group>"; };
+		2D9CAF3A192FA60E0011F500 /* MJArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJArgument.m; sourceTree = "<group>"; };
+		2D9CAF3B192FA60E0011F500 /* MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
+		2D9CAF3C192FA60E0011F500 /* MJIvar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJIvar.h; sourceTree = "<group>"; };
+		2D9CAF3D192FA60E0011F500 /* MJIvar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJIvar.m; sourceTree = "<group>"; };
+		2D9CAF3E192FA60E0011F500 /* MJMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJMember.h; sourceTree = "<group>"; };
+		2D9CAF3F192FA60E0011F500 /* MJMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJMember.m; sourceTree = "<group>"; };
+		2D9CAF40192FA60E0011F500 /* MJMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJMethod.h; sourceTree = "<group>"; };
+		2D9CAF41192FA60E0011F500 /* MJMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJMethod.m; sourceTree = "<group>"; };
+		2D9CAF42192FA60E0011F500 /* MJType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJType.h; sourceTree = "<group>"; };
+		2D9CAF43192FA60E0011F500 /* MJType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJType.m; sourceTree = "<group>"; };
+		2D9CAF44192FA60E0011F500 /* MJTypeEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJTypeEncoding.h; sourceTree = "<group>"; };
+		2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJTypeEncoding.m; sourceTree = "<group>"; };
+		2D9CAF46192FA60E0011F500 /* NSObject+MJCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJCoding.h"; sourceTree = "<group>"; };
+		2D9CAF47192FA60E0011F500 /* NSObject+MJCoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJCoding.m"; sourceTree = "<group>"; };
+		2D9CAF48192FA60E0011F500 /* NSObject+MJKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJKeyValue.h"; sourceTree = "<group>"; };
+		2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJKeyValue.m"; sourceTree = "<group>"; };
+		2D9CAF4A192FA60E0011F500 /* NSObject+MJMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJMember.h"; sourceTree = "<group>"; };
+		2D9CAF4B192FA60E0011F500 /* NSObject+MJMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJMember.m"; sourceTree = "<group>"; };
+		2D9CAF4C192FA60E0011F500 /* Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Status.h; sourceTree = "<group>"; };
+		2D9CAF4D192FA60E0011F500 /* Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Status.m; sourceTree = "<group>"; };
+		2D9CAF4E192FA60E0011F500 /* StatusResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusResult.h; sourceTree = "<group>"; };
+		2D9CAF4F192FA60E0011F500 /* StatusResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusResult.m; sourceTree = "<group>"; };
+		2D9CAF50192FA60E0011F500 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		2D9CAF51192FA60E0011F500 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2D9CAF24192FA6020011F500 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D9CAF2B192FA6020011F500 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2D9CAF1E192FA6020011F500 = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF2C192FA6020011F500 /* MJExtensionExample */,
+				2D9CAF29192FA6020011F500 /* Frameworks */,
+				2D9CAF28192FA6020011F500 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2D9CAF28192FA6020011F500 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF27192FA6020011F500 /* MJExtensionExample */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2D9CAF29192FA6020011F500 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF2A192FA6020011F500 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2D9CAF2C192FA6020011F500 /* MJExtensionExample */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF38192FA60E0011F500 /* MJExtension */,
+				2D9CAF4C192FA60E0011F500 /* Status.h */,
+				2D9CAF4D192FA60E0011F500 /* Status.m */,
+				2D9CAF4E192FA60E0011F500 /* StatusResult.h */,
+				2D9CAF4F192FA60E0011F500 /* StatusResult.m */,
+				2D9CAF50192FA60E0011F500 /* User.h */,
+				2D9CAF51192FA60E0011F500 /* User.m */,
+				2D9CAF2D192FA6020011F500 /* main.m */,
+				2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */,
+				2D9CAF2F192FA6020011F500 /* Supporting Files */,
+			);
+			path = MJExtensionExample;
+			sourceTree = "<group>";
+		};
+		2D9CAF2F192FA6020011F500 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF30192FA6020011F500 /* MJExtensionExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2D9CAF38192FA60E0011F500 /* MJExtension */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CAF39192FA60E0011F500 /* MJArgument.h */,
+				2D9CAF3A192FA60E0011F500 /* MJArgument.m */,
+				2D9CAF3B192FA60E0011F500 /* MJExtension.h */,
+				2D9CAF3C192FA60E0011F500 /* MJIvar.h */,
+				2D9CAF3D192FA60E0011F500 /* MJIvar.m */,
+				2D9CAF3E192FA60E0011F500 /* MJMember.h */,
+				2D9CAF3F192FA60E0011F500 /* MJMember.m */,
+				2D9CAF40192FA60E0011F500 /* MJMethod.h */,
+				2D9CAF41192FA60E0011F500 /* MJMethod.m */,
+				2D9CAF42192FA60E0011F500 /* MJType.h */,
+				2D9CAF43192FA60E0011F500 /* MJType.m */,
+				2D9CAF44192FA60E0011F500 /* MJTypeEncoding.h */,
+				2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */,
+				2D9CAF46192FA60E0011F500 /* NSObject+MJCoding.h */,
+				2D9CAF47192FA60E0011F500 /* NSObject+MJCoding.m */,
+				2D9CAF48192FA60E0011F500 /* NSObject+MJKeyValue.h */,
+				2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */,
+				2D9CAF4A192FA60E0011F500 /* NSObject+MJMember.h */,
+				2D9CAF4B192FA60E0011F500 /* NSObject+MJMember.m */,
+			);
+			path = MJExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2D9CAF26192FA6020011F500 /* MJExtensionExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D9CAF35192FA6020011F500 /* Build configuration list for PBXNativeTarget "MJExtensionExample" */;
+			buildPhases = (
+				2D9CAF23192FA6020011F500 /* Sources */,
+				2D9CAF24192FA6020011F500 /* Frameworks */,
+				2D9CAF25192FA6020011F500 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MJExtensionExample;
+			productName = MJExtensionExample;
+			productReference = 2D9CAF27192FA6020011F500 /* MJExtensionExample */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2D9CAF1F192FA6020011F500 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = itcast;
+			};
+			buildConfigurationList = 2D9CAF22192FA6020011F500 /* Build configuration list for PBXProject "MJExtensionExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2D9CAF1E192FA6020011F500;
+			productRefGroup = 2D9CAF28192FA6020011F500 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2D9CAF26192FA6020011F500 /* MJExtensionExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D9CAF23192FA6020011F500 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D9CAF5D192FA60E0011F500 /* User.m in Sources */,
+				2D9CAF57192FA60E0011F500 /* MJTypeEncoding.m in Sources */,
+				2D9CAF54192FA60E0011F500 /* MJMember.m in Sources */,
+				2D9CAF5B192FA60E0011F500 /* Status.m in Sources */,
+				2D9CAF5A192FA60E0011F500 /* NSObject+MJMember.m in Sources */,
+				2D9CAF5C192FA60E0011F500 /* StatusResult.m in Sources */,
+				2D9CAF53192FA60E0011F500 /* MJIvar.m in Sources */,
+				2D9CAF2E192FA6020011F500 /* main.m in Sources */,
+				2D9CAF59192FA60E0011F500 /* NSObject+MJKeyValue.m in Sources */,
+				2D9CAF58192FA60E0011F500 /* NSObject+MJCoding.m in Sources */,
+				2D9CAF55192FA60E0011F500 /* MJMethod.m in Sources */,
+				2D9CAF56192FA60E0011F500 /* MJType.m in Sources */,
+				2D9CAF52192FA60E0011F500 /* MJArgument.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2D9CAF33192FA6020011F500 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2D9CAF34192FA6020011F500 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2D9CAF36192FA6020011F500 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MJExtensionExample/MJExtensionExample-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2D9CAF37192FA6020011F500 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MJExtensionExample/MJExtensionExample-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D9CAF22192FA6020011F500 /* Build configuration list for PBXProject "MJExtensionExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D9CAF33192FA6020011F500 /* Debug */,
+				2D9CAF34192FA6020011F500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D9CAF35192FA6020011F500 /* Build configuration list for PBXNativeTarget "MJExtensionExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D9CAF36192FA6020011F500 /* Debug */,
+				2D9CAF37192FA6020011F500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2D9CAF1F192FA6020011F500 /* Project object */;
+}
