@@ -1,6 +1,7 @@
 MJExtension
 ===========
 一、MJ友情提醒：
+-----------
  * MJExtension是一套“字典和模型之间互相转换”的轻量级框(Conversion between JSON and modle)
  * MJExtension能完成的功能
   * 字典（JSON） --> 模型（model）
@@ -11,6 +12,7 @@ MJExtension
  * 希望各位大神能用得爽
 
 二、部分API用法：
+-----------
  * 将字典的键值对转成模型属性
   * - (void)setKeyValues:(NSDictionary *)keyValues;
 
