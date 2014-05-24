@@ -1,6 +1,6 @@
 MJExtension
 ===========
-Conversion between JSON and modle
+Conversion between JSON and model
 
 一、MJ友情提醒
 -----------
