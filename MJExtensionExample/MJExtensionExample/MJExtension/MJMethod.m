@@ -34,7 +34,7 @@
     
     // 1.方法选择器
     _selector = method_getName(method);
-    _name = NSStringFromSelector(_selector);
+    _name = NSStringFromSelector(self.selector);
     
     // 2.参数
     int step = 2; // 跳过前面的2个参数

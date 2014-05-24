@@ -14,7 +14,6 @@
 @interface MJMember : NSObject
 {
     __weak id _srcObject;
-    Class _srcClass;
     NSString *_name;
 }
 /** 成员来源于哪个类（可能是父类） */

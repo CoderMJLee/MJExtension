@@ -24,13 +24,13 @@
 {
     _code = code;
     
-    if (_code.length == 0 || [_code isEqualToString:MJTypeSEL] ||
-        [_code isEqualToString:MJTypeIvar] ||
-        [_code isEqualToString:MJTypeMethod]) {
+    if (code.length == 0 || [code isEqualToString:MJTypeSEL] ||
+        [code isEqualToString:MJTypeIvar] ||
+        [code isEqualToString:MJTypeMethod]) {
         _KVCDisabled = YES;
-    } else if ([_code hasPrefix:@"@"] && _code.length > 3) {
+    } else if ([code hasPrefix:@"@"] && code.length > 3) {
         // 去掉@"和"，截取中间的类型名称
-        _code = [_code substringFromIndex:2];
+        _code = [code substringFromIndex:2];
         _code = [_code substringToIndex:_code.length - 1];
         _typeClass = NSClassFromString(_code);
         
