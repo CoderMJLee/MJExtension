@@ -70,7 +70,7 @@
         if (!value) return;
         
         // 2.如果是模型属性
-        if (ivar.type.typeClass && !ivar.type.fromFoundation) {
+        if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
             value = [ivar.type.typeClass objectWithKeyValues:value];
         } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
             // 3.字典数组-->模型数组
@@ -101,7 +101,7 @@
         if (!value) return;
         
         // 2.如果是模型属性
-        if (ivar.type.typeClass && !ivar.type.fromFoundation) {
+        if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
             value = [value keyValues];
         } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
             // 3.处理数组里面有模型的情况

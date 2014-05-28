@@ -45,7 +45,6 @@
     
     // 3.成员变量的类型符
     NSString *code = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
-//    NSLog(@"---%@-%@---", _name, code);
     _type = [[MJType alloc] initWithCode:code];
 }
 
