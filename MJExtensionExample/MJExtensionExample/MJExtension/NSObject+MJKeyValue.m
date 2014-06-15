@@ -20,7 +20,7 @@
 + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues
 {
     if (![keyValues isKindOfClass:[NSDictionary class]]) {
-        [NSException raise:@"keyValues is not a NSDictionary - keyValues参数不是一个字典" format:nil];
+        [NSException raise:@"keyValues is not a NSDictionary - keyValues参数不是一个字典" format:@"keyValues is a %@ - keyValues参数是一个%@", keyValues.class, keyValues.class];
     }
     
     id model = [[self alloc] init];
@@ -57,7 +57,7 @@
 - (void)setKeyValues:(NSDictionary *)keyValues
 {
     if (![keyValues isKindOfClass:[NSDictionary class]]) {
-        [NSException raise:@"keyValues is not a NSDictionary - keyValues参数不是一个字典" format:nil];
+        [NSException raise:@"keyValues is not a NSDictionary - keyValues参数不是一个字典" format:@"keyValues is a %@ - keyValues参数是一个%@", keyValues.class, keyValues.class];
     }
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
@@ -128,7 +128,7 @@
 {
     // 0.判断真实性
     if (![objectArray isKindOfClass:[NSArray class]]) {
-        [NSException raise:@"objectArray is not a NSArray - objectArray不是一个数组" format:nil];
+        [NSException raise:@"objectArray is not a NSArray - objectArray不是一个数组" format:@"objectArray is a %@ - objectArray参数是一个%@", objectArray.class, objectArray.class];
     }
     
     // 1.过滤
@@ -153,7 +153,7 @@
 {
     // 1.判断真实性
     if (![keyValuesArray isKindOfClass:[NSArray class]]) {
-        [NSException raise:@"keyValuesArray is not a NSArray - keyValuesArray不是一个数组" format:nil];
+        [NSException raise:@"keyValuesArray is not a NSArray - keyValuesArray不是一个数组" format:@"keyValuesArray is a %@ - keyValuesArray参数是一个%@", keyValuesArray.class, keyValuesArray.class];
     }
     
     // 2.创建数组
