@@ -13,6 +13,17 @@
 #pragma mark - 公共方法
 #pragma mark - 字典转模型
 /**
+ *  通过JSON数据来创建一个模型
+ *  @param data JSON数据
+ *  @return 新建的对象
+ */
++ (instancetype)objectWithJSONData:(NSData *)data
+{
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    return [self objectWithKeyValues:dict];
+}
+
+/**
  *  通过字典来创建一个模型
  *  @param keyValues 字典
  *  @return 新建的对象
@@ -117,6 +128,17 @@
     }];
     
     return keyValues;
+}
+
+/**
+ *  通过JSON数据来创建一个模型数组
+ *  @param data JSON数据
+ *  @return 新建的对象
+ */
++ (NSArray *)objectArrayWithJSONData:(NSData *)data
+{
+    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    return [self objectArrayWithKeyValuesArray:array];
 }
 
 /**
