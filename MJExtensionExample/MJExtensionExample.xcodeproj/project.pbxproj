@@ -22,6 +22,7 @@
 		2D9CAF5B192FA60E0011F500 /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF4D192FA60E0011F500 /* Status.m */; };
 		2D9CAF5C192FA60E0011F500 /* StatusResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF4F192FA60E0011F500 /* StatusResult.m */; };
 		2D9CAF5D192FA60E0011F500 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF51192FA60E0011F500 /* User.m */; };
+		2DA30C251976A88600287282 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA30C241976A88600287282 /* MJFoundation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,6 +69,8 @@
 		2D9CAF4F192FA60E0011F500 /* StatusResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusResult.m; sourceTree = "<group>"; };
 		2D9CAF50192FA60E0011F500 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		2D9CAF51192FA60E0011F500 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		2DA30C231976A88600287282 /* MJFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJFoundation.h; sourceTree = "<group>"; };
+		2DA30C241976A88600287282 /* MJFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJFoundation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +157,8 @@
 				2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */,
 				2D9CAF4A192FA60E0011F500 /* NSObject+MJMember.h */,
 				2D9CAF4B192FA60E0011F500 /* NSObject+MJMember.m */,
+				2DA30C231976A88600287282 /* MJFoundation.h */,
+				2DA30C241976A88600287282 /* MJFoundation.m */,
 			);
 			path = MJExtension;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D9CAF5D192FA60E0011F500 /* User.m in Sources */,
+				2DA30C251976A88600287282 /* MJFoundation.m in Sources */,
 				2D9CAF57192FA60E0011F500 /* MJTypeEncoding.m in Sources */,
 				2D9CAF54192FA60E0011F500 /* MJMember.m in Sources */,
 				2D9CAF5B192FA60E0011F500 /* Status.m in Sources */,
@@ -335,6 +341,7 @@
 				2D9CAF37192FA6020011F500 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

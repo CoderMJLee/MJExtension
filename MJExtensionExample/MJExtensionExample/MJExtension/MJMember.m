@@ -8,8 +8,11 @@
 
 #import "MJMember.h"
 #import "MJExtension.h"
+#import "MJFoundation.h"
 
 @implementation MJMember
+
+
 /**
  *  初始化
  *
@@ -29,7 +32,7 @@
 {
     _srcClass = srcClass;
     
-    _srcClassFromFoundation = [NSStringFromClass(srcClass) hasPrefix:@"NS"];
+    _srcClassFromFoundation = [MJFoundation isClassFromFoundation:srcClass];
 }
 
 MJLogAllIvrs
