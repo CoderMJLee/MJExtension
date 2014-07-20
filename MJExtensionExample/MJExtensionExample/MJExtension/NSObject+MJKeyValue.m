@@ -94,6 +94,11 @@
         // 4.赋值
         ivar.value = value;
     }];
+    
+    // 转换完毕
+    if ([self respondsToSelector:@selector(keyValuesDidFinishConvertingToObject)]) {
+        [self keyValuesDidFinishConvertingToObject];
+    }
 }
 
 /**
@@ -126,6 +131,11 @@
         NSString *key = [self keyWithPropertyName:ivar.propertyName];
         keyValues[key] = value;
     }];
+    
+    // 转换完毕
+    if ([self respondsToSelector:@selector(objectDidFinishConvertingToKeyValues)]) {
+        [self objectDidFinishConvertingToKeyValues];
+    }
     
     return keyValues;
 }

@@ -26,6 +26,16 @@
  *  @return 字典中的key是数组属性名，value是数组中存放模型的Class
  */
 - (NSDictionary *)objectClassInArray;
+
+/**
+ *  当字典转模型完毕时调用
+ */
+- (void)keyValuesDidFinishConvertingToObject;
+
+/**
+ *  当模型转字典完毕时调用
+ */
+- (void)objectDidFinishConvertingToKeyValues;
 @end
 
 @interface NSObject (MJKeyValue) <MJKeyValue>
