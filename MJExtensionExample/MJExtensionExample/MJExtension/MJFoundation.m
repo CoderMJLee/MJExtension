@@ -7,6 +7,8 @@
 //
 
 #import "MJFoundation.h"
+#import "MJConst.h"
+
 static NSArray *_foundationClasses;
 
 @implementation MJFoundation
@@ -18,6 +20,7 @@ static NSArray *_foundationClasses;
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
+    MJAssertParamNotNil(c);
     return [_foundationClasses containsObject:NSStringFromClass(c)];
 }
 @end

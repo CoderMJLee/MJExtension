@@ -9,6 +9,7 @@
 #import "MJType.h"
 #import "MJExtension.h"
 #import "MJFoundation.h"
+#import "MJConst.h"
 
 @implementation MJType
 
@@ -24,6 +25,8 @@
 - (void)setCode:(NSString *)code
 {
     _code = code;
+    
+    MJAssertParamNotNil(code);
     
     if (code.length == 0 || [code isEqualToString:MJTypeSEL] ||
         [code isEqualToString:MJTypeIvar] ||

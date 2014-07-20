@@ -8,6 +8,7 @@
 
 #import "MJIvar.h"
 #import "MJTypeEncoding.h"
+#import "MJConst.h"
 
 @implementation MJIvar
 /**
@@ -32,6 +33,8 @@
 - (void)setIvar:(Ivar)ivar
 {
     _ivar = ivar;
+    
+    MJAssertParamNotNil(ivar);
     
     // 1.成员变量名
     _name = [NSString stringWithUTF8String:ivar_getName(ivar)];

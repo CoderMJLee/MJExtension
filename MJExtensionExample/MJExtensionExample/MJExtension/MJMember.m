@@ -9,6 +9,7 @@
 #import "MJMember.h"
 #import "MJExtension.h"
 #import "MJFoundation.h"
+#import "MJConst.h"
 
 @implementation MJMember
 
@@ -31,6 +32,8 @@
 - (void)setSrcClass:(Class)srcClass
 {
     _srcClass = srcClass;
+    
+    MJAssertParamNotNil(srcClass);
     
     _srcClassFromFoundation = [MJFoundation isClassFromFoundation:srcClass];
 }

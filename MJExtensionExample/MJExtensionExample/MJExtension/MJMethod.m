@@ -7,6 +7,7 @@
 //
 
 #import "MJMethod.h"
+#import "MJConst.h"
 
 @implementation MJMethod
 /**
@@ -31,6 +32,8 @@
 - (void)setMethod:(Method)method
 {
     _method = method;
+    
+    MJAssertParamNotNil(method);
     
     // 1.方法选择器
     _selector = method_getName(method);
