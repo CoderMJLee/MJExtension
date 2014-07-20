@@ -35,7 +35,7 @@ void keyValues2object()
                            };
     
     // 2.将字典转为User模型
-    User *user = [User objectWithKeyValues:@"44"];
+    User *user = [User objectWithKeyValues:dict];
     
     // 3.打印User模型的属性
     NSLog(@"name=%@, icon=%@", user.name, user.icon);
