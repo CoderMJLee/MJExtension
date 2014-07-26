@@ -81,7 +81,7 @@
         // 1.取出属性值
         NSString *key = [self keyWithPropertyName:ivar.propertyName];
         id value = keyValues[key];
-        if (!value) return;
+        if (!value || [value isKindOfClass:[NSNull class]]) return;
         
         // 2.如果是模型属性
         if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
