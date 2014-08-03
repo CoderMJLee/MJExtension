@@ -220,23 +220,23 @@ void objectArray2keyValuesArray()
 int main(int argc, const char * argv[])
 {
     @autoreleasepool {
-        // 简单的字典 -> 模型
-        keyValues2object();
-        
-        // 复杂的字典 -> 模型 (模型里面包含了模型)
-        keyValues2object2();
+//        // 简单的字典 -> 模型
+//        keyValues2object();
+//        
+//        // 复杂的字典 -> 模型 (模型里面包含了模型)
+//        keyValues2object2();
         
         // 复杂的字典 -> 模型 (模型的数组属性里面又装着模型)
         keyValues2object3();
         
-        // 字典数组 -> 模型数组
-        keyValuesArray2objectArray();
-        
-        // 模型转字典
-        object2keyValues();
-        
-        // 模型数组 -> 字典数组
-        objectArray2keyValuesArray();
+//        // 字典数组 -> 模型数组
+//        keyValuesArray2objectArray();
+//        
+//        // 模型转字典
+//        object2keyValues();
+//        
+//        // 模型数组 -> 字典数组
+//        objectArray2keyValuesArray();
     }
     return 0;
 }

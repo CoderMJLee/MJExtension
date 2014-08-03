@@ -15,12 +15,22 @@ static NSArray *_foundationClasses;
 
 + (void)initialize
 {
-    _foundationClasses = @[@"NSArray",@"NSAutoreleasePool",@"NSBundle",@"NSByteOrder",@"NSCalendar",@"NSCharacterSet",@"NSCoder",@"NSData",@"NSDate",@"NSDateFormatter",@"NSDecimal",@"NSDecimalNumber",@"NSDictionary",@"NSEnumerator",@"NSError",@"NSException",@"NSFileHandle",@"NSFileManager",@"NSFormatter",@"NSHashTable",@"NSHTTPCookie",@"NSHTTPCookieStorage",@"NSIndexPath",@"NSIndexSet",@"NSInvocation",@"NSJSONSerialization",@"NSKeyValueCoding",@"NSKeyValueObserving",@"NSKeyedArchiver",@"NSLocale",@"NSLock",@"NSMapTable",@"NSMethodSignature",@"NSNotification",@"NSNotificationQueue",@"NSNull",@"NSNumberFormatter",@"NSObject",@"NSOperation",@"NSOrderedSet",@"NSOrthography",@"NSPathUtilities",@"NSPointerArray",@"NSPointerFunctions",@"NSPort",@"NSProcessInfo",@"NSPropertyList",@"NSProxy",@"NSRange",@"NSRegularExpression",@"NSRunLoop",@"NSScanner",@"NSSet",@"NSSortDescriptor",@"NSStream",@"NSString",@"NSTextCheckingResult",@"NSThread",@"NSTimeZone",@"NSTimer",@"NSURL",@"NSURLAuthenticationChallenge",@"NSURLCache",@"NSURLConnection",@"NSURLCredential",@"NSURLCredentialStorage",@"NSURLError",@"NSURLProtectionSpace",@"NSURLProtocol",@"NSURLRequest",@"NSURLResponse",@"NSUserDefaults",@"NSValue",@"NSValueTransformer",@"NSXMLParser",@"NSZone"];
+    _foundationClasses = @[@"NSArray",@"NSAutoreleasePool",@"NSBundle",@"NSByteOrder",@"NSCalendar",@"NSCharacterSet",@"NSCoder",@"NSData",@"NSDate",@"NSDateFormatter",@"NSDecimal",@"NSDecimalNumber",@"NSDictionary",@"NSEnumerator",@"NSError",@"NSException",@"NSFileHandle",@"NSFileManager",@"NSFormatter",@"NSHashTable",@"NSHTTPCookie",@"NSHTTPCookieStorage",@"NSIndexPath",@"NSIndexSet",@"NSInvocation",@"NSJSONSerialization",@"NSKeyValueCoding",@"NSKeyValueObserving",@"NSKeyedArchiver",@"NSLocale",@"NSLock",@"NSMapTable",@"NSMethodSignature",@"NSNotification",@"NSNotificationQueue",@"NSNull",@"NSNumberFormatter",@"NSOperation",@"NSOrderedSet",@"NSOrthography",@"NSPathUtilities",@"NSPointerArray",@"NSPointerFunctions",@"NSPort",@"NSProcessInfo",@"NSPropertyList",@"NSProxy",@"NSRange",@"NSSet",@"NSSortDescriptor",@"NSStream",@"NSString",@"NSTextCheckingResult",@"NSThread",@"NSTimeZone",@"NSTimer",@"NSURL",@"NSURLAuthenticationChallenge",@"NSURLCache",@"NSURLConnection",@"NSURLCredential",@"NSURLCredentialStorage",@"NSURLError",@"NSURLProtectionSpace",@"NSURLProtocol",@"NSURLRequest",@"NSURLResponse",@"NSUserDefaults",@"NSValue",@"NSValueTransformer",@"NSXMLParser",@"NSZone"];
 }
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
     MJAssertParamNotNil(c);
-    return [_foundationClasses containsObject:NSStringFromClass(c)];
+    __block BOOL contains = [_foundationClasses containsObject:NSStringFromClass(c)];
+    if (!contains) {
+        [_foundationClasses enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+            Class superc = NSClassFromString(obj);
+            if ([c isSubclassOfClass:superc]) {
+                contains = YES;
+                *stop = YES;
+            }
+        }];
+    }
+    return contains;
 }
 @end

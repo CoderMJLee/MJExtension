@@ -12,7 +12,7 @@
 /**
  *  存放着某一页微博数据（里面都是Status模型）
  */
-@property (strong, nonatomic) NSArray *statuses;
+@property (strong, nonatomic) NSMutableArray *statuses;
 
 /**
  *  总数
