@@ -5,15 +5,9 @@
 #ifdef DEBUG  // 调试状态
 // 打开LOG功能
 #define MJLog(...) NSLog(__VA_ARGS__)
-// 打开断言功能
-#define MJAssert(condition, desc) NSAssert(condition, @"\n报错文件：%@\n报错行数：第%d行\n报错方法：%s\n错误描述：%@", [NSString stringWithUTF8String:__FILE__], __LINE__,  __FUNCTION__, desc)
-#define MJAssertParamNotNil(param) MJAssert(param, [[NSString stringWithFormat:@#param] stringByAppendingString:@"参数不能为nil"])
 #else // 发布状态
 // 关闭LOG功能
 #define MJLog(...)
-// 关闭断言功能
-#define MJAssert(condition, desc)
-#define MJAssertParamNotNil(param)
 #endif
 
 // 颜色
@@ -21,5 +15,20 @@
 
 // 随机色
 #define MJRandomColor MJColor(arc4random_uniform(256), arc4random_uniform(256), arc4random_uniform(256))
+
+// 断言
+#define MJAssert2(condition, desc, returnValue) \
+if ((condition) == NO) { \
+NSString *file = [NSString stringWithUTF8String:__FILE__]; \
+MJLog(@"\n警告文件：%@\n警告行数：第%d行\n警告方法：%s\n警告描述：%@", file, __LINE__,  __FUNCTION__, desc); \
+return returnValue; \
+}
+
+#define MJAssert(condition, desc) MJAssert2(condition, desc, )
+
+#define MJAssertParamNotNil2(param, returnValue) \
+MJAssert2(param, [[NSString stringWithFormat:@#param] stringByAppendingString:@"参数不能为nil"], returnValue)
+
+#define MJAssertParamNotNil(param) MJAssertParamNotNil2(param, )
 
 #endif
