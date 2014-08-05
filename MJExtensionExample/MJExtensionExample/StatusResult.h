@@ -17,7 +17,7 @@
 /**
  *  总数
  */
-@property (assign, nonatomic) int totalNumber;
+@property (assign, nonatomic) NSNumber *totalNumber;
 
 /**
  *  上一页的游标
