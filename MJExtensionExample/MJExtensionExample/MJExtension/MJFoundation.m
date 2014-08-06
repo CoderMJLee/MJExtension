@@ -15,7 +15,7 @@ static NSArray *_foundationClasses;
 
 + (void)initialize
 {
-    _foundationClasses = @[@"NSNumber",@"NSArray",@"NSMutableArray",@"NSData",@"NSMutableData",@"NSDate",@"NSDictionary",@"NSMutableDictionary",@"NSString",@"NSMutableString"];
+    _foundationClasses = @[@"NSObject", @"NSNumber",@"NSArray",@"NSMutableArray",@"NSData",@"NSMutableData",@"NSDate",@"NSDictionary",@"NSMutableDictionary",@"NSString",@"NSMutableString"];
 }
 
 + (BOOL)isClassFromFoundation:(Class)c
