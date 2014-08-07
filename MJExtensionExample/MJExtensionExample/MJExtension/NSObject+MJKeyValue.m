@@ -87,7 +87,8 @@
         if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
             value = [ivar.type.typeClass objectWithKeyValues:value];
         } else if (ivar.type.typeClass == [NSString class] && [value isKindOfClass:[NSNumber class]]) {
-            value = [value description];
+            NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
+            value = [fmt stringFromNumber:value];
         } else if (ivar.type.typeClass == [NSNumber class] && [value isKindOfClass:[NSString class]]) {
             NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
             value = [fmt numberFromString:value];
