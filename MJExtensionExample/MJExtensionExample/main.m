@@ -129,7 +129,7 @@ void keyValues2object3()
     StatusResult *result = [StatusResult objectWithKeyValues:dict];
     
     // 3.打印StatusResult模型的简单属性
-    NSLog(@"totalNumber=%d, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
+    NSLog(@"totalNumber=%@, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
     
     // 4.打印statuses数组中的模型属性
     for (Status *status in result.statuses) {

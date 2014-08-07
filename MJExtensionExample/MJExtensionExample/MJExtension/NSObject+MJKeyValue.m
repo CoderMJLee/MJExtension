@@ -86,6 +86,11 @@
         // 2.如果是模型属性
         if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
             value = [ivar.type.typeClass objectWithKeyValues:value];
+        } else if (ivar.type.typeClass == [NSString class] && [value isKindOfClass:[NSNumber class]]) {
+            value = [value description];
+        } else if (ivar.type.typeClass == [NSNumber class] && [value isKindOfClass:[NSString class]]) {
+            NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
+            value = [fmt numberFromString:value];
         } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
             // 3.字典数组-->模型数组
             Class objectClass = self.objectClassInArray[ivar.propertyName];
