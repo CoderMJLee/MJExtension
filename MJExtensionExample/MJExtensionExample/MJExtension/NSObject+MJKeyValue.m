@@ -94,6 +94,12 @@
             // NSString -> NSNumber
             NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
             value = [fmt numberFromString:value];
+        } else if (ivar.type.typeClass == [NSURL class] && [value isKindOfClass:[NSString class]]) {
+            // NSString -> NSURL
+            value = [NSURL URLWithString:value];
+        } else if (ivar.type.typeClass == [NSString class] && [value isKindOfClass:[NSURL class]]) {
+            // NSURL -> NSString
+            value = [value absoluteString];
         } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
             // 3.字典数组-->模型数组
             Class objectClass = self.objectClassInArray[ivar.propertyName];
