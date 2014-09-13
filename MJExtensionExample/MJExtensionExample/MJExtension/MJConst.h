@@ -21,6 +21,7 @@
 if ((condition) == NO) { \
 NSString *file = [NSString stringWithUTF8String:__FILE__]; \
 MJLog(@"\n警告文件：%@\n警告行数：第%d行\n警告方法：%s\n警告描述：%@", file, __LINE__,  __FUNCTION__, desc); \
+MJLog(@"\n如果不想看到警告信息，可以删掉MJConst.h中的第23、第24行"); \
 return returnValue; \
 }
 

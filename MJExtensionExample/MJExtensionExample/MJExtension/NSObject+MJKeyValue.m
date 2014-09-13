@@ -136,6 +136,8 @@
         // 2.如果是模型属性
         if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
             value = [value keyValues];
+        } else if (ivar.type.typeClass == [NSURL class]) {
+            value = [value absoluteString];
         } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
             // 3.处理数组里面有模型的情况
             Class objectClass = self.objectClassInArray[ivar.propertyName];
