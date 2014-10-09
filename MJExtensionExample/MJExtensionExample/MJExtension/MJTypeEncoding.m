@@ -5,6 +5,7 @@
 //  Created by mj on 14-1-15.
 //  Copyright (c) 2014年 itcast. All rights reserved.
 //
+#import <Foundation/Foundation.h>
 /**
  *  成员变量类型（属性类型）
  */
