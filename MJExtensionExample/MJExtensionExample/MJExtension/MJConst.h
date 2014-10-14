@@ -28,7 +28,7 @@ return returnValue; \
 #define MJAssert(condition, desc) MJAssert2(condition, desc, )
 
 #define MJAssertParamNotNil2(param, returnValue) \
-MJAssert2(param, [[NSString stringWithFormat:@#param] stringByAppendingString:@"参数不能为nil"], returnValue)
+MJAssert2(param != nil, [[NSString stringWithFormat:@#param] stringByAppendingString:@"参数不能为nil"], returnValue)
 
 #define MJAssertParamNotNil(param) MJAssertParamNotNil2(param, )
 
