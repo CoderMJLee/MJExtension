@@ -12,7 +12,7 @@
  */
 @interface MJArgument : NSObject
 /** 参数的索引 */
-@property (nonatomic, assign) int index;
+@property (nonatomic, assign) NSInteger index;
 /** 参数类型 */
 @property (nonatomic, copy) NSString *type;
 @end
