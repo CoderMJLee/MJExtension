@@ -14,7 +14,7 @@
 		<string>https://github.com/CoderMJLee/MJExtension.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>MJExtensionExample/MJExtensionExample.xcodeproj/project.xcworkspace</string>
+	<string>MJExtensionExample/MJExtensionExample.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>7C25AC53B95FE9469712D29C518D4ECD1787C7CD</key>

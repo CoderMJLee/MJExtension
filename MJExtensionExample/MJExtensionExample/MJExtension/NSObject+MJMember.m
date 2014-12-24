@@ -26,6 +26,7 @@
             MJIvar *ivar = [[MJIvar alloc] initWithIvar:ivars[i] srcObject:self];
             ivar.srcClass = c;
             block(ivar, stop);
+            if (*stop) break;
         }
         
         // 3.释放内存
@@ -48,6 +49,7 @@
             MJMethod *method = [[MJMethod alloc] initWithMethod:methods[i] srcObject:self];
             method.srcClass = c;
             block(method, stop);
+            if (*stop) break;
         }
         
         // 3.释放内存
