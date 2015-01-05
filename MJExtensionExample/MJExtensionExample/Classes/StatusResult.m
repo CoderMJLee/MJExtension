@@ -9,10 +9,14 @@
 #import "StatusResult.h"
 #import "MJExtension.h"
 #import "Status.h"
+#import "Ad.h"
 
 @implementation StatusResult
 - (NSDictionary *)objectClassInArray
 {
-    return @{@"statuses" : [Status class]};
+    return @{
+         @"statuses" : [Status class],
+         @"ads" : [Ad class]
+    };
 }
 @end

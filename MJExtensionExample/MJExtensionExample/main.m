@@ -20,8 +20,36 @@
 #import <Foundation/Foundation.h>
 #import "MJExtension.h"
 #import "User.h"
+#import "Ad.h"
 #import "Status.h"
+#import "Student.h"
 #import "StatusResult.h"
+
+/** 函数的声明（只用于此示例程序，仅仅是为了演示框架的使用） */
+void keyValues2object();
+void keyValues2object2();
+void keyValues2object3();
+void keyValues2object4();
+void keyValuesArray2objectArray();
+void object2keyValues();
+void objectArray2keyValuesArray();
+void execute(void (*fn)(), NSString *comment);
+
+/** main函数 */
+int main(int argc, const char * argv[])
+{
+    @autoreleasepool {
+        execute(keyValues2object, @"简单的字典 -> 模型");
+        execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
+        execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
+        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id）");
+        execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
+        execute(object2keyValues, @"模型转字典");
+        execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
+    }
+    return 0;
+}
+
 
 /**
  *  简单的字典 -> 模型
@@ -118,6 +146,17 @@ void keyValues2object3()
                                    
                                    ],
                            
+                           @"ads" : @[
+                                   @{
+                                       @"image" : @"ad01.png",
+                                       @"url" : @"http://www.ad01.com"
+                                       },
+                                   @{
+                                       @"image" : @"ad02.png",
+                                       @"url" : @"http://www.ad02.com"
+                                       }
+                                   ],
+                           
                            @"totalNumber" : @"2014",
                            
                            @"previousCursor" : @"13476589",
@@ -138,6 +177,29 @@ void keyValues2object3()
         NSString *icon = status.user.icon;
         NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
     }
+    
+    // 5.打印ads数组中的模型属性
+    for (Ad *ad in result.ads) {
+        NSLog(@"image=%@, url=%@", ad.image, ad.url);
+    }
+}
+
+/**
+ * 简单的字典 -> 模型（key替换，比如ID和id）
+ */
+void keyValues2object4()
+{
+    // 1.定义一个字典
+    NSDictionary *dict = @{
+                           @"id" : @"20",
+                           @"name" : @"lufy",
+                           };
+    
+    // 2.将字典转为Student模型
+    Student *stu = [Student objectWithKeyValues:dict];
+    
+    // 3.打印Student模型的属性
+    NSLog(@"id=%@, name=%@", stu.ID, stu.name);
 }
 
 /**
@@ -217,26 +279,9 @@ void objectArray2keyValuesArray()
     NSLog(@"%@", dictArray);
 }
 
-int main(int argc, const char * argv[])
+void execute(void (*fn)(), NSString *comment)
 {
-    @autoreleasepool {
-        // 简单的字典 -> 模型
-        keyValues2object();
-        
-        // 复杂的字典 -> 模型 (模型里面包含了模型)
-        keyValues2object2();
-        
-        // 复杂的字典 -> 模型 (模型的数组属性里面又装着模型)
-        keyValues2object3();
-        
-        // 字典数组 -> 模型数组
-        keyValuesArray2objectArray();
-        
-        // 模型转字典
-        object2keyValues();
-        
-        // 模型数组 -> 字典数组
-        objectArray2keyValuesArray();
-    }
-    return 0;
+    NSLog(@"[******************%@******************开始]", comment);
+    fn();
+    NSLog(@"[******************%@******************结尾]\n ", comment);
 }

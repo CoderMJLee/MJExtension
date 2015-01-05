@@ -15,6 +15,11 @@
 @property (strong, nonatomic) NSMutableArray *statuses;
 
 /**
+ *  存放着一堆的广告数据（里面都是Ad模型）
+ */
+@property (strong, nonatomic) NSArray *ads;
+
+/**
  *  总数
  */
 @property (strong, nonatomic) NSNumber *totalNumber;
