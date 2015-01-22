@@ -33,8 +33,7 @@
  */
 + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues
 {
-    NSString *desc = [NSString stringWithFormat:@"keyValues is not a NSDictionary - keyValues参数不是一个字典, keyValues is a %@ - keyValues参数是一个%@", keyValues.class, keyValues.class];
-    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], desc, nil);
+    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], @"参数不是一个字典", nil);
     
     id model = [[self alloc] init];
     [model setKeyValues:keyValues];
@@ -71,8 +70,7 @@
  */
 - (void)setKeyValues:(NSDictionary *)keyValues
 {
-    NSString *desc = [NSString stringWithFormat:@"keyValues is not a NSDictionary - keyValues参数不是一个字典, keyValues is a %@ - keyValues参数是一个%@", keyValues.class, keyValues.class];
-    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], desc, );
+    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], @"参数不是一个字典", );
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 来自Foundation框架的成员变量，直接返回
@@ -180,8 +178,7 @@
 + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray
 {
     // 0.判断真实性
-    NSString *desc = [NSString stringWithFormat:@"objectArray is not a NSArray - objectArray不是一个数组, objectArray is a %@ - objectArray参数是一个%@", objectArray.class, objectArray.class];
-    MJAssert2([objectArray isKindOfClass:[NSArray class]], desc, nil);
+    MJAssert2([objectArray isKindOfClass:[NSArray class]], @"参数不是一个数组", nil);
     
     // 1.过滤
     if (![objectArray isKindOfClass:[NSArray class]]) return objectArray;
@@ -204,8 +201,7 @@
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
 {
     // 1.判断真实性
-    NSString *desc = [NSString stringWithFormat:@"keyValuesArray is not a keyValuesArray - keyValuesArray不是一个数组, keyValuesArray is a %@ - keyValuesArray参数是一个%@", keyValuesArray.class, keyValuesArray.class];
-    MJAssert2([keyValuesArray isKindOfClass:[NSArray class]], desc, nil);
+    MJAssert2([keyValuesArray isKindOfClass:[NSArray class]], @"参数不是一个数组", nil);
     
     // 2.创建数组
     NSMutableArray *modelArray = [NSMutableArray array];
