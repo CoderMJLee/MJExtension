@@ -108,6 +108,7 @@ static NSNumberFormatter *_numberFormatter;
         }
         
         // 4.赋值
+        ivar.srcObject = self;
         ivar.value = value;
     }];
     

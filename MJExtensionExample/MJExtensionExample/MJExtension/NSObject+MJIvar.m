@@ -51,7 +51,6 @@ static const char MJCachedIvarsKey;
     NSArray *ivars = [self cachedIvars];
     BOOL stop = NO;
     for (MJIvar *ivar in ivars) {
-        ivar.srcObject = self;
         block(ivar, &stop);
         if (stop) break;
     }
