@@ -16,6 +16,8 @@
 @interface MJIvar : NSObject
 /** 成员变量 */
 @property (nonatomic, assign) Ivar ivar;
+/** 成员名 */
+@property (nonatomic, copy) NSString *name;
 /** 成员属性名 */
 @property (nonatomic, copy, readonly) NSString *propertyName;
 /** 成员变量的值 */
@@ -34,9 +36,6 @@
 @property (nonatomic, readonly, getter = isSrcClassFromFoundation) BOOL srcClassFromFoundation;
 /** 成员来源于哪个对象 */
 @property (nonatomic, weak) id srcObject;
-
-/** 成员名 */
-@property (nonatomic, copy) NSString *name;
 
 /**
  *  初始化

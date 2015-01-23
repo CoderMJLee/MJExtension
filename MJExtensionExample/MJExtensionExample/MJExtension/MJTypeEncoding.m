@@ -25,11 +25,5 @@ NSString *const MJTypeClass = @"#";
 NSString *const MJTypeSEL = @":";
 NSString *const MJTypeId = @"@";
 
-/**
- *  返回值类型(如果是unsigned，就是大写)
- */
-NSString *const MJReturnTypeVoid = @"v";
-NSString *const MJReturnTypeObject = @"@";
-
 
 

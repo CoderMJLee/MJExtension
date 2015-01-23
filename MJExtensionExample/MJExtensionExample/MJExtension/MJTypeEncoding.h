@@ -25,9 +25,3 @@ extern NSString *const MJTypeClass;
 extern NSString *const MJTypeSEL;
 extern NSString *const MJTypeId;
 
-/**
- *  返回值类型
- */
-extern NSString *const MJReturnTypeVoid;
-extern NSString *const MJReturnTypeObject;
-
