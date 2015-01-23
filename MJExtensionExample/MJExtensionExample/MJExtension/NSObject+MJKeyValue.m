@@ -8,6 +8,7 @@
 
 #import "NSObject+MJKeyValue.h"
 #import "NSObject+MJIvar.h"
+#import "MJType.h"
 #import "MJConst.h"
 
 @implementation NSObject (MJKeyValue)
