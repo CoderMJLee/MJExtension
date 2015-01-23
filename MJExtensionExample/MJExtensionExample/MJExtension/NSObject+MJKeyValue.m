@@ -130,6 +130,7 @@ static NSNumberFormatter *_numberFormatter;
         if (ivar.isSrcClassFromFoundation) return;
         
         // 1.取出属性值
+        ivar.srcObject = self;
         id value = ivar.value;
         if (!value) return;
         
@@ -256,6 +257,7 @@ static NSNumberFormatter *_numberFormatter;
     if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
         key = self.replacedKeyFromPropertyName[propertyName];
     }
+    
     // 2.用属性名作为key
     if (!key) key = propertyName;
     
