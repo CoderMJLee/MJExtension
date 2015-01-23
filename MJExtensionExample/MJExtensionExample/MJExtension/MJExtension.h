@@ -9,7 +9,7 @@
 
 #import "MJTypeEncoding.h"
 #import "NSObject+MJCoding.h"
-#import "NSObject+MJMember.h"
+#import "NSObject+MJIvar.h"
 #import "NSObject+MJKeyValue.h"
 
 #define MJLogAllIvrs \

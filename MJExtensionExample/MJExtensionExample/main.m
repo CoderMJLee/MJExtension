@@ -18,22 +18,13 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "main.h"
 #import "MJExtension.h"
 #import "User.h"
 #import "Ad.h"
 #import "Status.h"
 #import "Student.h"
 #import "StatusResult.h"
-
-/** 函数的声明（只用于此示例程序，仅仅是为了演示框架的使用） */
-void keyValues2object();
-void keyValues2object2();
-void keyValues2object3();
-void keyValues2object4();
-void keyValuesArray2objectArray();
-void object2keyValues();
-void objectArray2keyValuesArray();
-void execute(void (*fn)(), NSString *comment);
 
 /** main函数 */
 int main(int argc, const char * argv[])
@@ -49,7 +40,6 @@ int main(int argc, const char * argv[])
     }
     return 0;
 }
-
 
 /**
  *  简单的字典 -> 模型

@@ -28,4 +28,9 @@
  *  @param code 类型标识符
  */
 - (instancetype)initWithCode:(NSString *)code;
+
+/**
+ *  获得缓存的类型对象
+ */
++ (instancetype)cachedTypeWithCode:(NSString *)code;
 @end

@@ -11,6 +11,12 @@
 #import "MJConst.h"
 
 @implementation NSObject (MJKeyValue)
+static NSNumberFormatter *_numberFormatter;
++ (void)load
+{
+    _numberFormatter = [[NSNumberFormatter alloc] init];
+}
+
 #pragma mark - 公共方法
 #pragma mark - 字典转模型
 /**
@@ -21,8 +27,7 @@
 + (instancetype)objectWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
     return [self objectWithKeyValues:dict];
 }
 
@@ -33,7 +38,7 @@
  */
 + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues
 {
-    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], @"参数不是一个字典", nil);
+    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], nil);
     
     id model = [[self alloc] init];
     [model setKeyValues:keyValues];
@@ -70,40 +75,35 @@
  */
 - (void)setKeyValues:(NSDictionary *)keyValues
 {
-    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], @"参数不是一个字典", );
+    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], );
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 来自Foundation框架的成员变量，直接返回
         if (ivar.isSrcClassFromFoundation) return;
         
         // 1.取出属性值
-        NSString *key = [self keyWithPropertyName:ivar.propertyName];
-        id value = keyValues[key];
+        id value = keyValues[ivar.key];
         if (!value || [value isKindOfClass:[NSNull class]]) return;
         
         // 2.如果是模型属性
-        if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
-            value = [ivar.type.typeClass objectWithKeyValues:value];
-        } else if (ivar.type.typeClass == [NSString class] && [value isKindOfClass:[NSNumber class]]) {
+        Class typeClass = ivar.type.typeClass;
+        if (typeClass && !ivar.type.isFromFoundation) {
+            value = [typeClass objectWithKeyValues:value];
+        } else if (typeClass == [NSString class] && [value isKindOfClass:[NSNumber class]]) {
             // NSNumber -> NSString
-            NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
-            value = [fmt stringFromNumber:value];
-        } else if (ivar.type.typeClass == [NSNumber class] && [value isKindOfClass:[NSString class]]) {
+            value = [_numberFormatter stringFromNumber:value];
+        } else if (typeClass == [NSNumber class] && [value isKindOfClass:[NSString class]]) {
             // NSString -> NSNumber
-            NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
-            value = [fmt numberFromString:value];
-        } else if (ivar.type.typeClass == [NSURL class] && [value isKindOfClass:[NSString class]]) {
+            value = [_numberFormatter numberFromString:value];
+        } else if (typeClass == [NSURL class] && [value isKindOfClass:[NSString class]]) {
             // NSString -> NSURL
             value = [NSURL URLWithString:value];
-        } else if (ivar.type.typeClass == [NSString class] && [value isKindOfClass:[NSURL class]]) {
+        } else if (typeClass == [NSString class] && [value isKindOfClass:[NSURL class]]) {
             // NSURL -> NSString
             value = [value absoluteString];
-        } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
+        } else if (ivar.objectClassInArray) {
             // 3.字典数组-->模型数组
-            Class objectClass = self.objectClassInArray[ivar.propertyName];
-            if (objectClass) {
-                value = [objectClass objectArrayWithKeyValuesArray:value];
-            }
+            value = [ivar.objectClassInArray objectArrayWithKeyValuesArray:value];
         }
         
         // 4.赋值
@@ -165,8 +165,7 @@
 + (NSArray *)objectArrayWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
-    
-    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
     return [self objectArrayWithKeyValuesArray:array];
 }
 
@@ -178,7 +177,7 @@
 + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray
 {
     // 0.判断真实性
-    MJAssert2([objectArray isKindOfClass:[NSArray class]], @"参数不是一个数组", nil);
+    MJAssert2([objectArray isKindOfClass:[NSArray class]], nil);
     
     // 1.过滤
     if (![objectArray isKindOfClass:[NSArray class]]) return objectArray;
@@ -201,17 +200,15 @@
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
 {
     // 1.判断真实性
-    MJAssert2([keyValuesArray isKindOfClass:[NSArray class]], @"参数不是一个数组", nil);
+    MJAssert2([keyValuesArray isKindOfClass:[NSArray class]], nil);
     
     // 2.创建数组
     NSMutableArray *modelArray = [NSMutableArray array];
     
     // 3.遍历
     for (NSDictionary *keyValues in keyValuesArray) {
-        if (![keyValues isKindOfClass:[NSDictionary class]]) continue;
-        
         id model = [self objectWithKeyValues:keyValues];
-        [modelArray addObject:model];
+        if (model) [modelArray addObject:model];
     }
     
     return modelArray;

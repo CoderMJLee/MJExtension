@@ -7,10 +7,23 @@
 //
 
 #import "MJIvar.h"
+#import "MJType.h"
+#import "MJFoundation.h"
 #import "MJTypeEncoding.h"
 #import "MJConst.h"
 
 @implementation MJIvar
+
++ (instancetype)cachedIvarWithIvar:(Ivar)ivar
+{
+    MJIvar *ivarObject = objc_getAssociatedObject(self, ivar);
+    if (ivarObject == nil) {
+        ivarObject = [[self alloc] initWithIvar:ivar];
+        objc_setAssociatedObject(self, ivar, ivarObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return ivarObject;
+}
+
 /**
  *  初始化
  *
@@ -19,9 +32,9 @@
  *
  *  @return 初始化好的对象
  */
-- (instancetype)initWithIvar:(Ivar)ivar srcObject:(id)srcObject
+- (instancetype)initWithIvar:(Ivar)ivar
 {
-    if (self = [super initWithSrcObject:srcObject]) {
+    if (self = [super init]) {
         self.ivar = ivar;
     }
     return self;
@@ -48,7 +61,7 @@
     
     // 3.成员变量的类型符
     NSString *code = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
-    _type = [[MJType alloc] initWithCode:code];
+    _type = [MJType cachedTypeWithCode:code];
 }
 
 /**
@@ -69,4 +82,15 @@
     [_srcObject setValue:value forKey:_propertyName];
 }
 
+/**
+ * 成员来源于哪个类（可能是父类
+ */
+- (void)setSrcClass:(Class)srcClass
+{
+    _srcClass = srcClass;
+    
+    MJAssertParamNotNil(srcClass);
+    
+    _srcClassFromFoundation = [MJFoundation isClassFromFoundation:srcClass];
+}
 @end

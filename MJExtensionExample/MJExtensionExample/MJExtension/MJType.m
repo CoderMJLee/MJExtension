@@ -13,6 +13,24 @@
 
 @implementation MJType
 
+static NSMutableDictionary *_cachedTypes;
++ (void)load
+{
+    _cachedTypes = [NSMutableDictionary dictionary];
+}
+
++ (instancetype)cachedTypeWithCode:(NSString *)code
+{
+    MJAssertParamNotNil2(code, nil);
+    
+    MJType *type = _cachedTypes[code];
+    if (type == nil) {
+        type = [[self alloc] initWithCode:code];
+        _cachedTypes[code] = type;
+    }
+    return type;
+}
+
 - (instancetype)initWithCode:(NSString *)code
 {
     if (self = [super init]) {
@@ -28,17 +46,17 @@
     
     MJAssertParamNotNil(code);
     
-    if (code.length == 0 || [code isEqualToString:MJTypeSEL] ||
-        [code isEqualToString:MJTypeIvar] ||
-        [code isEqualToString:MJTypeMethod]) {
+    if (code.length == 0) {
         _KVCDisabled = YES;
-    } else if ([code hasPrefix:@"@"] && code.length > 3) {
+    } else if (code.length > 3 && [code hasPrefix:@"@\""]) {
         // 去掉@"和"，截取中间的类型名称
-        _code = [code substringFromIndex:2];
-        _code = [_code substringToIndex:_code.length - 1];
+        _code = [code substringWithRange:NSMakeRange(2, code.length - 3)];
         _typeClass = NSClassFromString(_code);
-        
         _fromFoundation = [MJFoundation isClassFromFoundation:_typeClass];
+    } else if ([code isEqualToString:MJTypeSEL] ||
+               [code isEqualToString:MJTypeIvar] ||
+               [code isEqualToString:MJTypeMethod]) {
+        _KVCDisabled = YES;
     }
 }
 

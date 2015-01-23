@@ -1,5 +1,5 @@
 //
-//  NSObject+MJMember.h
+//  NSObject+MJIvar.h
 //  MJExtension
 //
 //  Created by mj on 14-1-15.
@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "MJIvar.h"
-#import "MJMethod.h"
 
 /**
  *  遍历所有类的block（父类）
@@ -21,11 +20,6 @@ typedef void (^MJClassesBlock)(Class c, BOOL *stop);
  *  遍历所有的成员变量
  */
 - (void)enumerateIvarsWithBlock:(MJIvarsBlock)block;
-
-/**
- *  遍历所有的方法
- */
-- (void)enumerateMethodsWithBlock:(MJMethodsBlock)block;
 
 /**
  *  遍历所有的类

@@ -115,4 +115,7 @@
  *  @return 模型数组
  */
 + (NSArray *)objectArrayWithFile:(NSString *)file;
+
+#pragma mark - 其他方法
+- (NSString *)keyWithPropertyName:(NSString *)propertyName;
 @end
