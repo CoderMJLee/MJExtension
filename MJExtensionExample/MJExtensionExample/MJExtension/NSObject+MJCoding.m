@@ -7,7 +7,7 @@
 //
 
 #import "NSObject+MJCoding.h"
-#import "NSObject+MJMember.h"
+#import "NSObject+MJIvar.h"
 
 @implementation NSObject (MJCoding)
 /**
