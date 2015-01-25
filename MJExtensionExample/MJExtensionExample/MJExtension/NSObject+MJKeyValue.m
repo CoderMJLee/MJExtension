@@ -10,15 +10,18 @@
 #import "NSObject+MJIvar.h"
 #import "MJType.h"
 #import "MJConst.h"
+#import "MJFoundation.h"
 
 @implementation NSObject (MJKeyValue)
+
+#pragma mark - --常用的对象--
 static NSNumberFormatter *_numberFormatter;
 + (void)load
 {
     _numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
-#pragma mark - 公共方法
+#pragma mark - --公共方法--
 #pragma mark - 字典转模型
 /**
  *  通过JSON数据来创建一个模型
@@ -28,8 +31,8 @@ static NSNumberFormatter *_numberFormatter;
 + (instancetype)objectWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    return [self objectWithKeyValues:dict];
+    
+    return [self objectWithKeyValues:[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil]];
 }
 
 /**
@@ -42,8 +45,7 @@ static NSNumberFormatter *_numberFormatter;
     MJAssert2([keyValues isKindOfClass:[NSDictionary class]], nil);
     
     id model = [[self alloc] init];
-    [model setKeyValues:keyValues];
-    return model;
+    return [model setKeyValues:keyValues];
 }
 
 /**
@@ -54,8 +56,8 @@ static NSNumberFormatter *_numberFormatter;
 + (instancetype)objectWithFilename:(NSString *)filename
 {
     MJAssertParamNotNil2(filename, nil);
-    NSString *file = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
-    return [self objectWithFile:file];
+    
+    return [self objectWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil]];
 }
 
 /**
@@ -66,42 +68,44 @@ static NSNumberFormatter *_numberFormatter;
 + (instancetype)objectWithFile:(NSString *)file
 {
     MJAssertParamNotNil2(file, nil);
-    NSDictionary *keyValues = [NSDictionary dictionaryWithContentsOfFile:file];
-    return [self objectWithKeyValues:keyValues];
+    
+    return [self objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file]];
 }
 
 /**
  *  将字典的键值对转成模型属性
  *  @param keyValues 字典
  */
-- (void)setKeyValues:(NSDictionary *)keyValues
+- (instancetype)setKeyValues:(NSDictionary *)keyValues
 {
-    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], );
+    MJAssert2([keyValues isKindOfClass:[NSDictionary class]], self);
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        // 来自Foundation框架的成员变量，直接返回
-        if (ivar.isSrcClassFromFoundation) return;
-        
         // 1.取出属性值
         id value = keyValues[ivar.key];
-        if (!value || [value isKindOfClass:[NSNull class]]) return;
+        if (!value || value == [NSNull null]) return;
         
         // 2.如果是模型属性
-        Class typeClass = ivar.type.typeClass;
-        if (typeClass && !ivar.type.isFromFoundation) {
+        MJType *type = ivar.type;
+        Class typeClass = type.typeClass;
+        if (!type.isFromFoundation && typeClass) {
             value = [typeClass objectWithKeyValues:value];
-        } else if (typeClass == [NSString class] && [value isKindOfClass:[NSNumber class]]) {
-            // NSNumber -> NSString
-            value = [_numberFormatter stringFromNumber:value];
-        } else if (typeClass == [NSNumber class] && [value isKindOfClass:[NSString class]]) {
-            // NSString -> NSNumber
-            value = [_numberFormatter numberFromString:value];
-        } else if (typeClass == [NSURL class] && [value isKindOfClass:[NSString class]]) {
-            // NSString -> NSURL
-            value = [NSURL URLWithString:value];
-        } else if (typeClass == [NSString class] && [value isKindOfClass:[NSURL class]]) {
-            // NSURL -> NSString
-            value = [value absoluteString];
+        } else if (typeClass == [NSString class]) {
+            if ([value isKindOfClass:[NSNumber class]]) {
+                // NSNumber -> NSString
+                value = [_numberFormatter stringFromNumber:value];
+            } else if ([value isKindOfClass:[NSURL class]]) {
+                // NSURL -> NSString
+                value = [value absoluteString];
+            }
+        } else if ([value isKindOfClass:[NSString class]]) {
+            if (typeClass == [NSNumber class]) {
+                // NSString -> NSNumber
+                value = [_numberFormatter numberFromString:value];
+            } else if (typeClass == [NSURL class]) {
+                // NSString -> NSURL
+                value = [NSURL URLWithString:value];
+            }
         } else if (ivar.objectClassInArray) {
             // 3.字典数组-->模型数组
             value = [ivar.objectClassInArray objectArrayWithKeyValuesArray:value];
@@ -116,6 +120,8 @@ static NSNumberFormatter *_numberFormatter;
     if ([self respondsToSelector:@selector(keyValuesDidFinishConvertingToObject)]) {
         [self keyValuesDidFinishConvertingToObject];
     }
+    
+    return self;
 }
 
 /**
@@ -124,32 +130,31 @@ static NSNumberFormatter *_numberFormatter;
  */
 - (NSDictionary *)keyValues
 {
+    // 如果自己不是模型类
+    if ([MJFoundation isClassFromFoundation:[self class]]) return (NSDictionary *)self;
+    
     NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        if (ivar.isSrcClassFromFoundation) return;
-        
         // 1.取出属性值
         ivar.srcObject = self;
         id value = ivar.value;
         if (!value) return;
         
         // 2.如果是模型属性
-        if (ivar.type.typeClass && !ivar.type.isFromFoundation) {
+        MJType *type = ivar.type;
+        Class typeClass = type.typeClass;
+        if (!type.isFromFoundation && typeClass) {
             value = [value keyValues];
-        } else if (ivar.type.typeClass == [NSURL class]) {
+        } else if (typeClass == [NSURL class]) {
             value = [value absoluteString];
-        } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
+        } else if (ivar.objectClassInArray) {
             // 3.处理数组里面有模型的情况
-            Class objectClass = self.objectClassInArray[ivar.propertyName];
-            if (objectClass) {
-                value = [objectClass keyValuesArrayWithObjectArray:value];
-            }
+            value = [ivar.objectClassInArray keyValuesArrayWithObjectArray:value];
         }
         
         // 4.赋值
-        NSString *key = [self keyWithPropertyName:ivar.propertyName];
-        keyValues[key] = value;
+        keyValues[ivar.key] = value;
     }];
     
     // 转换完毕
@@ -168,8 +173,8 @@ static NSNumberFormatter *_numberFormatter;
 + (NSArray *)objectArrayWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
-    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    return [self objectArrayWithKeyValuesArray:array];
+    
+    return [self objectArrayWithKeyValuesArray:[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil]];
 }
 
 /**
@@ -182,11 +187,7 @@ static NSNumberFormatter *_numberFormatter;
     // 0.判断真实性
     MJAssert2([objectArray isKindOfClass:[NSArray class]], nil);
     
-    // 1.过滤
-    if (![objectArray isKindOfClass:[NSArray class]]) return objectArray;
-    if (![[objectArray lastObject] isKindOfClass:self]) return objectArray;
-    
-    // 2.创建数组
+    // 1.创建数组
     NSMutableArray *keyValuesArray = [NSMutableArray array];
     for (id object in objectArray) {
         [keyValuesArray addObject:[object keyValues]];
@@ -225,8 +226,8 @@ static NSNumberFormatter *_numberFormatter;
 + (NSArray *)objectArrayWithFilename:(NSString *)filename
 {
     MJAssertParamNotNil2(filename, nil);
-    NSString *file = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
-    return [self objectArrayWithFile:file];
+    
+    return [self objectArrayWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil]];
 }
 
 /**
@@ -237,11 +238,11 @@ static NSNumberFormatter *_numberFormatter;
 + (NSArray *)objectArrayWithFile:(NSString *)file
 {
     MJAssertParamNotNil2(file, nil);
-    NSArray *keyValuesArray = [NSArray arrayWithContentsOfFile:file];
-    return [self objectArrayWithKeyValuesArray:keyValuesArray];
+    
+    return [self objectArrayWithKeyValuesArray:[NSArray arrayWithContentsOfFile:file]];
 }
 
-#pragma mark - 私有方法
+#pragma mark - --私有方法--
 /**
  *  根据属性名获得对应的key
  *
@@ -252,6 +253,7 @@ static NSNumberFormatter *_numberFormatter;
 - (NSString *)keyWithPropertyName:(NSString *)propertyName
 {
     MJAssertParamNotNil2(propertyName, nil);
+    
     NSString *key = nil;
     // 1.查看有没有需要替换的key
     if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {

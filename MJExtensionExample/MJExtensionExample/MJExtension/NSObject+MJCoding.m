@@ -16,7 +16,6 @@
 - (void)encode:(NSCoder *)encoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        if (ivar.isSrcClassFromFoundation) return;
         ivar.srcObject = self;
         [encoder encodeObject:ivar.value forKey:ivar.name];
     }];
@@ -28,7 +27,6 @@
 - (void)decode:(NSCoder *)decoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        if (ivar.isSrcClassFromFoundation) return;
         ivar.srcObject = self;
         ivar.value = [decoder decodeObjectForKey:ivar.name];
     }];

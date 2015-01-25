@@ -17,7 +17,6 @@
 		2D9CAF32192FA6020011F500 /* MJExtensionExample.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */; };
 		2D9CAF53192FA60E0011F500 /* MJIvar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF3D192FA60E0011F500 /* MJIvar.m */; };
 		2D9CAF56192FA60E0011F500 /* MJType.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF43192FA60E0011F500 /* MJType.m */; };
-		2D9CAF57192FA60E0011F500 /* MJTypeEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */; };
 		2D9CAF58192FA60E0011F500 /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF47192FA60E0011F500 /* NSObject+MJCoding.m */; };
 		2D9CAF59192FA60E0011F500 /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */; };
 		2DA30C251976A88600287282 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA30C241976A88600287282 /* MJFoundation.m */; };
@@ -60,8 +59,6 @@
 		2D9CAF3D192FA60E0011F500 /* MJIvar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJIvar.m; sourceTree = "<group>"; };
 		2D9CAF42192FA60E0011F500 /* MJType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJType.h; sourceTree = "<group>"; };
 		2D9CAF43192FA60E0011F500 /* MJType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJType.m; sourceTree = "<group>"; };
-		2D9CAF44192FA60E0011F500 /* MJTypeEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJTypeEncoding.h; sourceTree = "<group>"; };
-		2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJTypeEncoding.m; sourceTree = "<group>"; };
 		2D9CAF46192FA60E0011F500 /* NSObject+MJCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJCoding.h"; sourceTree = "<group>"; };
 		2D9CAF47192FA60E0011F500 /* NSObject+MJCoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJCoding.m"; sourceTree = "<group>"; };
 		2D9CAF48192FA60E0011F500 /* NSObject+MJKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJKeyValue.h"; sourceTree = "<group>"; };
@@ -157,8 +154,6 @@
 				2DA7B58A197BB5B200B62F78 /* MJConst.m */,
 				2D9CAF42192FA60E0011F500 /* MJType.h */,
 				2D9CAF43192FA60E0011F500 /* MJType.m */,
-				2D9CAF44192FA60E0011F500 /* MJTypeEncoding.h */,
-				2D9CAF45192FA60E0011F500 /* MJTypeEncoding.m */,
 				2DA30C231976A88600287282 /* MJFoundation.h */,
 				2DA30C241976A88600287282 /* MJFoundation.m */,
 				2D9CAF3C192FA60E0011F500 /* MJIvar.h */,
@@ -228,7 +223,6 @@
 				2D6CAFF61A5AA0BB00E2BA5E /* Ad.m in Sources */,
 				2D6CAFFC1A5AA34800E2BA5E /* Student.m in Sources */,
 				2DA30C251976A88600287282 /* MJFoundation.m in Sources */,
-				2D9CAF57192FA60E0011F500 /* MJTypeEncoding.m in Sources */,
 				2DA7B58B197BB5B200B62F78 /* MJConst.m in Sources */,
 				2D6CAFF71A5AA0BB00E2BA5E /* Status.m in Sources */,
 				2D9CAF53192FA60E0011F500 /* MJIvar.m in Sources */,

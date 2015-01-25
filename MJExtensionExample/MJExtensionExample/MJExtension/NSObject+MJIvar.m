@@ -8,6 +8,7 @@
 
 #import "NSObject+MJIvar.h"
 #import "NSObject+MJKeyValue.h"
+#import "MJFoundation.h"
 
 @implementation NSObject (MJMember)
 
@@ -77,6 +78,8 @@ static const char MJCachedIvarsKey;
         
         // 4.2.获得父类
         c = class_getSuperclass(c);
+        
+        if ([MJFoundation isClassFromFoundation:c]) break;
     }
 }
 @end

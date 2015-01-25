@@ -32,8 +32,6 @@
 
 /** 成员来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
-/** 成员来源类是否是Foundation框架的 */
-@property (nonatomic, readonly, getter = isSrcClassFromFoundation) BOOL srcClassFromFoundation;
 /** 成员来源于哪个对象 */
 @property (nonatomic, weak) id srcObject;
 

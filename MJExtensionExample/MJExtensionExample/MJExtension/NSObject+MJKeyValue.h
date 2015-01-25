@@ -43,7 +43,7 @@
  *  将字典的键值对转成模型属性
  *  @param keyValues 字典
  */
-- (void)setKeyValues:(NSDictionary *)keyValues;
+- (instancetype)setKeyValues:(NSDictionary *)keyValues;
 
 /**
  *  将模型转成字典

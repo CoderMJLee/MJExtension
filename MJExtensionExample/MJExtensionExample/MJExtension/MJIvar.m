@@ -9,7 +9,6 @@
 #import "MJIvar.h"
 #import "MJType.h"
 #import "MJFoundation.h"
-#import "MJTypeEncoding.h"
 #import "MJConst.h"
 
 @implementation MJIvar
@@ -80,17 +79,5 @@
 {
     if (_type.KVCDisabled) return;
     [_srcObject setValue:value forKey:_propertyName];
-}
-
-/**
- * 成员来源于哪个类（可能是父类
- */
-- (void)setSrcClass:(Class)srcClass
-{
-    _srcClass = srcClass;
-    
-    MJAssertParamNotNil(srcClass);
-    
-    _srcClassFromFoundation = [MJFoundation isClassFromFoundation:srcClass];
 }
 @end

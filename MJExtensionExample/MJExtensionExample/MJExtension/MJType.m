@@ -59,6 +59,4 @@ static NSMutableDictionary *_cachedTypes;
         _KVCDisabled = YES;
     }
 }
-
-MJLogAllIvrs
 @end
