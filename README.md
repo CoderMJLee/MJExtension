@@ -13,7 +13,7 @@ Conversion between JSON and model
  * 具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
  * 希望各位大神能用得爽
 
-二、部分API用法
+二、基本API用法
 -----------
  * 将字典的键值对转成模型属性
   * - (void)setKeyValues:(NSDictionary *)keyValues;
@@ -41,3 +41,21 @@ Conversion between JSON and model
 
  * 通过plist来创建一个模型数组
   * + (NSArray *)objectArrayWithFile:(NSString *)file;
+
+三、其他用法
+-----------
+* 声明：数组中装的是什么模型
+```
+- (NSDictionary *)objectClassInArray {
+	return @{@"dogs" : [Dog class],
+			@"cats" : [Cat class]};
+}
+```
+
+* 声明：模型属性名对应着字典中的哪个key
+```
+- (NSDictionary *)replacedKeyFromPropertyName {
+	return @{@"ID" : @"id",
+			@"desc" : @"description"};
+}
+```
