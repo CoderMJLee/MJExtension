@@ -112,8 +112,7 @@ static NSNumberFormatter *_numberFormatter;
         }
         
         // 4.赋值
-        ivar.srcObject = self;
-        ivar.value = value;
+        [ivar setValue:value forObject:self];
     }];
     
     // 转换完毕
@@ -137,8 +136,7 @@ static NSNumberFormatter *_numberFormatter;
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
-        ivar.srcObject = self;
-        id value = ivar.value;
+        id value = [ivar valueFromObject:self];
         if (!value) return;
         
         // 2.如果是模型属性

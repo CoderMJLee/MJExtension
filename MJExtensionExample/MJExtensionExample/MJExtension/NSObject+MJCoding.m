@@ -16,8 +16,7 @@
 - (void)encode:(NSCoder *)encoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        ivar.srcObject = self;
-        [encoder encodeObject:ivar.value forKey:ivar.name];
+        [encoder encodeObject:[ivar valueFromObject:self] forKey:ivar.name];
     }];
 }
 
@@ -27,8 +26,8 @@
 - (void)decode:(NSCoder *)decoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        ivar.srcObject = self;
-        ivar.value = [decoder decodeObjectForKey:ivar.name];
+        id value = [decoder decodeObjectForKey:ivar.name];
+        [ivar setValue:value forObject:self];
     }];
 }
 @end

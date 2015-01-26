@@ -66,18 +66,18 @@
 /**
  *  获得成员变量的值
  */
-- (id)value
+- (id)valueFromObject:(id)object
 {
     if (_type.KVCDisabled) return [NSNull null];
-    return [_srcObject valueForKey:_propertyName];
+    return [object valueForKey:_propertyName];
 }
 
 /**
  *  设置成员变量的值
  */
-- (void)setValue:(id)value
+- (void)setValue:(id)value forObject:(id)object
 {
     if (_type.KVCDisabled) return;
-    [_srcObject setValue:value forKey:_propertyName];
+    [object setValue:value forKey:_propertyName];
 }
 @end

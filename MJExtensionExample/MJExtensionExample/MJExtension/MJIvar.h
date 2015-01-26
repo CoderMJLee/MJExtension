@@ -20,8 +20,6 @@
 @property (nonatomic, copy) NSString *name;
 /** 成员属性名 */
 @property (nonatomic, copy, readonly) NSString *propertyName;
-/** 成员变量的值 */
-@property (nonatomic) id value;
 /** 成员变量的类型 */
 @property (nonatomic, strong, readonly) MJType *type;
 
@@ -32,8 +30,15 @@
 
 /** 成员来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
-/** 成员来源于哪个对象 */
-@property (nonatomic, weak) id srcObject;
+
+/**
+ * 设置成员变量的值
+ */
+- (void)setValue:(id)value forObject:(id)object;
+/**
+ * 得到成员变量的值
+ */
+- (id)valueFromObject:(id)object;
 
 /**
  *  初始化
