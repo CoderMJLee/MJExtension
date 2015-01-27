@@ -2,7 +2,7 @@
 ---
 The fastest and most convenient conversion between JSON and model
 
-### 能做什么？
+## 能做什么？
 ---
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
@@ -12,7 +12,7 @@ The fastest and most convenient conversion between JSON and model
  	* `模型数组（Model Array）` --> `字典数组（JSON Array）`
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 
-### MJExtension和JSONModel、Mantle等框架的区别
+## MJExtension和JSONModel、Mantle等框架的区别
 ---
 * 转换速率：
 	* 最近一次测试表明：`MJExtension` > `JSONModel` > `Mantle`
@@ -22,7 +22,7 @@ The fastest and most convenient conversion between JSON and model
 	* `Mantle`：要求所有模型类`必须`继承自MTModel基类
 	* `MJExtension`：`不需要`你的模型类继承任何特殊基类，毫无污染，毫无侵入性
 
-### 如何使用MJExtension
+## 如何使用MJExtension
 ---
 * 将`MJExtension文件夹`中的所有源代码拽入项目中
 ```objc
@@ -44,7 +44,7 @@ NSObject+MJKeyValue.m
 ```
 * 导入主头文件：`#import "MJExtension.h"`
 
-### 最简单的字典转模型
+## 最简单的字典转模型
 ---
 ```objc
 @interface User : NSObject
@@ -72,7 +72,7 @@ NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", user.name, user.icon, us
 ##### 核心代码
 * `[User objectWithKeyValues:dict]`
 
-### 模型中嵌套模型
+## 模型中嵌套模型
 ---
 ```objc
 @interface Status : NSObject
@@ -120,7 +120,7 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 ##### 核心代码
 * `[Status objectWithKeyValues:dict]`
 
-### 模型中有个数组属性，数组里面又要装着其他模型
+## 模型中有个数组属性，数组里面又要装着其他模型
 ---
 ```objc
 @interface Ad : NSObject
@@ -210,7 +210,7 @@ for (Ad *ad in result.ads) {
 * 在模型内部实现`objectClassInArray`方法  
 * `[StatusResult objectWithKeyValues:dict]`
 
-### 模型中的属性名和字典中的key对不上
+## 模型中的属性名和字典中的key对不上
 ---
 ```objc
 @interface Student : NSObject
@@ -247,7 +247,7 @@ NSLog(@"ID=%@, name=%@, desc=%@", stu.ID, stu.name, stu.desc);
 * 在模型内部实现`replacedKeyFromPropertyName`方法  
 * `[Student objectWithKeyValues:dict]`
 
-### 将一个字典数组转成模型数组
+## 将一个字典数组转成模型数组
 ---
 ```objc
 NSArray *dictArray = @[
@@ -275,7 +275,7 @@ for (User *user in userArray) {
 ##### 核心代码
 * `[User objectArrayWithKeyValuesArray:dictArray]`
 
-### 将一个模型转成字典
+## 将一个模型转成字典
 ---
 ```objc
 // 新建模型
@@ -303,7 +303,7 @@ NSLog(@"%@", dict);
 ##### 核心代码
 * `status.keyValues`
 
-### 将一个模型数组转成字典数组
+## 将一个模型数组转成字典数组
 ---
 ```objc
 // 新建模型数组
@@ -336,7 +336,7 @@ NSLog(@"%@", dictArray);
 ##### 核心代码
 * `[User keyValuesArrayWithObjectArray:userArray]`
 
-### 更多用法
+## 更多用法
 ---
 * 参考`NSObject+MJKeyValue.h`
 * 参考`NSObject+MJCoding.h`
