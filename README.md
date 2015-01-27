@@ -61,7 +61,8 @@ NSDictionary *dict = @{
 // 将字典转为User模型
 User *user = [User objectWithKeyValues:dict];
 
-NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", user.name, user.icon, user.age, user.height, user.money);
+NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", 
+	user.name, user.icon, user.age, user.height, user.money);
 // name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9
 ```
 ##### 核心代码
