@@ -20,7 +20,6 @@ The fastest and most convenient conversion between JSON and model
 	* `MJExtension`：`不需要`你的模型类继承任何特殊基类，毫无污染，毫无侵入性
 
 ## 如何使用MJExtension
----
 * 将`MJExtension文件夹`中的所有源代码拽入项目中
 ```objc
 MJConst.h
@@ -42,7 +41,6 @@ NSObject+MJKeyValue.m
 * 导入主头文件：`#import "MJExtension.h"`
 
 ## 最简单的字典转模型
----
 ```objc
 @interface User : NSObject
 @property (copy, nonatomic) NSString *name;
@@ -70,7 +68,6 @@ NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", user.name, user.icon, us
 * `[User objectWithKeyValues:dict]`
 
 ## 模型中嵌套模型
----
 ```objc
 @interface Status : NSObject
 /** 微博文本内容 */
@@ -118,7 +115,6 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 * `[Status objectWithKeyValues:dict]`
 
 ## 模型中有个数组属性，数组里面又要装着其他模型
----
 ```objc
 @interface Ad : NSObject
 @property (copy, nonatomic) NSString *image;
@@ -208,7 +204,6 @@ for (Ad *ad in result.ads) {
 * `[StatusResult objectWithKeyValues:dict]`
 
 ## 模型中的属性名和字典中的key对不上
----
 ```objc
 @interface Student : NSObject
 @property (copy, nonatomic) NSString *ID;
@@ -245,7 +240,6 @@ NSLog(@"ID=%@, name=%@, desc=%@", stu.ID, stu.name, stu.desc);
 * `[Student objectWithKeyValues:dict]`
 
 ## 将一个字典数组转成模型数组
----
 ```objc
 NSArray *dictArray = @[
                        @{
@@ -273,7 +267,6 @@ for (User *user in userArray) {
 * `[User objectArrayWithKeyValuesArray:dictArray]`
 
 ## 将一个模型转成字典
----
 ```objc
 // 新建模型
 User *user = [[User alloc] init];
@@ -301,7 +294,6 @@ NSLog(@"%@", dict);
 * `status.keyValues`
 
 ## 将一个模型数组转成字典数组
----
 ```objc
 // 新建模型数组
 User *user1 = [[User alloc] init];
@@ -334,6 +326,5 @@ NSLog(@"%@", dictArray);
 * `[User keyValuesArrayWithObjectArray:userArray]`
 
 ## 更多用法
----
 * 参考`NSObject+MJKeyValue.h`
 * 参考`NSObject+MJCoding.h`
