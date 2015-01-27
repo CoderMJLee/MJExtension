@@ -1,9 +1,7 @@
 ## MJExtension
----
 The fastest and most convenient conversion between JSON and model
 
 ## 能做什么？
----
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
     * `字典（JSON）` --> `模型（Model）`
@@ -13,7 +11,6 @@ The fastest and most convenient conversion between JSON and model
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 
 ## MJExtension和JSONModel、Mantle等框架的区别
----
 * 转换速率：
 	* 最近一次测试表明：`MJExtension` > `JSONModel` > `Mantle`
 	* 各位开发者也可以自行测试
