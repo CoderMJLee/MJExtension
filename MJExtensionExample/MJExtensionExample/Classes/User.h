@@ -9,13 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface User : NSObject
-/**
- *  名称
- */
+/** 名称 */
 @property (copy, nonatomic) NSString *name;
-
-/**
- *  头像
- */
+/** 头像 */
 @property (copy, nonatomic) NSString *icon;
+/** 年龄 */
+@property (assign, nonatomic) int age;
+/** 身高 */
+@property (assign, nonatomic) double height;
+/** 财富 */
+@property (strong, nonatomic) NSNumber *money;
 @end

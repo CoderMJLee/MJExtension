@@ -1,61 +1,43 @@
-MJExtension
-===========
-Conversion between JSON and model
+## MJRefresh
+---
+The easiest way to use pull-to-refresh
 
-一、MJ友情提醒
------------
- * MJExtension是一套“字典和模型之间互相转换”的轻量级框架
- * MJExtension能完成的功能
-  * 字典（JSON） --> 模型（model）
-  * 模型（model） --> 字典（JSON）
-  * 字典数组（JSON array） --> 模型数组（model array）
-  * 模型数组（model array） --> 字典数组（JSON array）
- * 具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
- * 希望各位大神能用得爽
+![(52326ce26803fabc46000000_18)](http://code4app.qiniudn.com/photo/52326ce26803fabc46000000_18.gif)
 
-二、基本API用法
------------
- * 将字典的键值对转成模型属性
-  * - (void)setKeyValues:(NSDictionary *)keyValues;
-
- * 将模型转成字典
-  * - (NSDictionary *)keyValues;
-
- * 通过模型数组来创建一个字典数组
-  * + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
-
- * 通过字典来创建一个模型
-  * + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues;
-
- * 通过plist来创建一个模型(仅限于mainBundle中的文件)
-  * + (instancetype)objectWithFilename:(NSString *)filename;
-
- * 通过plist来创建一个模型
-  * + (instancetype)objectWithFile:(NSString *)file;
-
- * 通过字典数组来创建一个模型数组
-  * + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray;
-
- * 通过plist来创建一个模型数组
-  * + (NSArray *)objectArrayWithFilename:(NSString *)filename;
-
- * 通过plist来创建一个模型数组
-  * + (NSArray *)objectArrayWithFile:(NSString *)file;
-
-三、其他用法
------------
-* 声明：数组中装的是什么模型
+### 添加头部控件
+---
+```objc
+[self.tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
 ```
-- (NSDictionary *)objectClassInArray {
-	return @{@"dogs" : [Dog class],
-			@"cats" : [Cat class]};
-}
+或者
+```objc
+[self.tableView addHeaderWithCallback:^{ }];
+```
+ 
+### 添加尾部控件
+---
+```objc
+[self.tableView addFooterWithTarget:self action:@selector(footerRereshing)];
+```
+或者
+```objc
+[self.tableView addFooterWithCallback:^{ }];
 ```
 
-* 声明：模型属性名对应着字典中的哪个key
+### 自动进入刷新状态
+---
+```objc
+[self.tableView headerBeginRefreshing];
+[self.tableView footerBeginRefreshing];
 ```
-- (NSDictionary *)replacedKeyFromPropertyName {
-	return @{@"ID" : @"id",
-			@"desc" : @"description"};
-}
+ 
+### 结束刷新
+---
+```objc
+[self.tableView headerEndRefreshing];
+[self.tableView footerEndRefreshing];
 ```
+
+### 可以在MJRefreshConst.h和MJRefreshConst.m文件中自定义显示的文字内容和文字颜色
+ 
+### 本框架兼容的系统>=iOS6.0，iPhone\iPad横竖屏

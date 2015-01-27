@@ -50,13 +50,16 @@ void keyValues2object()
     NSDictionary *dict = @{
                            @"name" : @"Jack",
                            @"icon" : @"lufy.png",
+                           @"age" : @20,
+                           @"height" : @"1.55",
+                           @"money" : @100.9
                            };
-    
+
     // 2.将字典转为User模型
     User *user = [User objectWithKeyValues:dict];
-    
+
     // 3.打印User模型的属性
-    NSLog(@"name=%@, icon=%@", user.name, user.icon);
+    NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", user.name, user.icon, user.age, user.height, user.money);
 }
 
 /**
@@ -82,16 +85,16 @@ void keyValues2object2()
                                            }
                                    }
                            };
-    
+
     // 2.将字典转为Status模型
     Status *status = [Status objectWithKeyValues:dict];
-    
+
     // 3.打印status的属性
     NSString *text = status.text;
     NSString *name = status.user.name;
     NSString *icon = status.user.icon;
     NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
-    
+
     // 4.打印status.retweetedStatus的属性
     NSString *text2 = status.retweetedStatus.text;
     NSString *name2 = status.retweetedStatus.user.name;
@@ -123,16 +126,7 @@ void keyValues2object3()
                                                @"name" : @"Jack",
                                                @"icon" : @"lufy.png"
                                                }
-                                       },
-                                   
-                                   @{
-                                       @"text" : @"嘿嘿，这东西不错哦！",
-                                       
-                                       @"user" : @{
-                                               @"name" : @"Jim",
-                                               @"icon" : @"zero.png"
-                                               }
-                                       }
+                                    }
                                    
                                    ],
                            
@@ -148,18 +142,16 @@ void keyValues2object3()
                                    ],
                            
                            @"totalNumber" : @"2014",
-                           
                            @"previousCursor" : @"13476589",
-                           
                            @"nextCursor" : @"13476599"
                            };
-    
+
     // 2.将字典转为StatusResult模型
     StatusResult *result = [StatusResult objectWithKeyValues:dict];
-    
+
     // 3.打印StatusResult模型的简单属性
     NSLog(@"totalNumber=%@, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
-    
+
     // 4.打印statuses数组中的模型属性
     for (Status *status in result.statuses) {
         NSString *text = status.text;
@@ -167,7 +159,7 @@ void keyValues2object3()
         NSString *icon = status.user.icon;
         NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
     }
-    
+
     // 5.打印ads数组中的模型属性
     for (Ad *ad in result.ads) {
         NSLog(@"image=%@, url=%@", ad.image, ad.url);
@@ -183,13 +175,14 @@ void keyValues2object4()
     NSDictionary *dict = @{
                            @"id" : @"20",
                            @"name" : @"lufy",
+                           @"desciption" : @"好孩子",
                            };
-    
+
     // 2.将字典转为Student模型
     Student *stu = [Student objectWithKeyValues:dict];
-    
+
     // 3.打印Student模型的属性
-    NSLog(@"id=%@, name=%@", stu.ID, stu.name);
+    NSLog(@"ID=%@, name=%@, desc=%@", stu.ID, stu.name, stu.desc);
 }
 
 /**
@@ -207,11 +200,6 @@ void keyValuesArray2objectArray()
                            @{
                                @"name" : @"Rose",
                                @"icon" : @"nami.png",
-                               },
-                           
-                           @{
-                               @"name" : @"Jim",
-                               @"icon" : @"zero.png",
                                }
                            ];
     
@@ -239,7 +227,6 @@ void object2keyValues()
     status.text = @"今天的心情不错！";
     
     // 2.将模型转为字典
-    //    NSDictionary *dict = [status keyValues];
     NSDictionary *dict = status.keyValues;
     NSLog(@"%@", dict);
 }
@@ -258,11 +245,7 @@ void objectArray2keyValuesArray()
     user2.name = @"Rose";
     user2.icon = @"nami.png";
     
-    User *user3 = [[User alloc] init];
-    user3.name = @"Jim";
-    user3.icon = @"zero.png";
-    
-    NSArray *userArray = @[user1, user2, user3];
+    NSArray *userArray = @[user1, user2];
     
     // 2.将模型数组转为字典数组
     NSArray *dictArray = [User keyValuesArrayWithObjectArray:userArray];

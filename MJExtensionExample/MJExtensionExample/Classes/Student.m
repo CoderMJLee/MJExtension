@@ -10,9 +10,10 @@
 #import "MJExtension.h"
 
 @implementation Student
+// 实现这个方法的目的：告诉MJExtension框架模型中的属性名对应着字典的哪个key
 - (NSDictionary *)replacedKeyFromPropertyName
 {
-    /** 属性ID映射成字典中的id */
-    return @{@"ID" : @"id"};
+    return @{@"ID" : @"id",
+             @"desc" : @"desciption"};
 }
 @end
