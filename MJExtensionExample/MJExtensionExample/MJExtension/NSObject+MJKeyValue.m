@@ -82,7 +82,12 @@ static NSNumberFormatter *_numberFormatter;
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
-        id value = keyValues[ivar.key];
+        NSArray *keyArray = [ivar.key componentsSeparatedByString:@"."];
+        id value = keyValues ;
+        for (NSString *tempKey in keyArray) {
+            value = value[tempKey];
+        }
+//        id value = keyValues[ivar.key];
         if (!value || value == [NSNull null]) return;
         
         // 2.如果是模型属性
@@ -132,7 +137,7 @@ static NSNumberFormatter *_numberFormatter;
     // 如果自己不是模型类
     if ([MJFoundation isClassFromFoundation:[self class]]) return (NSDictionary *)self;
     
-    NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
+   __block NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
@@ -152,7 +157,26 @@ static NSNumberFormatter *_numberFormatter;
         }
         
         // 4.赋值
-        keyValues[ivar.key] = value;
+//        keyValues[ivar.key] = value;
+        NSArray *keyArray = [ivar.key componentsSeparatedByString:@"."];
+        __block NSDictionary  *tempDict = [[NSDictionary alloc]init];
+        [keyArray enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSString *tempKey, NSUInteger idx, BOOL *stop) {
+            if (idx == (keyArray.count -1)) {
+                if (idx == 0) {
+                    keyValues[tempKey] = value;
+                }else{
+                    tempDict = @{tempKey:value};
+                }
+            }else{
+                if (idx == 0) {
+                    keyValues[tempKey] = tempDict;
+                }else{
+                    NSDictionary *dict = @{tempKey:tempDict};
+                    tempDict = dict;
+                }
+            }
+        }];
+        
     }];
     
     // 转换完毕

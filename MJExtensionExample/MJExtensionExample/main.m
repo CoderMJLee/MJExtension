@@ -33,7 +33,7 @@ int main(int argc, const char * argv[])
         execute(keyValues2object, @"简单的字典 -> 模型");
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
         execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
-        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id）");
+        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
         execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
         execute(object2keyValues, @"模型转字典");
         execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
@@ -167,14 +167,15 @@ void keyValues2object3()
 }
 
 /**
- * 简单的字典 -> 模型（key替换，比如ID和id）
+ * 简单的字典 -> 模型（key替换，比如ID和id。多级映射，比如 oldName 和 name.oldName）
  */
 void keyValues2object4()
 {
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"id" : @"20",
-                           @"name" : @"lufy",
+                           @"name" : @{@"newName":@"lufy",
+                                       @"oldName":@"kitty"},
                            @"desciption" : @"好孩子",
                            };
 
@@ -182,7 +183,7 @@ void keyValues2object4()
     Student *stu = [Student objectWithKeyValues:dict];
 
     // 3.打印Student模型的属性
-    NSLog(@"ID=%@, name=%@, desc=%@", stu.ID, stu.name, stu.desc);
+    NSLog(@"ID=%@, oldName=%@, nowName=%@, desc=%@", stu.ID, stu.oldName, stu.nowName, stu.desc);
 }
 
 /**
