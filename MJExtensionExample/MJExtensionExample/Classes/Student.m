@@ -17,7 +17,8 @@
              @"desc" : @"desciption",
              @"oldName" : @"name.oldName",
              @"nowName" : @"name.newName",
-             @"nameChangedTime" : @"name.info.nameChangedTime"
+             @"nameChangedTime" : @"name.info.nameChangedTime",
+             @"bag" : @"other.bag"
         };
 }
 @end

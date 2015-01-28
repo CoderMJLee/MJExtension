@@ -25,6 +25,7 @@
 #import "Status.h"
 #import "Student.h"
 #import "StatusResult.h"
+#import "Bag.h"
 
 /** main函数 */
 int main(int argc, const char * argv[])
@@ -174,6 +175,7 @@ void keyValues2object4()
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"id" : @"20",
+                           @"desciption" : @"好孩子",
                            @"name" : @{
                                 @"newName" : @"lufy",
                                 @"oldName" : @"kitty",
@@ -181,7 +183,12 @@ void keyValues2object4()
                                     @"nameChangedTime" : @"2013-08-07"
                                 }
                            },
-                           @"desciption" : @"好孩子",
+                           @"other" : @{
+                                @"bag" : @{
+                                    @"name" : @"小书包",
+                                    @"price" : @100.7
+                                }
+                           }
                         };
 
     // 2.将字典转为Student模型
@@ -190,6 +197,8 @@ void keyValues2object4()
     // 3.打印Student模型的属性
     NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
           stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
+    NSLog(@"bagName=%@, bagPrice=%f",
+          stu.bag.name, stu.bag.price);
 }
 
 /**
@@ -244,6 +253,12 @@ void object2keyValues()
     stu.nowName = @"jack";
     stu.desc = @"handsome";
     stu.nameChangedTime = @"2018-09-08";
+    
+    Bag *bag = [[Bag alloc] init];
+    bag.name = @"小书包";
+    bag.price = 205;
+    stu.bag = bag;
+    
     NSDictionary *stuDict = stu.keyValues;
     NSLog(@"%@", stuDict);
 }
