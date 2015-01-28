@@ -20,7 +20,7 @@ The fastest and most convenient conversion between JSON and model
 	* `MJExtension`：`不需要`你的模型类继承任何特殊基类，毫无污染，毫无侵入性
 
 ## 如何使用MJExtension
-* 将`MJExtension文件夹`中的所有源代码拽入项目中
+* 将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中
 ```objc
 MJConst.h
 MJConst.m
