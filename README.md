@@ -5,7 +5,7 @@ The fastest and most convenient conversion between JSON and model
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
     * `字典（JSON）` --> `模型（Model）`
- 	* `模型（Model）` --> `字典（JSON）`
+     * `模型（Model）` --> `字典（JSON）`
  	* `字典数组（JSON Array）` --> `模型数组（Model Array）`
  	* `模型数组（Model Array）` --> `字典数组（JSON Array）`
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
@@ -132,7 +132,7 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 
 @implementation StatusResult
 // 实现这个方法的目的：告诉MJExtension框架statuses和ads数组里面装的是什么模型
-- (NSDictionary *)objectClassInArray
++ (NSDictionary *)objectClassInArray
 {
     return @{
          @"statuses" : [Status class],
@@ -201,43 +201,55 @@ for (Ad *ad in result.ads) {
 // image=ad02.png, url=http://www.ad02.com
 ```
 ##### 核心代码
-* 在模型内部实现`objectClassInArray`方法  
+* 在模型内部实现`+ (NSDictionary *)objectClassInArray`方法  
 * `[StatusResult objectWithKeyValues:dict]`
 
-## 模型中的属性名和字典中的key对不上
+## 模型中的属性名和字典中的key对不上(或者需要多级映射)
 ```objc
 @interface Student : NSObject
 @property (copy, nonatomic) NSString *ID;
-@property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *desc;
+@property (copy, nonatomic) NSString *nowName;
+@property (copy, nonatomic) NSString *oldName;
+@property (copy, nonatomic) NSString *nameChangedTime;
 @end
 
 @implementation Student
 // 实现这个方法的目的：告诉MJExtension框架模型中的属性名对应着字典的哪个key
-- (NSDictionary *)replacedKeyFromPropertyName
++ (NSDictionary *)replacedKeyFromPropertyName
 {
     return @{
                 @"ID" : @"id",
-                @"desc" : @"desciption"
+                @"desc" : @"desciption",
+                @"oldName" : @"name.oldName",
+                @"nowName" : @"name.newName",
+                @"nameChangedTime" : @"name.info.nameChangedTime"
             };
 }
 @end
 
 NSDictionary *dict = @{
                        @"id" : @"20",
-                       @"name" : @"lufy",
-                       @"desciption" : @"好孩子",
+                       @"desciption" : @"孩子",
+                       @"name" : @{
+                            @"newName" : @"lufy",
+                            @"oldName" : @"kitty",
+                            @"info" : @{
+                                @"nameChangedTime" : @"2013-08"
+                            }
+                       }
                     };
 
 // 将字典转为Student模型
 Student *stu = [Student objectWithKeyValues:dict];
 
 // 打印Student模型的属性
-NSLog(@"ID=%@, name=%@, desc=%@", stu.ID, stu.name, stu.desc);
-// ID=20, name=lufy, desc=好孩子
+NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
+          stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
+// ID=20, desc=孩子, oldName=kitty, nowName=lufy, nameChangedTime=2013-08
 ```
 ##### 核心代码
-* 在模型内部实现`replacedKeyFromPropertyName`方法  
+* 在模型内部实现`+ (NSDictionary *)replacedKeyFromPropertyName`方法  
 * `[Student objectWithKeyValues:dict]`
 
 ## 将一个字典数组转成模型数组
@@ -279,8 +291,8 @@ status.user = user;
 status.text = @"今天的心情不错！";
 
 // 将模型转为字典
-NSDictionary *dict = status.keyValues;
-NSLog(@"%@", dict);
+NSDictionary *statusDict = status.keyValues;
+NSLog(@"%@", statusDict);
 /*
 {
     text = "今天的心情不错！";
@@ -290,9 +302,32 @@ NSLog(@"%@", dict);
     };
 }
 */
+
+// 多级映射的模型
+Student *stu = [[Student alloc] init];
+stu.ID = @"123";
+stu.oldName = @"rose";
+stu.nowName = @"jack";
+stu.desc = @"handsome";
+stu.nameChangedTime = @"2018-09-08";
+NSDictionary *stuDict = stu.keyValues;
+NSLog(@"%@", stuDict);
+/*
+{
+    desciption = handsome;
+    id = 123;
+    name =     {
+        info =         {
+            nameChangedTime = "2018-09-08";
+        };
+        newName = jack;
+        oldName = rose;
+    };
+}
+*/
 ```
 ##### 核心代码
-* `status.keyValues`
+* `status.keyValues`、`stu.keyValues`
 
 ## 将一个模型数组转成字典数组
 ```objc
@@ -329,3 +364,9 @@ NSLog(@"%@", dictArray);
 ## 更多用法
 * 参考`NSObject+MJKeyValue.h`
 * 参考`NSObject+MJCoding.h`
+
+## 期待
+* 如果在使用过程中遇到BUG，希望你能Issues我，谢谢
+* 如果在使用过程中发现功能不够用，希望你能Issues我，我非常想为这个框架增加更多好用的功能，谢谢
+* 如果你想为MJExtension输出代码，请拼命Pull Requests我
+* 一起携手打造天朝乃至世界最好用的字典模型框架，做天朝程序员的骄傲

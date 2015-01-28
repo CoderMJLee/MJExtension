@@ -188,8 +188,8 @@ void keyValues2object4()
     Student *stu = [Student objectWithKeyValues:dict];
 
     // 3.打印Student模型的属性
-    NSLog(@"ID=%@, oldName=%@, nowName=%@, desc=%@, nameChangedTime=%@",
-          stu.ID, stu.oldName, stu.nowName, stu.desc, stu.nameChangedTime);
+    NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
+          stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
 }
 
 /**
@@ -236,7 +236,7 @@ void object2keyValues()
     // 2.将模型转为字典
     NSDictionary *statusDict = status.keyValues;
     NSLog(@"%@", statusDict);
-    
+
     // 3.新建多级映射的模型
     Student *stu = [[Student alloc] init];
     stu.ID = @"123";
