@@ -206,12 +206,18 @@ for (Ad *ad in result.ads) {
 
 ## 模型中的属性名和字典中的key不相同(或者需要多级映射)
 ```objc
+@interface Bag : NSObject
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) double price;
+@end
+
 @interface Student : NSObject
 @property (copy, nonatomic) NSString *ID;
 @property (copy, nonatomic) NSString *desc;
 @property (copy, nonatomic) NSString *nowName;
 @property (copy, nonatomic) NSString *oldName;
 @property (copy, nonatomic) NSString *nameChangedTime;
+@property (strong, nonatomic) Bag *bag;
 @end
 
 @implementation Student
@@ -223,7 +229,8 @@ for (Ad *ad in result.ads) {
                 @"desc" : @"desciption",
                 @"oldName" : @"name.oldName",
                 @"nowName" : @"name.newName",
-                @"nameChangedTime" : @"name.info.nameChangedTime"
+                @"nameChangedTime" : @"name.info.nameChangedTime",
+                @"bag" : @"other.bag"
             };
 }
 @end
@@ -237,7 +244,13 @@ NSDictionary *dict = @{
                             @"info" : @{
                                 @"nameChangedTime" : @"2013-08"
                             }
-                       }
+                       },
+	               @"other" : @{
+                            @"bag" : @{
+                                @"name" : @"小书包",
+                                @"price" : @100.7
+                            }
+	               }
                     };
 
 // 将字典转为Student模型
@@ -247,6 +260,8 @@ Student *stu = [Student objectWithKeyValues:dict];
 NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
           stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
 // ID=20, desc=孩子, oldName=kitty, nowName=lufy, nameChangedTime=2013-08
+NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
+// bagName=小书包, bagPrice=100.700000
 ```
 ##### 核心代码
 * 在模型内部实现`+ (NSDictionary *)replacedKeyFromPropertyName`方法  
@@ -310,6 +325,12 @@ stu.oldName = @"rose";
 stu.nowName = @"jack";
 stu.desc = @"handsome";
 stu.nameChangedTime = @"2018-09-08";
+    
+Bag *bag = [[Bag alloc] init];
+bag.name = @"小书包";
+bag.price = 205;
+stu.bag = bag;
+    
 NSDictionary *stuDict = stu.keyValues;
 NSLog(@"%@", stuDict);
 /*
@@ -322,6 +343,12 @@ NSLog(@"%@", stuDict);
         };
         newName = jack;
         oldName = rose;
+    };
+    other =     {
+        bag =         {
+            name = "小书包";
+            price = 205;
+        };
     };
 }
 */
