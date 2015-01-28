@@ -49,7 +49,7 @@
     MJAssertParamNotNil(ivar);
     
     // 1.成员变量名
-    _name = [NSString stringWithUTF8String:ivar_getName(ivar)];
+    _name = @(ivar_getName(ivar));
     
     // 2.属性名
     if ([_name hasPrefix:@"_"]) {
@@ -59,7 +59,7 @@
     }
     
     // 3.成员变量的类型符
-    NSString *code = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
+    NSString *code = @(ivar_getTypeEncoding(ivar));
     _type = [MJType cachedTypeWithCode:code];
 }
 

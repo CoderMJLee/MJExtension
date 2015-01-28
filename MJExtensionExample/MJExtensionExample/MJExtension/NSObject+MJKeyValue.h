@@ -19,14 +19,25 @@
  *
  *  @return 字典中的key是属性名，value是从字典中取值用的key
  */
-- (NSDictionary *)replacedKeyFromPropertyName;
++ (NSDictionary *)replacedKeyFromPropertyName;
+- (NSDictionary *)replacedKeyFromPropertyName MJDeprecated("请使用+ (NSDictionary *)replacedKeyFromPropertyName方法");
+
+/**
+ *  将属性名换为其他key去字典中取值
+ *  @param propertyName 属性名
+ *
+ *  @return 字典中的key
+ */
++ (NSString *)replacedKeyFromPropertyName:(NSString *)propertyName;
+// 方法优先级：replacedKeyFromPropertyName: > replacedKeyFromPropertyName
 
 /**
  *  数组中需要转换的模型类
  *
  *  @return 字典中的key是数组属性名，value是数组中存放模型的Class
  */
-- (NSDictionary *)objectClassInArray;
++ (NSDictionary *)objectClassInArray;
+- (NSDictionary *)objectClassInArray MJDeprecated("请使用+ (NSDictionary *)objectClassInArray方法");
 
 /**
  *  当字典转模型完毕时调用
@@ -116,14 +127,4 @@
  *  @return 模型数组
  */
 + (NSArray *)objectArrayWithFile:(NSString *)file;
-
-#pragma mark - 其他方法
-/**
- *  根据属性名获得对应的key
- *
- *  @param propertyName 属性名
- *
- *  @return 字典的key
- */
-- (NSString *)keyWithPropertyName:(NSString *)propertyName;
 @end

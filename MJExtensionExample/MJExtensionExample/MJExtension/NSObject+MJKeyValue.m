@@ -23,7 +23,6 @@ static NSNumberFormatter *_numberFormatter;
 }
 
 #pragma mark - --公共方法--
-#pragma mark - 字典转模型
 + (instancetype)objectWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
@@ -57,7 +56,7 @@ static NSNumberFormatter *_numberFormatter;
 {
     MJAssert2([keyValues isKindOfClass:[NSDictionary class]], self);
     
-    [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
+    [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
         id value = keyValues ;
         for (NSString *key in ivar.keys) {
@@ -103,56 +102,6 @@ static NSNumberFormatter *_numberFormatter;
     return self;
 }
 
-- (NSDictionary *)keyValues
-{
-    // 如果自己不是模型类
-    if ([MJFoundation isClassFromFoundation:[self class]]) return (NSDictionary *)self;
-    
-   __block NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
-    
-    [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        // 1.取出属性值
-        id value = [ivar valueFromObject:self];
-        if (!value) return;
-        
-        // 2.如果是模型属性
-        MJType *type = ivar.type;
-        Class typeClass = type.typeClass;
-        if (!type.isFromFoundation && typeClass) {
-            value = [value keyValues];
-        } else if (typeClass == [NSURL class]) {
-            value = [value absoluteString];
-        } else if (ivar.objectClassInArray) {
-            // 3.处理数组里面有模型的情况
-            value = [ivar.objectClassInArray keyValuesArrayWithObjectArray:value];
-        }
-        
-        // 4.赋值
-        NSUInteger keyCount = ivar.keys.count;
-        // 创建字典
-        __block NSMutableDictionary *innerDict = keyValues;
-        [ivar.keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
-            if (idx == keyCount - 1) { // 最后一个属性
-                innerDict[key] = value;
-            } else { // 字典
-                NSMutableDictionary *tempDict = innerDict[key];
-                if (tempDict == nil) {
-                    tempDict = [NSMutableDictionary dictionary];
-                    innerDict[key] = tempDict;
-                }
-                innerDict = tempDict;
-            }
-         }];
-    }];
-    
-    // 转换完毕
-    if ([self respondsToSelector:@selector(objectDidFinishConvertingToKeyValues)]) {
-        [self objectDidFinishConvertingToKeyValues];
-    }
-    
-    return keyValues;
-}
-
 + (NSArray *)objectArrayWithJSONData:(NSData *)data
 {
     MJAssertParamNotNil2(data, nil);
@@ -160,20 +109,6 @@ static NSNumberFormatter *_numberFormatter;
     return [self objectArrayWithKeyValuesArray:[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil]];
 }
 
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray
-{
-    // 0.判断真实性
-    MJAssert2([objectArray isKindOfClass:[NSArray class]], nil);
-    
-    // 1.创建数组
-    NSMutableArray *keyValuesArray = [NSMutableArray array];
-    for (id object in objectArray) {
-        [keyValuesArray addObject:[object keyValues]];
-    }
-    return keyValuesArray;
-}
-
-#pragma mark - 字典数组转模型数组
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
 {
     // 1.判断真实性
@@ -205,20 +140,66 @@ static NSNumberFormatter *_numberFormatter;
     return [self objectArrayWithKeyValuesArray:[NSArray arrayWithContentsOfFile:file]];
 }
 
-#pragma mark - --私有方法--
-- (NSString *)keyWithPropertyName:(NSString *)propertyName
+- (NSDictionary *)keyValues
 {
-    MJAssertParamNotNil2(propertyName, nil);
+    // 如果自己不是模型类
+    if ([MJFoundation isClassFromFoundation:[self class]]) return (NSDictionary *)self;
     
-    NSString *key = nil;
-    // 1.查看有没有需要替换的key
-    if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
-        key = self.replacedKeyFromPropertyName[propertyName];
+    __block NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
+    
+    [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
+        // 1.取出属性值
+        id value = [ivar valueFromObject:self];
+        if (!value) return;
+        
+        // 2.如果是模型属性
+        MJType *type = ivar.type;
+        Class typeClass = type.typeClass;
+        if (!type.isFromFoundation && typeClass) {
+            value = [value keyValues];
+        } else if (typeClass == [NSURL class]) {
+            value = [value absoluteString];
+        } else if (ivar.objectClassInArray) {
+            // 3.处理数组里面有模型的情况
+            value = [ivar.objectClassInArray keyValuesArrayWithObjectArray:value];
+        }
+        
+        // 4.赋值
+        NSUInteger keyCount = ivar.keys.count;
+        // 创建字典
+        __block NSMutableDictionary *innerDict = keyValues;
+        [ivar.keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+            if (idx == keyCount - 1) { // 最后一个属性
+                innerDict[key] = value;
+            } else { // 字典
+                NSMutableDictionary *tempDict = innerDict[key];
+                if (tempDict == nil) {
+                    tempDict = [NSMutableDictionary dictionary];
+                    innerDict[key] = tempDict;
+                }
+                innerDict = tempDict;
+            }
+        }];
+    }];
+    
+    // 转换完毕
+    if ([self respondsToSelector:@selector(objectDidFinishConvertingToKeyValues)]) {
+        [self objectDidFinishConvertingToKeyValues];
     }
     
-    // 2.用属性名作为key
-    if (!key) key = propertyName;
+    return keyValues;
+}
+
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray
+{
+    // 0.判断真实性
+    MJAssert2([objectArray isKindOfClass:[NSArray class]], nil);
     
-    return key;
+    // 1.创建数组
+    NSMutableArray *keyValuesArray = [NSMutableArray array];
+    for (id object in objectArray) {
+        [keyValuesArray addObject:[object keyValues]];
+    }
+    return keyValuesArray;
 }
 @end

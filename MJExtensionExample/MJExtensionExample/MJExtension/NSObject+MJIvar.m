@@ -13,10 +13,64 @@
 
 @implementation NSObject (MJMember)
 
-static const char MJCachedIvarsKey;
-- (NSArray *)cachedIvars
+#pragma mark - --私有方法--
++ (NSString *)ivarKey:(NSString *)propertyName
 {
-    NSMutableArray *cachedIvars = objc_getAssociatedObject([self class], &MJCachedIvarsKey);
+    MJAssertParamNotNil2(propertyName, nil);
+    
+    NSString *key = nil;
+    // 1.查看有没有需要替换的key
+    if ([self respondsToSelector:@selector(replacedKeyFromPropertyName:)]) {
+        key = [self replacedKeyFromPropertyName:propertyName];
+    } else if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
+        key = self.replacedKeyFromPropertyName[propertyName];
+    } else {
+        // 为了兼容以前的对象方法
+        id tempObject = self.tempObject;
+        if ([tempObject respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
+            key = [tempObject replacedKeyFromPropertyName][propertyName];
+        }
+    }
+    
+    // 2.用属性名作为key
+    if (!key) key = propertyName;
+    
+    return key;
+}
+
++ (Class)ivarObjectClassInArray:(NSString *)propertyName
+{
+    if ([self respondsToSelector:@selector(objectClassInArray)]) {
+        return self.objectClassInArray[propertyName];
+    } else {
+        // 为了兼容以前的对象方法
+        id tempObject = self.tempObject;
+        if ([tempObject respondsToSelector:@selector(objectClassInArray)]) {
+            id dict = [tempObject objectClassInArray];
+            return dict[propertyName];
+        }
+        return nil;
+    }
+    return nil;
+}
+
+#pragma mark - --公共方法--
++ (instancetype)tempObject
+{
+    static const char MJTempObjectKey;
+    id tempObject = objc_getAssociatedObject(self, &MJTempObjectKey);
+    if (tempObject == nil) {
+        tempObject = [[self alloc] init];
+        objc_setAssociatedObject(self, &MJTempObjectKey, tempObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return tempObject;
+}
+
++ (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
+{
+    static const char MJCachedIvarsKey;
+    // 获得成员变量
+    NSMutableArray *cachedIvars = objc_getAssociatedObject(self, &MJCachedIvarsKey);
     if (cachedIvars == nil) {
         cachedIvars = [NSMutableArray array];
         
@@ -28,13 +82,11 @@ static const char MJCachedIvarsKey;
             // 2.遍历每一个成员变量
             for (unsigned int i = 0; i<outCount; i++) {
                 MJIvar *ivar = [MJIvar cachedIvarWithIvar:ivars[i]];
-                ivar.key = [self keyWithPropertyName:ivar.propertyName];
+                ivar.key = [self ivarKey:ivar.propertyName];
                 // 如果有多级映射
                 ivar.keys = [ivar.key componentsSeparatedByString:@"."];
                 // 数组中的模型类
-                if ([self respondsToSelector:@selector(objectClassInArray)]) {
-                    ivar.objectClassInArray = self.objectClassInArray[ivar.propertyName];
-                }
+                ivar.objectClassInArray = [self ivarObjectClassInArray:ivar.propertyName];
                 ivar.srcClass = c;
                 [cachedIvars addObject:ivar];
             }
@@ -42,29 +94,15 @@ static const char MJCachedIvarsKey;
             // 3.释放内存
             free(ivars);
         }];
-        objc_setAssociatedObject([self class], &MJCachedIvarsKey, cachedIvars, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &MJCachedIvarsKey, cachedIvars, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
-    return cachedIvars;
-}
-
-- (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
-{
-    NSArray *ivars = [self cachedIvars];
+    
+    // 遍历成员变量
     BOOL stop = NO;
-    for (MJIvar *ivar in ivars) {
+    for (MJIvar *ivar in cachedIvars) {
         block(ivar, &stop);
         if (stop) break;
     }
-}
-
-+ (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
-{
-    
-}
-
-- (void)enumerateClassesWithBlock:(MJClassesBlock)block
-{
-    [[self class] enumerateClassesWithBlock:block];
 }
 
 + (void)enumerateClassesWithBlock:(MJClassesBlock)block
