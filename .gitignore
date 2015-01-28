@@ -20,3 +20,7 @@ profile
 *.xcuserstate
 
 *.xcuserstate
+
+*.swo
+
+*.swp
