@@ -39,7 +39,6 @@ static NSMutableDictionary *_cachedTypes;
     return self;
 }
 
-/** 类型标识符 */
 - (void)setCode:(NSString *)code
 {
     _code = code;

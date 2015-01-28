@@ -4,6 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
+// 过期
+#define MJDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
+
 #ifdef DEBUG  // 调试状态
 // 打开LOG功能
 #define MJLog(...) NSLog(__VA_ARGS__)

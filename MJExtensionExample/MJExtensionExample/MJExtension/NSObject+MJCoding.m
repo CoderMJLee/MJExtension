@@ -11,9 +11,7 @@
 #import "MJIvar.h"
 
 @implementation NSObject (MJCoding)
-/**
- *  编码（将对象写入文件中）
- */
+
 - (void)encode:(NSCoder *)encoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
@@ -21,9 +19,6 @@
     }];
 }
 
-/**
- *  解码（从文件中解析对象）
- */
 - (void)decode:(NSCoder *)decoder
 {
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {

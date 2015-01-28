@@ -28,9 +28,11 @@ typedef void (^MJIvarsBlock)(MJIvar *ivar, BOOL *stop);
  *  遍历所有的成员变量
  */
 - (void)enumerateIvarsWithBlock:(MJIvarsBlock)block;
++ (void)enumerateIvarsWithBlock:(MJIvarsBlock)block;
 
 /**
  *  遍历所有的类
  */
 - (void)enumerateClassesWithBlock:(MJClassesBlock)block;
++ (void)enumerateClassesWithBlock:(MJClassesBlock)block;
 @end

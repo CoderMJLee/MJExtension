@@ -46,11 +46,7 @@ static const char MJCachedIvarsKey;
     }
     return cachedIvars;
 }
-    
 
-/**
- *  遍历所有的成员变量
- */
 - (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
 {
     NSArray *ivars = [self cachedIvars];
@@ -61,10 +57,17 @@ static const char MJCachedIvarsKey;
     }
 }
 
-/**
- *  遍历所有的类
- */
++ (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
+{
+    
+}
+
 - (void)enumerateClassesWithBlock:(MJClassesBlock)block
+{
+    [[self class] enumerateClassesWithBlock:block];
+}
+
++ (void)enumerateClassesWithBlock:(MJClassesBlock)block
 {
     // 1.没有block就直接返回
     if (block == nil) return;
@@ -73,7 +76,7 @@ static const char MJCachedIvarsKey;
     BOOL stop = NO;
     
     // 3.当前正在遍历的类
-    Class c = [self class];
+    Class c = self;
     
     // 4.开始遍历每一个类
     while (c && !stop) {

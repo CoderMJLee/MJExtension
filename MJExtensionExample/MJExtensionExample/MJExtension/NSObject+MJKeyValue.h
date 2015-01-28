@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MJConst.h"
 
 /**
  *  KeyValue协议
@@ -117,5 +118,12 @@
 + (NSArray *)objectArrayWithFile:(NSString *)file;
 
 #pragma mark - 其他方法
+/**
+ *  根据属性名获得对应的key
+ *
+ *  @param propertyName 属性名
+ *
+ *  @return 字典的key
+ */
 - (NSString *)keyWithPropertyName:(NSString *)propertyName;
 @end
