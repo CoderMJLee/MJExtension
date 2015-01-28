@@ -204,7 +204,7 @@ for (Ad *ad in result.ads) {
 * 在模型内部实现`+ (NSDictionary *)objectClassInArray`方法  
 * `[StatusResult objectWithKeyValues:dict]`
 
-## 模型中的属性名和字典中的key对不上(或者需要多级映射)
+## 模型中的属性名和字典中的key不相同(或者需要多级映射)
 ```objc
 @interface Student : NSObject
 @property (copy, nonatomic) NSString *ID;
