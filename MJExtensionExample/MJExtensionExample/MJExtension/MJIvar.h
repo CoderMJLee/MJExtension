@@ -25,6 +25,8 @@
 
 /** 对应着字典中的key */
 @property (nonatomic, copy) NSString *key;
+/** 对应着字典中的多级key */
+@property (nonatomic, strong) NSArray *keys;
 /** 模型数组中的模型类型 */
 @property (nonatomic, assign) Class objectClassInArray;
 
@@ -51,11 +53,3 @@
 - (instancetype)initWithIvar:(Ivar)ivar;
 + (instancetype)cachedIvarWithIvar:(Ivar)ivar;
 @end
-
-/**
- *  遍历成员变量用的block
- *
- *  @param ivar 成员变量的包装对象
- *  @param stop       YES代表停止遍历，NO代表继续遍历
- */
-typedef void (^MJIvarsBlock)(MJIvar *ivar, BOOL *stop);

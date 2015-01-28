@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 itcast. All rights reserved.
 //
 
+#import "MJIvar.h"
 #import "NSObject+MJIvar.h"
 #import "NSObject+MJKeyValue.h"
 #import "MJFoundation.h"
@@ -28,6 +29,9 @@ static const char MJCachedIvarsKey;
             for (unsigned int i = 0; i<outCount; i++) {
                 MJIvar *ivar = [MJIvar cachedIvarWithIvar:ivars[i]];
                 ivar.key = [self keyWithPropertyName:ivar.propertyName];
+                // 如果有多级映射
+                ivar.keys = [ivar.key componentsSeparatedByString:@"."];
+                // 数组中的模型类
                 if ([self respondsToSelector:@selector(objectClassInArray)]) {
                     ivar.objectClassInArray = self.objectClassInArray[ivar.propertyName];
                 }

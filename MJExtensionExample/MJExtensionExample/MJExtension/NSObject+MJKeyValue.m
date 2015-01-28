@@ -8,6 +8,7 @@
 
 #import "NSObject+MJKeyValue.h"
 #import "NSObject+MJIvar.h"
+#import "MJIvar.h"
 #import "MJType.h"
 #import "MJConst.h"
 #import "MJFoundation.h"
@@ -82,12 +83,10 @@ static NSNumberFormatter *_numberFormatter;
     
     [self enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
-        NSArray *keyArray = [ivar.key componentsSeparatedByString:@"."];
         id value = keyValues ;
-        for (NSString *tempKey in keyArray) {
-            value = value[tempKey];
+        for (NSString *key in ivar.keys) {
+            value = value[key];
         }
-//        id value = keyValues[ivar.key];
         if (!value || value == [NSNull null]) return;
         
         // 2.如果是模型属性
@@ -157,26 +156,21 @@ static NSNumberFormatter *_numberFormatter;
         }
         
         // 4.赋值
-//        keyValues[ivar.key] = value;
-        NSArray *keyArray = [ivar.key componentsSeparatedByString:@"."];
-        __block NSDictionary  *tempDict = [[NSDictionary alloc]init];
-        [keyArray enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSString *tempKey, NSUInteger idx, BOOL *stop) {
-            if (idx == (keyArray.count -1)) {
-                if (idx == 0) {
-                    keyValues[tempKey] = value;
-                }else{
-                    tempDict = @{tempKey:value};
+        NSUInteger keyCount = ivar.keys.count;
+        // 创建字典
+        __block NSMutableDictionary *innerDict = keyValues;
+        [ivar.keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+            if (idx == keyCount - 1) { // 最后一个属性
+                innerDict[key] = value;
+            } else { // 字典
+                NSMutableDictionary *tempDict = innerDict[key];
+                if (tempDict == nil) {
+                    tempDict = [NSMutableDictionary dictionary];
+                    innerDict[key] = tempDict;
                 }
-            }else{
-                if (idx == 0) {
-                    keyValues[tempKey] = tempDict;
-                }else{
-                    NSDictionary *dict = @{tempKey:tempDict};
-                    tempDict = dict;
-                }
+                innerDict = tempDict;
             }
-        }];
-        
+         }];
     }];
     
     // 转换完毕

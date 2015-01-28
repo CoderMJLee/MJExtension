@@ -7,12 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJIvar.h"
+@class MJIvar;
 
 /**
  *  遍历所有类的block（父类）
  */
 typedef void (^MJClassesBlock)(Class c, BOOL *stop);
+
+/**
+ *  遍历成员变量用的block
+ *
+ *  @param ivar 成员变量的包装对象
+ *  @param stop       YES代表停止遍历，NO代表继续遍历
+ */
+typedef void (^MJIvarsBlock)(MJIvar *ivar, BOOL *stop);
 
 @interface NSObject (MJMember)
 

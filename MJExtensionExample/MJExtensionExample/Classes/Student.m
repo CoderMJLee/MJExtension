@@ -16,6 +16,8 @@
     return @{@"ID" : @"id",
              @"desc" : @"desciption",
              @"oldName" : @"name.oldName",
-             @"nowName" : @"name.newName"};
+             @"nowName" : @"name.newName",
+             @"nameChangedTime" : @"name.info.nameChangedTime"
+        };
 }
 @end
