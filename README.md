@@ -5,9 +5,9 @@ The fastest and most convenient conversion between JSON and model
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
     * `字典（JSON）` --> `模型（Model）`
-     * `模型（Model）` --> `字典（JSON）`
- 	* `字典数组（JSON Array）` --> `模型数组（Model Array）`
- 	* `模型数组（Model Array）` --> `字典数组（JSON Array）`
+    * `模型（Model）` --> `字典（JSON）`
+    * `字典数组（JSON Array）` --> `模型数组（Model Array）`
+    * `模型数组（Model Array）` --> `字典数组（JSON Array）`
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 
 ## MJExtension和JSONModel、Mantle等框架的区别
@@ -21,8 +21,7 @@ The fastest and most convenient conversion between JSON and model
 
 ## 如何使用MJExtension
 * cocoapods导入：`pod 'MJExtension'`
-* 手动导入
-    * 将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中
+* 手动导入：将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中，导入主头文件：`#import "MJExtension.h"`
 ```objc
 MJConst.h
 MJConst.m
@@ -40,7 +39,6 @@ NSObject+MJIvar.m
 NSObject+MJKeyValue.h
 NSObject+MJKeyValue.m
 ```
-    * 导入主头文件：`#import "MJExtension.h"`
 
 ## 最简单的字典转模型
 ```objc
