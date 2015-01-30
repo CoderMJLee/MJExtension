@@ -22,24 +22,17 @@ The fastest and most convenient conversion between JSON and model
 ## 如何使用MJExtension
 * cocoapods导入：`pod 'MJExtension'`
 * 手动导入：
-    * 将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中
+    * 将`MJExtensionExample/MJExtensionExample/MJExtension`文件夹中的所有源代码拽入项目中
     * 导入主头文件：`#import "MJExtension.h"`
 ```objc
-MJConst.h
-MJConst.m
 MJExtension.h
-MJFoundation.h
-MJFoundation.m
-MJIvar.h
-MJIvar.m
-MJType.h
-MJType.m
-NSObject+MJCoding.h
-NSObject+MJCoding.m
-NSObject+MJIvar.h
-NSObject+MJIvar.m
-NSObject+MJKeyValue.h
-NSObject+MJKeyValue.m
+MJConst.h		MJConst.m
+MJFoundation.h		MJFoundation.m
+MJIvar.h		MJIvar.m
+MJType.h		MJType.m
+NSObject+MJCoding.h	NSObject+MJCoding.m
+NSObject+MJIvar.h	NSObject+MJIvar.m
+NSObject+MJKeyValue.h	NSObject+MJKeyValue.m
 ```
 
 ## 最简单的字典转模型
