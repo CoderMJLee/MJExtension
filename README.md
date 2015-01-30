@@ -21,7 +21,9 @@ The fastest and most convenient conversion between JSON and model
 
 ## 如何使用MJExtension
 * cocoapods导入：`pod 'MJExtension'`
-* 手动导入：将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中，导入主头文件：`#import "MJExtension.h"`
+* 手动导入：
+    * 将`MJExtensionExample/MJExtensionExample/MJExtension文件夹`中的所有源代码拽入项目中
+    * 导入主头文件：`#import "MJExtension.h"`
 ```objc
 MJConst.h
 MJConst.m
