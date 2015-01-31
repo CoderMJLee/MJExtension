@@ -59,7 +59,8 @@ static NSNumberFormatter *_numberFormatter;
     [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         // 1.取出属性值
         id value = keyValues ;
-        for (NSString *key in ivar.keys) {
+        NSArray *keys = [ivar keysFromClass:[self class]];
+        for (NSString *key in keys) {
             value = value[key];
         }
         if (!value || value == [NSNull null]) return;
@@ -85,9 +86,12 @@ static NSNumberFormatter *_numberFormatter;
                 // NSString -> NSURL
                 value = [NSURL URLWithString:value];
             }
-        } else if (ivar.objectClassInArray) {
-            // 3.字典数组-->模型数组
-            value = [ivar.objectClassInArray objectArrayWithKeyValuesArray:value];
+        } else {
+          Class objectClass = [ivar objectClassInArrayFromClass:[self class]];
+          if (objectClass) {
+              // 3.字典数组-->模型数组
+              value = [objectClass objectArrayWithKeyValuesArray:value];
+          }
         }
         
         // 4.赋值
@@ -159,16 +163,20 @@ static NSNumberFormatter *_numberFormatter;
             value = [value keyValues];
         } else if (typeClass == [NSURL class]) {
             value = [value absoluteString];
-        } else if (ivar.objectClassInArray) {
-            // 3.处理数组里面有模型的情况
-            value = [ivar.objectClassInArray keyValuesArrayWithObjectArray:value];
+        } else {
+            Class objectClass = [ivar objectClassInArrayFromClass:[self class]];
+            if (objectClass) {
+                // 3.处理数组里面有模型的情况
+                value = [objectClass keyValuesArrayWithObjectArray:value];
+            }
         }
         
         // 4.赋值
-        NSUInteger keyCount = ivar.keys.count;
+        NSArray *keys = [ivar keysFromClass:[self class]];
+        NSUInteger keyCount = keys.count;
         // 创建字典
         __block NSMutableDictionary *innerDict = keyValues;
-        [ivar.keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+        [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
             if (idx == keyCount - 1) { // 最后一个属性
                 innerDict[key] = value;
             } else { // 字典

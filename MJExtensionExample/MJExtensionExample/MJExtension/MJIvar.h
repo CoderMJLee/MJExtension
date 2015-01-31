@@ -22,16 +22,21 @@
 @property (nonatomic, copy, readonly) NSString *propertyName;
 /** 成员变量的类型 */
 @property (nonatomic, strong, readonly) MJType *type;
-
-/** 对应着字典中的key */
-@property (nonatomic, copy) NSString *key;
-/** 对应着字典中的多级key */
-@property (nonatomic, strong) NSArray *keys;
-/** 模型数组中的模型类型 */
-@property (nonatomic, assign) Class objectClassInArray;
-
 /** 成员来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
+
+/**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
+/** 对应着字典中的key */
+- (void)setKey:(NSString *)key forClass:(Class)c;
+- (NSString *)keyFromClass:(Class)c;
+
+/** 对应着字典中的多级key */
+- (NSArray *)keysFromClass:(Class)c;
+
+/** 模型数组中的模型类型 */
+- (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c;
+- (Class)objectClassInArrayFromClass:(Class)c;
+/**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
 
 /**
  * 设置成员变量的值

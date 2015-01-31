@@ -82,12 +82,11 @@
             // 2.遍历每一个成员变量
             for (unsigned int i = 0; i<outCount; i++) {
                 MJIvar *ivar = [MJIvar cachedIvarWithIvar:ivars[i]];
-                ivar.key = [self ivarKey:ivar.propertyName];
-                // 如果有多级映射
-                ivar.keys = [ivar.key componentsSeparatedByString:@"."];
-                // 数组中的模型类
-                ivar.objectClassInArray = [self ivarObjectClassInArray:ivar.propertyName];
                 ivar.srcClass = c;
+                NSString *key = [self ivarKey:ivar.propertyName];
+                [ivar setKey:key forClass:self];
+                // 数组中的模型类
+                [ivar setObjectClassInArray:[self ivarObjectClassInArray:ivar.propertyName] forClass:self];
                 [cachedIvars addObject:ivar];
             }
             
