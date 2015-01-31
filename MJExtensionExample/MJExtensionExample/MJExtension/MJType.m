@@ -25,18 +25,11 @@ static NSMutableDictionary *_cachedTypes;
     
     MJType *type = _cachedTypes[code];
     if (type == nil) {
-        type = [[self alloc] initWithCode:code];
+        type = [[self alloc] init];
+        type.code = code;
         _cachedTypes[code] = type;
     }
     return type;
-}
-
-- (instancetype)initWithCode:(NSString *)code
-{
-    if (self = [super init]) {
-        self.code = code;
-    }
-    return self;
 }
 
 - (void)setCode:(NSString *)code

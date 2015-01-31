@@ -51,10 +51,8 @@
  *  初始化
  *
  *  @param ivar      成员变量
- *  @param srcObject 哪个对象的成员变量
  *
  *  @return 初始化好的对象
  */
-- (instancetype)initWithIvar:(Ivar)ivar;
 + (instancetype)cachedIvarWithIvar:(Ivar)ivar;
 @end

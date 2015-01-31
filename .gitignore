@@ -18,3 +18,5 @@ profile
 *.xcuserstate
 *.swo
 *.swp
+
+*.xcbkptlist
