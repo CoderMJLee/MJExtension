@@ -73,7 +73,7 @@ static NSNumberFormatter *_numberFormatter;
         } else if (typeClass == [NSString class]) {
             if ([value isKindOfClass:[NSNumber class]]) {
                 // NSNumber -> NSString
-                value = [_numberFormatter stringFromNumber:value];
+                value = [value description];
             } else if ([value isKindOfClass:[NSURL class]]) {
                 // NSURL -> NSString
                 value = [value absoluteString];

@@ -16,7 +16,7 @@
 /** 年龄 */
 @property (assign, nonatomic) int age;
 /** 身高 */
-@property (assign, nonatomic) double height;
+@property (copy, nonatomic) NSString *height;
 /** 财富 */
 @property (strong, nonatomic) NSNumber *money;
 @end
