@@ -15,11 +15,21 @@
 #define MJLog(...)
 #endif
 
+// 构建错误
+#define MJBuildError(error, msg) \
+if (error) *error = [NSError errorWithDomain:msg code:250 userInfo:nil];
+
 /**
  * 断言
  * @param condition   条件
  * @param returnValue 返回值
  */
+#define MJAssertError(condition, returnValue, error, msg) \
+if ((condition) == NO) { \
+    MJBuildError(error, msg); \
+    return returnValue;\
+}
+
 #define MJAssert2(condition, returnValue) \
 if ((condition) == NO) return returnValue;
 

@@ -56,12 +56,14 @@
  *  @param keyValues 字典
  */
 - (instancetype)setKeyValues:(NSDictionary *)keyValues;
+- (instancetype)setKeyValues:(NSDictionary *)keyValues error:(NSError **)error;
 
 /**
  *  将模型转成字典
  *  @return 字典
  */
 - (NSDictionary *)keyValues;
+- (NSDictionary *)keyValuesWithError:(NSError **)error;
 
 /**
  *  通过模型数组来创建一个字典数组
@@ -69,6 +71,7 @@
  *  @return 字典数组
  */
 + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray error:(NSError **)error;
 
 #pragma mark - 字典转模型
 /**
@@ -77,6 +80,7 @@
  *  @return 新建的对象
  */
 + (instancetype)objectWithJSONData:(NSData *)data;
++ (instancetype)objectWithJSONData:(NSData *)data error:(NSError **)error;
 
 /**
  *  通过字典来创建一个模型
@@ -84,6 +88,7 @@
  *  @return 新建的对象
  */
 + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues;
++ (instancetype)objectWithKeyValues:(NSDictionary *)keyValues error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型
@@ -91,6 +96,7 @@
  *  @return 新建的对象
  */
 + (instancetype)objectWithFilename:(NSString *)filename;
++ (instancetype)objectWithFilename:(NSString *)filename error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型
@@ -98,6 +104,7 @@
  *  @return 新建的对象
  */
 + (instancetype)objectWithFile:(NSString *)file;
++ (instancetype)objectWithFile:(NSString *)file error:(NSError **)error;
 
 #pragma mark - 字典数组转模型数组
 /**
@@ -106,6 +113,7 @@
  *  @return 新建的对象
  */
 + (NSArray *)objectArrayWithJSONData:(NSData *)data;
++ (NSArray *)objectArrayWithJSONData:(NSData *)data error:(NSError **)error;
 
 /**
  *  通过字典数组来创建一个模型数组
@@ -113,6 +121,7 @@
  *  @return 模型数组
  */
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray;
++ (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型数组
@@ -120,6 +129,7 @@
  *  @return 模型数组
  */
 + (NSArray *)objectArrayWithFilename:(NSString *)filename;
++ (NSArray *)objectArrayWithFilename:(NSString *)filename error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型数组
@@ -127,4 +137,5 @@
  *  @return 模型数组
  */
 + (NSArray *)objectArrayWithFile:(NSString *)file;
++ (NSArray *)objectArrayWithFile:(NSString *)file error:(NSError **)error;
 @end
