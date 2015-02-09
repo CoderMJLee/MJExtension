@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    SexMale,
+    SexFemale
+} Sex;
+
 @interface User : NSObject
 /** 名称 */
 @property (copy, nonatomic) NSString *name;
@@ -19,4 +24,6 @@
 @property (copy, nonatomic) NSString *height;
 /** 财富 */
 @property (strong, nonatomic) NSNumber *money;
+/** 性别 */
+@property (assign, nonatomic) Sex sex;
 @end

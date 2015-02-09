@@ -53,14 +53,15 @@ void keyValues2object()
                            @"icon" : @"lufy.png",
                            @"age" : @20,
                            @"height" : @1.55,
-                           @"money" : @"100.9"
+                           @"money" : @"100.9",
+                           @"sex" : @(SexFemale)
                            };
 
     // 2.将字典转为User模型
     User *user = [User objectWithKeyValues:dict];
 
     // 3.打印User模型的属性
-    NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@", user.name, user.icon, user.age, user.height, user.money);
+    NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d", user.name, user.icon, user.age, user.height, user.money, user.sex);
 }
 
 /**
