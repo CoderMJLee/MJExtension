@@ -37,12 +37,18 @@ NSObject+MJKeyValue.h	NSObject+MJKeyValue.m
 
 ## 最简单的字典转模型
 ```objc
+typedef enum {
+    SexMale,
+    SexFemale
+} Sex;
+
 @interface User : NSObject
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *icon;
 @property (assign, nonatomic) int age;
 @property (assign, nonatomic) double height;
 @property (strong, nonatomic) NSNumber *money;
+@property (assign, nonatomic) Sex sex;
 @end
 
 NSDictionary *dict = @{
@@ -50,15 +56,16 @@ NSDictionary *dict = @{
                @"icon" : @"lufy.png",
                @"age" : @20,
                @"height" : @"1.55",
-               @"money" : @100.9
+               @"money" : @100.9,
+               @"sex" : @(SexFemale)
             };
 
 // 将字典转为User模型
 User *user = [User objectWithKeyValues:dict];
 
-NSLog(@"name=%@, icon=%@, age=%d, height=%f, money=%@", 
-	user.name, user.icon, user.age, user.height, user.money);
-// name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9
+NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d", 
+	user.name, user.icon, user.age, user.height, user.money, user.sex);
+// name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9, sex=1
 ```
 ##### 核心代码
 * `[User objectWithKeyValues:dict]`
