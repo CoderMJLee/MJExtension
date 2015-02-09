@@ -92,7 +92,7 @@
  */
 - (void)setValue:(id)value forObject:(id)object
 {
-    if (_type.KVCDisabled) return;
+    if (_type.KVCDisabled || value == nil) return;
     [object setValue:value forKey:_propertyName];
 }
 
