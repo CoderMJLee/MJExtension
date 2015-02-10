@@ -253,7 +253,7 @@ NSDictionary *dict = @{
                                 @"price" : @100.7
                             }
 	               }
-                    };
+                   };
 
 // 将字典转为Student模型
 Student *stu = [Student objectWithKeyValues:dict];
