@@ -247,12 +247,12 @@ NSDictionary *dict = @{
                                 @"nameChangedTime" : @"2013-08"
                             }
                        },
-	               @"other" : @{
+                       @"other" : @{
                             @"bag" : @{
                                 @"name" : @"小书包",
                                 @"price" : @100.7
                             }
-	               }
+                       }
                    };
 
 // 将字典转为Student模型
