@@ -83,15 +83,12 @@ NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d",
 
 NSDictionary *dict = @{
                @"text" : @"是啊，今天天气确实不错！",
-               
                @"user" : @{
                    @"name" : @"Jack",
                    @"icon" : @"lufy.png"
                 },
-               
                @"retweetedStatus" : @{
                    @"text" : @"今天天气真不错！",
-                   
                    @"user" : @{
                        @"name" : @"Rose",
                        @"icon" : @"nami.png"
@@ -147,35 +144,29 @@ NSDictionary *dict = @{
                        @"statuses" : @[
                            @{
                                @"text" : @"今天天气真不错！",
-                               
                                @"user" : @{
                                    @"name" : @"Rose",
                                    @"icon" : @"nami.png"
                                }
                             },
-                           
                            @{
                                @"text" : @"明天去旅游了",
-                               
                                @"user" : @{
                                    @"name" : @"Jack",
                                    @"icon" : @"lufy.png"
                                }
                             }
                         ],
-                       
                        @"ads" : @[
                            @{
                                @"image" : @"ad01.png",
                                @"url" : @"http://www.ad01.com"
                            },
-                           
                            @{
                                @"image" : @"ad02.png",
                                @"url" : @"http://www.ad02.com"
                            }
                        ],
-                       
                        @"totalNumber" : @"2014"
                     };
 
@@ -276,7 +267,6 @@ NSArray *dictArray = @[
                            @"name" : @"Jack",
                            @"icon" : @"lufy.png",
                         },
-                       
                        @{
                            @"name" : @"Rose",
                            @"icon" : @"nami.png",
