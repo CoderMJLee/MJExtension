@@ -15,7 +15,9 @@
 - (void)encode:(NSCoder *)encoder
 {
     [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
-        [encoder encodeObject:[ivar valueFromObject:self] forKey:ivar.name];
+        id value = [ivar valueFromObject:self];
+        if (value == nil) return;
+        [encoder encodeObject:value forKey:ivar.name];
     }];
 }
 
@@ -23,6 +25,7 @@
 {
     [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
         id value = [decoder decodeObjectForKey:ivar.name];
+        if (value == nil) return;
         [ivar setValue:value forObject:self];
     }];
 }

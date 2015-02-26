@@ -54,6 +54,15 @@ MJAssert2((param) != nil, returnValue)
 #define MJAssertParamNotNil(param) MJAssertParamNotNil2(param, )
 
 /**
+ * 打印所有的属性
+ */
+#define MJLogAllIvars \
+-(NSString *)description \
+{ \
+    return [self keyValues].description; \
+}
+
+/**
  *  类型（属性类型）
  */
 extern NSString *const MJTypeInt;
