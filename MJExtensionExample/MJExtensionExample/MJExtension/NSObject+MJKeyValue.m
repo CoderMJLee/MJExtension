@@ -84,6 +84,7 @@ static NSNumberFormatter *_numberFormatter;
             id value = keyValues ;
             NSArray *keys = [ivar keysFromClass:[self class]];
             for (NSString *key in keys) {
+                if (![value isKindOfClass:[NSDictionary class]]) continue;
                 value = value[key];
             }
             if (!value || value == [NSNull null]) return;
