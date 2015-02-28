@@ -15,6 +15,11 @@
 @protocol MJKeyValue <NSObject>
 @optional
 /**
+ *  这个数组中的属性名将会被忽略：不进行字典和模型的转换
+ */
++ (NSArray *)ignoredPropertyNames;
+
+/**
  *  将属性名换为其他key去字典中取值
  *
  *  @return 字典中的key是属性名，value是从字典中取值用的key

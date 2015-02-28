@@ -7,8 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+/**
+ *  Codeing协议
+ */
+@protocol MJCoding <NSObject>
+@optional
+/**
+ *  这个数组中的属性名将会被忽略：不进行归档
+ */
++ (NSArray *)ignoredCodingPropertyNames;
+@end
 
-@interface NSObject (MJCoding)
+@interface NSObject (MJCoding) <MJCoding>
 /**
  *  解码（从文件中解析对象）
  */
