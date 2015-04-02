@@ -40,18 +40,24 @@
 
 + (Class)ivarObjectClassInArray:(NSString *)propertyName
 {
-    if ([self respondsToSelector:@selector(objectClassInArray)]) {
-        return self.objectClassInArray[propertyName];
+    id class = nil;
+    if ([self respondsToSelector:@selector(objectClassInArray:)]) {
+        class = [self objectClassInArray:propertyName];
+    } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
+        class = self.objectClassInArray[propertyName];
     } else {
         // 为了兼容以前的对象方法
         id tempObject = self.tempObject;
         if ([tempObject respondsToSelector:@selector(objectClassInArray)]) {
             id dict = [tempObject objectClassInArray];
-            return dict[propertyName];
+            class = dict[propertyName];
         }
-        return nil;
     }
-    return nil;
+    // 如果是NSString类型
+    if ([class isKindOfClass:[NSString class]]) {
+        class = NSClassFromString(class);
+    }
+    return class;
 }
 
 #pragma mark - --公共方法--

@@ -14,8 +14,11 @@
 /** 类型标识符 */
 @property (nonatomic, copy) NSString *code;
 
+/** 是否为id类型 */
+@property (nonatomic, readonly, getter=isIdType) BOOL idType;
+
 /** 对象类型（如果是基本数据类型，此值为nil） */
-@property (nonatomic, assign, readonly) Class typeClass;
+@property (nonatomic, readonly) Class typeClass;
 
 /** 类型是否来自于Foundation框架，比如NSString、NSArray */
 @property (nonatomic, readonly, getter = isFromFoundation) BOOL fromFoundation;

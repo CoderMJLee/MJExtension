@@ -19,9 +19,9 @@
 /** 成员名 */
 @property (nonatomic, copy) NSString *name;
 /** 成员属性名 */
-@property (nonatomic, copy, readonly) NSString *propertyName;
+@property (nonatomic, readonly) NSString *propertyName;
 /** 成员变量的类型 */
-@property (nonatomic, strong, readonly) MJType *type;
+@property (nonatomic, readonly) MJType *type;
 /** 成员来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
 

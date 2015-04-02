@@ -38,7 +38,9 @@ static NSMutableDictionary *_cachedTypes;
     
     MJAssertParamNotNil(code);
     
-    if (code.length == 0) {
+    if ([code isEqualToString:MJTypeId]) {
+        _idType = YES;
+    } else if (code.length == 0) {
         _KVCDisabled = YES;
     } else if (code.length > 3 && [code hasPrefix:@"@\""]) {
         // 去掉@"和"，截取中间的类型名称
