@@ -26,4 +26,6 @@ typedef enum {
 @property (strong, nonatomic) NSNumber *money;
 /** 性别 */
 @property (assign, nonatomic) Sex sex;
+/** 同性恋 */
+@property (assign, nonatomic, getter=isGay) BOOL gay;
 @end

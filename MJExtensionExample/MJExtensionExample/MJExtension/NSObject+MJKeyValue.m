@@ -117,6 +117,10 @@ static NSNumberFormatter *_numberFormatter;
                 } else if (typeClass == [NSURL class]) {
                     // NSString -> NSURL
                     value = [NSURL URLWithString:value];
+                } else if ([type.code isEqualToString:MJTypeBOOL]) {
+                    // 字符串转BOOL（字符串没有charValue方法）
+                    // 系统会调用字符串的charValue转为BOOL类型
+                    value = @([value intValue]);
                 }
             } else {
                 Class objectClass = [ivar objectClassInArrayFromClass:[self class]];
