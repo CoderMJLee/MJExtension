@@ -15,6 +15,7 @@ void keyValues2object();
 void keyValues2object2();
 void keyValues2object3();
 void keyValues2object4();
+void keyValues2object5();
 void keyValuesArray2objectArray();
 void object2keyValues();
 void objectArray2keyValuesArray();

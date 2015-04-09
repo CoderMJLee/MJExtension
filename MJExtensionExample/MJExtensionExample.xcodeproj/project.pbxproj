@@ -23,6 +23,7 @@
 		2DA30C251976A88600287282 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA30C241976A88600287282 /* MJFoundation.m */; };
 		2DA7B58B197BB5B200B62F78 /* MJConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA7B58A197BB5B200B62F78 /* MJConst.m */; };
 		2DF9EEA61A7282C4003D7940 /* NSObject+MJIvar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9EEA51A7282C4003D7940 /* NSObject+MJIvar.m */; };
+		DC520A161AD6495B00A1DCCC /* Weather.m in Sources */ = {isa = PBXBuildFile; fileRef = DC520A151AD6495B00A1DCCC /* Weather.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +73,8 @@
 		2DA7B58A197BB5B200B62F78 /* MJConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJConst.m; sourceTree = "<group>"; };
 		2DF9EEA41A7282C4003D7940 /* NSObject+MJIvar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJIvar.h"; sourceTree = "<group>"; };
 		2DF9EEA51A7282C4003D7940 /* NSObject+MJIvar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJIvar.m"; sourceTree = "<group>"; };
+		DC520A141AD6495B00A1DCCC /* Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weather.h; sourceTree = "<group>"; };
+		DC520A151AD6495B00A1DCCC /* Weather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Weather.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,8 @@
 				2D6CAFFB1A5AA34800E2BA5E /* Student.m */,
 				2D3576211A7913F30056D6BF /* Bag.h */,
 				2D3576221A7913F30056D6BF /* Bag.m */,
+				DC520A141AD6495B00A1DCCC /* Weather.h */,
+				DC520A151AD6495B00A1DCCC /* Weather.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -233,6 +238,7 @@
 				2D9CAF53192FA60E0011F500 /* MJIvar.m in Sources */,
 				2D6CAFF81A5AA0BB00E2BA5E /* StatusResult.m in Sources */,
 				2D9CAF2E192FA6020011F500 /* main.m in Sources */,
+				DC520A161AD6495B00A1DCCC /* Weather.m in Sources */,
 				2DF9EEA61A7282C4003D7940 /* NSObject+MJIvar.m in Sources */,
 				2D9CAF59192FA60E0011F500 /* NSObject+MJKeyValue.m in Sources */,
 				2D9CAF58192FA60E0011F500 /* NSObject+MJCoding.m in Sources */,

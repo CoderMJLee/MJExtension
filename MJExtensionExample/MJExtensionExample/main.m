@@ -26,6 +26,7 @@
 #import "Student.h"
 #import "StatusResult.h"
 #import "Bag.h"
+#import "Weather.h"
 
 /** main函数 */
 int main(int argc, const char * argv[])
@@ -35,6 +36,7 @@ int main(int argc, const char * argv[])
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
         execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
         execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
+        execute(keyValues2object5, @"复杂的字典 -> 模型 (模型的数组属性里面装着NSDictionary/NSNumber等Foundation数据类型)");
         execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
         execute(object2keyValues, @"模型转字典");
         execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
@@ -201,6 +203,42 @@ void keyValues2object4()
           stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
     NSLog(@"bagName=%@, bagPrice=%f",
           stu.bag.name, stu.bag.price);
+}
+
+/**
+ *  复杂的字典 -> 模型 (模型的数组属性里面又装着模型)
+ */
+void keyValues2object5()
+{
+    // 1.定义一个字典
+    NSDictionary *dict = @{
+                           @"temperatures":@[ @(5.7), @(5.7), @(7.8), @(9.2) ,@(8.1), @(4.1), @(4.0), @(3.7)],
+                           @"cloud":@[
+                                   @{
+                                       @"direction":@"西北",
+                                       @"speed":@"1"
+                                       },
+                                   @{
+                                       @"direction":@"西",
+                                       @"speed":@"3"
+                                       },
+                                   @{
+                                       @"direction":@"北",
+                                       @"speed":@"1"
+                                       }
+                                      ]
+                           };
+    
+    // 2.将字典转为StatusResult模型
+    Weather *result = [Weather objectWithKeyValues:dict];
+    
+    for (NSNumber *temp in result.temperatures) {
+        NSLog(@"%f", temp.floatValue);
+    }
+    
+    for (NSDictionary *cloud in result.cloud) {
+        NSLog(@"%@", cloud);
+    }
 }
 
 /**
