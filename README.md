@@ -1,5 +1,6 @@
 ## MJExtension
-The fastest and most convenient conversion between JSON and model
+* The fastest and most convenient conversion between JSON and model
+* 世界上转换速度最快、使用最简单方便的字典转模型框架
 
 ## 能做什么？
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
@@ -215,6 +216,7 @@ for (Ad *ad in result.ads) {
 ##### 核心代码
 * 在模型内部实现`+ (NSDictionary *)objectClassInArray`方法  
 * `[StatusResult objectWithKeyValues:dict]`
+* 提醒一句：如果NSArray\NSMutableArray属性中存放的不希望是模型，而是NSNumber、NSString等基本数据，那么就不需要实现`+ (NSDictionary *)objectClassInArray`方法
 
 ## 模型中的属性名和字典中的key不相同(或者需要多级映射)
 ```objc
