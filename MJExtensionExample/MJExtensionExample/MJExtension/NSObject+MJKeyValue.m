@@ -166,6 +166,14 @@ static NSNumberFormatter *_numberFormatter;
     // 1.判断真实性
     MJAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, error, @"keyValuesArray参数不是一个数组");
     
+    if([MJFoundation isClassFromFoundation:[self class]]) {
+        // 数组内所放数据来自于Foundation
+        for (id keyValues in keyValuesArray) {
+            MJAssertError([keyValues isKindOfClass:[self class]], nil, error, @"keyValuesArray内容与目标内容不一致");
+        }
+        return keyValuesArray.copy;
+    }
+    
     // 2.创建数组
     NSMutableArray *modelArray = [NSMutableArray array];
     
