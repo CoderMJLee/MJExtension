@@ -55,7 +55,9 @@ void keyValues2object()
                            @"height" : @1.55,
                            @"money" : @"100.9",
                            @"sex" : @(SexFemale),
-                           @"gay" : @"1"
+//                           @"gay" : @"1"
+//                           @"gay" : @"NO"
+                           @"gay" : @"true"
                            };
 
     // 2.将字典转为User模型
