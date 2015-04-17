@@ -67,8 +67,8 @@
  *  将字典的键值对转成模型属性
  *  @param keyValues 字典
  */
-- (instancetype)setKeyValues:(NSDictionary *)keyValues;
-- (instancetype)setKeyValues:(NSDictionary *)keyValues error:(NSError **)error;
+- (instancetype)setKeyValues:(id)keyValues;
+- (instancetype)setKeyValues:(id)keyValues error:(NSError **)error;
 
 /**
  *  将模型转成字典
@@ -99,8 +99,8 @@
  *  @param keyValues 字典
  *  @return 新建的对象
  */
-+ (instancetype)objectWithKeyValues:(NSDictionary *)keyValues;
-+ (instancetype)objectWithKeyValues:(NSDictionary *)keyValues error:(NSError **)error;
++ (instancetype)objectWithKeyValues:(id)keyValues;
++ (instancetype)objectWithKeyValues:(id)keyValues error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型
@@ -132,8 +132,8 @@
  *  @param keyValuesArray 字典数组
  *  @return 模型数组
  */
-+ (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray;
-+ (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray error:(NSError **)error;
++ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray;
++ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型数组

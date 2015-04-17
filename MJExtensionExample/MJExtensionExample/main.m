@@ -32,6 +32,7 @@ int main(int argc, const char * argv[])
 {
     @autoreleasepool {
         execute(keyValues2object, @"简单的字典 -> 模型");
+        execute(keyValues2object1, @"JSON字符串 -> 模型");
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
         execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
         execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
@@ -65,6 +66,21 @@ void keyValues2object()
 
     // 3.打印User模型的属性
     NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+}
+
+/**
+ *  JSON字符串 -> 模型
+ */
+void keyValues2object1()
+{
+    // 1.定义一个JSON字符串
+    NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20}";
+
+    // 2.将JSON字符串转为User模型
+    User *user = [User objectWithKeyValues:jsonString];
+
+    // 3.打印User模型的属性
+    NSLog(@"name=%@, icon=%@, age=%d", user.name, user.icon, user.age);
 }
 
 /**

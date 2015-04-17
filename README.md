@@ -73,6 +73,21 @@ NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d",
 ##### 核心代码
 * `[User objectWithKeyValues:dict]`
 
+## JSON字符串转模型
+```objc
+// 1.定义一个JSON字符串
+NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20}";
+
+// 2.将JSON字符串转为User模型
+User *user = [User objectWithKeyValues:jsonString];
+
+// 3.打印User模型的属性
+NSLog(@"name=%@, icon=%@, age=%d", user.name, user.icon, user.age);
+// name=Jack, icon=lufy.png, age=20
+```
+##### 核心代码
+* `[User objectWithKeyValues:dict]`
+
 ## 模型中嵌套模型
 ```objc
 @interface Status : NSObject
