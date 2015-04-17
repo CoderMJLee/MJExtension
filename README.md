@@ -6,8 +6,10 @@
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
     * `字典（JSON）` --> `模型（Model）`
+    * `JSON字符串` --> `模型（Model）`
     * `模型（Model）` --> `字典（JSON）`
     * `字典数组（JSON Array）` --> `模型数组（Model Array）`
+    * `JSON字符串` --> `模型数组（Model Array）`
     * `模型数组（Model Array）` --> `字典数组（JSON Array）`
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 

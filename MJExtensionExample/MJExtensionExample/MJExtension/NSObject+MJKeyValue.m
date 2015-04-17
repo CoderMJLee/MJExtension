@@ -11,6 +11,7 @@
 #import "MJProperty.h"
 #import "MJType.h"
 #import "MJConst.h"
+#import "NSString+MJExtension.h"
 #import "MJFoundation.h"
 
 @implementation NSObject (MJKeyValue)
@@ -76,6 +77,11 @@ static NSNumberFormatter *_numberFormatter;
 
 - (instancetype)setKeyValues:(NSDictionary *)keyValues error:(NSError *__autoreleasing *)error
 {
+    // 如果是JSON字符串
+    if ([keyValues isKindOfClass:[NSString class]]) {
+        keyValues = [((NSString *)keyValues) JSONObject];
+    }
+    
     MJAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
     
     @try {
@@ -100,8 +106,12 @@ static NSNumberFormatter *_numberFormatter;
             // 2.如果是模型属性
             MJType *type = property.type;
             Class typeClass = type.typeClass;
+            Class objectClass = [property objectClassInArrayFromClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
                 value = [typeClass objectWithKeyValues:value];
+            } else if (objectClass) {
+                // 3.字典数组-->模型数组
+                value = [objectClass objectArrayWithKeyValuesArray:value];
             } else if (typeClass == [NSString class]) {
                 if ([value isKindOfClass:[NSNumber class]]) {
                     // NSNumber -> NSString
@@ -128,12 +138,6 @@ static NSNumberFormatter *_numberFormatter;
                     } else {
                         value = @([value intValue]);
                     }
-                }
-            } else {
-                Class objectClass = [property objectClassInArrayFromClass:[self class]];
-                if (objectClass) {
-                    // 3.字典数组-->模型数组
-                    value = [objectClass objectArrayWithKeyValuesArray:value];
                 }
             }
             
@@ -170,6 +174,11 @@ static NSNumberFormatter *_numberFormatter;
 
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray error:(NSError *__autoreleasing *)error
 {
+    // 如果是JSON字符串
+    if ([keyValuesArray isKindOfClass:[NSString class]]) {
+        keyValuesArray = [((NSString *)keyValuesArray) JSONObject];
+    }
+    
     // 1.判断真实性
     MJAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, error, @"keyValuesArray参数不是一个数组");
     
@@ -238,16 +247,14 @@ static NSNumberFormatter *_numberFormatter;
             // 2.如果是模型属性
             MJType *type = property.type;
             Class typeClass = type.typeClass;
+            Class objectClass = [property objectClassInArrayFromClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
                 value = [value keyValues];
+            } else if (objectClass) {
+                // 3.处理数组里面有模型的情况
+                value = [objectClass keyValuesArrayWithObjectArray:value];
             } else if (typeClass == [NSURL class]) {
                 value = [value absoluteString];
-            } else {
-                Class objectClass = [property objectClassInArrayFromClass:[self class]];
-                if (objectClass) {
-                    // 3.处理数组里面有模型的情况
-                    value = [objectClass keyValuesArrayWithObjectArray:value];
-                }
             }
             
             // 4.赋值
