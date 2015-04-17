@@ -1,23 +1,23 @@
 //
-//  MJIvar.m
-//  MJExtension
+//  MJProperty.m
+//  MJExtensionExample
 //
-//  Created by mj on 14-1-15.
-//  Copyright (c) 2014年 itcast. All rights reserved.
+//  Created by MJ Lee on 15/4/17.
+//  Copyright (c) 2015年 itcast. All rights reserved.
 //
 
-#import "MJIvar.h"
+#import "MJProperty.h"
 #import "MJType.h"
 #import "MJFoundation.h"
 #import "MJConst.h"
 
-@interface MJIvar()
+@interface MJProperty()
 @property (strong, nonatomic) NSMutableDictionary *keyDict;
 @property (strong, nonatomic) NSMutableDictionary *keysDict;
 @property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
 @end
 
-@implementation MJIvar
+@implementation MJProperty
 
 - (NSMutableDictionary *)keyDict
 {
@@ -43,39 +43,31 @@
     return _objectClassInArrayDict;
 }
 
-+ (instancetype)cachedIvarWithIvar:(Ivar)ivar
++ (instancetype)cachedPropertyWithProperty:(objc_property_t)property
 {
-    MJIvar *ivarObject = objc_getAssociatedObject(self, ivar);
-    if (ivarObject == nil) {
-        ivarObject = [[self alloc] init];
-        ivarObject.ivar = ivar;
-        objc_setAssociatedObject(self, ivar, ivarObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    MJProperty *propertyObj = objc_getAssociatedObject(self, property);
+    if (propertyObj == nil) {
+        propertyObj = [[self alloc] init];
+        propertyObj.property = property;
+        objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
-    return ivarObject;
+    return propertyObj;
 }
 
-/**
- *  设置成员变量
- */
-- (void)setIvar:(Ivar)ivar
+- (void)setProperty:(objc_property_t)property
 {
-    _ivar = ivar;
+    _property = property;
     
-    MJAssertParamNotNil(ivar);
+    MJAssertParamNotNil(property);
     
-    // 1.成员变量名
-    _name = @(ivar_getName(ivar));
+    // 1.属性名
+    _name = @(property_getName(property));
     
-    // 2.属性名
-    if ([_name hasPrefix:@"_"]) {
-        _propertyName = [_name stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
-    } else {
-        _propertyName = _name;
-    }
-    
-    // 3.成员变量的类型符
-    NSString *code = @(ivar_getTypeEncoding(ivar));
-    _type = [MJType cachedTypeWithCode:code];
+    // 2.成员类型
+    NSString *attrs = @(property_getAttributes(property));
+    NSUInteger loc = 1;
+    NSUInteger len = [attrs rangeOfString:@","].location - loc;
+    _type = [MJType cachedTypeWithCode:[attrs substringWithRange:NSMakeRange(loc, len)]];
 }
 
 /**
@@ -84,7 +76,7 @@
 - (id)valueFromObject:(id)object
 {
     if (_type.KVCDisabled) return [NSNull null];
-    return [object valueForKey:_propertyName];
+    return [object valueForKey:_name];
 }
 
 /**
@@ -93,7 +85,7 @@
 - (void)setValue:(id)value forObject:(id)object
 {
     if (_type.KVCDisabled || value == nil) return;
-    [object setValue:value forKey:_propertyName];
+    [object setValue:value forKey:_name];
 }
 
 /** 对应着字典中的key */

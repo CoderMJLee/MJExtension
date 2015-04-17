@@ -7,8 +7,8 @@
 //
 
 #import "NSObject+MJCoding.h"
-#import "NSObject+MJIvar.h"
-#import "MJIvar.h"
+#import "NSObject+MJProperty.h"
+#import "MJProperty.h"
 
 @implementation NSObject (MJCoding)
 
@@ -19,13 +19,13 @@
         ignoredCodingPropertyNames = [[self class] ignoredCodingPropertyNames];
     }
     
-    [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
+    [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略
-        if ([ignoredCodingPropertyNames containsObject:ivar.propertyName]) return;
+        if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
-        id value = [ivar valueFromObject:self];
+        id value = [property valueFromObject:self];
         if (value == nil) return;
-        [encoder encodeObject:value forKey:ivar.name];
+        [encoder encodeObject:value forKey:property.name];
     }];
 }
 
@@ -36,13 +36,13 @@
         ignoredCodingPropertyNames = [[self class] ignoredCodingPropertyNames];
     }
     
-    [[self class] enumerateIvarsWithBlock:^(MJIvar *ivar, BOOL *stop) {
+    [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略
-        if ([ignoredCodingPropertyNames containsObject:ivar.propertyName]) return;
+        if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
-        id value = [decoder decodeObjectForKey:ivar.name];
+        id value = [decoder decodeObjectForKey:property.name];
         if (value == nil) return;
-        [ivar setValue:value forObject:self];
+        [property setValue:value forObject:self];
     }];
 }
 @end

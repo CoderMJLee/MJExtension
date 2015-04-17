@@ -1,20 +1,20 @@
 //
-//  NSObject+MJIvar.m
-//  MJExtension
+//  NSObject+MJProperty.m
+//  MJExtensionExample
 //
-//  Created by mj on 14-1-15.
-//  Copyright (c) 2014年 itcast. All rights reserved.
+//  Created by MJ Lee on 15/4/17.
+//  Copyright (c) 2015年 itcast. All rights reserved.
 //
 
-#import "MJIvar.h"
-#import "NSObject+MJIvar.h"
+#import "NSObject+MJProperty.h"
 #import "NSObject+MJKeyValue.h"
+#import "MJProperty.h"
 #import "MJFoundation.h"
+#import <objc/runtime.h>
 
 @implementation NSObject (MJMember)
-
 #pragma mark - --私有方法--
-+ (NSString *)ivarKey:(NSString *)propertyName
++ (NSString *)propertyKey:(NSString *)propertyName
 {
     MJAssertParamNotNil2(propertyName, nil);
     
@@ -38,7 +38,7 @@
     return key;
 }
 
-+ (Class)ivarObjectClassInArray:(NSString *)propertyName
++ (Class)propertyObjectClassInArray:(NSString *)propertyName
 {
     id class = nil;
     if ([self respondsToSelector:@selector(objectClassInArray:)]) {
@@ -72,40 +72,40 @@
     return tempObject;
 }
 
-+ (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
++ (void)enumeratePropertiesWithBlock:(MJPropertiesBlock)block
 {
-    static const char MJCachedIvarsKey;
+    static const char MJCachedPropertiesKey;
     // 获得成员变量
-    NSMutableArray *cachedIvars = objc_getAssociatedObject(self, &MJCachedIvarsKey);
-    if (cachedIvars == nil) {
-        cachedIvars = [NSMutableArray array];
+    NSMutableArray *cachedProperties = objc_getAssociatedObject(self, &MJCachedPropertiesKey);
+    if (cachedProperties == nil) {
+        cachedProperties = [NSMutableArray array];
         
         [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             // 1.获得所有的成员变量
             unsigned int outCount = 0;
-            Ivar *ivars = class_copyIvarList(c, &outCount);
+            objc_property_t *properties = class_copyPropertyList(c, &outCount);
             
             // 2.遍历每一个成员变量
             for (unsigned int i = 0; i<outCount; i++) {
-                MJIvar *ivar = [MJIvar cachedIvarWithIvar:ivars[i]];
-                ivar.srcClass = c;
-                NSString *key = [self ivarKey:ivar.propertyName];
-                [ivar setKey:key forClass:self];
+                MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+                property.srcClass = c;
+                NSString *key = [self propertyKey:property.name];
+                [property setKey:key forClass:self];
                 // 数组中的模型类
-                [ivar setObjectClassInArray:[self ivarObjectClassInArray:ivar.propertyName] forClass:self];
-                [cachedIvars addObject:ivar];
+                [property setObjectClassInArray:[self propertyObjectClassInArray:property.name] forClass:self];
+                [cachedProperties addObject:property];
             }
             
             // 3.释放内存
-            free(ivars);
+            free(properties);
         }];
-        objc_setAssociatedObject(self, &MJCachedIvarsKey, cachedIvars, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &MJCachedPropertiesKey, cachedProperties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
     // 遍历成员变量
     BOOL stop = NO;
-    for (MJIvar *ivar in cachedIvars) {
-        block(ivar, &stop);
+    for (MJProperty *property in cachedProperties) {
+        block(property, &stop);
         if (stop) break;
     }
 }
