@@ -43,6 +43,19 @@ static NSNumberFormatter *_numberFormatter;
 
 + (instancetype)objectWithKeyValues:(NSDictionary *)keyValues error:(NSError *__autoreleasing *)error
 {
+    return [self objectWithKeyValues:keyValues context:nil error:error];
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
+{
+    return [self objectWithKeyValues:keyValues context:context error:nil];
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
+{
+    if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
+        return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
+    }
     return [[[self alloc] init] setKeyValues:keyValues error:error];
 }
 
@@ -77,7 +90,16 @@ static NSNumberFormatter *_numberFormatter;
 
 - (instancetype)setKeyValues:(NSDictionary *)keyValues error:(NSError *__autoreleasing *)error
 {
-    // 如果是JSON字符串
+    return [self setKeyValues:keyValues context:nil error:error];
+}
+
+- (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
+{
+    return [self setKeyValues:keyValues context:context error:nil];
+}
+
+- (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
+{// 如果是JSON字符串
     if ([keyValues isKindOfClass:[NSString class]]) {
         keyValues = [((NSString *)keyValues) JSONObject];
     }
@@ -108,10 +130,10 @@ static NSNumberFormatter *_numberFormatter;
             Class typeClass = type.typeClass;
             Class objectClass = [property objectClassInArrayFromClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
-                value = [typeClass objectWithKeyValues:value];
+                value = [typeClass objectWithKeyValues:value context:context error:error];
             } else if (objectClass) {
                 // 3.字典数组-->模型数组
-                value = [objectClass objectArrayWithKeyValuesArray:value];
+                value = [objectClass objectArrayWithKeyValuesArray:value context:context error:error];
             } else if (typeClass == [NSString class]) {
                 if ([value isKindOfClass:[NSNumber class]]) {
                     // NSNumber -> NSString
@@ -174,6 +196,16 @@ static NSNumberFormatter *_numberFormatter;
 
 + (NSArray *)objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray error:(NSError *__autoreleasing *)error
 {
+    return [self objectArrayWithKeyValuesArray:keyValuesArray context:nil error:error];
+}
+
++ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context
+{
+    return [self objectArrayWithKeyValuesArray:keyValuesArray context:context error:nil];
+}
+
++ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
+{
     // 如果是JSON字符串
     if ([keyValuesArray isKindOfClass:[NSString class]]) {
         keyValuesArray = [((NSString *)keyValuesArray) JSONObject];
@@ -187,7 +219,7 @@ static NSNumberFormatter *_numberFormatter;
     
     // 3.遍历
     for (NSDictionary *keyValues in keyValuesArray) {
-        id model = [self objectWithKeyValues:keyValues error:error];
+        id model = [self objectWithKeyValues:keyValues context:context error:error];
         if (model) [modelArray addObject:model];
     }
     

@@ -426,15 +426,12 @@ NSDictionary *dict = @{
 
 // This demo just provide simple steps
 NSManagedObjectContext *context = nil;
-User *user = [NSEntityDescription insertNewObjectForEntityForName:@"YourModelClass" inManagedObjectContext:context];
-
-// JSON -> user
-[user setKeyValues:dict];
+User *user = [User objectWithKeyValues:dict context:context];
 
 [context save:nil];
 ```
 ##### Core code
-* `[user setKeyValues:dict]`
+* `[User objectWithKeyValues:dict context:context]`
 
 ## More
 * Please reference `NSObject+MJKeyValue.h`
@@ -874,16 +871,13 @@ NSDictionary *dict = @{
 
 // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
 NSManagedObjectContext *context = nil;
-User *user = [NSEntityDescription insertNewObjectForEntityForName:@"模型名称" inManagedObjectContext:context];
-
-// 字典转模型
-[user setKeyValues:dict];
+User *user = [User objectWithKeyValues:dict context:context];
 
 // 利用CoreData保存模型
 [context save:nil];
 ```
 ##### Core code
-* `[user setKeyValues:dict]`
+* `[User objectWithKeyValues:dict context:context]`
 
 ## 更多用法
 * 参考`NSObject+MJKeyValue.h`

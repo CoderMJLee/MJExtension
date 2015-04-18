@@ -324,10 +324,7 @@ void coreData()
 
         // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
         NSManagedObjectContext *context = nil;
-        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"模型名称" inManagedObjectContext:context];
-
-        // 字典转模型
-        [user setKeyValues:dict];
+        User *user = [User objectWithKeyValues:dict context:context];
 
         // 利用CoreData保存模型
         [context save:nil];

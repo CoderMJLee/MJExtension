@@ -11,6 +11,7 @@
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
+#import <CoreData/CoreData.h>
 
 @implementation NSObject (MJMember)
 #pragma mark - --私有方法--
@@ -24,7 +25,7 @@
         key = [self replacedKeyFromPropertyName:propertyName];
     } else if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
         key = self.replacedKeyFromPropertyName[propertyName];
-    } else {
+    } else if (![self isSubclassOfClass:[NSManagedObject class]]) { // 如果不是CoreData对象
         // 为了兼容以前的对象方法
         id tempObject = self.tempObject;
         if ([tempObject respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
@@ -45,7 +46,7 @@
         class = [self objectClassInArray:propertyName];
     } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
         class = self.objectClassInArray[propertyName];
-    } else {
+    } else if (![self isSubclassOfClass:[NSManagedObject class]]) { // 如果不是CoreData对象
         // 为了兼容以前的对象方法
         id tempObject = self.tempObject;
         if ([tempObject respondsToSelector:@selector(objectClassInArray)]) {
