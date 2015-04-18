@@ -8,6 +8,7 @@
 * `JSON Array` --> `Model Array`
 * `JSONString` --> `Model Array`
 * `Model Array` --> `JSON Array`
+* Supprting CoreData Objects
 
 ## Differences between MJExtension, JSONModel and Mantle
 * Conversion rate
@@ -411,6 +412,30 @@ NSLog(@"%@", dictArray);
 ##### Core code
 * `[User keyValuesArrayWithObjectArray:userArray]`
 
+## Core Data
+```objc
+NSDictionary *dict = @{
+                       @"name" : @"Jack",
+                       @"icon" : @"lufy.png",
+                       @"age" : @20,
+                       @"height" : @1.55,
+                       @"money" : @"100.9",
+                       @"sex" : @(SexFemale),
+                       @"gay" : @"true"
+                       };
+
+// This demo just provide simple steps
+NSManagedObjectContext *context = nil;
+User *user = [NSEntityDescription insertNewObjectForEntityForName:@"YourModelClass" inManagedObjectContext:context];
+
+// JSON -> user
+[user setKeyValues:dict];
+
+[context save:nil];
+```
+##### Core code
+* `[user setKeyValues:dict]`
+
 ## More
 * Please reference `NSObject+MJKeyValue.h`
 * Please reference `NSObject+MJCoding.h`
@@ -427,6 +452,7 @@ NSLog(@"%@", dictArray);
     * `字典数组（JSON Array）` --> `模型数组（Model Array）`
     * `JSON字符串` --> `模型数组（Model Array）`
     * `模型数组（Model Array）` --> `字典数组（JSON Array）`
+    * 支持CoreData对象
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 
 ## MJExtension和JSONModel、Mantle等框架的区别
@@ -833,6 +859,31 @@ NSLog(@"%@", dictArray);
 ```
 ##### 核心代码
 * `[User keyValuesArrayWithObjectArray:userArray]`
+
+## Core Data
+```objc
+NSDictionary *dict = @{
+                       @"name" : @"Jack",
+                       @"icon" : @"lufy.png",
+                       @"age" : @20,
+                       @"height" : @1.55,
+                       @"money" : @"100.9",
+                       @"sex" : @(SexFemale),
+                       @"gay" : @"true"
+                       };
+
+// 这个Demo仅仅提供思路，具体的方法参数需要自己创建
+NSManagedObjectContext *context = nil;
+User *user = [NSEntityDescription insertNewObjectForEntityForName:@"模型名称" inManagedObjectContext:context];
+
+// 字典转模型
+[user setKeyValues:dict];
+
+// 利用CoreData保存模型
+[context save:nil];
+```
+##### Core code
+* `[user setKeyValues:dict]`
 
 ## 更多用法
 * 参考`NSObject+MJKeyValue.h`

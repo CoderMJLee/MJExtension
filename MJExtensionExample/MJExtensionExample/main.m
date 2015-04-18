@@ -26,6 +26,7 @@
 #import "Student.h"
 #import "StatusResult.h"
 #import "Bag.h"
+#import <CoreData/CoreData.h>
 
 /** main函数 */
 int main(int argc, const char * argv[])
@@ -39,6 +40,7 @@ int main(int argc, const char * argv[])
         execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
         execute(object2keyValues, @"模型转字典");
         execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
+        execute(coreData, @"CoreData示例");
     }
     return 0;
 }
@@ -302,6 +304,36 @@ void objectArray2keyValuesArray()
     // 2.将模型数组转为字典数组
     NSArray *dictArray = [User keyValuesArrayWithObjectArray:userArray];
     NSLog(@"%@", dictArray);
+}
+
+/**
+ *  CoreData示例
+ */
+void coreData()
+{
+    @try {
+        NSDictionary *dict = @{
+                               @"name" : @"Jack",
+                               @"icon" : @"lufy.png",
+                               @"age" : @20,
+                               @"height" : @1.55,
+                               @"money" : @"100.9",
+                               @"sex" : @(SexFemale),
+                               @"gay" : @"true"
+                               };
+
+        // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
+        NSManagedObjectContext *context = nil;
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"模型名称" inManagedObjectContext:context];
+
+        // 字典转模型
+        [user setKeyValues:dict];
+
+        // 利用CoreData保存模型
+        [context save:nil];
+    } @catch (NSException *e) {
+    
+    }
 }
 
 void execute(void (*fn)(), NSString *comment)
