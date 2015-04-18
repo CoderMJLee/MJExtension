@@ -1,5 +1,421 @@
 ## MJExtension
-* The fastest and most convenient conversion between JSON and model
+* The fastest, most convenient and most nonintrusive conversion between JSON and model.
+
+## Features
+* `JSON` --> `Model`
+* `JSONString` --> `Model`
+* `Model` --> `JSON`
+* `JSON Array` --> `Model Array`
+* `JSONString` --> `Model Array`
+* `Model Array` --> `JSON Array`
+
+## Differences between MJExtension, JSONModel and Mantle
+* Conversion rate
+	* `MJExtension` > `JSONModel` > `Mantle`
+* You can also create a demo to test it yourself.
+* How to use it
+	* `JSONModel`：You `must` let `all` model class extends `JSONModel` class.
+	* `Mantle`：You `must` let `all` model class extends `MTModel` class.
+	* `MJExtension`：Your model class `dont't need to` extends another base class. `Nonintrusive`, `convenient`.
+
+## How
+* Cocoapods：`pod 'MJExtension'`
+* Manual way
+	* Drag all source files under floder `MJExtensionExample/MJExtensionExample/MJExtension` to your project.
+	* Import the main header file：`#import "MJExtension.h"`
+```objc
+MJExtension.h
+MJConst.h               MJConst.m
+MJFoundation.h          MJFoundation.m
+MJIvar.h                MJIvar.m
+MJType.h                MJType.m
+NSObject+MJCoding.h     NSObject+MJCoding.m
+NSObject+MJIvar.h       NSObject+MJIvar.m
+NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
+```
+
+## The most simple JSON -> Model
+```objc
+typedef enum {
+    SexMale,
+    SexFemale
+} Sex;
+
+@interface User : NSObject
+@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *icon;
+@property (assign, nonatomic) int age;
+@property (assign, nonatomic) double height;
+@property (strong, nonatomic) NSNumber *money;
+@property (assign, nonatomic) Sex sex;
+@end
+
+NSDictionary *dict = @{
+    @"name" : @"Jack",
+    @"icon" : @"lufy.png",
+    @"age" : @20,
+    @"height" : @"1.55",
+    @"money" : @100.9,
+    @"sex" : @(SexFemale)
+};
+
+// JSON -> User
+User *user = [User objectWithKeyValues:dict];
+
+NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d",
+      user.name, user.icon, user.age, user.height, user.money, user.sex);
+// name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9, sex=1
+```
+##### Core code
+* `[User objectWithKeyValues:dict]`
+
+## JSONString -> Model
+```objc
+// 1.Define a JSONString
+NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20}";
+
+// 2.JSONString -> User
+User *user = [User objectWithKeyValues:jsonString];
+
+// 3.Print user's properties
+NSLog(@"name=%@, icon=%@, age=%d", user.name, user.icon, user.age);
+// name=Jack, icon=lufy.png, age=20
+```
+##### Core code
+* `[User objectWithKeyValues:dict]`
+
+## Model contains model
+```objc
+@interface Status : NSObject
+@property (copy, nonatomic) NSString *text;
+@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) Status *retweetedStatus;
+@end
+
+NSDictionary *dict = @{
+    @"text" : @"Agree!Nice weather!",
+    @"user" : @{
+        @"name" : @"Jack",
+        @"icon" : @"lufy.png"
+    },
+    @"retweetedStatus" : @{
+        @"text" : @"Nice weather!",
+        @"user" : @{
+            @"name" : @"Rose",
+            @"icon" : @"nami.png"
+        }
+    }
+};
+
+// JSON -> Status
+Status *status = [Status objectWithKeyValues:dict];
+
+NSString *text = status.text;
+NSString *name = status.user.name;
+NSString *icon = status.user.icon;
+NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
+// text=Agree!Nice weather!, name=Jack, icon=lufy.png
+
+NSString *text2 = status.retweetedStatus.text;
+NSString *name2 = status.retweetedStatus.user.name;
+NSString *icon2 = status.retweetedStatus.user.icon;
+NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
+// text2=Nice weather!, name2=Rose, icon2=nami.png
+```
+##### Core code
+* `[Status objectWithKeyValues:dict]`
+
+## Model contains model-array
+```objc
+@interface Ad : NSObject
+@property (copy, nonatomic) NSString *image;
+@property (copy, nonatomic) NSString *url;
+@end
+
+@interface StatusResult : NSObject
+/** Contatins status model */
+@property (strong, nonatomic) NSMutableArray *statuses;
+/** Contatins ad model */
+@property (strong, nonatomic) NSArray *ads;
+@property (strong, nonatomic) NSNumber *totalNumber;
+@end
+
+@implementation StatusResult
+// Why implements this function? Tell MJExtension what type model will be contained in statuses and ads.
+/*
+ + (NSDictionary *)objectClassInArray
+ {
+ return @{
+ @"statuses" : [Status class],
+ @"ads" : [Ad class]
+ };
+ }
+ + (Class)objectClassInArray:(NSString *)propertyName
+ {
+ if ([propertyName isEqualToString:@"statuses"]) {
+ return [Status class];
+ } else if ([propertyName isEqualToString:@"ads"]) {
+ return [Ad class];
+ }
+ return nil;
+ }
+ */
+// This way will more nonintrusive than other 2 ways, because there is no need to import Ad.h and Status.h
++ (NSDictionary *)objectClassInArray
+{
+    return @{
+        @"statuses" : @"Status",
+        @"ads" : @"Ad"
+    };
+}
+@end
+
+NSDictionary *dict = @{
+    @"statuses" : @[
+                    @{
+                    @"text" : @"Nice weather!",
+                    @"user" : @{
+                    @"name" : @"Rose",
+                    @"icon" : @"nami.png"
+                    }
+                    },
+                    @{
+                    @"text" : @"Go camping tomorrow!",
+                    @"user" : @{
+                    @"name" : @"Jack",
+                    @"icon" : @"lufy.png"
+                    }
+                    }
+                    ],
+    @"ads" : @[
+               @{
+               @"image" : @"ad01.png",
+               @"url" : @"http://www.ad01.com"
+               },
+               @{
+               @"image" : @"ad02.png",
+               @"url" : @"http://www.ad02.com"
+               }
+               ],
+    @"totalNumber" : @"2014"
+};
+
+// JSON -> StatusResult
+StatusResult *result = [StatusResult objectWithKeyValues:dict];
+
+NSLog(@"totalNumber=%@", result.totalNumber);
+// totalNumber=2014
+
+// Printing
+for (Status *status in result.statuses) {
+    NSString *text = status.text;
+    NSString *name = status.user.name;
+    NSString *icon = status.user.icon;
+    NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
+}
+// text=Nice weather!, name=Rose, icon=nami.png
+// text=Go camping tomorrow!, name=Jack, icon=lufy.png
+
+// Printing
+for (Ad *ad in result.ads) {
+    NSLog(@"image=%@, url=%@", ad.image, ad.url);
+}
+// image=ad01.png, url=http://www.ad01.com
+// image=ad02.png, url=http://www.ad02.com
+```
+##### Core code
+* Implementing `+ (NSDictionary *)objectClassInArray` inside model .m file
+* `[StatusResult objectWithKeyValues:dict]`
+* If NSArray\NSMutableArray contains like NSNumber、NSString，well no need to implement `+ (NSDictionary *)objectClassInArray`
+
+## Model name - JSON key mapping
+```objc
+@interface Bag : NSObject
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) double price;
+@end
+
+@interface Student : NSObject
+@property (copy, nonatomic) NSString *ID;
+@property (copy, nonatomic) NSString *desc;
+@property (copy, nonatomic) NSString *nowName;
+@property (copy, nonatomic) NSString *oldName;
+@property (copy, nonatomic) NSString *nameChangedTime;
+@property (strong, nonatomic) Bag *bag;
+@end
+
+@implementation Student
+// How to map
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{
+        @"ID" : @"id",
+        @"desc" : @"desciption",
+        @"oldName" : @"name.oldName",
+        @"nowName" : @"name.newName",
+        @"nameChangedTime" : @"name.info.nameChangedTime",
+        @"bag" : @"other.bag"
+    };
+}
+@end
+
+NSDictionary *dict = @{
+    @"id" : @"20",
+    @"desciption" : @"kids",
+    @"name" : @{
+        @"newName" : @"lufy",
+        @"oldName" : @"kitty",
+        @"info" : @{
+            @"nameChangedTime" : @"2013-08"
+        }
+    },
+    @"other" : @{
+        @"bag" : @{
+            @"name" : @"a red bag",
+            @"price" : @100.7
+        }
+    }
+};
+
+// JSON -> Student
+Student *stu = [Student objectWithKeyValues:dict];
+
+// Printing
+NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
+      stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
+// ID=20, desc=kids, oldName=kitty, nowName=lufy, nameChangedTime=2013-08
+NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
+// bagName=a red bag, bagPrice=100.700000
+```
+##### Core code
+* Implementing `+ (NSDictionary *)replacedKeyFromPropertyName` inside model .m file
+* `[Student objectWithKeyValues:dict]`
+
+## JSON array -> model array
+```objc
+NSArray *dictArray = @[
+                       @{
+                       @"name" : @"Jack",
+                       @"icon" : @"lufy.png",
+                       },
+                       @{
+                       @"name" : @"Rose",
+                       @"icon" : @"nami.png",
+                       }
+                       ];
+
+// JSON array -> User array
+NSArray *userArray = [User objectArrayWithKeyValuesArray:dictArray];
+
+// Printing
+for (User *user in userArray) {
+    NSLog(@"name=%@, icon=%@", user.name, user.icon);
+}
+// name=Jack, icon=lufy.png
+// name=Rose, icon=nami.png
+```
+##### Core code
+* `[User objectArrayWithKeyValuesArray:dictArray]`
+
+## Model -> JSON
+```objc
+// New model
+User *user = [[User alloc] init];
+user.name = @"Jack";
+user.icon = @"lufy.png";
+
+Status *status = [[Status alloc] init];
+status.user = user;
+status.text = @"Nice mood!";
+
+// Status -> JSON
+NSDictionary *statusDict = status.keyValues;
+NSLog(@"%@", statusDict);
+/*
+ {
+ text = "Nice mood!";
+ user =     {
+ icon = "lufy.png";
+ name = Jack;
+ };
+ }
+ */
+
+// More complex situation
+Student *stu = [[Student alloc] init];
+stu.ID = @"123";
+stu.oldName = @"rose";
+stu.nowName = @"jack";
+stu.desc = @"handsome";
+stu.nameChangedTime = @"2018-09-08";
+
+Bag *bag = [[Bag alloc] init];
+bag.name = @"a red bag";
+bag.price = 205;
+stu.bag = bag;
+
+NSDictionary *stuDict = stu.keyValues;
+NSLog(@"%@", stuDict);
+/*
+ {
+ desciption = handsome;
+ id = 123;
+ name =     {
+ info =         {
+ nameChangedTime = "2018-09-08";
+ };
+ newName = jack;
+ oldName = rose;
+ };
+ other =     {
+ bag =         {
+ name = "a red bag";
+ price = 205;
+ };
+ };
+ }
+ */
+```
+##### Core code
+* `status.keyValues`、`stu.keyValues`
+
+## Model array -> JSON array
+```objc
+// New model array
+User *user1 = [[User alloc] init];
+user1.name = @"Jack";
+user1.icon = @"lufy.png";
+
+User *user2 = [[User alloc] init];
+user2.name = @"Rose";
+user2.icon = @"nami.png";
+
+NSArray *userArray = @[user1, user2];
+
+// Model array -> JSON array
+NSArray *dictArray = [User keyValuesArrayWithObjectArray:userArray];
+NSLog(@"%@", dictArray);
+/*
+ (
+ {
+ icon = "lufy.png";
+ name = Jack;
+ },
+ {
+ icon = "nami.png";
+ name = Rose;
+ }
+ )
+ */
+```
+##### Core code
+* `[User keyValuesArrayWithObjectArray:userArray]`
+
+## More
+* Please reference `NSObject+MJKeyValue.h`
+* Please reference `NSObject+MJCoding.h`
+
+## MJExtension(Chinese)
 * 世界上转换速度最快、使用最简单方便的字典转模型框架
 
 ## 能做什么？
@@ -29,14 +445,13 @@
     * 导入主头文件：`#import "MJExtension.h"`
 ```objc
 MJExtension.h
-MJConst.h		MJConst.m
-MJFoundation.h		MJFoundation.m
-MJProperty.h		MJProperty.m
-MJType.h		MJType.m
-NSObject+MJCoding.h	NSObject+MJCoding.m
-NSObject+MJKeyValue.h	NSObject+MJKeyValue.m
-NSObject+MJProperty.h	NSObject+MJProperty.m
-NSString+MJExtension.h	NSString+MJExtension.m
+MJConst.h               MJConst.m
+MJFoundation.h          MJFoundation.m
+MJIvar.h                MJIvar.m
+MJType.h                MJType.m
+NSObject+MJCoding.h     NSObject+MJCoding.m
+NSObject+MJIvar.h       NSObject+MJIvar.m
+NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
 ```
 
 ## 最简单的字典转模型
