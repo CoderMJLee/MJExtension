@@ -99,7 +99,8 @@ static NSNumberFormatter *_numberFormatter;
 }
 
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
-{// 如果是JSON字符串
+{
+    // 如果是JSON字符串
     if ([keyValues isKindOfClass:[NSString class]]) {
         keyValues = [((NSString *)keyValues) JSONObject];
     }
@@ -210,6 +211,9 @@ static NSNumberFormatter *_numberFormatter;
     if ([keyValuesArray isKindOfClass:[NSString class]]) {
         keyValuesArray = [((NSString *)keyValuesArray) JSONObject];
     }
+    
+    // 如果数组里面放的是NSString、NSNumber等数据
+    if ([MJFoundation isClassFromFoundation:self]) return keyValuesArray;
     
     // 1.判断真实性
     MJAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, error, @"keyValuesArray参数不是一个数组");
