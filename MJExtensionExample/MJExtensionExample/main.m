@@ -41,6 +41,7 @@ int main(int argc, const char * argv[])
         execute(object2keyValues, @"模型转字典");
         execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
         execute(coreData, @"CoreData示例");
+        execute(coding, @"NSCoding示例");
     }
     return 0;
 }
@@ -331,6 +332,30 @@ void coreData()
     } @catch (NSException *e) {
     
     }
+}
+
+/**
+ * NSCoding示例
+ */
+void coding()
+{
+    // 创建模型
+    User *user = [[User alloc] init];
+    user.name = @"Jack";
+    user.icon = @"123.png";
+    user.age = 25;
+    user.money = @10.6;
+    user.height = @"1.65";
+    user.sex = SexFemale;
+    user.gay = YES;
+
+    NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+    // 归档
+    [NSKeyedArchiver archiveRootObject:user toFile:file];
+
+    // 解档
+    User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
 }
 
 void execute(void (*fn)(), NSString *comment)

@@ -2,13 +2,13 @@
 * The fastest, most convenient and most nonintrusive conversion between JSON and model.
 
 ## Features
-* `JSON` --> `Model`
-* `JSONString` --> `Model`
-* `Model` --> `JSON`
-* `JSON Array` --> `Model Array`
-* `JSONString` --> `Model Array`
-* `Model Array` --> `JSON Array`
-* Supprting CoreData Objects
+* `JSON` --> `Model`、`Core Data Model`
+* `JSONString` --> `Model`、`Core Data Model`
+* `Model`、`Core Data Model` --> `JSON`
+* `JSON Array` --> `Model Array`、`Core Data Model Array`
+* `JSONString` --> `Model Array`、`Core Data Model Array`
+* `Model Array`、`Core Data Model Array` --> `JSON Array`
+* Coding all properties of model in one line code. 
 
 ## Differences between MJExtension, JSONModel and Mantle
 * Conversion rate
@@ -17,7 +17,7 @@
 * How to use it
 	* `JSONModel`：You `must` let `all` model class extends `JSONModel` class.
 	* `Mantle`：You `must` let `all` model class extends `MTModel` class.
-	* `MJExtension`：Your model class `dont't need to` extends another base class. `Nonintrusive`, `convenient`.
+	* `MJExtension`：Your model class `don't need to` extends another base class. `Nonintrusive`, `convenient`.
 
 ## How
 * Cocoapods：`pod 'MJExtension'`
@@ -433,6 +433,47 @@ User *user = [User objectWithKeyValues:dict context:context];
 ##### Core code
 * `[User objectWithKeyValues:dict context:context]`
 
+## Coding
+```objc
+#import "MJExtension.h"
+
+@implementation User
+
+/**
+ * what properties not to be coded
+ */
++ (NSArray *)ignoredCodingPropertyNames
+{
+    return @[@"icon", @"age"];
+}
+
+// NSCoding Implementation
+MJCodingImplementation
+@end
+
+// Create model
+User *user = [[User alloc] init];
+user.name = @"Jack";
+user.icon = @"123.png";
+user.age = 25;
+user.money = @10.6;
+user.height = @"1.65";
+user.sex = SexFemale;
+user.gay = YES;
+
+NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+// Encoding
+[NSKeyedArchiver archiveRootObject:user toFile:file];
+
+// Decoding
+User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
+// name=Jack, icon=(null), age=0, height=1.65, money=10.6, sex=1, gay=1
+```
+##### Core code
+* `MJCodingImplementation`
+* Implements the `ignoredCodingPropertyNames` method（If all properties need to be coded, there is no need to implements it.）
+
 ## More
 * Please reference `NSObject+MJKeyValue.h`
 * Please reference `NSObject+MJCoding.h`
@@ -443,13 +484,13 @@ User *user = [User objectWithKeyValues:dict context:context];
 ## 能做什么？
  * MJExtension是一套`字典和模型之间互相转换`的超轻量级框架
  * MJExtension能完成的功能
-    * `字典（JSON）` --> `模型（Model）`
-    * `JSON字符串` --> `模型（Model）`
-    * `模型（Model）` --> `字典（JSON）`
-    * `字典数组（JSON Array）` --> `模型数组（Model Array）`
-    * `JSON字符串` --> `模型数组（Model Array）`
-    * `模型数组（Model Array）` --> `字典数组（JSON Array）`
-    * 支持CoreData对象
+    * `字典（JSON）` --> `模型（Model）`、`CoreData模型（Core Data Model）`
+    * `JSON字符串` --> `模型（Model）`、`CoreData模型（Core Data Model）`
+    * `模型（Model）`、`CoreData模型（Core Data Model）` --> `字典（JSON）`
+    * `字典数组（JSON Array）` --> `模型数组（Model Array）`、`Core Data模型数组（Core Data Model Array）`
+    * `JSON字符串` --> `模型数组（Model Array）`、`Core Data模型数组（Core Data Model Array）`
+    * `模型数组（Model Array）`、`Core Data模型数组（Core Data Model Array）` --> `字典数组（JSON Array）`
+    * 只需要一行代码，就能实现模型的所有属性进行Coding（归档和解档）
  * 详尽用法主要参考 main.m中的各个函数 以及 `NSObject+MJKeyValue.h`
 
 ## MJExtension和JSONModel、Mantle等框架的区别
@@ -878,6 +919,47 @@ User *user = [User objectWithKeyValues:dict context:context];
 ```
 ##### Core code
 * `[User objectWithKeyValues:dict context:context]`
+
+## Coding
+```objc
+#import "MJExtension.h"
+
+@implementation User
+
+/**
+ * 哪些属性需要忽略，不参与Coding
+ */
++ (NSArray *)ignoredCodingPropertyNames
+{
+    return @[@"icon", @"age"];
+}
+
+// NSCoding实现
+MJCodingImplementation
+@end
+
+// 创建模型
+User *user = [[User alloc] init];
+user.name = @"Jack";
+user.icon = @"123.png";
+user.age = 25;
+user.money = @10.6;
+user.height = @"1.65";
+user.sex = SexFemale;
+user.gay = YES;
+
+NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+// 归档
+[NSKeyedArchiver archiveRootObject:user toFile:file];
+
+// 解档
+User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
+// name=Jack, icon=(null), age=0, height=1.65, money=10.6, sex=1, gay=1
+```
+##### Core code
+* `MJCodingImplementation`
+* 实现`ignoredCodingPropertyNames`方法（如果全部属性都要归档、解档，那就不需要实现这个方法）
 
 ## 更多用法
 * 参考`NSObject+MJKeyValue.h`

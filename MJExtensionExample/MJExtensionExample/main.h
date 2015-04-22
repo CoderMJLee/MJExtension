@@ -20,6 +20,7 @@ void keyValuesArray2objectArray();
 void object2keyValues();
 void objectArray2keyValuesArray();
 void coreData();
+void coding();
 void execute(void (*fn)(), NSString *comment);
 
 #endif
