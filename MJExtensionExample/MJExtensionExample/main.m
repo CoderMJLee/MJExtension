@@ -32,6 +32,9 @@
 int main(int argc, const char * argv[])
 {
     @autoreleasepool {
+        // 关于模型的具体配置可以参考：MJExtensionConfig.m
+        // 或者参考每个模型的.m文件中被注释掉的配置
+        
         execute(keyValues2object, @"简单的字典 -> 模型");
         execute(keyValues2object1, @"JSON字符串 -> 模型");
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
@@ -340,22 +343,17 @@ void coreData()
 void coding()
 {
     // 创建模型
-    User *user = [[User alloc] init];
-    user.name = @"Jack";
-    user.icon = @"123.png";
-    user.age = 25;
-    user.money = @10.6;
-    user.height = @"1.65";
-    user.sex = SexFemale;
-    user.gay = YES;
+    Bag *bag = [[Bag alloc] init];
+    bag.name = @"Red bag";
+    bag.price = 200.8;
 
-    NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+    NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
     // 归档
-    [NSKeyedArchiver archiveRootObject:user toFile:file];
+    [NSKeyedArchiver archiveRootObject:bag toFile:file];
 
     // 解档
-    User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
-    NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
+    Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 }
 
 void execute(void (*fn)(), NSString *comment)

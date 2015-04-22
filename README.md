@@ -142,34 +142,17 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 @end
 
 @implementation StatusResult
-// Why implements this function? Tell MJExtension what type model will be contained in statuses and ads.
-/*
- + (NSDictionary *)objectClassInArray
- {
- return @{
- @"statuses" : [Status class],
- @"ads" : [Ad class]
- };
- }
- + (Class)objectClassInArray:(NSString *)propertyName
- {
- if ([propertyName isEqualToString:@"statuses"]) {
- return [Status class];
- } else if ([propertyName isEqualToString:@"ads"]) {
- return [Ad class];
- }
- return nil;
- }
- */
-// This way will more nonintrusive than other 2 ways, because there is no need to import Ad.h and Status.h
-+ (NSDictionary *)objectClassInArray
-{
-    return @{
-        @"statuses" : @"Status",
-        @"ads" : @"Ad"
-    };
-}
+
 @end
+
+// Tell MJExtension what type model will be contained in statuses and ads.
+[StatusResult setupObjectClassInArray:^NSDictionary *{
+    return @{
+             @"statuses" : @"Status",
+             @"ads" : @"Ad"
+             };
+}];
+// Equals: StatusResult.m implements +objectClassInArray method.
 
 NSDictionary *dict = @{
     @"statuses" : @[
@@ -225,9 +208,7 @@ for (Ad *ad in result.ads) {
 // image=ad02.png, url=http://www.ad02.com
 ```
 ##### Core code
-* Implementing `+ (NSDictionary *)objectClassInArray` inside model .m file
-* `[StatusResult objectWithKeyValues:dict]`
-* If NSArray\NSMutableArray contains like NSNumber、NSString，well no need to implement `+ (NSDictionary *)objectClassInArray`
+* call `+ (void)setupObjectClassInArray:` method
 
 ## Model name - JSON key mapping
 ```objc
@@ -246,19 +227,20 @@ for (Ad *ad in result.ads) {
 @end
 
 @implementation Student
-// How to map
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{
-        @"ID" : @"id",
-        @"desc" : @"desciption",
-        @"oldName" : @"name.oldName",
-        @"nowName" : @"name.newName",
-        @"nameChangedTime" : @"name.info.nameChangedTime",
-        @"bag" : @"other.bag"
-    };
-}
+
 @end
+
+// How to map
+[Student setupReplacedKeyFromPropertyName:^NSDictionary *{
+    return @{@"ID" : @"id",
+             @"desc" : @"desciption",
+             @"oldName" : @"name.oldName",
+             @"nowName" : @"name.newName",
+             @"nameChangedTime" : @"name.info.nameChangedTime",
+             @"bag" : @"other.bag"
+             };
+}];
+// Equals: Student.m implements +replacedKeyFromPropertyName method.
 
 NSDictionary *dict = @{
     @"id" : @"20",
@@ -289,8 +271,7 @@ NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
 // bagName=a red bag, bagPrice=100.700000
 ```
 ##### Core code
-* Implementing `+ (NSDictionary *)replacedKeyFromPropertyName` inside model .m file
-* `[Student objectWithKeyValues:dict]`
+* call `+setupReplacedKeyFromPropertyName:` method
 
 ## JSON array -> model array
 ```objc
@@ -438,41 +419,32 @@ User *user = [User objectWithKeyValues:dict context:context];
 #import "MJExtension.h"
 
 @implementation User
-
-/**
- * what properties not to be coded
- */
-+ (NSArray *)ignoredCodingPropertyNames
-{
-    return @[@"icon", @"age"];
-}
-
 // NSCoding Implementation
 MJCodingImplementation
 @end
+// what properties not to be coded
+[Bag setupIgnoredCodingPropertyNames:^NSArray *{
+    return @[@"name"];
+}];
+// Equals: Bag.m implements +ignoredCodingPropertyNames method.
 
 // Create model
-User *user = [[User alloc] init];
-user.name = @"Jack";
-user.icon = @"123.png";
-user.age = 25;
-user.money = @10.6;
-user.height = @"1.65";
-user.sex = SexFemale;
-user.gay = YES;
+Bag *bag = [[Bag alloc] init];
+bag.name = @"Red bag";
+bag.price = 200.8;
 
-NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
 // Encoding
-[NSKeyedArchiver archiveRootObject:user toFile:file];
+[NSKeyedArchiver archiveRootObject:bag toFile:file];
 
 // Decoding
-User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
-NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
-// name=Jack, icon=(null), age=0, height=1.65, money=10.6, sex=1, gay=1
+Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+// name=(null), price=200.800000
 ```
 ##### Core code
 * `MJCodingImplementation`
-* Implements the `ignoredCodingPropertyNames` method（If all properties need to be coded, there is no need to implements it.）
+* call `+ (void)setupIgnoredCodingPropertyNames:` method（If all properties need to be coded, there is no need to call it.）
 
 ## More
 * Please reference `NSObject+MJKeyValue.h`
@@ -628,34 +600,18 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 @end
 
 @implementation StatusResult
-// 实现这个方法的目的：告诉MJExtension框架statuses和ads数组里面装的是什么模型
-/*
-+ (NSDictionary *)objectClassInArray
-{
-    return @{
-         @"statuses" : [Status class],
-         @"ads" : [Ad class]
-    };
-}
-+ (Class)objectClassInArray:(NSString *)propertyName
-{
-    if ([propertyName isEqualToString:@"statuses"]) {
-        return [Status class];
-    } else if ([propertyName isEqualToString:@"ads"]) {
-        return [Ad class];
-    }
-    return nil;
-}
-*/
-// 这个方法对比上面的2个方法更加没有侵入性和污染，因为不需要导入Status和Ad的头文件
-+ (NSDictionary *)objectClassInArray
-{
-    return @{
-         @"statuses" : @"Status",
-         @"ads" : @"Ad"
-    };
-}
+
 @end
+
+// StatusResult类中的statuses数组中存放的是Status模型
+// StatusResult类中的ads数组中存放的是Ad模型
+[StatusResult setupObjectClassInArray:^NSDictionary *{
+    return @{
+             @"statuses" : @"Status",
+             @"ads" : @"Ad"
+             };
+}];
+// 相当于在StatusResult.m中实现了+objectClassInArray方法
 
 NSDictionary *dict = @{
                        @"statuses" : @[
@@ -711,9 +667,9 @@ for (Ad *ad in result.ads) {
 // image=ad02.png, url=http://www.ad02.com
 ```
 ##### 核心代码
-* 在模型内部实现`+ (NSDictionary *)objectClassInArray`方法  
+* 调用`+ (void)setupObjectClassInArray:`方法  
 * `[StatusResult objectWithKeyValues:dict]`
-* 提醒一句：如果NSArray\NSMutableArray属性中存放的不希望是模型，而是NSNumber、NSString等基本数据，那么就不需要实现`+ (NSDictionary *)objectClassInArray`方法
+* 提醒一句：如果NSArray\NSMutableArray属性中存放的不希望是模型，而是NSNumber、NSString等基本数据，那么就不需要调用`+ (void)setupObjectClassInArray:`方法
 
 ## 模型中的属性名和字典中的key不相同(或者需要多级映射)
 ```objc
@@ -732,19 +688,21 @@ for (Ad *ad in result.ads) {
 @end
 
 @implementation Student
-// 实现这个方法的目的：告诉MJExtension框架模型中的属性名对应着字典的哪个key
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{
-                @"ID" : @"id",
-                @"desc" : @"desciption",
-                @"oldName" : @"name.oldName",
-                @"nowName" : @"name.newName",
-                @"nameChangedTime" : @"name.info.nameChangedTime",
-                @"bag" : @"other.bag"
-            };
-}
+
 @end
+
+// Student中的ID属性对应着字典中的id
+// ....
+[Student setupReplacedKeyFromPropertyName:^NSDictionary *{
+    return @{@"ID" : @"id",
+             @"desc" : @"desciption",
+             @"oldName" : @"name.oldName",
+             @"nowName" : @"name.newName",
+             @"nameChangedTime" : @"name.info.nameChangedTime",
+             @"bag" : @"other.bag"
+             };
+}];
+// 相当于在Student.m中实现了+replacedKeyFromPropertyName方法
 
 NSDictionary *dict = @{
                        @"id" : @"20",
@@ -775,7 +733,7 @@ NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
 // bagName=小书包, bagPrice=100.700000
 ```
 ##### 核心代码
-* 在模型内部实现`+ (NSDictionary *)replacedKeyFromPropertyName`方法  
+* 调用`+ (void)setupReplacedKeyFromPropertyName:`方法  
 * `[Student objectWithKeyValues:dict]`
 
 ## 将一个字典数组转成模型数组
@@ -925,41 +883,32 @@ User *user = [User objectWithKeyValues:dict context:context];
 #import "MJExtension.h"
 
 @implementation User
-
-/**
- * 哪些属性需要忽略，不参与Coding
- */
-+ (NSArray *)ignoredCodingPropertyNames
-{
-    return @[@"icon", @"age"];
-}
-
 // NSCoding实现
 MJCodingImplementation
 @end
+// Bag类中的name属性不参与归档
+[Bag setupIgnoredCodingPropertyNames:^NSArray *{
+    return @[@"name"];
+}];
+// 相当于在Bag.m中实现了+ignoredCodingPropertyNames方法
 
 // 创建模型
-User *user = [[User alloc] init];
-user.name = @"Jack";
-user.icon = @"123.png";
-user.age = 25;
-user.money = @10.6;
-user.height = @"1.65";
-user.sex = SexFemale;
-user.gay = YES;
+Bag *bag = [[Bag alloc] init];
+bag.name = @"Red bag";
+bag.price = 200.8;
 
-NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/user.data"];
+NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
 // 归档
-[NSKeyedArchiver archiveRootObject:user toFile:file];
+[NSKeyedArchiver archiveRootObject:bag toFile:file];
 
 // 解档
-User *decodedUser = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
-NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", decodedUser.name, decodedUser.icon, decodedUser.age, decodedUser.height, decodedUser.money, decodedUser.sex, decodedUser.gay);
-// name=Jack, icon=(null), age=0, height=1.65, money=10.6, sex=1, gay=1
+Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+// name=(null), price=200.800000
 ```
 ##### Core code
 * `MJCodingImplementation`
-* 实现`ignoredCodingPropertyNames`方法（如果全部属性都要归档、解档，那就不需要实现这个方法）
+* 调用`+ (void)setupIgnoredCodingPropertyNames`方法（如果全部属性都要归档、解档，那就不需要调用这个方法）
 
 ## 更多用法
 * 参考`NSObject+MJKeyValue.h`

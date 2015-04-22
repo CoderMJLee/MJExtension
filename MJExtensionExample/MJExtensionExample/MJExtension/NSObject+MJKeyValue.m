@@ -108,10 +108,7 @@ static NSNumberFormatter *_numberFormatter;
     MJAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
     
     @try {
-        NSArray *ignoredPropertyNames = nil;
-        if ([[self class] respondsToSelector:@selector(ignoredPropertyNames)]) {
-            ignoredPropertyNames = [[self class] ignoredPropertyNames];
-        }
+        NSArray *ignoredPropertyNames = [[self class] totalIgnoredPropertyNames];
         
         [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
             // 0.检测是否被忽略
@@ -267,10 +264,7 @@ static NSNumberFormatter *_numberFormatter;
     __block NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
     
     @try {
-        NSArray *ignoredPropertyNames = nil;
-        if ([[self class] respondsToSelector:@selector(ignoredPropertyNames)]) {
-            ignoredPropertyNames = [[self class] ignoredPropertyNames];
-        }
+        NSArray *ignoredPropertyNames = [[self class] totalIgnoredPropertyNames];
         
         [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
             // 0.检测是否被忽略

@@ -8,100 +8,22 @@
 
 #import "NSObject+MJProperty.h"
 #import "NSObject+MJKeyValue.h"
+#import "NSObject+MJCoding.h"
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
-#import <CoreData/CoreData.h>
 
-@implementation NSObject (MJMember)
-#pragma mark - --私有方法--
-+ (NSString *)propertyKey:(NSString *)propertyName
-{
-    MJAssertParamNotNil2(propertyName, nil);
-    
-    NSString *key = nil;
-    // 1.查看有没有需要替换的key
-    if ([self respondsToSelector:@selector(replacedKeyFromPropertyName:)]) {
-        key = [self replacedKeyFromPropertyName:propertyName];
-    } else if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
-        key = self.replacedKeyFromPropertyName[propertyName];
-    } else if (![self isSubclassOfClass:[NSManagedObject class]]) { // 如果不是CoreData对象
-        // 为了兼容以前的对象方法
-        id tempObject = self.tempObject;
-        if ([tempObject respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
-            key = [tempObject replacedKeyFromPropertyName][propertyName];
-        }
-    }
-    
-    // 2.用属性名作为key
-    if (!key) key = propertyName;
-    
-    return key;
-}
+static const char MJReplacedKeyFromPropertyNameKey;
+static const char MJObjectClassInArrayKey;
+static const char MJIgnoredPropertyNamesKey;
+static const char MJIgnoredCodingPropertyNamesKey;
 
-+ (Class)propertyObjectClassInArray:(NSString *)propertyName
-{
-    id class = nil;
-    if ([self respondsToSelector:@selector(objectClassInArray:)]) {
-        class = [self objectClassInArray:propertyName];
-    } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
-        class = self.objectClassInArray[propertyName];
-    } else if (![self isSubclassOfClass:[NSManagedObject class]]) { // 如果不是CoreData对象
-        // 为了兼容以前的对象方法
-        id tempObject = self.tempObject;
-        if ([tempObject respondsToSelector:@selector(objectClassInArray)]) {
-            id dict = [tempObject objectClassInArray];
-            class = dict[propertyName];
-        }
-    }
-    // 如果是NSString类型
-    if ([class isKindOfClass:[NSString class]]) {
-        class = NSClassFromString(class);
-    }
-    return class;
-}
-
+@implementation NSObject (Property)
 #pragma mark - --公共方法--
-+ (instancetype)tempObject
-{
-    static const char MJTempObjectKey;
-    id tempObject = objc_getAssociatedObject(self, &MJTempObjectKey);
-    if (tempObject == nil) {
-        tempObject = [[self alloc] init];
-        objc_setAssociatedObject(self, &MJTempObjectKey, tempObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return tempObject;
-}
-
 + (void)enumeratePropertiesWithBlock:(MJPropertiesBlock)block
 {
-    static const char MJCachedPropertiesKey;
     // 获得成员变量
-    NSMutableArray *cachedProperties = objc_getAssociatedObject(self, &MJCachedPropertiesKey);
-    if (cachedProperties == nil) {
-        cachedProperties = [NSMutableArray array];
-        
-        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
-            // 1.获得所有的成员变量
-            unsigned int outCount = 0;
-            objc_property_t *properties = class_copyPropertyList(c, &outCount);
-            
-            // 2.遍历每一个成员变量
-            for (unsigned int i = 0; i<outCount; i++) {
-                MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
-                property.srcClass = c;
-                NSString *key = [self propertyKey:property.name];
-                [property setKey:key forClass:self];
-                // 数组中的模型类
-                [property setObjectClassInArray:[self propertyObjectClassInArray:property.name] forClass:self];
-                [cachedProperties addObject:property];
-            }
-            
-            // 3.释放内存
-            free(properties);
-        }];
-        objc_setAssociatedObject(self, &MJCachedPropertiesKey, cachedProperties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
+    NSArray *cachedProperties = [self properties];
     
     // 遍历成员变量
     BOOL stop = NO;
@@ -132,5 +54,172 @@
         
         if ([MJFoundation isClassFromFoundation:c]) break;
     }
+}
+
+#pragma mark - --私有方法--
++ (NSString *)propertyKey:(NSString *)propertyName
+{
+    MJAssertParamNotNil2(propertyName, nil);
+    
+    __block NSString *key = nil;
+    // 1.查看有没有需要替换的key
+    if ([self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
+        key = [self replacedKeyFromPropertyName][propertyName];
+    }
+    
+    if (!key) {
+        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+            NSDictionary *dict = objc_getAssociatedObject(c, &MJReplacedKeyFromPropertyNameKey);
+            if (dict) {
+                key = dict[propertyName];
+            }
+            if (key) *stop = YES;
+        }];
+    }
+    
+    // 2.用属性名作为key
+    if (!key) key = propertyName;
+    
+    return key;
+}
+
++ (Class)propertyObjectClassInArray:(NSString *)propertyName
+{
+    __block id class = nil;
+    if ([self respondsToSelector:@selector(objectClassInArray)]) {
+        class = [self objectClassInArray][propertyName];
+    }
+    
+    if (!class) {
+        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+            NSDictionary *dict = objc_getAssociatedObject(c, &MJObjectClassInArrayKey);
+            if (dict) {
+                class = dict[propertyName];
+            }
+            if (class) *stop = YES;
+        }];
+    }
+    
+    // 如果是NSString类型
+    if ([class isKindOfClass:[NSString class]]) {
+        class = NSClassFromString(class);
+    }
+    return class;
+}
+
+#pragma mark - 公共方法
++ (NSArray *)properties
+{
+    static const char MJCachedPropertiesKey;
+    
+    // 获得成员变量
+    NSMutableArray *cachedProperties = objc_getAssociatedObject(self, &MJCachedPropertiesKey);
+    if (cachedProperties == nil) {
+        cachedProperties = [NSMutableArray array];
+        
+        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+            // 1.获得所有的成员变量
+            unsigned int outCount = 0;
+            objc_property_t *properties = class_copyPropertyList(c, &outCount);
+            
+            // 2.遍历每一个成员变量
+            for (unsigned int i = 0; i<outCount; i++) {
+                MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+                property.srcClass = c;
+                [property setKey:[self propertyKey:property.name] forClass:self];
+                [property setObjectClassInArray:[self propertyObjectClassInArray:property.name] forClass:self];
+                [cachedProperties addObject:property];
+            }
+            
+            // 3.释放内存
+            free(properties);
+        }];
+        objc_setAssociatedObject(self, &MJCachedPropertiesKey, cachedProperties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    return cachedProperties;
+}
+
++ (void)setupReplacedKeyFromPropertyName:(ReplacedKeyFromPropertyName)replacedKeyFromPropertyName objectClassInArray:(ObjectClassInArray)objectClassInArray
+{
+    if (replacedKeyFromPropertyName) {
+        NSDictionary *dict = replacedKeyFromPropertyName();
+        if (dict) {
+            objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyNameKey, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }
+    
+    if (objectClassInArray) {
+        NSDictionary *dict = objectClassInArray();
+        if (dict) {
+            objc_setAssociatedObject(self, &MJObjectClassInArrayKey, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }
+}
+
++ (void)setupObjectClassInArray:(ObjectClassInArray)objectClassInArray
+{
+    [self setupReplacedKeyFromPropertyName:nil objectClassInArray:objectClassInArray];
+}
+
++ (void)setupReplacedKeyFromPropertyName:(ReplacedKeyFromPropertyName)replacedKeyFromPropertyName
+{
+    [self setupReplacedKeyFromPropertyName:replacedKeyFromPropertyName objectClassInArray:nil];
+}
+
++ (void)setupIgnoredPropertyNames:(IgnoredPropertyNames)ignoredPropertyNames
+{
+    if (ignoredPropertyNames) {
+        NSArray *array = ignoredPropertyNames();
+        if (array) {
+            objc_setAssociatedObject(self, &MJIgnoredPropertyNamesKey, array, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }
+}
+
++ (NSArray *)totalIgnoredPropertyNames
+{
+    NSMutableArray *array = [NSMutableArray array];
+    
+    if ([self respondsToSelector:@selector(ignoredPropertyNames)]) {
+        NSArray *subArray = [self ignoredPropertyNames];
+        if (subArray) {
+            [array addObjectsFromArray:subArray];
+        }
+    }
+    
+    [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+        NSArray *subArray = objc_getAssociatedObject(c, &MJIgnoredPropertyNamesKey);
+        [array addObjectsFromArray:subArray];
+    }];
+    return array;
+}
+
++ (void)setupIgnoredCodingPropertyNames:(IgnoredCodingPropertyNames)ignoredCodingPropertyNames
+{
+    if (ignoredCodingPropertyNames) {
+        NSArray *array = ignoredCodingPropertyNames();
+        if (array) {
+            objc_setAssociatedObject(self, &MJIgnoredCodingPropertyNamesKey, array, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }
+}
+
++ (NSArray *)totalIgnoredCodingPropertyNames
+{
+    NSMutableArray *array = [NSMutableArray array];
+    
+    if ([self respondsToSelector:@selector(ignoredCodingPropertyNames)]) {
+        NSArray *subArray = [self ignoredCodingPropertyNames];
+        if (subArray) {
+            [array addObjectsFromArray:subArray];
+        }
+    }
+    
+    [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+        NSArray *subArray = objc_getAssociatedObject(c, &MJIgnoredCodingPropertyNamesKey);
+        [array addObjectsFromArray:subArray];
+    }];
+    return array;
 }
 @end

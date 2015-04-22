@@ -14,10 +14,7 @@
 
 - (void)encode:(NSCoder *)encoder
 {
-    NSArray *ignoredCodingPropertyNames = nil;
-    if ([[self class] respondsToSelector:@selector(ignoredCodingPropertyNames)]) {
-        ignoredCodingPropertyNames = [[self class] ignoredCodingPropertyNames];
-    }
+    NSArray *ignoredCodingPropertyNames = [[self class] totalIgnoredCodingPropertyNames];
     
     [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略
@@ -31,10 +28,7 @@
 
 - (void)decode:(NSCoder *)decoder
 {
-    NSArray *ignoredCodingPropertyNames = nil;
-    if ([[self class] respondsToSelector:@selector(ignoredCodingPropertyNames)]) {
-        ignoredCodingPropertyNames = [[self class] ignoredCodingPropertyNames];
-    }
+    NSArray *ignoredCodingPropertyNames = [[self class] totalIgnoredCodingPropertyNames];
     
     [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略

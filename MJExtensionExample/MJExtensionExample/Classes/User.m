@@ -7,18 +7,7 @@
 //
 
 #import "User.h"
-#import "MJExtension.h"
 
 @implementation User
 
-/**
- * 哪些属性需要忽略，不参与Coding
- */
-+ (NSArray *)ignoredCodingPropertyNames
-{
-    return @[@"icon", @"age"];
-}
-
-// NSCoding实现
-MJCodingImplementation
 @end

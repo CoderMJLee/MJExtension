@@ -7,7 +7,14 @@
 //
 
 #import "Bag.h"
+#import "MJExtension.h"
 
 @implementation Bag
+// NSCoding实现
+MJCodingImplementation
 
+//+ (NSArray *)ignoredCodingPropertyNames
+//{
+//    return @[@"name"];
+//}
 @end
