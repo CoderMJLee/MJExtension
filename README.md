@@ -150,39 +150,39 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 // Tell MJExtension what type model will be contained in statuses and ads.
 [StatusResult setupObjectClassInArray:^NSDictionary *{
     return @{
-             @"statuses" : @"Status",
-             @"ads" : @"Ad"
-             };
+               @"statuses" : @"Status",
+               @"ads" : @"Ad"
+           };
 }];
 // Equals: StatusResult.m implements +objectClassInArray method.
 
 NSDictionary *dict = @{
     @"statuses" : @[
-                    @{
-                    @"text" : @"Nice weather!",
-                    @"user" : @{
-                    @"name" : @"Rose",
-                    @"icon" : @"nami.png"
-                    }
-                    },
-                    @{
-                    @"text" : @"Go camping tomorrow!",
-                    @"user" : @{
-                    @"name" : @"Jack",
-                    @"icon" : @"lufy.png"
-                    }
-                    }
-                    ],
+                      @{
+                          @"text" : @"Nice weather!",
+                          @"user" : @{
+                              @"name" : @"Rose",
+                              @"icon" : @"nami.png"
+                          }
+                      },
+                      @{
+                          @"text" : @"Go camping tomorrow!",
+                          @"user" : @{
+                              @"name" : @"Jack",
+                              @"icon" : @"lufy.png"
+                          }
+                      }
+                  ],
     @"ads" : @[
-               @{
-               @"image" : @"ad01.png",
-               @"url" : @"http://www.ad01.com"
-               },
-               @{
-               @"image" : @"ad02.png",
-               @"url" : @"http://www.ad02.com"
-               }
-               ],
+                 @{
+                     @"image" : @"ad01.png",
+                     @"url" : @"http://www.ad01.com"
+                 },
+                 @{
+                     @"image" : @"ad02.png",
+                     @"url" : @"http://www.ad02.com"
+                 }
+             ],
     @"totalNumber" : @"2014"
 };
 
@@ -232,13 +232,14 @@ for (Ad *ad in result.ads) {
 
 // How to map
 [Student setupReplacedKeyFromPropertyName:^NSDictionary *{
-    return @{@"ID" : @"id",
-             @"desc" : @"desciption",
-             @"oldName" : @"name.oldName",
-             @"nowName" : @"name.newName",
-             @"nameChangedTime" : @"name.info.nameChangedTime",
-             @"bag" : @"other.bag"
-             };
+    return @{
+               @"ID" : @"id",
+               @"desc" : @"desciption",
+               @"oldName" : @"name.oldName",
+               @"nowName" : @"name.newName",
+               @"nameChangedTime" : @"name.info.nameChangedTime",
+               @"bag" : @"other.bag"
+           };
 }];
 // Equals: Student.m implements +replacedKeyFromPropertyName method.
 
@@ -276,15 +277,15 @@ NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
 ## JSON array -> model array
 ```objc
 NSArray *dictArray = @[
-                       @{
-                       @"name" : @"Jack",
-                       @"icon" : @"lufy.png",
-                       },
-                       @{
-                       @"name" : @"Rose",
-                       @"icon" : @"nami.png",
-                       }
-                       ];
+                         @{
+                             @"name" : @"Jack",
+                             @"icon" : @"lufy.png"
+                         },
+                         @{
+                             @"name" : @"Rose",
+                             @"icon" : @"nami.png"
+                         }
+                     ];
 
 // JSON array -> User array
 NSArray *userArray = [User objectArrayWithKeyValuesArray:dictArray];
@@ -396,14 +397,14 @@ NSLog(@"%@", dictArray);
 ## Core Data
 ```objc
 NSDictionary *dict = @{
-                       @"name" : @"Jack",
-                       @"icon" : @"lufy.png",
-                       @"age" : @20,
-                       @"height" : @1.55,
-                       @"money" : @"100.9",
-                       @"sex" : @(SexFemale),
-                       @"gay" : @"true"
-                       };
+                         @"name" : @"Jack",
+                         @"icon" : @"lufy.png",
+                         @"age" : @20,
+                         @"height" : @1.55,
+                         @"money" : @"100.9",
+                         @"sex" : @(SexFemale),
+                         @"gay" : @"true"
+                     };
 
 // This demo just provide simple steps
 NSManagedObjectContext *context = nil;
