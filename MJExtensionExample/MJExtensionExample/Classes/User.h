@@ -19,7 +19,7 @@ typedef enum {
 /** 头像 */
 @property (copy, nonatomic) NSString *icon;
 /** 年龄 */
-@property (assign, nonatomic) int age;
+@property (assign, nonatomic) unsigned int age;
 /** 身高 */
 @property (copy, nonatomic) NSString *height;
 /** 财富 */

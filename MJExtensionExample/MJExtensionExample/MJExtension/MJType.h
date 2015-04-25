@@ -17,6 +17,9 @@
 /** 是否为id类型 */
 @property (nonatomic, readonly, getter=isIdType) BOOL idType;
 
+/** 是否为基本数字类型：int、float等 */
+@property (nonatomic, readonly, getter=isNumberType) BOOL numberType;
+
 /** 对象类型（如果是基本数据类型，此值为nil） */
 @property (nonatomic, readonly) Class typeClass;
 

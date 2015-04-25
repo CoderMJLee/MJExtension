@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MJExtension"
-  s.version      = "2.0.0"
+  s.version      = "2.0.1"
   s.summary      = "The fastest and most convenient conversion between JSON and model"
   s.homepage     = "https://github.com/CoderMJLee/MJExtension"
   s.license      = "MIT"

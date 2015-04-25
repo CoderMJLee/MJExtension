@@ -47,10 +47,18 @@ static NSMutableDictionary *_cachedTypes;
         _code = [code substringWithRange:NSMakeRange(2, code.length - 3)];
         _typeClass = NSClassFromString(_code);
         _fromFoundation = [MJFoundation isClassFromFoundation:_typeClass];
+        _numberType = (_typeClass == [NSNumber class] || [_typeClass isSubclassOfClass:[NSNumber class]]);
     } else if ([code isEqualToString:MJTypeSEL] ||
                [code isEqualToString:MJTypeIvar] ||
                [code isEqualToString:MJTypeMethod]) {
         _KVCDisabled = YES;
+    }
+    
+    // 是否为数字类型
+    NSString *lowerCode = _code.lowercaseString;
+    NSArray *numberTypes = @[MJTypeInt, MJTypeFloat, MJTypeDouble, MJTypeLong, MJTypeChar];
+    if ([numberTypes containsObject:lowerCode]) {
+        _numberType = YES;
     }
 }
 @end

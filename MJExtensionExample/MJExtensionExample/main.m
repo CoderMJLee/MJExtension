@@ -58,7 +58,7 @@ void keyValues2object()
     NSDictionary *dict = @{
                            @"name" : @"Jack",
                            @"icon" : @"lufy.png",
-                           @"age" : @20,
+                           @"age" : @"20",
                            @"height" : @1.55,
                            @"money" : @"100.9",
                            @"sex" : @(SexFemale),
@@ -71,7 +71,7 @@ void keyValues2object()
     User *user = [User objectWithKeyValues:dict];
 
     // 3.打印User模型的属性
-    NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    NSLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**

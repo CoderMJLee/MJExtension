@@ -141,22 +141,25 @@ static NSNumberFormatter *_numberFormatter;
                     value = [value absoluteString];
                 }
             } else if ([value isKindOfClass:[NSString class]]) {
-                if (typeClass == [NSNumber class]) {
-                    // NSString -> NSNumber
-                    value = [_numberFormatter numberFromString:value];
-                } else if (typeClass == [NSURL class]) {
+                if (typeClass == [NSURL class]) {
                     // NSString -> NSURL
                     value = [NSURL URLWithString:value];
-                } else if ([type.code isEqualToString:MJTypeBOOL]) {
-                    // 字符串转BOOL（字符串没有charValue方法）
-                    // 系统会调用字符串的charValue转为BOOL类型
-                    NSString *lower = [value lowercaseString];
-                    if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
-                        value = @YES;
-                    } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
-                        value = @NO;
-                    } else {
-                        value = @([value intValue]);
+                } else if (type.isNumberType) {
+                    NSString *oldValue = value;
+                    
+                    // NSString -> NSNumber
+                    value = [_numberFormatter numberFromString:oldValue];
+                    
+                    // 如果是BOOL
+                    if ([type.code isEqualToString:MJTypeBOOL]) {
+                        // 字符串转BOOL（字符串没有charValue方法）
+                        // 系统会调用字符串的charValue转为BOOL类型
+                        NSString *lower = [oldValue lowercaseString];
+                        if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
+                            value = @YES;
+                        } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
+                            value = @NO;
+                        }
                     }
                 }
             }
