@@ -26,13 +26,13 @@
 	* Import the main header file：`#import "MJExtension.h"`
 ```objc
 MJExtension.h
-MJConst.h               MJConst.m
-MJFoundation.h          MJFoundation.m
-MJIvar.h                MJIvar.m
-MJType.h                MJType.m
-NSObject+MJCoding.h     NSObject+MJCoding.m
-NSObject+MJIvar.h       NSObject+MJIvar.m
-NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
+MJConst.h					MJConst.m
+MJFoundation.h				MJFoundation.m
+MJType.h						MJType.m
+MJProperty.h				MJProperty.m
+NSObject+MJCoding.h		NSObject+MJCoding.m
+NSObject+MJProperty.h	NSObject+MJProperty.m
+NSObject+MJKeyValue.h	NSObject+MJKeyValue.m
 ```
 
 ## The most simple JSON -> Model
