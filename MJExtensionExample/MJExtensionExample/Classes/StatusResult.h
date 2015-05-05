@@ -3,7 +3,7 @@
 //  字典与模型的互转
 //
 //  Created by MJ Lee on 14-5-21.
-//  Copyright (c) 2014年 itcast. All rights reserved.
+//  Copyright (c) 2014年 小码哥. All rights reserved.
 //  微博结果（用来表示大批量的微博数据）
 
 #import <Foundation/Foundation.h>

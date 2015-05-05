@@ -210,7 +210,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = itcast;
+				ORGANIZATIONNAME = "小码哥";
 			};
 			buildConfigurationList = 2D9CAF22192FA6020011F500 /* Build configuration list for PBXProject "MJExtensionExample" */;
 			compatibilityVersion = "Xcode 3.2";

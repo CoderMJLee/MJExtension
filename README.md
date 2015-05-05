@@ -1,3 +1,4 @@
+![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
 ## MJExtension
 * The fastest, most convenient and most nonintrusive conversion between JSON and model.
 

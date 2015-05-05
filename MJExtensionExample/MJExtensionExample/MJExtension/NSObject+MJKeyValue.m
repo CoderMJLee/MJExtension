@@ -3,7 +3,7 @@
 //  MJExtension
 //
 //  Created by mj on 13-8-24.
-//  Copyright (c) 2013年 itcast. All rights reserved.
+//  Copyright (c) 2013年 小码哥. All rights reserved.
 //
 
 #import "NSObject+MJKeyValue.h"
