@@ -113,13 +113,27 @@ static const char MJIgnoredCodingPropertyNamesKey;
     static const char MJCachedPropertiesKey;
     
     // 获得成员变量
+    // 通过关联对象，以及提前定义好的MJCachedPropertiesKey来进行运行时，对所有属性的获取。
+
+    //***objc_getAssociatedObject 方法用于判断当前是否已经获取过MJCachedPropertiesKey对应的关联对象
+    //  1> 关联到的对象
+    //  2> 关联的属性 key
     NSMutableArray *cachedProperties = objc_getAssociatedObject(self, &MJCachedPropertiesKey);
+    //***
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
-        
+
+        /**遍历这个类的父类*/
         [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             // 1.获得所有的成员变量
             unsigned int outCount = 0;
+            /**
+                class_copyIvarList 成员变量，提示有很多第三方框架会使用 Ivar，能够获得更多的信息
+                但是：在 swift 中，由于语法结构的变化，使用 Ivar 非常不稳定，经常会崩溃！
+                class_copyPropertyList 属性
+                class_copyMethodList 方法
+                class_copyProtocolList 协议
+                */
             objc_property_t *properties = class_copyPropertyList(c, &outCount);
             
             // 2.遍历每一个成员变量
@@ -134,7 +148,9 @@ static const char MJIgnoredCodingPropertyNamesKey;
             // 3.释放内存
             free(properties);
         }];
+        //*** 在此时设置当前这个类为关联对象，这样下次就不会重复获取类的相关属性。
         objc_setAssociatedObject(self, &MJCachedPropertiesKey, cachedProperties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        //***
     }
     
     return cachedProperties;
