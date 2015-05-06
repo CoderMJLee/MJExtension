@@ -36,12 +36,12 @@ static NSNumberFormatter *_numberFormatter;
     return [self objectWithKeyValues:[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil] error:error];
 }
 
-+ (instancetype)objectWithKeyValues:(NSDictionary *)keyValues
++ (instancetype)objectWithKeyValues:(id)keyValues
 {
     return [self objectWithKeyValues:keyValues error:nil];
 }
 
-+ (instancetype)objectWithKeyValues:(NSDictionary *)keyValues error:(NSError *__autoreleasing *)error
++ (instancetype)objectWithKeyValues:(id)keyValues error:(NSError *__autoreleasing *)error
 {
     return [self objectWithKeyValues:keyValues context:nil error:error];
 }
@@ -83,12 +83,12 @@ static NSNumberFormatter *_numberFormatter;
     return [self objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file] error:error];
 }
 
-- (instancetype)setKeyValues:(NSDictionary *)keyValues
+- (instancetype)setKeyValues:(id)keyValues
 {
     return [self setKeyValues:keyValues error:nil];
 }
 
-- (instancetype)setKeyValues:(NSDictionary *)keyValues error:(NSError *__autoreleasing *)error
+- (instancetype)setKeyValues:(id)keyValues error:(NSError *__autoreleasing *)error
 {
     return [self setKeyValues:keyValues context:nil error:error];
 }
