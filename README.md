@@ -46,10 +46,11 @@ typedef enum {
 @interface User : NSObject
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *icon;
-@property (assign, nonatomic) int age;
-@property (assign, nonatomic) double height;
+@property (assign, nonatomic) unsigned int age;
+@property (copy, nonatomic) NSString *height;
 @property (strong, nonatomic) NSNumber *money;
 @property (assign, nonatomic) Sex sex;
+@property (assign, nonatomic, getter=isGay) BOOL gay;
 @end
 
 /***********************************************/
@@ -60,14 +61,16 @@ NSDictionary *dict = @{
     @"age" : @20,
     @"height" : @"1.55",
     @"money" : @100.9,
-    @"sex" : @(SexFemale)
+    @"sex" : @(SexFemale),
+//	 @"gay" : @"1"
+//	 @"gay" : @"NO"
+    @"gay" : @"true"
 };
 
 // JSON -> User
 User *user = [User objectWithKeyValues:dict];
 
-NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d",
-      user.name, user.icon, user.age, user.height, user.money, user.sex);
+NSLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 // name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9, sex=1
 ```
 ##### Core code
@@ -505,28 +508,31 @@ typedef enum {
 @interface User : NSObject
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *icon;
-@property (assign, nonatomic) int age;
-@property (assign, nonatomic) double height;
+@property (assign, nonatomic) unsigned int age;
+@property (copy, nonatomic) NSString *height;
 @property (strong, nonatomic) NSNumber *money;
 @property (assign, nonatomic) Sex sex;
+@property (assign, nonatomic, getter=isGay) BOOL gay;
 @end
 
 /***********************************************/
 
 NSDictionary *dict = @{
-               @"name" : @"Jack",
-               @"icon" : @"lufy.png",
-               @"age" : @20,
-               @"height" : @"1.55",
-               @"money" : @100.9,
-               @"sex" : @(SexFemale)
-            };
+    @"name" : @"Jack",
+    @"icon" : @"lufy.png",
+    @"age" : @20,
+    @"height" : @"1.55",
+    @"money" : @100.9,
+    @"sex" : @(SexFemale),
+//	 @"gay" : @"1"
+//	 @"gay" : @"NO"
+    @"gay" : @"true"
+};
 
 // 将字典转为User模型
 User *user = [User objectWithKeyValues:dict];
 
-NSLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d", 
-	user.name, user.icon, user.age, user.height, user.money, user.sex);
+NSLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 // name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9, sex=1
 ```
 ##### 核心代码
