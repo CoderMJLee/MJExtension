@@ -97,7 +97,9 @@ static NSNumberFormatter *_numberFormatter;
 {
     return [self setKeyValues:keyValues context:context error:nil];
 }
-
+/**
+ 核心代码：
+ */
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
     // 如果是JSON字符串
@@ -110,6 +112,7 @@ static NSNumberFormatter *_numberFormatter;
     @try {
         NSArray *ignoredPropertyNames = [[self class] totalIgnoredPropertyNames];
         
+        //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
         [[self class] enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
             // 0.检测是否被忽略
             if ([ignoredPropertyNames containsObject:property.name]) return;
