@@ -1,30 +1,46 @@
 ![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
-## MJExtension
-* The fastest, most convenient and most nonintrusive conversion between JSON and model.
+MJExtension
+===
+The fastest, most convenient and most nonintrusive conversion between JSON and model.
 
-## Features
-* `JSON` --> `Model`、`Core Data Model`
-* `JSONString` --> `Model`、`Core Data Model`
-* `Model`、`Core Data Model` --> `JSON`
-* `JSON Array` --> `Model Array`、`Core Data Model Array`
-* `JSONString` --> `Model Array`、`Core Data Model Array`
-* `Model Array`、`Core Data Model Array` --> `JSON Array`
-* Coding all properties of model in one line code. 
+GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](richermj123go@vip.qq.com)
 
-## Differences between MJExtension, JSONModel and Mantle
-* Conversion rate
-	* `MJExtension` > `JSONModel` > `Mantle`
-* You can also create a demo to test it yourself.
-* How to use it
-	* `JSONModel`：You `must` let `all` model class extends `JSONModel` class.
-	* `Mantle`：You `must` let `all` model class extends `MTModel` class.
-	* `MJExtension`：Your model class `don't need to` extends another base class. You don't need to modify any model file.  `Nonintrusive`, `convenient`.
 
-## How
-* Cocoapods：`pod 'MJExtension'`
-* Manual way
-	* Drag all source files under floder `MJExtensionExample/MJExtensionExample/MJExtension` to your project.
-	* Import the main header file：`#import "MJExtension.h"`
+## Contents
+* [Getting Started](#Getting_Started)
+	* [Installation](#Installation)
+	* [Features](#Features)
+	* [Why MJExtension](#Why_MJExtension)
+* [Examples](#Examples)
+	* [JSON -> Model](#JSON_Model)
+	* [JSONString -> Model](#JSONString_Model)
+	* [Model contains model](#Model_contains_model)
+	* [Model contains model-array](#Model_contains_model_array)
+	* [Model name - JSON key mapping](#Model_name_JSON_key_mapping)
+	* [JSON array -> model array](#JSON_array_model_array)
+	* [Model -> JSON](#Model_JSON)
+	* [Model array -> JSON array](#Model_array_JSON_array)
+	* [Core Data](#Core_Data)
+	* [Coding](#Coding)
+	* [More use cases](#More_use_cases)
+* [Chinese Version](#Chinese_Version)
+
+---
+
+# <a id="Getting_Started"></a> Getting Started
+
+## <a id="Installation"></a> Installation
+
+### From CocoaPods
+
+```ruby
+pod 'MJExtension'
+```
+
+### Manually
+Drag all source files under floder `MJExtensionExample/MJExtensionExample/MJExtension` to your project.
+Import the main header file：`#import "MJExtension.h"`
+
 ```objc
 MJExtension.h
 MJConst.h               MJConst.m
@@ -36,7 +52,32 @@ NSObject+MJProperty.h   NSObject+MJProperty.m
 NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
 ```
 
-## The most simple JSON -> Model
+## <a id="Features"></a> Features
+
+* `JSON` --> `Model`、`Core Data Model`
+* `JSONString` --> `Model`、`Core Data Model`
+* `Model`、`Core Data Model` --> `JSON`
+* `JSON Array` --> `Model Array`、`Core Data Model Array`
+* `JSONString` --> `Model Array`、`Core Data Model Array`
+* `Model Array`、`Core Data Model Array` --> `JSON Array`
+* Coding all properties of model in one line code. 
+
+
+## <a id="Why_MJExtension"></a> Why use MJExtension, why not use JSONModel or Mantle
+#### MJExtension is faster than JSONModel and Mantle
+`MJExtension` > `JSONModel` > `Mantle` _(Feel free to test it yourself)_
+#### MJExtension is more easy to go
+`JSONModel`：You `must` let `all` model class extends `JSONModel` class.
+
+`Mantle`：You `must` let `all` model class extends `MTModel` class.
+
+`MJExtension`：Your model class `don't need to` extends another base class. You don't need to modify any model file.  `Nonintrusive`, `convenient`.
+
+
+# <a id="Examples"></a> Examples
+
+### <a id="JSON_Model"></a> The most simple JSON -> Model
+
 ```objc
 typedef enum {
     SexMale,
@@ -62,8 +103,6 @@ NSDictionary *dict = @{
     @"height" : @"1.55",
     @"money" : @100.9,
     @"sex" : @(SexFemale),
-//	 @"gay" : @"1"
-//	 @"gay" : @"NO"
     @"gay" : @"true"
 };
 
@@ -73,10 +112,9 @@ User *user = [User objectWithKeyValues:dict];
 NSLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 // name=Jack, icon=lufy.png, age=20, height=1.550000, money=100.9, sex=1
 ```
-##### Core code
-* `[User objectWithKeyValues:dict]`
 
-## JSONString -> Model
+### <a id="JSONString_Model"></a> JSONString -> Model
+
 ```objc
 // 1.Define a JSONString
 NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20}";
@@ -88,10 +126,9 @@ User *user = [User objectWithKeyValues:jsonString];
 NSLog(@"name=%@, icon=%@, age=%d", user.name, user.icon, user.age);
 // name=Jack, icon=lufy.png, age=20
 ```
-##### Core code
-* `[User objectWithKeyValues:dict]`
 
-## Model contains model
+### <a id="Model_contains_model"></a> Model contains model
+
 ```objc
 @interface Status : NSObject
 @property (copy, nonatomic) NSString *text;
@@ -131,10 +168,9 @@ NSString *icon2 = status.retweetedStatus.user.icon;
 NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 // text2=Nice weather!, name2=Rose, icon2=nami.png
 ```
-##### Core code
-* `[Status objectWithKeyValues:dict]`
 
-## Model contains model-array
+### <a id="Model_contains_model_array"></a> Model contains model-array
+
 ```objc
 @interface Ad : NSObject
 @property (copy, nonatomic) NSString *image;
@@ -213,10 +249,9 @@ for (Ad *ad in result.ads) {
 // image=ad01.png, url=http://www.ad01.com
 // image=ad02.png, url=http://www.ad02.com
 ```
-##### Core code
-* call `+ (void)setupObjectClassInArray:` method
 
-## Model name - JSON key mapping
+### <a id="Model_name_JSON_key_mapping"></a> Model name - JSON key mapping
+
 ```objc
 @interface Bag : NSObject
 @property (copy, nonatomic) NSString *name;
@@ -275,10 +310,10 @@ NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
 NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
 // bagName=a red bag, bagPrice=100.700000
 ```
-##### Core code
-* call `+setupReplacedKeyFromPropertyName:` method
 
-## JSON array -> model array
+
+### <a id="JSON_array_model_array"></a> JSON array -> model array
+
 ```objc
 NSArray *dictArray = @[
                          @{
@@ -301,10 +336,8 @@ for (User *user in userArray) {
 // name=Jack, icon=lufy.png
 // name=Rose, icon=nami.png
 ```
-##### Core code
-* `[User objectArrayWithKeyValuesArray:dictArray]`
 
-## Model -> JSON
+### <a id="Model_JSON"></a> Model -> JSON
 ```objc
 // New model
 User *user = [[User alloc] init];
@@ -363,10 +396,9 @@ NSLog(@"%@", stuDict);
  }
  */
 ```
-##### Core code
-* `status.keyValues`、`stu.keyValues`
 
-## Model array -> JSON array
+### <a id="Model_array_JSON_array"></a> Model array -> JSON array
+
 ```objc
 // New model array
 User *user1 = [[User alloc] init];
@@ -395,10 +427,9 @@ NSLog(@"%@", dictArray);
  )
  */
 ```
-##### Core code
-* `[User keyValuesArrayWithObjectArray:userArray]`
 
-## Core Data
+### <a id="Core_Data"></a> Core Data
+
 ```objc
 NSDictionary *dict = @{
                          @"name" : @"Jack",
@@ -416,10 +447,9 @@ User *user = [User objectWithKeyValues:dict context:context];
 
 [context save:nil];
 ```
-##### Core code
-* `[User objectWithKeyValues:dict context:context]`
 
-## Coding
+### <a id="Coding"></a> Coding
+
 ```objc
 #import "MJExtension.h"
 
@@ -450,15 +480,13 @@ Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 // name=(null), price=200.800000
 ```
-##### Core code
-* `MJCodingImplementation`
-* call `+ (void)setupIgnoredCodingPropertyNames:` method（If all properties need to be coded, there is no need to call it.）
 
-## More
-* Please reference `NSObject+MJKeyValue.h`
-* Please reference `NSObject+MJCoding.h`
+### <a id="More_use_cases"></a> More use cases
 
-## MJExtension(Chinese)
+Please reference to `NSObject+MJKeyValue.h` and `NSObject+MJCoding.h`
+
+
+## <a id="Chinese_Version"></a> MJExtension(Chinese)
 * 世界上转换速度最快、使用最简单方便的字典转模型框架
 
 ## 能做什么？
