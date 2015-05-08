@@ -3,7 +3,7 @@ MJExtension
 ===
 The fastest, most convenient and most nonintrusive conversion between JSON and model.
 
-GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](richermj123go@vip.qq.com)
+GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto://richermj123go@vip.qq.com)
 
 
 ## Contents
