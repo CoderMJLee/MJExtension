@@ -53,6 +53,7 @@ static NSNumberFormatter *_numberFormatter;
 
 + (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
+    if (keyValues == nil) return nil;
     if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
         return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
     }
