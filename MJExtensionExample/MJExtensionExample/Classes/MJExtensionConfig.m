@@ -9,6 +9,7 @@
 #import "MJExtensionConfig.h"
 #import "MJExtension.h"
 #import "Bag.h"
+#import "User.h"
 #import "StatusResult.h"
 #import "Student.h"
 
@@ -18,11 +19,23 @@
  */
 + (void)load
 {
+    // User类的只有name、icon属性参与字典转模型
+//    [User setupAllowedPropertyNames:^NSArray *{
+//        return @[@"name", @"icon"];
+//    }];
+    // 相当于在User.m中实现了+allowedPropertyNames方法
+    
     // Bag类中的name属性不参与归档
     [Bag setupIgnoredCodingPropertyNames:^NSArray *{
         return @[@"name"];
     }];
     // 相当于在Bag.m中实现了+ignoredCodingPropertyNames方法
+    
+    // Bag类中只有price属性参与归档
+//    [Bag setupAllowedCodingPropertyNames:^NSArray *{
+//        return @[@"price"];
+//    }];
+    // 相当于在Bag.m中实现了+allowedCodingPropertyNames方法
     
     // StatusResult类中的statuses数组中存放的是Status模型
     // StatusResult类中的ads数组中存放的是Ad模型

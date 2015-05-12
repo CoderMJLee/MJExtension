@@ -13,6 +13,10 @@
 @protocol MJCoding <NSObject>
 @optional
 /**
+ *  这个数组中的属性名才会进行归档
+ */
++ (NSArray *)allowedCodingPropertyNames;
+/**
  *  这个数组中的属性名将会被忽略：不进行归档
  */
 + (NSArray *)ignoredCodingPropertyNames;

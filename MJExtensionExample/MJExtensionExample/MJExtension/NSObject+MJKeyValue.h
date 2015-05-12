@@ -16,6 +16,11 @@
 @protocol MJKeyValue <NSObject>
 @optional
 /**
+ *  只有这个数组中的属性名才允许进行字典和模型的转换
+ */
++ (NSArray *)allowedPropertyNames;
+
+/**
  *  这个数组中的属性名将会被忽略：不进行字典和模型的转换
  */
 + (NSArray *)ignoredPropertyNames;
