@@ -71,7 +71,11 @@
  *  @return 字典
  */
 - (NSDictionary *)keyValues;
+- (NSDictionary *)keyValuesWithKeys:(NSArray *)keys;
+- (NSDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
 - (NSDictionary *)keyValuesWithError:(NSError **)error;
+- (NSDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
+- (NSDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 /**
  *  通过模型数组来创建一个字典数组
@@ -79,7 +83,11 @@
  *  @return 字典数组
  */
 + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
 + (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray error:(NSError **)error;
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys error:(NSError **)error;
++ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 #pragma mark - 字典转模型
 /**

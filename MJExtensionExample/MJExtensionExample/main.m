@@ -271,6 +271,8 @@ void object2keyValues()
     // 2.将模型转为字典
     NSDictionary *statusDict = status.keyValues;
     NSLog(@"%@", statusDict);
+    
+    NSLog(@"%@", [status keyValuesWithKeys:@[@"text"]]);
 
     // 3.新建多级映射的模型
     Student *stu = [[Student alloc] init];
@@ -287,6 +289,7 @@ void object2keyValues()
     
     NSDictionary *stuDict = stu.keyValues;
     NSLog(@"%@", stuDict);
+    NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
 }
 
 /**
