@@ -319,6 +319,9 @@ static NSNumberFormatter *_numberFormatter;
             }];
         }];
         
+        // 去除系统自动增加的元素
+        [keyValues removeObjectsForKeys:@[@"superclass", @"debugDescription", @"description", @"hash"]];
+        
         // 转换完毕
         if ([self respondsToSelector:@selector(objectDidFinishConvertingToKeyValues)]) {
             [self objectDidFinishConvertingToKeyValues];
