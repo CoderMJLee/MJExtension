@@ -230,8 +230,12 @@ static NSNumberFormatter *_numberFormatter;
     
     // 3.遍历
     for (NSDictionary *keyValues in keyValuesArray) {
-        id model = [self objectWithKeyValues:keyValues context:context error:error];
-        if (model) [modelArray addObject:model];
+        if ([keyValues isKindOfClass:[NSArray class]]){
+            [modelArray addObject:[self objectArrayWithKeyValuesArray:keyValues context:context error:error]];
+        } else {
+            id model = [self objectWithKeyValues:keyValues context:context error:error];
+            if (model) [modelArray addObject:model];
+        }
     }
     
     return modelArray;
