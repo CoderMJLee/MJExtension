@@ -40,30 +40,30 @@
 
 + (Class)ivarObjectClassInArray:(NSString *)propertyName
 {
-    id class = nil;
+    id aClass = nil;
     if ([self respondsToSelector:@selector(objectClassInArray:)]) {
-        class = [self objectClassInArray:propertyName];
+        aClass = [self objectClassInArray:propertyName];
     } else if ([self respondsToSelector:@selector(objectClassInArray)]) {
-        class = self.objectClassInArray[propertyName];
+        aClass = self.objectClassInArray[propertyName];
     } else {
         // 为了兼容以前的对象方法
         id tempObject = self.tempObject;
         if ([tempObject respondsToSelector:@selector(objectClassInArray)]) {
             id dict = [tempObject objectClassInArray];
-            class = dict[propertyName];
+            aClass = dict[propertyName];
         }
     }
     // 如果是NSString类型
-    if ([class isKindOfClass:[NSString class]]) {
-        class = NSClassFromString(class);
+    if ([aClass isKindOfClass:[NSString class]]) {
+        aClass = NSClassFromString(aClass);
     }
-    return class;
+    return aClass;
 }
 
 #pragma mark - --公共方法--
 + (instancetype)tempObject
 {
-    static const char MJTempObjectKey;
+    static const char MJTempObjectKey = '\0';
     id tempObject = objc_getAssociatedObject(self, &MJTempObjectKey);
     if (tempObject == nil) {
         tempObject = [[self alloc] init];
@@ -74,7 +74,7 @@
 
 + (void)enumerateIvarsWithBlock:(MJIvarsBlock)block
 {
-    static const char MJCachedIvarsKey;
+    static const char MJCachedIvarsKey = '\0';
     // 获得成员变量
     NSMutableArray *cachedIvars = objc_getAssociatedObject(self, &MJCachedIvarsKey);
     if (cachedIvars == nil) {
