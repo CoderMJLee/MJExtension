@@ -13,12 +13,12 @@
 #import "MJFoundation.h"
 #import <objc/runtime.h>
 
-static const char MJReplacedKeyFromPropertyNameKey;
-static const char MJObjectClassInArrayKey;
-static const char MJAllowedPropertyNamesKey;
-static const char MJAllowedCodingPropertyNamesKey;
-static const char MJIgnoredPropertyNamesKey;
-static const char MJIgnoredCodingPropertyNamesKey;
+static const char MJReplacedKeyFromPropertyNameKey = '\0';
+static const char MJObjectClassInArrayKey = '\0';
+static const char MJAllowedPropertyNamesKey = '\0';
+static const char MJAllowedCodingPropertyNamesKey = '\0';
+static const char MJIgnoredPropertyNamesKey = '\0';
+static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
 @implementation NSObject (Property)
 #pragma mark - --私有方法--
@@ -50,26 +50,26 @@ static const char MJIgnoredCodingPropertyNamesKey;
 
 + (Class)propertyObjectClassInArray:(NSString *)propertyName
 {
-    __block id class = nil;
+    __block id aClass = nil;
     if ([self respondsToSelector:@selector(objectClassInArray)]) {
-        class = [self objectClassInArray][propertyName];
+        aClass = [self objectClassInArray][propertyName];
     }
     
-    if (!class) {
+    if (!aClass) {
         [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             NSDictionary *dict = objc_getAssociatedObject(c, &MJObjectClassInArrayKey);
             if (dict) {
-                class = dict[propertyName];
+                aClass = dict[propertyName];
             }
-            if (class) *stop = YES;
+            if (aClass) *stop = YES;
         }];
     }
     
     // 如果是NSString类型
-    if ([class isKindOfClass:[NSString class]]) {
-        class = NSClassFromString(class);
+    if ([aClass isKindOfClass:[NSString class]]) {
+        aClass = NSClassFromString(aClass);
     }
-    return class;
+    return aClass;
 }
 
 #pragma mark - --公共方法--
@@ -112,7 +112,7 @@ static const char MJIgnoredCodingPropertyNamesKey;
 #pragma mark - 公共方法
 + (NSArray *)properties
 {
-    static const char MJCachedPropertiesKey;
+    static const char MJCachedPropertiesKey = '\0';
     
     // 获得成员变量
     // 通过关联对象，以及提前定义好的MJCachedPropertiesKey来进行运行时，对所有属性的获取。

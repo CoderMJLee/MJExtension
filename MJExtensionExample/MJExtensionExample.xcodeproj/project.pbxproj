@@ -25,6 +25,7 @@
 		2D9CAF59192FA60E0011F500 /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF49192FA60E0011F500 /* NSObject+MJKeyValue.m */; };
 		2DA30C251976A88600287282 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA30C241976A88600287282 /* MJFoundation.m */; };
 		2DA7B58B197BB5B200B62F78 /* MJConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA7B58A197BB5B200B62F78 /* MJConst.m */; };
+		89568B751B1B3EAE00B1FACA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89568B741B1B3EAE00B1FACA /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,6 +79,7 @@
 		2DA30C241976A88600287282 /* MJFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJFoundation.m; sourceTree = "<group>"; };
 		2DA7B589197BB5B200B62F78 /* MJConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJConst.h; sourceTree = "<group>"; };
 		2DA7B58A197BB5B200B62F78 /* MJConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJConst.m; sourceTree = "<group>"; };
+		89568B741B1B3EAE00B1FACA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89568B751B1B3EAE00B1FACA /* CoreData.framework in Frameworks */,
 				2D9CAF2B192FA6020011F500 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,6 +136,7 @@
 		2D9CAF29192FA6020011F500 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				89568B741B1B3EAE00B1FACA /* CoreData.framework */,
 				2D9CAF2A192FA6020011F500 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -329,6 +333,7 @@
 		2D9CAF36192FA6020011F500 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MJExtensionExample/MJExtensionExample-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -338,6 +343,7 @@
 		2D9CAF37192FA6020011F500 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MJExtensionExample/MJExtensionExample-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
