@@ -652,7 +652,7 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
              @"ads" : @"Ad"
              };
 }];
-// 相当于在StatusResult.m中实现了+objectClassInArray方法
+// 相当于在StatusResult.m中实现了+(NSDictionary *)objectClassInArray方法
 
 NSDictionary *dict = @{
                        @"statuses" : @[
@@ -741,7 +741,7 @@ for (Ad *ad in result.ads) {
              @"bag" : @"other.bag"
              };
 }];
-// 相当于在Student.m中实现了+replacedKeyFromPropertyName方法
+// 相当于在Student.m中实现了+(NSDictionary *)replacedKeyFromPropertyName方法
 
 NSDictionary *dict = @{
                        @"id" : @"20",
