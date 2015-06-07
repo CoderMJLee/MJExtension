@@ -21,6 +21,8 @@ void object2keyValues();
 void objectArray2keyValuesArray();
 void coreData();
 void coding();
+void replacedKeyFromPropertyName121();
+void newValueFromOldValue();
 void execute(void (*fn)(), NSString *comment);
 
 #endif

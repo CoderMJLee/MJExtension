@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-@class MJType;
+#import "MJType.h"
 
 /**
  *  包装一个成员

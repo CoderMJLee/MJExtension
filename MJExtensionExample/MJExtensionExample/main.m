@@ -26,6 +26,8 @@
 #import "Student.h"
 #import "StatusResult.h"
 #import "Bag.h"
+#import "Dog.h"
+#import "Book.h"
 #import <CoreData/CoreData.h>
 
 /** main函数 */
@@ -45,6 +47,8 @@ int main(int argc, const char * argv[])
         execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
         execute(coreData, @"CoreData示例");
         execute(coding, @"NSCoding示例");
+        execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
+        execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
     }
     return 0;
 }
@@ -357,6 +361,43 @@ void coding()
     // 解档
     Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
     NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+}
+
+/**
+ *  统一转换属性名（比如驼峰转下划线）
+ */
+void replacedKeyFromPropertyName121()
+{
+    // 1.定义一个字典
+    NSDictionary *dict = @{
+                           @"nick_name" : @"旺财",
+                           @"sale_price" : @"10.5",
+                           @"run_speed" : @"100.9"
+                           };
+    
+    // 2.将字典转为User模型
+    Dog *dog = [Dog objectWithKeyValues:dict];
+    
+    // 3.打印User模型的属性
+    NSLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, dog.runSpeed);
+}
+
+/**
+ *  过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）
+ */
+void newValueFromOldValue()
+{
+    // 1.定义一个字典
+    NSDictionary *dict = @{
+                           @"name" : @"5分钟突破iOS开发",
+                           @"publishedTime" : @"2011-09-10"
+                           };
+    
+    // 2.将字典转为User模型
+    Book *book = [Book objectWithKeyValues:dict];
+    
+    // 3.打印User模型的属性
+    NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
 }
 
 void execute(void (*fn)(), NSString *comment)

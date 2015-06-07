@@ -7,7 +7,6 @@
 //
 
 #import "MJProperty.h"
-#import "MJType.h"
 #import "MJFoundation.h"
 #import "MJConst.h"
 

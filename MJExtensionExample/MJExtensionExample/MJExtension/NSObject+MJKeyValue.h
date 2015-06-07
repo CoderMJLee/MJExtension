@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MJConst.h"
 #import <CoreData/CoreData.h>
+#import "MJProperty.h"
 
 /**
  *  KeyValue协议
@@ -33,11 +34,27 @@
 + (NSDictionary *)replacedKeyFromPropertyName;
 
 /**
+ *  将属性名换为其他key去字典中取值
+ *
+ *  @return 从字典中取值用的key
+ */
++ (NSString *)replacedKeyFromPropertyName121:(NSString *)propertyName;
+
+/**
  *  数组中需要转换的模型类
  *
  *  @return 字典中的key是数组属性名，value是数组中存放模型的Class（Class类型或者NSString类型）
  */
 + (NSDictionary *)objectClassInArray;
+
+/**
+ *  旧值换新值，用于过滤字典中的值
+ *
+ *  @param oldValue 旧值
+ *
+ *  @return 新值
+ */
+- (id)newValueFromOldValue:(id)oldValue property:(MJProperty *)property;
 
 /**
  *  当字典转模型完毕时调用
@@ -70,37 +87,29 @@
  *  将模型转成字典
  *  @return 字典
  */
-- (NSDictionary *)keyValues;
-- (NSDictionary *)keyValuesWithKeys:(NSArray *)keys;
-- (NSDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
-- (NSDictionary *)keyValuesWithError:(NSError **)error;
-- (NSDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
-- (NSDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
+- (NSMutableDictionary *)keyValues;
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys;
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
+- (NSMutableDictionary *)keyValuesWithError:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 /**
  *  通过模型数组来创建一个字典数组
  *  @param objectArray 模型数组
  *  @return 字典数组
  */
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray error:(NSError **)error;
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys error:(NSError **)error;
-+ (NSArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray error:(NSError **)error;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys error:(NSError **)error;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 #pragma mark - 字典转模型
 /**
- *  通过JSON数据来创建一个模型
- *  @param data JSON数据
- *  @return 新建的对象
- */
-+ (instancetype)objectWithJSONData:(NSData *)data;
-+ (instancetype)objectWithJSONData:(NSData *)data error:(NSError **)error;
-
-/**
  *  通过字典来创建一个模型
- *  @param keyValues 字典
+ *  @param keyValues 字典(可以是NSDictionary、NSData、NSString)
  *  @return 新建的对象
  */
 + (instancetype)objectWithKeyValues:(id)keyValues;
@@ -108,7 +117,7 @@
 
 /**
  *  通过字典来创建一个CoreData模型
- *  @param keyValues 字典
+ *  @param keyValues 字典(可以是NSDictionary、NSData、NSString)
  *  @param context   CoreData上下文
  *  @return 新建的对象
  */
@@ -133,43 +142,40 @@
 
 #pragma mark - 字典数组转模型数组
 /**
- *  通过JSON数据来创建一个模型数组
- *  @param data JSON数据
- *  @return 新建的对象
- */
-+ (NSArray *)objectArrayWithJSONData:(NSData *)data;
-+ (NSArray *)objectArrayWithJSONData:(NSData *)data error:(NSError **)error;
-
-/**
  *  通过字典数组来创建一个模型数组
- *  @param keyValuesArray 字典数组
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
  *  @return 模型数组
  */
-+ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray;
-+ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray error:(NSError **)error;
++ (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray;
++ (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray error:(NSError **)error;
 
 /**
  *  通过字典数组来创建一个模型数组
- *  @param keyValuesArray 字典数组
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
  *  @param context        CoreData上下文
  *  @return 模型数组
  */
-+ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
-+ (NSArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context error:(NSError **)error;
++ (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
++ (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型数组
  *  @param filename 文件名(仅限于mainBundle中的文件)
  *  @return 模型数组
  */
-+ (NSArray *)objectArrayWithFilename:(NSString *)filename;
-+ (NSArray *)objectArrayWithFilename:(NSString *)filename error:(NSError **)error;
++ (NSMutableArray *)objectArrayWithFilename:(NSString *)filename;
++ (NSMutableArray *)objectArrayWithFilename:(NSString *)filename error:(NSError **)error;
 
 /**
  *  通过plist来创建一个模型数组
  *  @param file 文件全路径
  *  @return 模型数组
  */
-+ (NSArray *)objectArrayWithFile:(NSString *)file;
-+ (NSArray *)objectArrayWithFile:(NSString *)file error:(NSError **)error;
++ (NSMutableArray *)objectArrayWithFile:(NSString *)file;
++ (NSMutableArray *)objectArrayWithFile:(NSString *)file error:(NSError **)error;
+
+#pragma mark - 转换为JSON
+- (NSData *)JSONData;
+- (id)JSONObject;
+- (NSString *)JSONString;
 @end
