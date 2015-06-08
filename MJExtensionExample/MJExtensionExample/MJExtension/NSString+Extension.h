@@ -17,4 +17,12 @@
  *  下划线转驼峰（love_you -> loveYou）
  */
 - (NSString *)camelFromUnderline;
+/**
+ * 首字母变大写
+ */
+- (NSString *)firstCharUpper;
+/**
+ * 首字母变小写
+ */
+- (NSString *)firstCharLower;
 @end
