@@ -21,6 +21,8 @@
  */
 + (void)load
 {
+#pragma mark 如果使用NSObject来调用这些方法，代表所有类都会生效
+    
 #pragma mark User类的只有name、icon属性参与字典转模型
 //    [User setupAllowedPropertyNames:^NSArray *{
 //        return @[@"name", @"icon"];

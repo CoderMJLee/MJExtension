@@ -52,6 +52,7 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *  遍历所有的类
  */
 + (void)enumerateClassesWithBlock:(MJClassesBlock)block;
++ (void)enumerateAllClassesWithBlock:(MJClassesBlock)block;
 
 #pragma mark - 新值配置
 /**

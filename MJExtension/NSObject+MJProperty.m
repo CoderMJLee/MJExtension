@@ -36,7 +36,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     
     // 调用block
     if (!key) {
-        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+        [self enumerateAllClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             MJReplacedKeyFromPropertyName121 block = objc_getAssociatedObject(c, &MJReplacedKeyFromPropertyName121Key);
             if (block) {
                 key = block(propertyName);
@@ -51,7 +51,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     if (!key) {
-        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+        [self enumerateAllClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             NSDictionary *dict = objc_getAssociatedObject(c, &MJReplacedKeyFromPropertyNameKey);
             if (dict) {
                 key = dict[propertyName];
@@ -74,7 +74,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     if (!aClass) {
-        [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+        [self enumerateAllClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
             NSDictionary *dict = objc_getAssociatedObject(c, &MJObjectClassInArrayKey);
             if (dict) {
                 aClass = dict[propertyName];
@@ -124,6 +124,27 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
         c = class_getSuperclass(c);
         
         if ([MJFoundation isClassFromFoundation:c]) break;
+    }
+}
+
++ (void)enumerateAllClassesWithBlock:(MJClassesBlock)block
+{
+    // 1.没有block就直接返回
+    if (block == nil) return;
+    
+    // 2.停止遍历的标记
+    BOOL stop = NO;
+    
+    // 3.当前正在遍历的类
+    Class c = self;
+    
+    // 4.开始遍历每一个类
+    while (c && !stop) {
+        // 4.1.执行操作
+        block(c, &stop);
+        
+        // 4.2.获得父类
+        c = class_getSuperclass(c);
     }
 }
 
@@ -185,7 +206,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 + (id)getNewValueFormOldValue:(__weak id)oldValue object:(__weak id)object property:(MJProperty *__weak)property
 {
     __block id newValue = nil;
-    [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+    [self enumerateAllClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
         MJNewValueFormOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
         if (block) {
             newValue = block(object, oldValue, property);
@@ -280,7 +301,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
         }
     }
     
-    [self enumerateClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
+    [self enumerateAllClassesWithBlock:^(__unsafe_unretained Class c, BOOL *stop) {
         NSArray *subArray = objc_getAssociatedObject(c, key);
         [array addObjectsFromArray:subArray];
     }];
