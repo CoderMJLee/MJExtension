@@ -150,7 +150,7 @@ static NSNumberFormatter *_numberFormatter;
             } else if ([value isKindOfClass:[NSString class]]) {
                 if (typeClass == [NSURL class]) {
                     // NSString -> NSURL
-                    value = [NSURL URLWithString:value];
+                    value = [NSURL URLWithString:[value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
                 } else if (type.isNumberType) {
                     NSString *oldValue = value;
                     
