@@ -107,7 +107,7 @@ static NSNumberFormatter *_numberFormatter;
         NSArray *ignoredPropertyNames = [aClass totalIgnoredPropertyNames];
         
         //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
-        [aClass enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
+        [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
             if ([ignoredPropertyNames containsObject:property.name]) return;
@@ -299,7 +299,7 @@ static NSNumberFormatter *_numberFormatter;
         NSArray *allowedPropertyNames = [aClass totalAllowedPropertyNames];
         NSArray *ignoredPropertyNames = [aClass totalIgnoredPropertyNames];
         
-        [aClass enumeratePropertiesWithBlock:^(MJProperty *property, BOOL *stop) {
+        [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
             if ([ignoredPropertyNames containsObject:property.name]) return;

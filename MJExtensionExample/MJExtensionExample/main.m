@@ -28,6 +28,7 @@
 #import "Bag.h"
 #import "Dog.h"
 #import "Book.h"
+#import "Box.h"
 #import <CoreData/CoreData.h>
 
 /** main函数 */
@@ -339,6 +340,8 @@ void coreData()
 
         // 利用CoreData保存模型
         [context save:nil];
+        
+        NSLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
     } @catch (NSException *e) {
     
     }

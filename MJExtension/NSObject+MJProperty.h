@@ -13,7 +13,7 @@
 /**
  *  遍历所有类的block（父类）
  */
-typedef void (^MJClassesBlock)(Class c, BOOL *stop);
+typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
 
 /**
  *  遍历成员变量用的block
@@ -21,7 +21,7 @@ typedef void (^MJClassesBlock)(Class c, BOOL *stop);
  *  @param property 成员的包装对象
  *  @param stop   YES代表停止遍历，NO代表继续遍历
  */
-typedef void (^MJPropertiesBlock)(MJProperty *property, BOOL *stop);
+typedef void (^MJPropertiesEnumeration)(MJProperty *property, BOOL *stop);
 
 /** 将属性名换为其他key去字典中取值 */
 typedef NSDictionary * (^MJReplacedKeyFromPropertyName)();
@@ -46,13 +46,13 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
 /**
  *  遍历所有的成员
  */
-+ (void)enumeratePropertiesWithBlock:(MJPropertiesBlock)block;
++ (void)enumerateProperties:(MJPropertiesEnumeration)enumeration;
 
 /**
  *  遍历所有的类
  */
-+ (void)enumerateClassesWithBlock:(MJClassesBlock)block;
-+ (void)enumerateAllClassesWithBlock:(MJClassesBlock)block;
++ (void)enumerateClasses:(MJClassesEnumeration)enumeration;
++ (void)enumerateAllClasses:(MJClassesEnumeration)enumeration;
 
 #pragma mark - 新值配置
 /**

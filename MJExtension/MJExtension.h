@@ -10,4 +10,4 @@
 #import "NSObject+MJCoding.h"
 #import "NSObject+MJProperty.h"
 #import "NSObject+MJKeyValue.h"
-#import "NSString+Extension.h"
+#import "NSString+MJExtension.h"

@@ -1,5 +1,5 @@
 //
-//  NSString+Extension.h
+//  NSString+MJExtension.h
 //  MJExtensionExample
 //
 //  Created by MJ Lee on 15/6/7.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (Extension)
+@interface NSString (MJExtension)
 /**
  *  驼峰转下划线（loveYou -> love_you）
  */
