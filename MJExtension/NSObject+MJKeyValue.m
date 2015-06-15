@@ -150,7 +150,9 @@ static NSNumberFormatter *_numberFormatter;
             } else if ([value isKindOfClass:[NSString class]]) {
                 if (typeClass == [NSURL class]) {
                     // NSString -> NSURL
-                    value = [NSURL URLWithString:[value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+                    // 字符串转码
+                    value = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)value,(CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL,kCFStringEncodingUTF8));
+                    value = [NSURL URLWithString:value];
                 } else if (type.isNumberType) {
                     NSString *oldValue = value;
                     

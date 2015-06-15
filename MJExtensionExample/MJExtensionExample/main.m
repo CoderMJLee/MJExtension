@@ -165,11 +165,11 @@ void keyValues2object3()
                            @"ads" : @[
                                    @{
                                        @"image" : @"ad01.png",
-                                       @"url" : @"http://www.ad01.com"
+                                       @"url" : @"http://www.小码哥ad01.com"
                                        },
                                    @{
                                        @"image" : @"ad02.png",
-                                       @"url" : @"http://www.ad02.com"
+                                       @"url" : @"http://www.小码哥ad02.com"
                                        }
                                    ],
                            

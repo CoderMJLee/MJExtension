@@ -12,5 +12,5 @@
 /** 广告图片 */
 @property (copy, nonatomic) NSString *image;
 /** 广告url */
-@property (copy, nonatomic) NSString *url;
+@property (strong, nonatomic) NSURL *url;
 @end
