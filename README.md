@@ -1018,17 +1018,17 @@ NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 @implementation Dog
 + (NSString *)replacedKeyFromPropertyName121:(NSString *)propertyName
 {
-// nickName -> nick_name
-return [propertyName underlineFromCamel];
+    // nickName -> nick_name
+    return [propertyName underlineFromCamel];
 }
 @end
 
 // 定义一个字典
 NSDictionary *dict = @{
-@"nick_name" : @"旺财",
-@"sale_price" : @"10.5",
-@"run_speed" : @"100.9"
-};
+                       @"nick_name" : @"旺财",
+                       @"sale_price" : @"10.5",
+                       @"run_speed" : @"100.9"
+                       };
 // 将字典转为Dog模型
 Dog *dog = [Dog objectWithKeyValues:dict];
 
@@ -1046,23 +1046,23 @@ NSLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, do
 @implementation Book
 - (id)newValueFromOldValue:(id)oldValue property:(MJProperty *)property
 {
-if ([property.name isEqualToString:@"publisher"]) {
-if (oldValue == nil) return @"";
-} else if (property.type.typeClass == [NSDate class]) {
-NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-fmt.dateFormat = @"yyyy-MM-dd";
-return [fmt dateFromString:oldValue];
-}
+    if ([property.name isEqualToString:@"publisher"]) {
+       if (oldValue == nil) return @"";
+    } else if (property.type.typeClass == [NSDate class]) {
+       NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+       fmt.dateFormat = @"yyyy-MM-dd";
+       return [fmt dateFromString:oldValue];
+    }
 
-return oldValue;
+    return oldValue;
 }
 @end
 
 // 定义一个字典
 NSDictionary *dict = @{
-@"name" : @"5分钟突破iOS开发",
-@"publishedTime" : @"2011-09-10"
-};
+                       @"name" : @"5分钟突破iOS开发",
+                       @"publishedTime" : @"2011-09-10"
+                       };
 // 将字典转为Book模型
 Book *book = [Book objectWithKeyValues:dict];
 
