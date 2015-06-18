@@ -49,14 +49,17 @@ GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)]
 - 各位开发者也可以自行测试
 
 #### MJExtension is more easy to go【MJExtension更加容易使用】
-- `JSONModel`：You `must` let `all` model class extends `JSONModel` class
-    - 要求所有模型类`必须`继承自JSONModel基类
+- `JSONModel`
+	- You `must` let `all` model class extends `JSONModel` class
+   - 要求所有模型类`必须`继承自JSONModel基类
 
-- `Mantle`：You `must` let `all` model class extends `MTModel` class.
-    - 要求所有模型类`必须`继承自MTModel基类
+- `Mantle`
+	- You `must` let `all` model class extends `MTModel` class.
+   - 要求所有模型类`必须`继承自MTModel基类
 
-- `MJExtension`：Your model class `don't need to` extends another base class. You don't need to modify any model file.  `Nonintrusive`, `convenient`.
-    - `不需要`你的模型类继承任何特殊基类，也不需要修改任何模型代码，毫无污染，毫无侵入性
+- `MJExtension`
+	- Your model class `don't need to` extends another base class. You don't need to modify any model file.  `Nonintrusive`, `convenient`.
+   - `不需要`你的模型类继承任何特殊基类，也不需要修改任何模型代码，毫无污染，毫无侵入性
 
 ## <a id="Installation"></a> Installation【安装】
 
