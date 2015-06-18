@@ -46,7 +46,9 @@
     [StatusResult setupObjectClassInArray:^NSDictionary *{
         return @{
                  @"statuses" : @"Status",
+//                 @"statuses" : [Status class],
                  @"ads" : @"Ad"
+//                 @"ads" : [Ad class]
                  };
     }];
     // 相当于在StatusResult.m中实现了+(NSDictionary *)objectClassInArray方法

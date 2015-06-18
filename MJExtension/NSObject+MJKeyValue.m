@@ -417,6 +417,10 @@ static NSNumberFormatter *_numberFormatter;
 
 - (id)JSONObject
 {
+    if ([self isKindOfClass:[NSDictionary class]] || [self isKindOfClass:[NSArray class]]) {
+        return self;
+    }
+    
     if ([self isKindOfClass:[NSString class]]) {
         return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
