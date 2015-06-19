@@ -315,12 +315,11 @@ static NSNumberFormatter *_numberFormatter;
             // 2.如果是模型属性
             MJType *type = property.type;
             Class typeClass = type.typeClass;
-            Class objectClass = [property objectClassInArrayFromClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
                 value = [value keyValues];
-            } else if (objectClass) {
+            } else if ([value isKindOfClass:[NSArray class]]) {
                 // 3.处理数组里面有模型的情况
-                value = [objectClass keyValuesArrayWithObjectArray:value];
+                value = [NSObject keyValuesArrayWithObjectArray:value];
             } else if (typeClass == [NSURL class]) {
                 value = [value absoluteString];
             }
