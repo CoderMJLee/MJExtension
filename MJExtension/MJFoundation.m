@@ -14,27 +14,30 @@ static NSSet *_foundationClasses;
 
 @implementation MJFoundation
 
-+ (void)load
++ (NSSet *)foundatonClasses
 {
-    _foundationClasses = [NSSet setWithObjects:
-                          [NSObject class],
-                          [NSURL class],
-                          [NSDate class],
-                          [NSNumber class],
-                          [NSDecimalNumber class],
-                          [NSData class],
-                          [NSMutableData class],
-                          [NSArray class],
-                          [NSMutableArray class],
-                          [NSDictionary class],
-                          [NSMutableDictionary class],
-                          [NSManagedObject class],
-                          [NSString class],
-                          [NSMutableString class], nil];
+    if (_foundationClasses == nil) {
+        _foundationClasses = [NSSet setWithObjects:
+                              [NSObject class],
+                              [NSURL class],
+                              [NSDate class],
+                              [NSNumber class],
+                              [NSDecimalNumber class],
+                              [NSData class],
+                              [NSMutableData class],
+                              [NSArray class],
+                              [NSMutableArray class],
+                              [NSDictionary class],
+                              [NSMutableDictionary class],
+                              [NSManagedObject class],
+                              [NSString class],
+                              [NSMutableString class], nil];
+    }
+    return _foundationClasses;
 }
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
-    return [_foundationClasses containsObject:c];
+    return [[self foundatonClasses] containsObject:c];
 }
 @end
