@@ -210,9 +210,10 @@ void keyValues2object4()
                            @"name" : @{
                                 @"newName" : @"lufy",
                                 @"oldName" : @"kitty",
-                                @"info" : @{
-                                    @"nameChangedTime" : @"2013-08-07"
-                                }
+                                @"info" : @[
+                                            @"test-data",
+                                            @{@"nameChangedTime" : @"2013-08-07"}
+                                        ]
                            },
                            @"other" : @{
                                 @"bag" : @{
@@ -220,7 +221,7 @@ void keyValues2object4()
                                     @"price" : @100.7
                                 }
                            }
-                        };
+                       };
 
     // 2.将字典转为Student模型
     Student *stu = [Student objectWithKeyValues:dict];
@@ -295,6 +296,10 @@ void object2keyValues()
     NSDictionary *stuDict = stu.keyValues;
     NSLog(@"%@", stuDict);
     NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
+    
+    // 忽略配置的replacedKey，生成字典
+    stu.ignoreReplacedKeyWhenGettingKeyValues = YES;
+    NSLog(@"%@", stu.keyValues);
 }
 
 /**

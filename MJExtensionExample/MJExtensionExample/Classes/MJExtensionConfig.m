@@ -60,7 +60,7 @@
                  @"desc" : @"desciption",
                  @"oldName" : @"name.oldName",
                  @"nowName" : @"name.newName",
-                 @"nameChangedTime" : @"name.info.nameChangedTime",
+                 @"nameChangedTime" : @"name.info[1].nameChangedTime",
                  @"bag" : @"other.bag"
                  };
     }];

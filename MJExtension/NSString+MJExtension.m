@@ -61,4 +61,11 @@
     if (self.length >= 2) [string appendString:[self substringFromIndex:1]];
     return string;
 }
+
+- (BOOL)isPureInt
+{
+    NSScanner *scan = [NSScanner scannerWithString:self];
+    int val;
+    return [scan scanInt:&val] && [scan isAtEnd];
+}
 @end

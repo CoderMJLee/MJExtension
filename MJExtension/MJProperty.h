@@ -10,6 +10,22 @@
 #import <objc/runtime.h>
 #import "MJType.h"
 
+typedef enum {
+    MJPropertyKeyTypeDictionary = 0, // 字典的key
+    MJPropertyKeyTypeArray // 数组的key
+} MJPropertyKeyType;
+/**
+ *  属性的key
+ */
+@interface MJPropertyKey : NSObject
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) MJPropertyKeyType type;
+/**
+ *  根据当前的key从object（字典或者数组）中取值
+ */
+- (id)valueForObject:(id)object;
+@end
+
 /**
  *  包装一个成员
  */
@@ -27,10 +43,8 @@
 /**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
 /** 对应着字典中的key */
 - (void)setKey:(NSString *)key forClass:(Class)c;
-- (NSString *)keyFromClass:(Class)c;
-
 /** 对应着字典中的多级key */
-- (NSArray *)keysFromClass:(Class)c;
+- (NSArray *)propertyKeysFromClass:(Class)c;
 
 /** 模型数组中的模型类型 */
 - (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c;

@@ -15,6 +15,18 @@
 
 @implementation NSObject (MJKeyValue)
 
+static const char MJIgnoreReplacedKeyWhenGettingKeyValuesKey = '\0';
+
+- (void)setIgnoreReplacedKeyWhenGettingKeyValues:(BOOL)ignoreReplacedKeyWhenGettingKeyValues
+{
+    objc_setAssociatedObject(self, &MJIgnoreReplacedKeyWhenGettingKeyValuesKey, @(ignoreReplacedKeyWhenGettingKeyValues), OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (BOOL)isIgnoreReplacedKeyWhenGettingKeyValues
+{
+    return [objc_getAssociatedObject(self, &MJIgnoreReplacedKeyWhenGettingKeyValuesKey) boolValue];
+}
+
 #pragma mark - --常用的对象--
 static NSNumberFormatter *_numberFormatter;
 + (void)load
@@ -99,7 +111,7 @@ static NSNumberFormatter *_numberFormatter;
         keyValues = [NSJSONSerialization JSONObjectWithData:keyValues options:kNilOptions error:nil];
     }
     
-    MJAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
+    MJAssertError([keyValues isKindOfClass:[NSDictionary class]] || [keyValues isKindOfClass:[NSArray class]], self, error, @"keyValues参数不是一个字典或者数组");
     
     @try {
         Class aClass = [self class];
@@ -114,10 +126,9 @@ static NSNumberFormatter *_numberFormatter;
             
             // 1.取出属性值
             id value = keyValues ;
-            NSArray *keys = [property keysFromClass:[self class]];
-            for (NSString *key in keys) {
-                if (![value isKindOfClass:[NSDictionary class]]) continue;
-                value = value[key];
+            NSArray *propertyKeys = [property propertyKeysFromClass:[self class]];
+            for (MJPropertyKey *propertyKey in propertyKeys) {
+                value = [propertyKey valueForObject:value];
             }
             
             // 值的过滤
@@ -259,42 +270,46 @@ static NSNumberFormatter *_numberFormatter;
 }
 
 #pragma mark - 模型 -> 字典
-- (NSMutableDictionary *)keyValues
+- (id)keyValues
 {
     return [self keyValuesWithError:nil];
 }
 
-- (NSMutableDictionary *)keyValuesWithError:(NSError *__autoreleasing *)error
+- (id)keyValuesWithError:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithIgnoredKeys:nil error:error];
 }
 
-- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys
+- (id)keyValuesWithKeys:(NSArray *)keys
 {
     return [self keyValuesWithKeys:keys error:nil];
 }
 
-- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
+- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
 {
     return [self keyValuesWithIgnoredKeys:ignoredKeys error:nil];
 }
 
-- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError *__autoreleasing *)error
+- (id)keyValuesWithKeys:(NSArray *)keys error:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithKeys:keys ignoredKeys:nil error:error];
 }
 
-- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
+- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithKeys:nil ignoredKeys:ignoredKeys error:error];
 }
 
-- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
+- (id)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     // 如果自己不是模型类
     if ([MJFoundation isClassFromFoundation:[self class]]) return (NSMutableDictionary *)self;
     
-    __block NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
+    __block id keyValues = nil;
+    
+    if (self.isIgnoreReplacedKeyWhenGettingKeyValues) {
+        keyValues = [NSMutableDictionary dictionary];
+    }
     
     @try {
         Class aClass = [self class];
@@ -325,26 +340,78 @@ static NSNumberFormatter *_numberFormatter;
             }
             
             // 4.赋值
-            NSArray *keys = [property keysFromClass:[self class]];
-            NSUInteger keyCount = keys.count;
-            // 创建字典
-            __block NSMutableDictionary *innerDict = keyValues;
-            [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
-                if (idx == keyCount - 1) { // 最后一个属性
-                    innerDict[key] = value;
-                } else { // 字典
-                    NSMutableDictionary *tempDict = innerDict[key];
-                    if (tempDict == nil) {
-                        tempDict = [NSMutableDictionary dictionary];
-                        innerDict[key] = tempDict;
+            if (self.isIgnoreReplacedKeyWhenGettingKeyValues) {
+                keyValues[property.name] = value;
+            } else {
+                NSArray *propertyKeys = [property propertyKeysFromClass:[self class]];
+                NSUInteger keyCount = propertyKeys.count;
+                // 创建字典
+                __block id innerContainer = nil;
+                [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
+                    // 创建keyValues
+                    if (!keyValues) {
+                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                            keyValues = [NSMutableDictionary dictionary];
+                        } else {
+                            keyValues = [NSMutableArray array];
+                        }
                     }
-                    innerDict = tempDict;
-                }
-            }];
+                    // 创建innerContainer
+                    if (!innerContainer) {
+                        innerContainer = keyValues;
+                        if ([innerContainer isKindOfClass:[NSMutableArray class]]) {
+                            int index = propertyKey.name.intValue;
+                            while ([innerContainer count] < index + 1) {
+                                [innerContainer addObject:[NSNull null]];
+                            }
+                        }
+                    }
+                    
+                    // 下一个属性
+                    MJPropertyKey *nextPropertyKey = nil;
+                    if (idx != keyCount - 1) {
+                        nextPropertyKey = propertyKeys[idx + 1];
+                    }
+                    
+                    if (nextPropertyKey) { // 不是最后一个key
+                        // 当前propertyKey对应的字典或者数组
+                        id tempInnerContainer = [propertyKey valueForObject:innerContainer];
+                        if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
+                            if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
+                                tempInnerContainer = [NSMutableDictionary dictionary];
+                            } else {
+                                tempInnerContainer = [NSMutableArray array];
+                            }
+                            if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                                innerContainer[propertyKey.name] = tempInnerContainer;
+                            } else {
+                                innerContainer[propertyKey.name.intValue] = tempInnerContainer;
+                            }
+                        }
+                        
+                        if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
+                            int index = nextPropertyKey.name.intValue;
+                            while ([tempInnerContainer count] < index + 1) {
+                                [tempInnerContainer addObject:[NSNull null]];
+                            }
+                        }
+                        
+                        innerContainer = tempInnerContainer;
+                    } else { // 最后一个key
+                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                            innerContainer[propertyKey.name] = value;
+                        } else {
+                            innerContainer[propertyKey.name.intValue] = value;
+                        }
+                    }
+                }];
+            }
         }];
         
         // 去除系统自动增加的元素
-        [keyValues removeObjectsForKeys:@[@"superclass", @"debugDescription", @"description", @"hash"]];
+        if ([keyValues isKindOfClass:[NSMutableDictionary class]]) {
+            [keyValues removeObjectsForKeys:@[@"superclass", @"debugDescription", @"description", @"hash"]];
+        }
         
         // 转换完毕
         if ([self respondsToSelector:@selector(objectDidFinishConvertingToKeyValues)]) {

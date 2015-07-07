@@ -25,4 +25,6 @@
  * 首字母变小写
  */
 - (NSString *)firstCharLower;
+
+- (BOOL)isPureInt;
 @end
