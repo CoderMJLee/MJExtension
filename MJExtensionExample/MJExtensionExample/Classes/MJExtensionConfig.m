@@ -75,7 +75,7 @@
 #pragma mark Book的日期处理、字符串nil值处理
     [Book setupNewValueFormOldValue:^id(id object, id oldValue, MJProperty *property) {
         if ([property.name isEqualToString:@"publisher"]) {
-            if (oldValue == nil) return @"";
+            if (oldValue == nil || [oldValue isKindOfClass:[NSNull class]]) return @"";
         } else if (property.type.typeClass == [NSDate class]) {
             NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
             fmt.dateFormat = @"yyyy-MM-dd";

@@ -77,7 +77,7 @@
 /**
  *  获得成员变量的值
  */
-- (id)valueFromObject:(id)object
+- (id)valueForObject:(id)object
 {
     if (_type.KVCDisabled) return [NSNull null];
     return [object valueForKey:_name];
@@ -105,16 +105,16 @@
         NSUInteger start = [oldKey rangeOfString:@"["].location;
         if (start != NSNotFound) { // 有索引的key
             NSString *prefixKey = [oldKey substringToIndex:start];
+            NSString *indexKey = prefixKey;
             if (prefixKey.length) {
                 MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
                 propertyKey.name = prefixKey;
                 [propertyKeys addObject:propertyKey];
+                
+                indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
             }
             
             /** 解析索引 **/
-            // 去除前面的key，剩下数字
-            NSString *indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
-            
             // 元素
             NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
             for (NSInteger i = 0; i<cmps.count - 1; i++) {

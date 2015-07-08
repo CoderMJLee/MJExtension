@@ -287,6 +287,7 @@ void object2keyValues()
     stu.nowName = @"jack";
     stu.desc = @"handsome";
     stu.nameChangedTime = @"2018-09-08";
+    stu.books = @[@"Good book", @"Red book"];
     
     Bag *bag = [[Bag alloc] init];
     bag.name = @"小书包";

@@ -24,7 +24,7 @@
         // 检测是否被忽略
         if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
-        id value = [property valueFromObject:self];
+        id value = [property valueForObject:self];
         if (value == nil) return;
         [encoder encodeObject:value forKey:property.name];
     }];

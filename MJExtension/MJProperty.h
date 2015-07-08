@@ -58,7 +58,7 @@ typedef enum {
 /**
  * 得到成员变量的值
  */
-- (id)valueFromObject:(id)object;
+- (id)valueForObject:(id)object;
 
 /**
  *  初始化

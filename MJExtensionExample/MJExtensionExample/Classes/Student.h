@@ -16,4 +16,5 @@
 @property (copy, nonatomic) NSString *nameChangedTime;
 @property (copy, nonatomic) NSString *desc;
 @property (strong, nonatomic) Bag *bag;
+@property (strong, nonatomic) NSArray *books;
 @end

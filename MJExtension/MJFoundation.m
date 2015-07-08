@@ -18,26 +18,26 @@ static NSSet *_foundationClasses;
 {
     if (_foundationClasses == nil) {
         _foundationClasses = [NSSet setWithObjects:
-                              [NSObject class],
                               [NSURL class],
                               [NSDate class],
-                              [NSNumber class],
-                              [NSDecimalNumber class],
+                              [NSValue class],
                               [NSData class],
-                              [NSMutableData class],
                               [NSArray class],
-                              [NSMutableArray class],
                               [NSDictionary class],
-                              [NSMutableDictionary class],
                               [NSManagedObject class],
-                              [NSString class],
-                              [NSMutableString class], nil];
+                              [NSString class], nil];
     }
     return _foundationClasses;
 }
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
-    return [[self foundatonClasses] containsObject:c];
+    __block BOOL result = NO;
+    [[self foundatonClasses] enumerateObjectsUsingBlock:^(Class obj, BOOL *stop) {
+        if (c == [NSObject class] || c == obj || [c isSubclassOfClass:obj]) {
+            result = YES;
+        }
+    }];
+    return result;
 }
 @end

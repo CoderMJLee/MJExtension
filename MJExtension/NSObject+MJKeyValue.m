@@ -303,7 +303,7 @@ static NSNumberFormatter *_numberFormatter;
 - (id)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     // 如果自己不是模型类
-    if ([MJFoundation isClassFromFoundation:[self class]]) return (NSMutableDictionary *)self;
+    if ([MJFoundation isClassFromFoundation:[self class]]) return self;
     
     __block id keyValues = nil;
     
@@ -324,7 +324,7 @@ static NSNumberFormatter *_numberFormatter;
             if ([ignoredKeys containsObject:property.name]) return;
             
             // 1.取出属性值
-            id value = [property valueFromObject:self];
+            id value = [property valueForObject:self];
             if (!value) return;
             
             // 2.如果是模型属性
