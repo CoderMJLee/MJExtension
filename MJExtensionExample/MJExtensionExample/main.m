@@ -297,6 +297,7 @@ void object2keyValues()
     NSDictionary *stuDict = stu.keyValues;
     NSLog(@"%@", stuDict);
     NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
+    NSLog(@"%@", stu.JSONString);
 }
 
 /**

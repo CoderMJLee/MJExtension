@@ -303,7 +303,7 @@ static NSNumberFormatter *_numberFormatter;
 - (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     // 如果自己不是模型类
-    if ([MJFoundation isClassFromFoundation:[self class]]) return self;
+    if ([MJFoundation isClassFromFoundation:[self class]]) return (NSMutableDictionary *)self;
     
     id keyValues = [NSMutableDictionary dictionary];
     
@@ -414,10 +414,6 @@ static NSNumberFormatter *_numberFormatter;
 
 - (id)JSONObject
 {
-    if ([self isKindOfClass:[NSDictionary class]] || [self isKindOfClass:[NSArray class]]) {
-        return self;
-    }
-    
     if ([self isKindOfClass:[NSString class]]) {
         return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
