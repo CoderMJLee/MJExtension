@@ -83,18 +83,16 @@
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError **)error;
 
-/** 是否在模型转字典时，忽略替换过的key */
-@property (nonatomic, assign, getter=isIgnoreReplacedKeyWhenGettingKeyValues) BOOL ignoreReplacedKeyWhenGettingKeyValues;
 /**
  *  将模型转成字典
  *  @return 字典
  */
-- (id)keyValues;
-- (id)keyValuesWithKeys:(NSArray *)keys;
-- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
-- (id)keyValuesWithError:(NSError **)error;
-- (id)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
-- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
+- (NSMutableDictionary *)keyValues;
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys;
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
+- (NSMutableDictionary *)keyValuesWithError:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 /**
  *  通过模型数组来创建一个字典数组

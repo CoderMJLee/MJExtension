@@ -297,10 +297,6 @@ void object2keyValues()
     NSDictionary *stuDict = stu.keyValues;
     NSLog(@"%@", stuDict);
     NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
-    
-    // 忽略配置的replacedKey，生成字典
-    stu.ignoreReplacedKeyWhenGettingKeyValues = YES;
-    NSLog(@"%@", stu.keyValues);
 }
 
 /**

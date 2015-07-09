@@ -270,46 +270,42 @@ static NSNumberFormatter *_numberFormatter;
 }
 
 #pragma mark - 模型 -> 字典
-- (id)keyValues
+- (NSMutableDictionary *)keyValues
 {
     return [self keyValuesWithError:nil];
 }
 
-- (id)keyValuesWithError:(NSError *__autoreleasing *)error
+- (NSMutableDictionary *)keyValuesWithError:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithIgnoredKeys:nil error:error];
 }
 
-- (id)keyValuesWithKeys:(NSArray *)keys
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys
 {
     return [self keyValuesWithKeys:keys error:nil];
 }
 
-- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
 {
     return [self keyValuesWithIgnoredKeys:ignoredKeys error:nil];
 }
 
-- (id)keyValuesWithKeys:(NSArray *)keys error:(NSError *__autoreleasing *)error
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithKeys:keys ignoredKeys:nil error:error];
 }
 
-- (id)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithKeys:nil ignoredKeys:ignoredKeys error:error];
 }
 
-- (id)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
 {
     // 如果自己不是模型类
     if ([MJFoundation isClassFromFoundation:[self class]]) return self;
     
-    __block id keyValues = nil;
-    
-    if (self.isIgnoreReplacedKeyWhenGettingKeyValues) {
-        keyValues = [NSMutableDictionary dictionary];
-    }
+    id keyValues = [NSMutableDictionary dictionary];
     
     @try {
         Class aClass = [self class];
@@ -340,77 +336,8 @@ static NSNumberFormatter *_numberFormatter;
             }
             
             // 4.赋值
-            if (self.isIgnoreReplacedKeyWhenGettingKeyValues) {
-                keyValues[property.name] = value;
-            } else {
-                NSArray *propertyKeys = [property propertyKeysFromClass:[self class]];
-                NSUInteger keyCount = propertyKeys.count;
-                // 创建字典
-                __block id innerContainer = nil;
-                [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
-                    // 创建keyValues
-                    if (!keyValues) {
-                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                            keyValues = [NSMutableDictionary dictionary];
-                        } else {
-                            keyValues = [NSMutableArray array];
-                        }
-                    }
-                    // 创建innerContainer
-                    if (!innerContainer) {
-                        innerContainer = keyValues;
-                        if ([innerContainer isKindOfClass:[NSMutableArray class]]) {
-                            int index = propertyKey.name.intValue;
-                            while ([innerContainer count] < index + 1) {
-                                [innerContainer addObject:[NSNull null]];
-                            }
-                        }
-                    }
-                    
-                    // 下一个属性
-                    MJPropertyKey *nextPropertyKey = nil;
-                    if (idx != keyCount - 1) {
-                        nextPropertyKey = propertyKeys[idx + 1];
-                    }
-                    
-                    if (nextPropertyKey) { // 不是最后一个key
-                        // 当前propertyKey对应的字典或者数组
-                        id tempInnerContainer = [propertyKey valueForObject:innerContainer];
-                        if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
-                            if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
-                                tempInnerContainer = [NSMutableDictionary dictionary];
-                            } else {
-                                tempInnerContainer = [NSMutableArray array];
-                            }
-                            if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                                innerContainer[propertyKey.name] = tempInnerContainer;
-                            } else {
-                                innerContainer[propertyKey.name.intValue] = tempInnerContainer;
-                            }
-                        }
-                        
-                        if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
-                            int index = nextPropertyKey.name.intValue;
-                            while ([tempInnerContainer count] < index + 1) {
-                                [tempInnerContainer addObject:[NSNull null]];
-                            }
-                        }
-                        
-                        innerContainer = tempInnerContainer;
-                    } else { // 最后一个key
-                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                            innerContainer[propertyKey.name] = value;
-                        } else {
-                            innerContainer[propertyKey.name.intValue] = value;
-                        }
-                    }
-                }];
-            }
+            keyValues[property.name] = value;
         }];
-        
-        if (!keyValues) {
-            keyValues = [NSMutableDictionary dictionary];
-        }
         
         // 去除系统自动增加的元素
         if ([keyValues isKindOfClass:[NSMutableDictionary class]]) {
