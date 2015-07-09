@@ -408,6 +408,10 @@ static NSNumberFormatter *_numberFormatter;
             }
         }];
         
+        if (!keyValues) {
+            keyValues = [NSMutableDictionary dictionary];
+        }
+        
         // 去除系统自动增加的元素
         if ([keyValues isKindOfClass:[NSMutableDictionary class]]) {
             [keyValues removeObjectsForKeys:@[@"superclass", @"debugDescription", @"description", @"hash"]];
