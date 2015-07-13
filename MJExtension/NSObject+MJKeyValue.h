@@ -83,6 +83,12 @@
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError **)error;
 
+/** 
+ *  模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法
+ */
++ (void)referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference;
++ (BOOL)isReferenceReplacedKeyWhenCreatingKeyValues;
+
 /**
  *  将模型转成字典
  *  @return 字典

@@ -15,16 +15,16 @@
 
 @implementation NSObject (MJKeyValue)
 
-static const char MJIgnoreReplacedKeyWhenGettingKeyValuesKey = '\0';
+static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 
-- (void)setIgnoreReplacedKeyWhenGettingKeyValues:(BOOL)ignoreReplacedKeyWhenGettingKeyValues
++ (void)referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference
 {
-    objc_setAssociatedObject(self, &MJIgnoreReplacedKeyWhenGettingKeyValuesKey, @(ignoreReplacedKeyWhenGettingKeyValues), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey, @(reference), OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (BOOL)isIgnoreReplacedKeyWhenGettingKeyValues
++ (BOOL)isReferenceReplacedKeyWhenCreatingKeyValues
 {
-    return [objc_getAssociatedObject(self, &MJIgnoreReplacedKeyWhenGettingKeyValuesKey) boolValue];
+    return [objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey) boolValue];
 }
 
 #pragma mark - --常用的对象--
@@ -111,7 +111,7 @@ static NSNumberFormatter *_numberFormatter;
         keyValues = [NSJSONSerialization JSONObjectWithData:keyValues options:kNilOptions error:nil];
     }
     
-    MJAssertError([keyValues isKindOfClass:[NSDictionary class]] || [keyValues isKindOfClass:[NSArray class]], self, error, @"keyValues参数不是一个字典或者数组");
+    MJAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
     
     @try {
         Class aClass = [self class];
@@ -336,7 +336,53 @@ static NSNumberFormatter *_numberFormatter;
             }
             
             // 4.赋值
-            keyValues[property.name] = value;
+            if ([aClass isReferenceReplacedKeyWhenCreatingKeyValues]) {
+                NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
+                NSUInteger keyCount = propertyKeys.count;
+                // 创建字典
+                __block id innerContainer = keyValues;
+                [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
+                    // 下一个属性
+                    MJPropertyKey *nextPropertyKey = nil;
+                    if (idx != keyCount - 1) {
+                        nextPropertyKey = propertyKeys[idx + 1];
+                    }
+                    
+                    if (nextPropertyKey) { // 不是最后一个key
+                        // 当前propertyKey对应的字典或者数组
+                        id tempInnerContainer = [propertyKey valueForObject:innerContainer];
+                        if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
+                            if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
+                                tempInnerContainer = [NSMutableDictionary dictionary];
+                            } else {
+                                tempInnerContainer = [NSMutableArray array];
+                            }
+                            if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                                innerContainer[propertyKey.name] = tempInnerContainer;
+                            } else {
+                                innerContainer[propertyKey.name.intValue] = tempInnerContainer;
+                            }
+                        }
+                        
+                        if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
+                            int index = nextPropertyKey.name.intValue;
+                            while ([tempInnerContainer count] < index + 1) {
+                                [tempInnerContainer addObject:[NSNull null]];
+                            }
+                        }
+                        
+                        innerContainer = tempInnerContainer;
+                    } else { // 最后一个key
+                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                            innerContainer[propertyKey.name] = value;
+                        } else {
+                            innerContainer[propertyKey.name.intValue] = value;
+                        }
+                    }
+                }];
+            } else {
+                keyValues[property.name] = value;
+            }
         }];
         
         // 去除系统自动增加的元素
