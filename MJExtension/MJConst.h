@@ -66,12 +66,14 @@ MJAssert2((param) != nil, returnValue)
  *  类型（属性类型）
  */
 extern NSString *const MJTypeInt;
+extern NSString *const MJTypeShort;
 extern NSString *const MJTypeFloat;
 extern NSString *const MJTypeDouble;
 extern NSString *const MJTypeLong;
 extern NSString *const MJTypeLongLong;
 extern NSString *const MJTypeChar;
-extern NSString *const MJTypeBOOL;
+extern NSString *const MJTypeBOOL1;
+extern NSString *const MJTypeBOOL2;
 extern NSString *const MJTypePointer;
 
 extern NSString *const MJTypeIvar;

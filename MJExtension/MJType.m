@@ -56,9 +56,14 @@ static NSMutableDictionary *_cachedTypes;
     
     // 是否为数字类型
     NSString *lowerCode = _code.lowercaseString;
-    NSArray *numberTypes = @[MJTypeInt, MJTypeFloat, MJTypeDouble, MJTypeLong, MJTypeChar];
+    NSArray *numberTypes = @[MJTypeInt, MJTypeShort, MJTypeBOOL1, MJTypeBOOL2, MJTypeFloat, MJTypeDouble, MJTypeLong, MJTypeChar];
     if ([numberTypes containsObject:lowerCode]) {
         _numberType = YES;
+        
+        if ([lowerCode isEqualToString:MJTypeBOOL1]
+            || [lowerCode isEqualToString:MJTypeBOOL2]) {
+            _boolType = YES;
+        }
     }
 }
 @end

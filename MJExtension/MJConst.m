@@ -7,12 +7,13 @@
  *  成员变量类型（属性类型）
  */
 NSString *const MJTypeInt = @"i";
+NSString *const MJTypeShort = @"s";
 NSString *const MJTypeFloat = @"f";
 NSString *const MJTypeDouble = @"d";
 NSString *const MJTypeLong = @"q";
-NSString *const MJTypeLongLong = @"q";
 NSString *const MJTypeChar = @"c";
-NSString *const MJTypeBOOL = @"c";
+NSString *const MJTypeBOOL1 = @"c";
+NSString *const MJTypeBOOL2 = @"b";
 NSString *const MJTypePointer = @"*";
 
 NSString *const MJTypeIvar = @"^{objc_ivar=}";

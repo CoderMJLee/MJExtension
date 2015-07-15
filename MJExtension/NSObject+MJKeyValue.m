@@ -171,7 +171,7 @@ static NSNumberFormatter *_numberFormatter;
                     value = [_numberFormatter numberFromString:oldValue];
                     
                     // 如果是BOOL
-                    if ([type.code isEqualToString:MJTypeBOOL]) {
+                    if (type.isBoolType) {
                         // 字符串转BOOL（字符串没有charValue方法）
                         // 系统会调用字符串的charValue转为BOOL类型
                         NSString *lower = [oldValue lowercaseString];
@@ -216,15 +216,15 @@ static NSNumberFormatter *_numberFormatter;
 
 + (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
+    // 如果数组里面放的是NSString、NSNumber等数据
+    if ([MJFoundation isClassFromFoundation:self]) return keyValuesArray;
+    
     // 如果是JSON字符串
     if ([keyValuesArray isKindOfClass:[NSString class]]) {
         keyValuesArray = [((NSString *)keyValuesArray) JSONObject];
     } else if ([keyValuesArray isKindOfClass:[NSData class]]) {
         keyValuesArray = [NSJSONSerialization JSONObjectWithData:keyValuesArray options:kNilOptions error:nil];
     }
-    
-    // 如果数组里面放的是NSString、NSNumber等数据
-    if ([MJFoundation isClassFromFoundation:self]) return keyValuesArray;
     
     // 1.判断真实性
     MJAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, error, @"keyValuesArray参数不是一个数组");
