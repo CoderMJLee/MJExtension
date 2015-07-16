@@ -17,6 +17,7 @@ static NSSet *_foundationClasses;
 + (NSSet *)foundatonClasses
 {
     if (_foundationClasses == nil) {
+        // 集合中没有NSObject，因为几乎所有的类都是继承自NSObject，具体是不是NSObject需要特殊判断
         _foundationClasses = [NSSet setWithObjects:
                               [NSURL class],
                               [NSDate class],
@@ -33,11 +34,17 @@ static NSSet *_foundationClasses;
 + (BOOL)isClassFromFoundation:(Class)c
 {
     __block BOOL result = NO;
-    [[self foundatonClasses] enumerateObjectsUsingBlock:^(Class obj, BOOL *stop) {
-        if (c == [NSObject class] || c == obj || [c isSubclassOfClass:obj]) {
+    [[self foundatonClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
+        if (c == foundationClass || [c isSubclassOfClass:foundationClass]) {
             result = YES;
+            *stop = YES;
         }
     }];
+    
+    if (c == [NSObject class]) {
+        result = YES;
+    }
+    
     return result;
 }
 @end

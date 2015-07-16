@@ -305,9 +305,9 @@ NSDictionary *dict = @{
         @"info" : @[
         		 @"test-data",
         		 @{
-            		@"nameChangedTime" : @"2013-08"
-            }
-        }]
+            	             @"nameChangedTime" : @"2013-08"
+                         }
+                  ]
     },
     @"other" : @{
         @"bag" : @{

@@ -14,22 +14,29 @@ typedef enum {
     MJPropertyKeyTypeDictionary = 0, // 字典的key
     MJPropertyKeyTypeArray // 数组的key
 } MJPropertyKeyType;
+
+
 /**
  *  属性的key
  */
 @interface MJPropertyKey : NSObject
-@property (copy, nonatomic) NSString *name;
+
+@property (copy,   nonatomic) NSString *name;
 @property (assign, nonatomic) MJPropertyKeyType type;
+
 /**
- *  根据当前的key从object（字典或者数组）中取值
+ *  根据当前的key，也就是name，从object（字典或者数组）中取值
  */
-- (id)valueForObject:(id)object;
+- (id)valueInObject:(id)object;
+
 @end
+
 
 /**
  *  包装一个成员
  */
 @interface MJProperty : NSObject
+
 /** 成员属性 */
 @property (nonatomic, assign) objc_property_t property;
 /** 成员属性名 */
@@ -39,6 +46,7 @@ typedef enum {
 @property (nonatomic, readonly) MJType *type;
 /** 成员来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
+
 
 /**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
 /** 对应着字典中的key */
@@ -64,4 +72,5 @@ typedef enum {
  *  初始化
  */
 + (instancetype)cachedPropertyWithProperty:(objc_property_t)property;
+
 @end
