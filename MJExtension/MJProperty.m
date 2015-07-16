@@ -12,7 +12,7 @@
 
 @implementation MJPropertyKey
 
-- (id)valueForObject:(id)object
+- (id)valueInObject:(id)object
 {
     if ([object isKindOfClass:[NSDictionary class]] && self.type == MJPropertyKeyTypeDictionary) {
         return object[self.name];
@@ -25,8 +25,10 @@
 @end
 
 @interface MJProperty()
+
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
 @property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
+
 @end
 
 @implementation MJProperty

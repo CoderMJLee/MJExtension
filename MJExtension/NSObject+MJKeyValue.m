@@ -128,7 +128,7 @@ static NSNumberFormatter *_numberFormatter;
             id value = keyValues ;
             NSArray *propertyKeys = [property propertyKeysFromClass:[self class]];
             for (MJPropertyKey *propertyKey in propertyKeys) {
-                value = [propertyKey valueForObject:value];
+                value = [propertyKey valueInObject:value];
             }
             
             // 值的过滤
@@ -350,7 +350,7 @@ static NSNumberFormatter *_numberFormatter;
                     
                     if (nextPropertyKey) { // 不是最后一个key
                         // 当前propertyKey对应的字典或者数组
-                        id tempInnerContainer = [propertyKey valueForObject:innerContainer];
+                        id tempInnerContainer = [propertyKey valueInObject:innerContainer];
                         if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
                             if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
                                 tempInnerContainer = [NSMutableDictionary dictionary];
