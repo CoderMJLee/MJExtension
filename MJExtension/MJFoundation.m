@@ -25,7 +25,6 @@ static NSSet *_foundationClasses;
                               [NSData class],
                               [NSArray class],
                               [NSDictionary class],
-                              [NSManagedObject class],
                               [NSString class], nil];
     }
     return _foundationClasses;
@@ -33,6 +32,8 @@ static NSSet *_foundationClasses;
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
+    if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
+    
     __block BOOL result = NO;
     [[self foundatonClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
         if (c == foundationClass || [c isSubclassOfClass:foundationClass]) {
@@ -40,11 +41,6 @@ static NSSet *_foundationClasses;
             *stop = YES;
         }
     }];
-    
-    if (c == [NSObject class]) {
-        result = YES;
-    }
-    
     return result;
 }
 @end
