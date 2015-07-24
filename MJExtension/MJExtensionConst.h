@@ -1,22 +1,14 @@
 
-#ifndef __MJConst__H__
-#define __MJConst__H__
+#ifndef __MJExtensionConst__H__
+#define __MJExtensionConst__H__
 
 #import <Foundation/Foundation.h>
 
 // 过期
-#define MJDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
-
-#ifdef DEBUG  // 调试状态
-// 打开LOG功能
-#define MJLog(...) NSLog(__VA_ARGS__)
-#else // 发布状态
-// 关闭LOG功能
-#define MJLog(...)
-#endif
+#define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
 
 // 构建错误
-#define MJBuildError(error, msg) \
+#define MJExtensionBuildError(error, msg) \
 if (error) *error = [NSError errorWithDomain:msg code:250 userInfo:nil];
 
 /**
@@ -24,34 +16,34 @@ if (error) *error = [NSError errorWithDomain:msg code:250 userInfo:nil];
  * @param condition   条件
  * @param returnValue 返回值
  */
-#define MJAssertError(condition, returnValue, error, msg) \
+#define MJExtensionAssertError(condition, returnValue, error, msg) \
 if ((condition) == NO) { \
-    MJBuildError(error, msg); \
+    MJExtensionBuildError(error, msg); \
     return returnValue;\
 }
 
-#define MJAssert2(condition, returnValue) \
+#define MJExtensionAssert2(condition, returnValue) \
 if ((condition) == NO) return returnValue;
 
 /**
  * 断言
  * @param condition   条件
  */
-#define MJAssert(condition) MJAssert2(condition, )
+#define MJExtensionAssert(condition) MJExtensionAssert2(condition, )
 
 /**
  * 断言
  * @param param         参数
  * @param returnValue   返回值
  */
-#define MJAssertParamNotNil2(param, returnValue) \
-MJAssert2((param) != nil, returnValue)
+#define MJExtensionAssertParamNotNil2(param, returnValue) \
+MJExtensionAssert2((param) != nil, returnValue)
 
 /**
  * 断言
  * @param param   参数
  */
-#define MJAssertParamNotNil(param) MJAssertParamNotNil2(param, )
+#define MJExtensionAssertParamNotNil(param) MJExtensionAssertParamNotNil2(param, )
 
 /**
  * 打印所有的属性
@@ -61,6 +53,7 @@ MJAssert2((param) != nil, returnValue)
 { \
     return [self keyValues].description; \
 }
+#define MJExtensionLogAllIvars MJLogAllIvars
 
 /**
  *  类型（属性类型）

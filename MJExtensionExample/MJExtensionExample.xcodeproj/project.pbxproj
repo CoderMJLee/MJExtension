@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D306F5D1B58A6650069910E /* MJExtensionConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D306F5C1B58A6650069910E /* MJExtensionConst.m */; };
+		2D306F601B5A24430069910E /* BaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D306F5F1B5A24430069910E /* BaseObject.m */; };
 		2D35374C1B24868D00D5B7A8 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D35374B1B24868D00D5B7A8 /* Dog.m */; };
 		2D3537551B248D9B00D5B7A8 /* Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3537541B248D9B00D5B7A8 /* Book.m */; };
 		2D3576231A7913F30056D6BF /* Bag.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3576221A7913F30056D6BF /* Bag.m */; };
 		2D49F3211B2855EC008D5A72 /* Box.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49F3201B2855EC008D5A72 /* Box.m */; };
-		2D4A0BF81B25615700D323A7 /* MJConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BE81B25615600D323A7 /* MJConst.m */; };
 		2D4A0BF91B25615700D323A7 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BEB1B25615600D323A7 /* MJFoundation.m */; };
 		2D4A0BFA1B25615700D323A7 /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BED1B25615600D323A7 /* MJProperty.m */; };
 		2D4A0BFB1B25615700D323A7 /* MJType.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BEF1B25615700D323A7 /* MJType.m */; };
@@ -46,6 +47,10 @@
 
 /* Begin PBXFileReference section */
 		2D2ABF0B1A7127DC0016C673 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		2D306F5B1B58A6650069910E /* MJExtensionConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConst.h; sourceTree = "<group>"; };
+		2D306F5C1B58A6650069910E /* MJExtensionConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJExtensionConst.m; sourceTree = "<group>"; };
+		2D306F5E1B5A24430069910E /* BaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseObject.h; sourceTree = "<group>"; };
+		2D306F5F1B5A24430069910E /* BaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseObject.m; sourceTree = "<group>"; };
 		2D35374A1B24868D00D5B7A8 /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
 		2D35374B1B24868D00D5B7A8 /* Dog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
 		2D3537531B248D9B00D5B7A8 /* Book.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Book.h; sourceTree = "<group>"; };
@@ -54,8 +59,6 @@
 		2D3576221A7913F30056D6BF /* Bag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bag.m; sourceTree = "<group>"; };
 		2D49F31F1B2855EC008D5A72 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
 		2D49F3201B2855EC008D5A72 /* Box.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Box.m; sourceTree = "<group>"; };
-		2D4A0BE71B25615600D323A7 /* MJConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJConst.h; sourceTree = "<group>"; };
-		2D4A0BE81B25615600D323A7 /* MJConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJConst.m; sourceTree = "<group>"; };
 		2D4A0BE91B25615600D323A7 /* MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
 		2D4A0BEA1B25615600D323A7 /* MJFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJFoundation.h; sourceTree = "<group>"; };
 		2D4A0BEB1B25615600D323A7 /* MJFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJFoundation.m; sourceTree = "<group>"; };
@@ -107,8 +110,8 @@
 		2D4A0BE61B25615600D323A7 /* MJExtension */ = {
 			isa = PBXGroup;
 			children = (
-				2D4A0BE71B25615600D323A7 /* MJConst.h */,
-				2D4A0BE81B25615600D323A7 /* MJConst.m */,
+				2D306F5B1B58A6650069910E /* MJExtensionConst.h */,
+				2D306F5C1B58A6650069910E /* MJExtensionConst.m */,
 				2D4A0BE91B25615600D323A7 /* MJExtension.h */,
 				2D4A0BEA1B25615600D323A7 /* MJFoundation.h */,
 				2D4A0BEB1B25615600D323A7 /* MJFoundation.m */,
@@ -152,6 +155,8 @@
 				2D3537541B248D9B00D5B7A8 /* Book.m */,
 				2D49F31F1B2855EC008D5A72 /* Box.h */,
 				2D49F3201B2855EC008D5A72 /* Box.m */,
+				2D306F5E1B5A24430069910E /* BaseObject.h */,
+				2D306F5F1B5A24430069910E /* BaseObject.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -255,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D4A0BFD1B25615700D323A7 /* NSObject+MJKeyValue.m in Sources */,
+				2D306F601B5A24430069910E /* BaseObject.m in Sources */,
 				2D6CAFF91A5AA0BB00E2BA5E /* User.m in Sources */,
 				2D6CAFF61A5AA0BB00E2BA5E /* Ad.m in Sources */,
 				2D6CAFFC1A5AA34800E2BA5E /* Student.m in Sources */,
@@ -267,9 +273,9 @@
 				2D9CAF2E192FA6020011F500 /* main.m in Sources */,
 				2D4B069E1AE7CFF300C1843E /* MJExtensionConfig.m in Sources */,
 				2D49F3211B2855EC008D5A72 /* Box.m in Sources */,
-				2D4A0BF81B25615700D323A7 /* MJConst.m in Sources */,
 				2D3537551B248D9B00D5B7A8 /* Book.m in Sources */,
 				2D4A0BFE1B25615700D323A7 /* NSObject+MJProperty.m in Sources */,
+				2D306F5D1B58A6650069910E /* MJExtensionConst.m in Sources */,
 				2D35374C1B24868D00D5B7A8 /* Dog.m in Sources */,
 				2D3576231A7913F30056D6BF /* Bag.m in Sources */,
 				2D4A0BFC1B25615700D323A7 /* NSObject+MJCoding.m in Sources */,

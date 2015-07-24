@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJConst.h"
+#import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
 #import "MJProperty.h"
 
@@ -84,10 +84,9 @@
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError **)error;
 
 /** 
- *  模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法
+ *  模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法（父类设置了，子类也会继承下来）
  */
 + (void)referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference;
-+ (BOOL)isReferenceReplacedKeyWhenCreatingKeyValues;
 
 /**
  *  将模型转成字典

@@ -7,7 +7,7 @@
 //
 
 #import "MJFoundation.h"
-#import "MJConst.h"
+#import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
 
 static NSSet *_foundationClasses;

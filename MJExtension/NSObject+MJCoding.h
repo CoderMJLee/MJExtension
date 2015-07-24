@@ -49,3 +49,5 @@ return self; \
 { \
 [self encode:encoder]; \
 }
+
+#define MJExtensionCodingImplementation MJCodingImplementation

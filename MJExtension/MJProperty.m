@@ -8,7 +8,7 @@
 
 #import "MJProperty.h"
 #import "MJFoundation.h"
-#import "MJConst.h"
+#import "MJExtensionConst.h"
 
 @implementation MJPropertyKey
 
@@ -64,7 +64,7 @@
 {
     _property = property;
     
-    MJAssertParamNotNil(property);
+    MJExtensionAssertParamNotNil(property);
     
     // 1.属性名
     _name = @(property_getName(property));

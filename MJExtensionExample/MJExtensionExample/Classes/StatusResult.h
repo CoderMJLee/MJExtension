@@ -6,9 +6,9 @@
 //  Copyright (c) 2014年 小码哥. All rights reserved.
 //  微博结果（用来表示大批量的微博数据）
 
-#import <Foundation/Foundation.h>
+#import "BaseObject.h"
 
-@interface StatusResult : NSObject
+@interface StatusResult : BaseObject
 /** 存放着某一页微博数据（里面都是Status模型） */
 @property (strong, nonatomic) NSMutableArray *statuses;
 /** 存放着一堆的广告数据（里面都是Ad模型） */

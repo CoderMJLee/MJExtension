@@ -26,7 +26,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 #pragma mark - --私有方法--
 + (NSString *)propertyKey:(NSString *)propertyName
 {
-    MJAssertParamNotNil2(propertyName, nil);
+    MJExtensionAssertParamNotNil2(propertyName, nil);
     
     __block NSString *key = nil;
     // 查看有没有需要替换的key

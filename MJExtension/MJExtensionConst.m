@@ -1,5 +1,5 @@
-#ifndef __MJConst__M__
-#define __MJConst__M__
+#ifndef __MJExtensionConst__M__
+#define __MJExtensionConst__M__
 
 #import <Foundation/Foundation.h>
 

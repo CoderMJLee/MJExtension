@@ -9,7 +9,7 @@
 #import "MJType.h"
 #import "MJExtension.h"
 #import "MJFoundation.h"
-#import "MJConst.h"
+#import "MJExtensionConst.h"
 
 @implementation MJType
 
@@ -21,7 +21,7 @@ static NSMutableDictionary *_cachedTypes;
 
 + (instancetype)cachedTypeWithCode:(NSString *)code
 {
-    MJAssertParamNotNil2(code, nil);
+    MJExtensionAssertParamNotNil2(code, nil);
     
     MJType *type = _cachedTypes[code];
     if (type == nil) {
@@ -36,7 +36,7 @@ static NSMutableDictionary *_cachedTypes;
 {
     _code = code;
     
-    MJAssertParamNotNil(code);
+    MJExtensionAssertParamNotNil(code);
     
     if ([code isEqualToString:MJTypeId]) {
         _idType = YES;
