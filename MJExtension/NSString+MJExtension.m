@@ -68,4 +68,9 @@
     int val;
     return [scan scanInt:&val] && [scan isAtEnd];
 }
+
+- (NSURL *)url
+{
+    return [NSURL URLWithString:(NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self,(CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL,kCFStringEncodingUTF8))];
+}
 @end

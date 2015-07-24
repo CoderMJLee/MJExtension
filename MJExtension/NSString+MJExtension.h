@@ -27,4 +27,6 @@
 - (NSString *)firstCharLower;
 
 - (BOOL)isPureInt;
+
+- (NSURL *)url;
 @end

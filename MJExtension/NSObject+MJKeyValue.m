@@ -112,12 +112,7 @@ static NSNumberFormatter *_numberFormatter;
  */
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
-    // 如果是JSON字符串
-    if ([keyValues isKindOfClass:[NSString class]]) {
-        keyValues = [((NSString *)keyValues) JSONObject];
-    } else if ([keyValues isKindOfClass:[NSData class]]) {
-        keyValues = [NSJSONSerialization JSONObjectWithData:keyValues options:kNilOptions error:nil];
-    }
+    keyValues = [keyValues JSONObject];
     
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
     
@@ -156,8 +151,18 @@ static NSNumberFormatter *_numberFormatter;
             if (!type.isFromFoundation && typeClass) {
                 value = [typeClass objectWithKeyValues:value context:context error:error];
             } else if (objectClass) {
-                // 3.字典数组-->模型数组
-                value = [objectClass objectArrayWithKeyValuesArray:value context:context error:error];
+                // string array -> url array
+                if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
+                    NSMutableArray *urlArray = [NSMutableArray array];
+                    for (NSString *string in value) {
+                        if ([string isKindOfClass:[NSString class]]) continue;
+                        [urlArray addObject:string.url];
+                    }
+                    value = urlArray;
+                } else {
+                    // 3.字典数组-->模型数组
+                    value = [objectClass objectArrayWithKeyValuesArray:value context:context error:error];
+                }
             } else if (typeClass == [NSString class]) {
                 if ([value isKindOfClass:[NSNumber class]]) {
                     // NSNumber -> NSString
@@ -170,8 +175,7 @@ static NSNumberFormatter *_numberFormatter;
                 if (typeClass == [NSURL class]) {
                     // NSString -> NSURL
                     // 字符串转码
-                    value = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)value,(CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL,kCFStringEncodingUTF8));
-                    value = [NSURL URLWithString:value];
+                    value = [value url];
                 } else if (type.isNumberType) {
                     NSString *oldValue = value;
                     
@@ -228,11 +232,7 @@ static NSNumberFormatter *_numberFormatter;
     if ([MJFoundation isClassFromFoundation:self]) return keyValuesArray;
     
     // 如果是JSON字符串
-    if ([keyValuesArray isKindOfClass:[NSString class]]) {
-        keyValuesArray = [((NSString *)keyValuesArray) JSONObject];
-    } else if ([keyValuesArray isKindOfClass:[NSData class]]) {
-        keyValuesArray = [NSJSONSerialization JSONObjectWithData:keyValuesArray options:kNilOptions error:nil];
-    }
+    keyValuesArray = [keyValuesArray JSONObject];
     
     // 1.判断真实性
     MJExtensionAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, error, @"keyValuesArray参数不是一个数组");
@@ -461,6 +461,8 @@ static NSNumberFormatter *_numberFormatter;
 {
     if ([self isKindOfClass:[NSString class]]) {
         return [((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding];
+    } else if ([self isKindOfClass:[NSData class]]) {
+        return (NSData *)self;
     }
     
     return [NSJSONSerialization dataWithJSONObject:[self JSONObject] options:kNilOptions error:nil];
@@ -470,6 +472,8 @@ static NSNumberFormatter *_numberFormatter;
 {
     if ([self isKindOfClass:[NSString class]]) {
         return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    } else if ([self isKindOfClass:[NSData class]]) {
+        return [NSJSONSerialization JSONObjectWithData:(NSData *)self options:kNilOptions error:nil];
     }
     
     return self.keyValues;
@@ -479,6 +483,8 @@ static NSNumberFormatter *_numberFormatter;
 {
     if ([self isKindOfClass:[NSString class]]) {
         return (NSString *)self;
+    } else if ([self isKindOfClass:[NSData class]]) {
+        return [[NSString alloc] initWithData:(NSData *)self encoding:NSUTF8StringEncoding];
     }
     
     return [[NSString alloc] initWithData:[self JSONData] encoding:NSUTF8StringEncoding];
