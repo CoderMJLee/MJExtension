@@ -155,7 +155,7 @@ static NSNumberFormatter *_numberFormatter;
                 if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
                     NSMutableArray *urlArray = [NSMutableArray array];
                     for (NSString *string in value) {
-                        if ([string isKindOfClass:[NSString class]]) continue;
+                        if (![string isKindOfClass:[NSString class]]) continue;
                         [urlArray addObject:string.url];
                     }
                     value = urlArray;
