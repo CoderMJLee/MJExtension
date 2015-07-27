@@ -198,7 +198,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 }
 
 #pragma mark - 新值配置
-+ (void)setupNewValueFormOldValue:(MJNewValueFormOldValue)newValueFormOldValue
++ (void)setupNewValueFormOldValue:(MJNewValueFromOldValue)newValueFormOldValue
 {
     objc_setAssociatedObject(self, &MJNewValueFromOldValueKey, newValueFormOldValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
@@ -207,7 +207,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 {
     __block id newValue = nil;
     [self enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-        MJNewValueFormOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
+        MJNewValueFromOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
         if (block) {
             newValue = block(object, oldValue, property);
             *stop = YES;

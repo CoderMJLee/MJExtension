@@ -12,7 +12,7 @@
 #import "MJType.h"
 #import "MJExtensionConst.h"
 #import "MJFoundation.h"
-#import "NSString+MJExtensino.h"
+#import "NSString+MJExtension.h"
 
 @implementation NSObject (MJKeyValue)
 
