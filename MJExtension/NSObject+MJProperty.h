@@ -29,7 +29,7 @@ typedef NSString * (^MJReplacedKeyFromPropertyName121)(NSString *propertyName);
 /** 数组中需要转换的模型类 */
 typedef NSDictionary * (^MJObjectClassInArray)();
 /** 用于过滤字典中的值 */
-typedef id (^MJNewValueFormOldValue)(id object, id oldValue, MJProperty *property);
+typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *property);
 
 /** 这个数组中的属性名才会进行字典和模型的转换 */
 typedef NSArray * (^MJAllowedPropertyNames)();
@@ -60,7 +60,7 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *
  *  @param newValueFormOldValue 用于过滤字典中的值
  */
-+ (void)setupNewValueFormOldValue:(MJNewValueFormOldValue)newValueFormOldValue;
++ (void)setupNewValueFormOldValue:(MJNewValueFromOldValue)newValueFormOldValue;
 + (id)getNewValueFormOldValue:(__weak id)oldValue object:(__weak id)object property:(__weak MJProperty *)property;
 
 #pragma mark - key配置
