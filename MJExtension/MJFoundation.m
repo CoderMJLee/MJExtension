@@ -25,7 +25,8 @@ static NSSet *_foundationClasses;
                               [NSData class],
                               [NSArray class],
                               [NSDictionary class],
-                              [NSString class], nil];
+                              [NSString class],
+                              [NSAttributedString class], nil];
     }
     return _foundationClasses;
 }
