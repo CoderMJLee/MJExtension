@@ -8,6 +8,7 @@
 
 #import "NSObject+MJKeyValue.h"
 #import "NSObject+MJProperty.h"
+#import "NSString+MJExtension.h"
 #import "MJProperty.h"
 #import "MJType.h"
 #import "MJExtensionConst.h"
@@ -207,6 +208,7 @@ static NSNumberFormatter *_numberFormatter;
         }
     } @catch (NSException *exception) {
         MJExtensionBuildError(error, exception.reason);
+        NSLog(@"%@", exception);
     }
     return self;
 }
@@ -405,6 +407,7 @@ static NSNumberFormatter *_numberFormatter;
         }
     } @catch (NSException *exception) {
         MJExtensionBuildError(error, exception.reason);
+        NSLog(@"%@", exception);
     }
     
     return keyValues;
