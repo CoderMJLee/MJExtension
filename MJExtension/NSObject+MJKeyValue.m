@@ -64,10 +64,13 @@ static NSNumberFormatter *_numberFormatter;
 + (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
     if (keyValues == nil) return nil;
-    if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
-        return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
+    
+    @synchronized([self class]) {
+        if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
+            return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
+        }
+        return [[[self alloc] init] setKeyValues:keyValues error:error];
     }
-    return [[[self alloc] init] setKeyValues:keyValues error:error];
 }
 
 + (instancetype)objectWithFilename:(NSString *)filename
@@ -319,82 +322,84 @@ static NSNumberFormatter *_numberFormatter;
     id keyValues = [NSMutableDictionary dictionary];
     
     @try {
-        Class aClass = [self class];
-        NSArray *allowedPropertyNames = [aClass totalAllowedPropertyNames];
-        NSArray *ignoredPropertyNames = [aClass totalIgnoredPropertyNames];
-        
-        [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
-            // 0.检测是否被忽略
-            if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
-            if ([ignoredPropertyNames containsObject:property.name]) return;
-            if (keys.count && ![keys containsObject:property.name]) return;
-            if ([ignoredKeys containsObject:property.name]) return;
+        @synchronized([self class]) {
+            Class aClass = [self class];
+            NSArray *allowedPropertyNames = [aClass totalAllowedPropertyNames];
+            NSArray *ignoredPropertyNames = [aClass totalIgnoredPropertyNames];
             
-            // 1.取出属性值
-            id value = [property valueForObject:self];
-            if (!value) return;
-            
-            // 2.如果是模型属性
-            MJType *type = property.type;
-            Class typeClass = type.typeClass;
-            if (!type.isFromFoundation && typeClass) {
-                value = [value keyValues];
-            } else if ([value isKindOfClass:[NSArray class]]) {
-                // 3.处理数组里面有模型的情况
-                value = [NSObject keyValuesArrayWithObjectArray:value];
-            } else if (typeClass == [NSURL class]) {
-                value = [value absoluteString];
-            }
-            
-            // 4.赋值
-            if ([aClass isReferenceReplacedKeyWhenCreatingKeyValues]) {
-                NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
-                NSUInteger keyCount = propertyKeys.count;
-                // 创建字典
-                __block id innerContainer = keyValues;
-                [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
-                    // 下一个属性
-                    MJPropertyKey *nextPropertyKey = nil;
-                    if (idx != keyCount - 1) {
-                        nextPropertyKey = propertyKeys[idx + 1];
-                    }
-                    
-                    if (nextPropertyKey) { // 不是最后一个key
-                        // 当前propertyKey对应的字典或者数组
-                        id tempInnerContainer = [propertyKey valueInObject:innerContainer];
-                        if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
-                            if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
-                                tempInnerContainer = [NSMutableDictionary dictionary];
-                            } else {
-                                tempInnerContainer = [NSMutableArray array];
+            [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
+                // 0.检测是否被忽略
+                if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
+                if ([ignoredPropertyNames containsObject:property.name]) return;
+                if (keys.count && ![keys containsObject:property.name]) return;
+                if ([ignoredKeys containsObject:property.name]) return;
+                
+                // 1.取出属性值
+                id value = [property valueForObject:self];
+                if (!value) return;
+                
+                // 2.如果是模型属性
+                MJType *type = property.type;
+                Class typeClass = type.typeClass;
+                if (!type.isFromFoundation && typeClass) {
+                    value = [value keyValues];
+                } else if ([value isKindOfClass:[NSArray class]]) {
+                    // 3.处理数组里面有模型的情况
+                    value = [NSObject keyValuesArrayWithObjectArray:value];
+                } else if (typeClass == [NSURL class]) {
+                    value = [value absoluteString];
+                }
+                
+                // 4.赋值
+                if ([aClass isReferenceReplacedKeyWhenCreatingKeyValues]) {
+                    NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
+                    NSUInteger keyCount = propertyKeys.count;
+                    // 创建字典
+                    __block id innerContainer = keyValues;
+                    [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
+                        // 下一个属性
+                        MJPropertyKey *nextPropertyKey = nil;
+                        if (idx != keyCount - 1) {
+                            nextPropertyKey = propertyKeys[idx + 1];
+                        }
+                        
+                        if (nextPropertyKey) { // 不是最后一个key
+                            // 当前propertyKey对应的字典或者数组
+                            id tempInnerContainer = [propertyKey valueInObject:innerContainer];
+                            if (tempInnerContainer == nil || [tempInnerContainer isKindOfClass:[NSNull class]]) {
+                                if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
+                                    tempInnerContainer = [NSMutableDictionary dictionary];
+                                } else {
+                                    tempInnerContainer = [NSMutableArray array];
+                                }
+                                if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                                    innerContainer[propertyKey.name] = tempInnerContainer;
+                                } else {
+                                    innerContainer[propertyKey.name.intValue] = tempInnerContainer;
+                                }
                             }
+                            
+                            if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
+                                int index = nextPropertyKey.name.intValue;
+                                while ([tempInnerContainer count] < index + 1) {
+                                    [tempInnerContainer addObject:[NSNull null]];
+                                }
+                            }
+                            
+                            innerContainer = tempInnerContainer;
+                        } else { // 最后一个key
                             if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                                innerContainer[propertyKey.name] = tempInnerContainer;
+                                innerContainer[propertyKey.name] = value;
                             } else {
-                                innerContainer[propertyKey.name.intValue] = tempInnerContainer;
+                                innerContainer[propertyKey.name.intValue] = value;
                             }
                         }
-                        
-                        if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
-                            int index = nextPropertyKey.name.intValue;
-                            while ([tempInnerContainer count] < index + 1) {
-                                [tempInnerContainer addObject:[NSNull null]];
-                            }
-                        }
-                        
-                        innerContainer = tempInnerContainer;
-                    } else { // 最后一个key
-                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                            innerContainer[propertyKey.name] = value;
-                        } else {
-                            innerContainer[propertyKey.name.intValue] = value;
-                        }
-                    }
-                }];
-            } else {
-                keyValues[property.name] = value;
-            }
-        }];
+                    }];
+                } else {
+                    keyValues[property.name] = value;
+                }
+            }];
+        }
         
         // 去除系统自动增加的元素
         if ([keyValues isKindOfClass:[NSMutableDictionary class]]) {
