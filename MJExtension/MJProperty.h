@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "MJType.h"
 
 typedef enum {
     MJPropertyKeyTypeDictionary = 0, // 字典的key
@@ -35,7 +34,7 @@ typedef enum {
 /**
  *  包装一个成员
  */
-@interface MJProperty : NSObject
+@interface MJProperty : MJBaseObject
 
 /** 成员属性 */
 @property (nonatomic, assign) objc_property_t property;

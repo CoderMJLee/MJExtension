@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class Box;
 
-@interface Book : NSObject
+@interface Book : BaseModel
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *publisher;
 @property (strong, nonatomic) NSDate *publishedTime;

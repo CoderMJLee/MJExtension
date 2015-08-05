@@ -7,10 +7,18 @@
 //  包装一种类型
 
 #import <Foundation/Foundation.h>
+
+#ifdef MJExtension_CUSTOM_BASE_CLASS
+#define MJBaseObject    MJExtension_CUSTOM_BASE_CLASS
+#else
+#define MJBaseObject    NSObject
+#endif
+
+
 /**
  *  包装一种类型
  */
-@interface MJType : NSObject
+@interface MJType : MJBaseObject
 /** 类型标识符 */
 @property (nonatomic, copy) NSString *code;
 

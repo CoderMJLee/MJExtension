@@ -29,6 +29,7 @@
 		2D9CAF2B192FA6020011F500 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9CAF2A192FA6020011F500 /* Foundation.framework */; };
 		2D9CAF2E192FA6020011F500 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF2D192FA6020011F500 /* main.m */; };
 		2D9CAF32192FA6020011F500 /* MJExtensionExample.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */; };
+		687B42291B71FB7000D655A2 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B42281B71FB7000D655A2 /* BaseModel.m */; };
 		89568B751B1B3EAE00B1FACA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89568B741B1B3EAE00B1FACA /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,8 @@
 		2D9CAF2D192FA6020011F500 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2D9CAF30192FA6020011F500 /* MJExtensionExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionExample-Prefix.pch"; sourceTree = "<group>"; };
 		2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = MJExtensionExample.1; sourceTree = "<group>"; };
+		687B42271B71FB7000D655A2 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
+		687B42281B71FB7000D655A2 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
 		89568B741B1B3EAE00B1FACA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -157,6 +160,8 @@
 				2D49F3201B2855EC008D5A72 /* Box.m */,
 				2D306F5E1B5A24430069910E /* BaseObject.h */,
 				2D306F5F1B5A24430069910E /* BaseObject.m */,
+				687B42271B71FB7000D655A2 /* BaseModel.h */,
+				687B42281B71FB7000D655A2 /* BaseModel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -262,6 +267,7 @@
 				2D4A0BFD1B25615700D323A7 /* NSObject+MJKeyValue.m in Sources */,
 				2D306F601B5A24430069910E /* BaseObject.m in Sources */,
 				2D6CAFF91A5AA0BB00E2BA5E /* User.m in Sources */,
+				687B42291B71FB7000D655A2 /* BaseModel.m in Sources */,
 				2D6CAFF61A5AA0BB00E2BA5E /* Ad.m in Sources */,
 				2D6CAFFC1A5AA34800E2BA5E /* Student.m in Sources */,
 				2D4A0BF91B25615700D323A7 /* MJFoundation.m in Sources */,

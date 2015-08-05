@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class Bag;
 
-@interface Student : NSObject
+@interface Student : BaseModel
 @property (copy, nonatomic) NSString *ID;
 @property (copy, nonatomic) NSString *nowName;
 @property (copy, nonatomic) NSString *oldName;

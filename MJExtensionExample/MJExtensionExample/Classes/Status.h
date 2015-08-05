@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class User;
 
-@interface Status : NSObject
+@interface Status : BaseModel
 /** 微博文本内容 */
 @property (copy, nonatomic) NSString *text;
 /** 微博作者 */
