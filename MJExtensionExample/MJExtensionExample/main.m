@@ -38,6 +38,18 @@ int main(int argc, const char * argv[])
         // 关于模型的具体配置可以参考：MJExtensionConfig.m
         // 或者参考每个模型的.m文件中被注释掉的配置
         
+#if 0
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        queue.maxConcurrentOperationCount = 5;
+        for(NSInteger i=0; i<2000; i++) {
+            NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+                NSLog(@" >>>>>>>>>>>> %zd", i);
+                execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
+            }];
+            [queue addOperation:operation];
+        }
+        [queue waitUntilAllOperationsAreFinished];
+#else
         execute(keyValues2object, @"简单的字典 -> 模型");
         execute(keyValues2object1, @"JSON字符串 -> 模型");
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
@@ -50,6 +62,7 @@ int main(int argc, const char * argv[])
         execute(coding, @"NSCoding示例");
         execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
         execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
+#endif
     }
     return 0;
 }
