@@ -13,4 +13,5 @@
 //{
 //    return @[@"name", @"icon"];
 //}
+MJExtensionLogAllProperties
 @end

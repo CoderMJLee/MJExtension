@@ -23,6 +23,7 @@ void coreData();
 void coding();
 void replacedKeyFromPropertyName121();
 void newValueFromOldValue();
+void logAllProperties();
 void execute(void (*fn)(), NSString *comment);
 
 #endif

@@ -53,7 +53,7 @@ MJExtensionAssert2((param) != nil, returnValue)
 { \
     return [self keyValues].description; \
 }
-#define MJExtensionLogAllIvars MJLogAllIvars
+#define MJExtensionLogAllProperties MJLogAllIvars
 
 /**
  *  类型（属性类型）

@@ -50,6 +50,7 @@ int main(int argc, const char * argv[])
         execute(coding, @"NSCoding示例");
         execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
         execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
+        execute(logAllProperties, @"使用NSLog打印模型的所有属性");
     }
     return 0;
 }
@@ -407,6 +408,20 @@ void newValueFromOldValue()
     
     // 3.打印User模型的属性
     NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
+}
+
+/**
+ *  使用NSLog打印模型的所有属性
+ */
+void logAllProperties()
+{
+    User *user = [[User alloc] init];
+    user.name = @"MJ";
+    user.age = 10;
+    user.sex = SexMale;
+    user.icon = @"test.png";
+    
+    NSLog(@"%@", user);
 }
 
 void execute(void (*fn)(), NSString *comment)
