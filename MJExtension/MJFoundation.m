@@ -14,7 +14,7 @@ static NSSet *_foundationClasses;
 
 @implementation MJFoundation
 
-+ (NSSet *)foundatonClasses
++ (NSSet *)foundationClasses
 {
     if (_foundationClasses == nil) {
         // 集合中没有NSObject，因为几乎所有的类都是继承自NSObject，具体是不是NSObject需要特殊判断
@@ -36,7 +36,7 @@ static NSSet *_foundationClasses;
     if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
     
     __block BOOL result = NO;
-    [[self foundatonClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
+    [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
         if (c == foundationClass || [c isSubclassOfClass:foundationClass]) {
             result = YES;
             *stop = YES;
