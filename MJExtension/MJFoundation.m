@@ -10,15 +10,15 @@
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
 
-static NSSet *_foundationClasses;
+static NSSet *foundationClasses_;
 
 @implementation MJFoundation
 
 + (NSSet *)foundationClasses
 {
-    if (_foundationClasses == nil) {
+    if (foundationClasses_ == nil) {
         // 集合中没有NSObject，因为几乎所有的类都是继承自NSObject，具体是不是NSObject需要特殊判断
-        _foundationClasses = [NSSet setWithObjects:
+        foundationClasses_ = [NSSet setWithObjects:
                               [NSURL class],
                               [NSDate class],
                               [NSValue class],
@@ -28,7 +28,7 @@ static NSSet *_foundationClasses;
                               [NSString class],
                               [NSAttributedString class], nil];
     }
-    return _foundationClasses;
+    return foundationClasses_;
 }
 
 + (BOOL)isClassFromFoundation:(Class)c

@@ -6,21 +6,21 @@
 /**
  *  成员变量类型（属性类型）
  */
-NSString *const MJTypeInt = @"i";
-NSString *const MJTypeShort = @"s";
-NSString *const MJTypeFloat = @"f";
-NSString *const MJTypeDouble = @"d";
-NSString *const MJTypeLong = @"q";
-NSString *const MJTypeChar = @"c";
-NSString *const MJTypeBOOL1 = @"c";
-NSString *const MJTypeBOOL2 = @"b";
-NSString *const MJTypePointer = @"*";
+NSString *const MJPropertyTypeInt = @"i";
+NSString *const MJPropertyTypeShort = @"s";
+NSString *const MJPropertyTypeFloat = @"f";
+NSString *const MJPropertyTypeDouble = @"d";
+NSString *const MJPropertyTypeLong = @"q";
+NSString *const MJPropertyTypeChar = @"c";
+NSString *const MJPropertyTypeBOOL1 = @"c";
+NSString *const MJPropertyTypeBOOL2 = @"b";
+NSString *const MJPropertyTypePointer = @"*";
 
-NSString *const MJTypeIvar = @"^{objc_ivar=}";
-NSString *const MJTypeMethod = @"^{objc_method=}";
-NSString *const MJTypeBlock = @"@?";
-NSString *const MJTypeClass = @"#";
-NSString *const MJTypeSEL = @":";
-NSString *const MJTypeId = @"@";
+NSString *const MJPropertyTypeIvar = @"^{objc_ivar=}";
+NSString *const MJPropertyTypeMethod = @"^{objc_method=}";
+NSString *const MJPropertyTypeBlock = @"@?";
+NSString *const MJPropertyTypeClass = @"#";
+NSString *const MJPropertyTypeSEL = @":";
+NSString *const MJPropertyTypeId = @"@";
 
 #endif

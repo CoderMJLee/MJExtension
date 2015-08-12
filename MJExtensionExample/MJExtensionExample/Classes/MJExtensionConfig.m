@@ -73,7 +73,7 @@
     // 相当于在Dog.m中实现了+(NSDictionary *)replacedKeyFromPropertyName121:方法
     
 #pragma mark Book的日期处理、字符串nil值处理
-    [Book setupNewValueFormOldValue:^id(id object, id oldValue, MJProperty *property) {
+    [Book setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
         if ([property.name isEqualToString:@"publisher"]) {
             if (oldValue == nil || [oldValue isKindOfClass:[NSNull class]]) return @"";
         } else if (property.type.typeClass == [NSDate class]) {

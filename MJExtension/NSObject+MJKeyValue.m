@@ -10,13 +10,16 @@
 #import "NSObject+MJProperty.h"
 #import "NSString+MJExtension.h"
 #import "MJProperty.h"
-#import "MJType.h"
+#import "MJPropertyType.h"
 #import "MJExtensionConst.h"
 #import "MJFoundation.h"
 #import "NSString+MJExtension.h"
+#import "NSObject+MJClass.h"
 
 @implementation NSObject (MJKeyValue)
 
+#pragma mark - 模型 -> 字典时的参考
+/** 模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法（父类设置了，子类也会继承下来） */
 static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 
 + (void)referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference
@@ -46,54 +49,6 @@ static NSNumberFormatter *_numberFormatter;
 
 #pragma mark - --公共方法--
 #pragma mark - 字典 -> 模型
-+ (instancetype)objectWithKeyValues:(id)keyValues
-{
-    return [self objectWithKeyValues:keyValues error:nil];
-}
-
-+ (instancetype)objectWithKeyValues:(id)keyValues error:(NSError *__autoreleasing *)error
-{
-    return [self objectWithKeyValues:keyValues context:nil error:error];
-}
-
-+ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
-{
-    return [self objectWithKeyValues:keyValues context:context error:nil];
-}
-
-+ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
-{
-    if (keyValues == nil) return nil;
-    if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
-        return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
-    }
-    return [[[self alloc] init] setKeyValues:keyValues error:error];
-}
-
-+ (instancetype)objectWithFilename:(NSString *)filename
-{
-    return [self objectWithFilename:filename error:nil];
-}
-
-+ (instancetype)objectWithFilename:(NSString *)filename error:(NSError *__autoreleasing *)error
-{
-    MJExtensionAssertError(filename != nil, nil, error, @"filename参数为nil");
-    
-    return [self objectWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil] error:error];
-}
-
-+ (instancetype)objectWithFile:(NSString *)file
-{
-    return [self objectWithFile:file error:nil];
-}
-
-+ (instancetype)objectWithFile:(NSString *)file error:(NSError *__autoreleasing *)error
-{
-    MJExtensionAssertError(file != nil, nil, error, @"file参数为nil");
-    
-    return [self objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file] error:error];
-}
-
 - (instancetype)setKeyValues:(id)keyValues
 {
     return [self setKeyValues:keyValues error:nil];
@@ -114,6 +69,7 @@ static NSNumberFormatter *_numberFormatter;
  */
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
+    // 获得JSON对象
     keyValues = [keyValues JSONObject];
     
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, error, @"keyValues参数不是一个字典");
@@ -131,23 +87,20 @@ static NSNumberFormatter *_numberFormatter;
             
             // 1.取出属性值
             id value = keyValues ;
-            NSArray *propertyKeys = [property propertyKeysFromClass:[self class]];
+            NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
             for (MJPropertyKey *propertyKey in propertyKeys) {
                 value = [propertyKey valueInObject:value];
             }
             
             // 值的过滤
-            if ([self respondsToSelector:@selector(newValueFromOldValue:property:)]) {
-                value = [self newValueFromOldValue:value property:property];
-            } else {
-                id newValue = [aClass getNewValueFormOldValue:value object:self property:property];
-                if (newValue) value = newValue;
-            }
+            id newValue = [aClass getNewValueFromObject:self oldValue:value property:property];
+            if (newValue) value = newValue;
             
+            // 如果没有值，就直接返回
             if (!value || value == [NSNull null]) return;
-                
+            
             // 2.如果是模型属性
-            MJType *type = property.type;
+            MJPropertyType *type = property.type;
             Class typeClass = type.typeClass;
             Class objectClass = [property objectClassInArrayFromClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
@@ -211,6 +164,54 @@ static NSNumberFormatter *_numberFormatter;
         NSLog(@"%@", exception);
     }
     return self;
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues
+{
+    return [self objectWithKeyValues:keyValues error:nil];
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues error:(NSError *__autoreleasing *)error
+{
+    return [self objectWithKeyValues:keyValues context:nil error:error];
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
+{
+    return [self objectWithKeyValues:keyValues context:context error:nil];
+}
+
++ (instancetype)objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
+{
+    if (keyValues == nil) return nil;
+    if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
+        return [[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self) inManagedObjectContext:context] setKeyValues:keyValues context:context error:error];
+    }
+    return [[[self alloc] init] setKeyValues:keyValues error:error];
+}
+
++ (instancetype)objectWithFilename:(NSString *)filename
+{
+    return [self objectWithFilename:filename error:nil];
+}
+
++ (instancetype)objectWithFilename:(NSString *)filename error:(NSError *__autoreleasing *)error
+{
+    MJExtensionAssertError(filename != nil, nil, error, @"filename参数为nil");
+    
+    return [self objectWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil] error:error];
+}
+
++ (instancetype)objectWithFile:(NSString *)file
+{
+    return [self objectWithFile:file error:nil];
+}
+
++ (instancetype)objectWithFile:(NSString *)file error:(NSError *__autoreleasing *)error
+{
+    MJExtensionAssertError(file != nil, nil, error, @"file参数为nil");
+    
+    return [self objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file] error:error];
 }
 
 #pragma mark - 字典数组 -> 模型数组
@@ -296,14 +297,14 @@ static NSNumberFormatter *_numberFormatter;
     return [self keyValuesWithKeys:keys error:nil];
 }
 
-- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
-{
-    return [self keyValuesWithIgnoredKeys:ignoredKeys error:nil];
-}
-
 - (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError *__autoreleasing *)error
 {
     return [self keyValuesWithKeys:keys ignoredKeys:nil error:error];
+}
+
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
+{
+    return [self keyValuesWithIgnoredKeys:ignoredKeys error:nil];
 }
 
 - (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError *__autoreleasing *)error
@@ -335,7 +336,7 @@ static NSNumberFormatter *_numberFormatter;
             if (!value) return;
             
             // 2.如果是模型属性
-            MJType *type = property.type;
+            MJPropertyType *type = property.type;
             Class typeClass = type.typeClass;
             if (!type.isFromFoundation && typeClass) {
                 value = [value keyValues];

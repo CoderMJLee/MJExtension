@@ -70,14 +70,14 @@
 @interface NSObject (MJKeyValue) <MJKeyValue>
 /**
  *  将字典的键值对转成模型属性
- *  @param keyValues 字典
+ *  @param keyValues 字典(可以是NSDictionary、NSData、NSString)
  */
 - (instancetype)setKeyValues:(id)keyValues;
 - (instancetype)setKeyValues:(id)keyValues error:(NSError **)error;
 
 /**
  *  将字典的键值对转成模型属性
- *  @param keyValues 字典
+ *  @param keyValues 字典(可以是NSDictionary、NSData、NSString)
  *  @param context   CoreData上下文
  */
 - (instancetype)setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
@@ -93,10 +93,10 @@
  *  @return 字典
  */
 - (NSMutableDictionary *)keyValues;
-- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys;
-- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
 - (NSMutableDictionary *)keyValuesWithError:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys;
 - (NSMutableDictionary *)keyValuesWithKeys:(NSArray *)keys error:(NSError **)error;
+- (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
 - (NSMutableDictionary *)keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 /**
@@ -105,10 +105,10 @@
  *  @return 字典数组
  */
 + (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray;
-+ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
-+ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
 + (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray error:(NSError **)error;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
 + (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys error:(NSError **)error;
++ (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
 + (NSMutableArray *)keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys error:(NSError **)error;
 
 #pragma mark - 字典转模型

@@ -1,5 +1,5 @@
 //
-//  MJType.h
+//  MJPropertyType.h
 //  MJExtension
 //
 //  Created by mj on 14-1-15.
@@ -7,10 +7,11 @@
 //  包装一种类型
 
 #import <Foundation/Foundation.h>
+
 /**
  *  包装一种类型
  */
-@interface MJType : NSObject
+@interface MJPropertyType : NSObject
 /** 类型标识符 */
 @property (nonatomic, copy) NSString *code;
 

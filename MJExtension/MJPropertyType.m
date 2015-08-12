@@ -1,44 +1,46 @@
 //
-//  MJType.m
+//  MJPropertyType.m
 //  MJExtension
 //
 //  Created by mj on 14-1-15.
 //  Copyright (c) 2014年 小码哥. All rights reserved.
 //
 
-#import "MJType.h"
+#import "MJPropertyType.h"
 #import "MJExtension.h"
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 
-@implementation MJType
+@implementation MJPropertyType
 
-static NSMutableDictionary *_cachedTypes;
+#pragma mark - 缓存
+static NSMutableDictionary *cachedTypes_;
 + (void)load
 {
-    _cachedTypes = [NSMutableDictionary dictionary];
+    cachedTypes_ = [NSMutableDictionary dictionary];
 }
 
 + (instancetype)cachedTypeWithCode:(NSString *)code
 {
     MJExtensionAssertParamNotNil2(code, nil);
     
-    MJType *type = _cachedTypes[code];
+    MJPropertyType *type = cachedTypes_[code];
     if (type == nil) {
         type = [[self alloc] init];
         type.code = code;
-        _cachedTypes[code] = type;
+        cachedTypes_[code] = type;
     }
     return type;
 }
 
+#pragma mark - 公共方法
 - (void)setCode:(NSString *)code
 {
     _code = code;
     
     MJExtensionAssertParamNotNil(code);
     
-    if ([code isEqualToString:MJTypeId]) {
+    if ([code isEqualToString:MJPropertyTypeId]) {
         _idType = YES;
     } else if (code.length == 0) {
         _KVCDisabled = YES;
@@ -48,20 +50,20 @@ static NSMutableDictionary *_cachedTypes;
         _typeClass = NSClassFromString(_code);
         _fromFoundation = [MJFoundation isClassFromFoundation:_typeClass];
         _numberType = (_typeClass == [NSNumber class] || [_typeClass isSubclassOfClass:[NSNumber class]]);
-    } else if ([code isEqualToString:MJTypeSEL] ||
-               [code isEqualToString:MJTypeIvar] ||
-               [code isEqualToString:MJTypeMethod]) {
+    } else if ([code isEqualToString:MJPropertyTypeSEL] ||
+               [code isEqualToString:MJPropertyTypeIvar] ||
+               [code isEqualToString:MJPropertyTypeMethod]) {
         _KVCDisabled = YES;
     }
     
     // 是否为数字类型
     NSString *lowerCode = _code.lowercaseString;
-    NSArray *numberTypes = @[MJTypeInt, MJTypeShort, MJTypeBOOL1, MJTypeBOOL2, MJTypeFloat, MJTypeDouble, MJTypeLong, MJTypeChar];
+    NSArray *numberTypes = @[MJPropertyTypeInt, MJPropertyTypeShort, MJPropertyTypeBOOL1, MJPropertyTypeBOOL2, MJPropertyTypeFloat, MJPropertyTypeDouble, MJPropertyTypeLong, MJPropertyTypeChar];
     if ([numberTypes containsObject:lowerCode]) {
         _numberType = YES;
         
-        if ([lowerCode isEqualToString:MJTypeBOOL1]
-            || [lowerCode isEqualToString:MJTypeBOOL2]) {
+        if ([lowerCode isEqualToString:MJPropertyTypeBOOL1]
+            || [lowerCode isEqualToString:MJPropertyTypeBOOL2]) {
             _boolType = YES;
         }
     }
