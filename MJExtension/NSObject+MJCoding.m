@@ -10,7 +10,7 @@
 #import "NSObject+MJProperty.h"
 #import "MJProperty.h"
 
-@implementation NSObject (MJCoding)
+@implementation MJBaseObject (MJCoding)
 
 - (void)encode:(NSCoder *)encoder
 {

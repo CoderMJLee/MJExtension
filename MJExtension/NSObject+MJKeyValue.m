@@ -341,7 +341,7 @@ static NSNumberFormatter *_numberFormatter;
                 value = [value keyValues];
             } else if ([value isKindOfClass:[NSArray class]]) {
                 // 3.处理数组里面有模型的情况
-                value = [NSObject keyValuesArrayWithObjectArray:value];
+                value = [MJBaseObject keyValuesArrayWithObjectArray:value];
             } else if (typeClass == [NSURL class]) {
                 value = [value absoluteString];
             }

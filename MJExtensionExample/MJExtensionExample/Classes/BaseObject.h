@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BaseObject : NSObject
+@interface BaseObject : BaseModel
 @property (copy, nonatomic) NSString *name;
 @end

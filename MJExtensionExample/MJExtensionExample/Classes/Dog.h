@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Dog : NSObject
+@interface Dog : BaseModel
 @property (copy, nonatomic) NSString *nickName;
 @property (assign, nonatomic) double salePrice;
 @property (assign, nonatomic) double runSpeed;

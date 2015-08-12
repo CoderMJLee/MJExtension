@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Bag : NSObject
+@interface Bag : BaseModel
 @property (copy, nonatomic) NSString *name;
 @property (assign, nonatomic) double price;
 @end

@@ -13,7 +13,7 @@ typedef enum {
     SexFemale
 } Sex;
 
-@interface User : NSObject
+@interface User : BaseModel
 /** 名称 */
 @property (copy, nonatomic) NSString *name;
 /** 头像 */

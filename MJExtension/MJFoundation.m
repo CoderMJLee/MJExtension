@@ -33,7 +33,7 @@ static NSSet *_foundationClasses;
 
 + (BOOL)isClassFromFoundation:(Class)c
 {
-    if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
+    if (c == [NSObject class] || c == [MJBaseObject class] || c == [NSManagedObject class]) return YES;
     
     __block BOOL result = NO;
     [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {

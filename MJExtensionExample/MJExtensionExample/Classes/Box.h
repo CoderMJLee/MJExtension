@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Box : NSObject
+@interface Box : BaseModel
 @property (assign, nonatomic) double weight;
 @property (assign, nonatomic) int size;
 @end

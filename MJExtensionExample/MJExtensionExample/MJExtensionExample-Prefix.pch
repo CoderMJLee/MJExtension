@@ -6,5 +6,15 @@
 
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
+
+    #define USE_CUSTOM_BASECLASS    0
+
+#if USE_CUSTOM_BASECLASS
+    #import "BaseModel.h"
+    #define MJExtension_CUSTOM_BASE_CLASS   BaseModel
+#else
+    #define BaseModel NSObject
+#endif
+
     #import "MJExtension.h"
 #endif

@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MJType.h"
+
 /**
- *  Codeing协议
+ *  Coding协议
  */
 @protocol MJCoding <NSObject>
 @optional
@@ -22,7 +24,7 @@
 + (NSArray *)ignoredCodingPropertyNames;
 @end
 
-@interface NSObject (MJCoding) <MJCoding>
+@interface MJBaseObject (MJCoding) <MJCoding>
 /**
  *  解码（从文件中解析对象）
  */

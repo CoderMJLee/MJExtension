@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MJFoundation : NSObject
+@interface MJFoundation : MJBaseObject
 + (BOOL)isClassFromFoundation:(Class)c;
 @end
