@@ -44,6 +44,9 @@
         if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
         id value = [decoder decodeObjectForKey:property.name];
+        if (value == nil) { // 兼容以前的MJExtension版本
+            value = [decoder decodeObjectForKey:[@"_" stringByAppendingString:property.name]];
+        }
         if (value == nil) return;
         [property setValue:value forObject:self];
     }];

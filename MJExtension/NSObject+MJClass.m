@@ -19,6 +19,18 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
 @implementation NSObject (MJClass)
 
+static NSMutableDictionary *allowedPropertyNames_;
+static NSMutableDictionary *ignoredPropertyNames_;
+static NSMutableDictionary *allowedCodingPropertyNames_;
+static NSMutableDictionary *ignoredCodingPropertyNames_;
++ (void)load
+{
+    allowedPropertyNames_ = [NSMutableDictionary dictionary];
+    ignoredPropertyNames_ = [NSMutableDictionary dictionary];
+    allowedCodingPropertyNames_ = [NSMutableDictionary dictionary];
+    ignoredCodingPropertyNames_ = [NSMutableDictionary dictionary];
+}
+
 + (void)enumerateClasses:(MJClassesEnumeration)enumeration
 {
     // 1.没有block就直接返回
@@ -66,59 +78,66 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 #pragma mark - 属性黑名单配置
 + (void)setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames
 {
-    [self setupBlockReturnValue:ignoredPropertyNames key:&MJIgnoredPropertyNamesKey];
+    [self setupBlockReturnValue:ignoredPropertyNames key:&MJIgnoredPropertyNamesKey dict:ignoredPropertyNames_];
 }
 
 + (NSMutableArray *)totalIgnoredPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
+    return [self totalObjectsWithSelector:@selector(ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey dict:ignoredPropertyNames_];
 }
 
 #pragma mark - 归档属性黑名单配置
 + (void)setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames
 {
-    [self setupBlockReturnValue:ignoredCodingPropertyNames key:&MJIgnoredCodingPropertyNamesKey];
+    [self setupBlockReturnValue:ignoredCodingPropertyNames key:&MJIgnoredCodingPropertyNamesKey dict:ignoredCodingPropertyNames_];
 }
 
 + (NSMutableArray *)totalIgnoredCodingPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(ignoredCodingPropertyNames) key:&MJIgnoredCodingPropertyNamesKey];
+    return [self totalObjectsWithSelector:@selector(ignoredCodingPropertyNames) key:&MJIgnoredCodingPropertyNamesKey dict:ignoredCodingPropertyNames_];
 }
 
 #pragma mark - 属性白名单配置
 + (void)setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames;
 {
-    [self setupBlockReturnValue:allowedPropertyNames key:&MJAllowedPropertyNamesKey];
+    [self setupBlockReturnValue:allowedPropertyNames key:&MJAllowedPropertyNamesKey dict:allowedPropertyNames_];
 }
 
 + (NSMutableArray *)totalAllowedPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(allowedPropertyNames) key:&MJAllowedPropertyNamesKey];
+    return [self totalObjectsWithSelector:@selector(allowedPropertyNames) key:&MJAllowedPropertyNamesKey dict:allowedPropertyNames_];
 }
 
 #pragma mark - 归档属性白名单配置
 + (void)setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames
 {
-    [self setupBlockReturnValue:allowedCodingPropertyNames key:&MJAllowedCodingPropertyNamesKey];
+    [self setupBlockReturnValue:allowedCodingPropertyNames key:&MJAllowedCodingPropertyNamesKey dict:allowedCodingPropertyNames_];
 }
 
 + (NSMutableArray *)totalAllowedCodingPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey];
+    return [self totalObjectsWithSelector:@selector(allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey dict:allowedCodingPropertyNames_];
 }
 #pragma mark - block和方法处理:存储block的返回值
-+ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key
++ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key dict:(NSMutableDictionary *)dict
 {
     if (block) {
         objc_setAssociatedObject(self, key, block(), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     } else {
         objc_setAssociatedObject(self, key, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
+    
+    // 清空数据
+    [dict removeAllObjects];
 }
 
-+ (NSMutableArray *)totalObjectsWithSelector:(SEL)selector key:(const char *)key
++ (NSMutableArray *)totalObjectsWithSelector:(SEL)selector key:(const char *)key dict:(NSMutableDictionary *)dict
 {
-    NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *array = dict[NSStringFromClass(self)];
+    if (array) return array;
+    
+    // 创建、存储
+    dict[NSStringFromClass(self)] = array = [NSMutableArray array];
     
     if ([self respondsToSelector:selector]) {
 #pragma clang diagnostic push

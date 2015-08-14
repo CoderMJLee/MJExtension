@@ -184,14 +184,14 @@ static NSMutableDictionary *cachedProperties_;
 #pragma mark - array model class配置
 + (void)setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
 {
-    [self setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
+    [self setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey dict:nil];
     [cachedProperties_ removeAllObjects];
 }
 
 #pragma mark - key配置
 + (void)setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName
 {
-    [self setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
+    [self setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey dict:nil];
     [cachedProperties_ removeAllObjects];
 }
 

@@ -11,7 +11,7 @@
 
 @implementation Bag
 // NSCoding实现
-MJCodingImplementation
+MJExtensionCodingImplementation
 
 //+ (NSArray *)ignoredCodingPropertyNames
 //{

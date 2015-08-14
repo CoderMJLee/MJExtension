@@ -10,5 +10,5 @@
 #import "MJExtension.h"
 
 @implementation Box
-MJCodingImplementation
+MJExtensionCodingImplementation
 @end
