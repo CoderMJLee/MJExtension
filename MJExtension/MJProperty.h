@@ -27,13 +27,13 @@
 
 /**** 同一个成员属性 - 父类和子类的行为可能不一致（originKey、propertyKeys、objectClassInArray） ****/
 /** 设置最原始的key */
-- (void)setOriginKey:(NSString *)originKey forClass:(Class)c;
-/** 对应着字典中的多级key（里面存放的都是MJPropertyKey对象） */
-- (NSArray *)propertyKeysFromClass:(Class)c;
+- (void)setOriginKey:(id)originKey forClass:(Class)c;
+/** 对应着字典中的多级key（里面存放的数组，数组里面都是MJPropertyKey对象） */
+- (NSArray *)propertyKeysForClass:(Class)c;
 
 /** 模型数组中的模型类型 */
 - (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c;
-- (Class)objectClassInArrayFromClass:(Class)c;
+- (Class)objectClassInArrayForClass:(Class)c;
 /**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
 
 /**

@@ -88,50 +88,69 @@ static NSMutableDictionary *originKeyPropertyKey_;
     [object setValue:value forKey:self.name];
 }
 
-/** 对应着字典中的key */
-- (void)setOriginKey:(NSString *)originKey forClass:(Class)c
+/**
+ *  通过字符串key创建对应的keys
+ */
+- (NSArray *)propertyKeysWithStringKey:(NSString *)stringKey
 {
-    if (originKey.length == 0) return;
+    if (stringKey.length == 0) return nil;
     
-    NSMutableArray *propertyKeys = originKeyPropertyKey_[originKey];
-    if (propertyKeys == nil) {
-        // 存放所有的key
-        originKeyPropertyKey_[originKey] = propertyKeys = [NSMutableArray array];
-        
-        // 如果有多级映射
-        NSArray *oldKeys = [originKey componentsSeparatedByString:@"."];
-        
-        for (NSString *oldKey in oldKeys) {
-            NSUInteger start = [oldKey rangeOfString:@"["].location;
-            if (start != NSNotFound) { // 有索引的key
-                NSString *prefixKey = [oldKey substringToIndex:start];
-                NSString *indexKey = prefixKey;
-                if (prefixKey.length) {
-                    MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-                    propertyKey.name = prefixKey;
-                    [propertyKeys addObject:propertyKey];
-                    
-                    indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
-                }
-                
-                /** 解析索引 **/
-                // 元素
-                NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
-                for (NSInteger i = 0; i<cmps.count - 1; i++) {
-                    MJPropertyKey *subPropertyKey = [[MJPropertyKey alloc] init];
-                    subPropertyKey.type = MJPropertyKeyTypeArray;
-                    subPropertyKey.name = cmps[i];
-                    [propertyKeys addObject:subPropertyKey];
-                }
-            } else { // 没有索引的key
+    NSMutableArray *propertyKeys = [NSMutableArray array];
+    // 如果有多级映射
+    NSArray *oldKeys = [stringKey componentsSeparatedByString:@"."];
+    
+    for (NSString *oldKey in oldKeys) {
+        NSUInteger start = [oldKey rangeOfString:@"["].location;
+        if (start != NSNotFound) { // 有索引的key
+            NSString *prefixKey = [oldKey substringToIndex:start];
+            NSString *indexKey = prefixKey;
+            if (prefixKey.length) {
                 MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-                propertyKey.name = oldKey;
+                propertyKey.name = prefixKey;
                 [propertyKeys addObject:propertyKey];
+                
+                indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
             }
+            
+            /** 解析索引 **/
+            // 元素
+            NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
+            for (NSInteger i = 0; i<cmps.count - 1; i++) {
+                MJPropertyKey *subPropertyKey = [[MJPropertyKey alloc] init];
+                subPropertyKey.type = MJPropertyKeyTypeArray;
+                subPropertyKey.name = cmps[i];
+                [propertyKeys addObject:subPropertyKey];
+            }
+        } else { // 没有索引的key
+            MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
+            propertyKey.name = oldKey;
+            [propertyKeys addObject:propertyKey];
         }
     }
     
-    [self setPorpertyKeys:propertyKeys forClass:c];
+    return propertyKeys;
+}
+
+/** 对应着字典中的key */
+- (void)setOriginKey:(id)originKey forClass:(Class)c
+{
+    if ([originKey isKindOfClass:[NSString class]]) { // 字符串类型的key
+        NSArray *propertyKeys = [self propertyKeysWithStringKey:originKey];
+        if (propertyKeys.count) {
+            [self setPorpertyKeys:@[propertyKeys] forClass:c];
+        }
+    } else if ([originKey isKindOfClass:[NSArray class]]) {
+        NSMutableArray *keyses = [NSMutableArray array];
+        for (NSString *stringKey in originKey) {
+            NSArray *propertyKeys = [self propertyKeysWithStringKey:stringKey];
+            if (propertyKeys.count) {
+                [keyses addObject:propertyKeys];
+            }
+        }
+        if (keyses.count) {
+            [self setPorpertyKeys:keyses forClass:c];
+        }
+    }
 }
 
 /** 对应着字典中的多级key */
@@ -140,7 +159,7 @@ static NSMutableDictionary *originKeyPropertyKey_;
     if (propertyKeys.count == 0) return;
     self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
 }
-- (NSArray *)propertyKeysFromClass:(Class)c
+- (NSArray *)propertyKeysForClass:(Class)c
 {
     return self.propertyKeysDict[NSStringFromClass(c)];
 }
@@ -151,7 +170,7 @@ static NSMutableDictionary *originKeyPropertyKey_;
     if (!objectClass) return;
     self.objectClassInArrayDict[NSStringFromClass(c)] = objectClass;
 }
-- (Class)objectClassInArrayFromClass:(Class)c
+- (Class)objectClassInArrayForClass:(Class)c
 {
     return self.objectClassInArrayDict[NSStringFromClass(c)];
 }

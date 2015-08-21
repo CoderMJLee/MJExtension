@@ -221,15 +221,16 @@ void keyValues2object4()
                                     @"name" : @"小书包",
                                     @"price" : @100.7
                                 }
-                           }
+                           },
+//                           @"otherName" : @"test"
                        };
 
     // 2.将字典转为Student模型
     Student *stu = [Student objectWithKeyValues:dict];
 
     // 3.打印Student模型的属性
-    NSLog(@"ID=%@, desc=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
-          stu.ID, stu.desc, stu.oldName, stu.nowName, stu.nameChangedTime);
+    NSLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
+          stu.ID, stu.desc, stu.otherName, stu.oldName, stu.nowName, stu.nameChangedTime);
     NSLog(@"bagName=%@, bagPrice=%f",
           stu.bag.name, stu.bag.price);
 }

@@ -11,6 +11,7 @@
 
 @interface Student : NSObject
 @property (copy, nonatomic) NSString *ID;
+@property (copy, nonatomic) NSString *otherName;
 @property (copy, nonatomic) NSString *nowName;
 @property (copy, nonatomic) NSString *oldName;
 @property (copy, nonatomic) NSString *nameChangedTime;

@@ -180,7 +180,16 @@
 + (NSMutableArray *)objectArrayWithFile:(NSString *)file error:(NSError **)error;
 
 #pragma mark - 转换为JSON
+/**
+ *  转换为JSON Data
+ */
 - (NSData *)JSONData;
+/**
+ *  转换为字典或者数组
+ */
 - (id)JSONObject;
+/**
+ *  转换为JSON 字符串
+ */
 - (NSString *)JSONString;
 @end

@@ -86,10 +86,14 @@ static NSNumberFormatter *_numberFormatter;
             if ([ignoredPropertyNames containsObject:property.name]) return;
             
             // 1.取出属性值
-            id value = keyValues ;
-            NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
-            for (MJPropertyKey *propertyKey in propertyKeys) {
-                value = [propertyKey valueInObject:value];
+            id value;
+            NSArray *propertyKeyses = [property propertyKeysForClass:aClass];
+            for (NSArray *propertyKeys in propertyKeyses) {
+                value = keyValues;
+                for (MJPropertyKey *propertyKey in propertyKeys) {
+                    value = [propertyKey valueInObject:value];
+                }
+                if (value) break;
             }
             
             // 值的过滤
@@ -102,7 +106,7 @@ static NSNumberFormatter *_numberFormatter;
             // 2.如果是模型属性
             MJPropertyType *type = property.type;
             Class typeClass = type.typeClass;
-            Class objectClass = [property objectClassInArrayFromClass:[self class]];
+            Class objectClass = [property objectClassInArrayForClass:[self class]];
             if (!type.isFromFoundation && typeClass) {
                 value = [typeClass objectWithKeyValues:value context:context error:error];
             } else if (objectClass) {
@@ -349,7 +353,7 @@ static NSNumberFormatter *_numberFormatter;
             
             // 4.赋值
             if ([aClass isReferenceReplacedKeyWhenCreatingKeyValues]) {
-                NSArray *propertyKeys = [property propertyKeysFromClass:aClass];
+                NSArray *propertyKeys = [[property propertyKeysForClass:aClass] firstObject];
                 NSUInteger keyCount = propertyKeys.count;
                 // 创建字典
                 __block id innerContainer = keyValues;
