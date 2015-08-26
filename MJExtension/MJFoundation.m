@@ -23,6 +23,7 @@ static NSSet *foundationClasses_;
                               [NSDate class],
                               [NSValue class],
                               [NSData class],
+                              [NSError class],
                               [NSArray class],
                               [NSDictionary class],
                               [NSString class],

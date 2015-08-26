@@ -86,5 +86,5 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
 + (NSMutableArray *)totalIgnoredCodingPropertyNames;
 
 #pragma mark - 内部使用
-+ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key dict:(NSMutableDictionary *)dict;
++ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key;
 @end

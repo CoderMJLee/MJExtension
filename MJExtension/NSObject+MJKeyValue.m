@@ -41,10 +41,10 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 }
 
 #pragma mark - --常用的对象--
-static NSNumberFormatter *_numberFormatter;
+static NSNumberFormatter *numberFormatter_;
 + (void)load
 {
-    _numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter_ = [[NSNumberFormatter alloc] init];
 }
 
 #pragma mark - --公共方法--
@@ -139,7 +139,7 @@ static NSNumberFormatter *_numberFormatter;
                     NSString *oldValue = value;
                     
                     // NSString -> NSNumber
-                    value = [_numberFormatter numberFromString:oldValue];
+                    value = [numberFormatter_ numberFromString:oldValue];
                     
                     // 如果是BOOL
                     if (type.isBoolType) {

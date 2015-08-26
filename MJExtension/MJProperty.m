@@ -17,13 +17,6 @@
 
 @implementation MJProperty
 
-/** originKey作为key，propertyKeys作为value */
-static NSMutableDictionary *originKeyPropertyKey_;
-+ (void)load
-{
-    originKeyPropertyKey_ = [NSMutableDictionary dictionary];
-}
-
 #pragma mark - 懒加载
 - (NSMutableDictionary *)propertyKeysDict
 {

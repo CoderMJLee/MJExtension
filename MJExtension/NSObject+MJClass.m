@@ -11,6 +11,7 @@
 #import "NSObject+MJKeyValue.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
+#import "MJDictionaryCache.h"
 
 static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
@@ -18,18 +19,6 @@ static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
 @implementation NSObject (MJClass)
-
-static NSMutableDictionary *allowedPropertyNames_;
-static NSMutableDictionary *ignoredPropertyNames_;
-static NSMutableDictionary *allowedCodingPropertyNames_;
-static NSMutableDictionary *ignoredCodingPropertyNames_;
-+ (void)load
-{
-    allowedPropertyNames_ = [NSMutableDictionary dictionary];
-    ignoredPropertyNames_ = [NSMutableDictionary dictionary];
-    allowedCodingPropertyNames_ = [NSMutableDictionary dictionary];
-    ignoredCodingPropertyNames_ = [NSMutableDictionary dictionary];
-}
 
 + (void)enumerateClasses:(MJClassesEnumeration)enumeration
 {
@@ -78,48 +67,48 @@ static NSMutableDictionary *ignoredCodingPropertyNames_;
 #pragma mark - 属性黑名单配置
 + (void)setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames
 {
-    [self setupBlockReturnValue:ignoredPropertyNames key:&MJIgnoredPropertyNamesKey dict:ignoredPropertyNames_];
+    [self setupBlockReturnValue:ignoredPropertyNames key:&MJIgnoredPropertyNamesKey];
 }
 
 + (NSMutableArray *)totalIgnoredPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey dict:ignoredPropertyNames_];
+    return [self totalObjectsWithSelector:@selector(ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
 }
 
 #pragma mark - 归档属性黑名单配置
 + (void)setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames
 {
-    [self setupBlockReturnValue:ignoredCodingPropertyNames key:&MJIgnoredCodingPropertyNamesKey dict:ignoredCodingPropertyNames_];
+    [self setupBlockReturnValue:ignoredCodingPropertyNames key:&MJIgnoredCodingPropertyNamesKey];
 }
 
 + (NSMutableArray *)totalIgnoredCodingPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(ignoredCodingPropertyNames) key:&MJIgnoredCodingPropertyNamesKey dict:ignoredCodingPropertyNames_];
+    return [self totalObjectsWithSelector:@selector(ignoredCodingPropertyNames) key:&MJIgnoredCodingPropertyNamesKey];
 }
 
 #pragma mark - 属性白名单配置
 + (void)setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames;
 {
-    [self setupBlockReturnValue:allowedPropertyNames key:&MJAllowedPropertyNamesKey dict:allowedPropertyNames_];
+    [self setupBlockReturnValue:allowedPropertyNames key:&MJAllowedPropertyNamesKey];
 }
 
 + (NSMutableArray *)totalAllowedPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(allowedPropertyNames) key:&MJAllowedPropertyNamesKey dict:allowedPropertyNames_];
+    return [self totalObjectsWithSelector:@selector(allowedPropertyNames) key:&MJAllowedPropertyNamesKey];
 }
 
 #pragma mark - 归档属性白名单配置
 + (void)setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames
 {
-    [self setupBlockReturnValue:allowedCodingPropertyNames key:&MJAllowedCodingPropertyNamesKey dict:allowedCodingPropertyNames_];
+    [self setupBlockReturnValue:allowedCodingPropertyNames key:&MJAllowedCodingPropertyNamesKey];
 }
 
 + (NSMutableArray *)totalAllowedCodingPropertyNames
 {
-    return [self totalObjectsWithSelector:@selector(allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey dict:allowedCodingPropertyNames_];
+    return [self totalObjectsWithSelector:@selector(allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey];
 }
 #pragma mark - block和方法处理:存储block的返回值
-+ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key dict:(NSMutableDictionary *)dict
++ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key
 {
     if (block) {
         objc_setAssociatedObject(self, key, block(), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -128,16 +117,16 @@ static NSMutableDictionary *ignoredCodingPropertyNames_;
     }
     
     // 清空数据
-    [dict removeAllObjects];
+    [[MJDictionaryCache dictWithDictId:key] removeAllObjects];
 }
 
-+ (NSMutableArray *)totalObjectsWithSelector:(SEL)selector key:(const char *)key dict:(NSMutableDictionary *)dict
++ (NSMutableArray *)totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
-    NSMutableArray *array = dict[NSStringFromClass(self)];
+    NSMutableArray *array = [MJDictionaryCache objectForKey:NSStringFromClass(self) forDictId:key];
     if (array) return array;
     
     // 创建、存储
-    dict[NSStringFromClass(self)] = array = [NSMutableArray array];
+    [MJDictionaryCache setObject:array = [NSMutableArray array] forKey:NSStringFromClass(self) forDictId:key];
     
     if ([self respondsToSelector:selector]) {
 #pragma clang diagnostic push

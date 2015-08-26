@@ -12,6 +12,7 @@
 		2D35374C1B24868D00D5B7A8 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D35374B1B24868D00D5B7A8 /* Dog.m */; };
 		2D3537551B248D9B00D5B7A8 /* Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3537541B248D9B00D5B7A8 /* Book.m */; };
 		2D3576231A7913F30056D6BF /* Bag.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3576221A7913F30056D6BF /* Bag.m */; };
+		2D3E79571B878DFE003A2B27 /* MJDictionaryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3E79561B878DFD003A2B27 /* MJDictionaryCache.m */; };
 		2D49F3211B2855EC008D5A72 /* Box.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49F3201B2855EC008D5A72 /* Box.m */; };
 		2D4A0BF91B25615700D323A7 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BEB1B25615600D323A7 /* MJFoundation.m */; };
 		2D4A0BFA1B25615700D323A7 /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A0BED1B25615600D323A7 /* MJProperty.m */; };
@@ -59,6 +60,8 @@
 		2D3537541B248D9B00D5B7A8 /* Book.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Book.m; sourceTree = "<group>"; };
 		2D3576211A7913F30056D6BF /* Bag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bag.h; sourceTree = "<group>"; };
 		2D3576221A7913F30056D6BF /* Bag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bag.m; sourceTree = "<group>"; };
+		2D3E79551B878DFD003A2B27 /* MJDictionaryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJDictionaryCache.h; sourceTree = "<group>"; };
+		2D3E79561B878DFD003A2B27 /* MJDictionaryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJDictionaryCache.m; sourceTree = "<group>"; };
 		2D49F31F1B2855EC008D5A72 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
 		2D49F3201B2855EC008D5A72 /* Box.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Box.m; sourceTree = "<group>"; };
 		2D4A0BE91B25615600D323A7 /* MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
@@ -121,6 +124,8 @@
 				2D4A0BE91B25615600D323A7 /* MJExtension.h */,
 				2D4A0BEA1B25615600D323A7 /* MJFoundation.h */,
 				2D4A0BEB1B25615600D323A7 /* MJFoundation.m */,
+				2D3E79551B878DFD003A2B27 /* MJDictionaryCache.h */,
+				2D3E79561B878DFD003A2B27 /* MJDictionaryCache.m */,
 				2D4A0BEC1B25615600D323A7 /* MJProperty.h */,
 				2D4A0BED1B25615600D323A7 /* MJProperty.m */,
 				2D581C7C1B7A2912006ACCEB /* MJPropertyKey.h */,
@@ -288,6 +293,7 @@
 				2D4A0BFE1B25615700D323A7 /* NSObject+MJProperty.m in Sources */,
 				2D581C841B7A291A006ACCEB /* NSObject+MJClass.m in Sources */,
 				2D306F5D1B58A6650069910E /* MJExtensionConst.m in Sources */,
+				2D3E79571B878DFE003A2B27 /* MJDictionaryCache.m in Sources */,
 				2D35374C1B24868D00D5B7A8 /* Dog.m in Sources */,
 				2D3576231A7913F30056D6BF /* Bag.m in Sources */,
 				2D4A0BFC1B25615700D323A7 /* NSObject+MJCoding.m in Sources */,

@@ -10,25 +10,21 @@
 #import "MJExtension.h"
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
+#import "MJDictionaryCache.h"
 
 @implementation MJPropertyType
-
-#pragma mark - 缓存
-static NSMutableDictionary *cachedTypes_;
-+ (void)load
-{
-    cachedTypes_ = [NSMutableDictionary dictionary];
-}
 
 + (instancetype)cachedTypeWithCode:(NSString *)code
 {
     MJExtensionAssertParamNotNil2(code, nil);
     
-    MJPropertyType *type = cachedTypes_[code];
+    static const char MJCachedTypesKey = '\0';
+    
+    MJPropertyType *type = [MJDictionaryCache objectForKey:code forDictId:&MJCachedTypesKey];
     if (type == nil) {
         type = [[self alloc] init];
         type.code = code;
-        cachedTypes_[code] = type;
+        [MJDictionaryCache setObject:type forKey:code forDictId:&MJCachedTypesKey];
     }
     return type;
 }

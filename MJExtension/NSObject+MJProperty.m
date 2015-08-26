@@ -13,6 +13,7 @@
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
+#import "MJDictionaryCache.h"
 
 @implementation NSObject (Property)
 
@@ -21,11 +22,7 @@ static const char MJReplacedKeyFromPropertyName121Key = '\0';
 static const char MJNewValueFromOldValueKey = '\0';
 static const char MJObjectClassInArrayKey = '\0';
 
-static NSMutableDictionary *cachedProperties_;
-+ (void)load
-{
-    cachedProperties_ = [NSMutableDictionary dictionary];
-}
+static const char MJCachedPropertiesKey = '\0';
 
 #pragma mark - --私有方法--
 + (NSString *)propertyKey:(NSString *)propertyName
@@ -117,7 +114,7 @@ static NSMutableDictionary *cachedProperties_;
     //***objc_getAssociatedObject 方法用于判断当前是否已经获取过MJCachedPropertiesKey对应的关联对象
     //  1> 关联到的对象
     //  2> 关联的属性 key
-    NSMutableArray *cachedProperties = cachedProperties_[NSStringFromClass(self)];
+    NSMutableArray *cachedProperties = [MJDictionaryCache objectForKey:NSStringFromClass(self) forDictId:&MJCachedPropertiesKey];
     
     //***
     if (cachedProperties == nil) {
@@ -150,7 +147,7 @@ static NSMutableDictionary *cachedProperties_;
         }];
         
         //*** 在此时设置当前这个类为关联对象，这样下次就不会重复获取类的相关属性。
-        cachedProperties_[NSStringFromClass(self)] = cachedProperties;
+        [MJDictionaryCache setObject:cachedProperties forKey:NSStringFromClass(self) forDictId:&MJCachedPropertiesKey];
         //***
     }
     
@@ -184,20 +181,23 @@ static NSMutableDictionary *cachedProperties_;
 #pragma mark - array model class配置
 + (void)setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
 {
-    [self setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey dict:nil];
-    [cachedProperties_ removeAllObjects];
+    [self setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
+    
+    [[MJDictionaryCache dictWithDictId:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 #pragma mark - key配置
 + (void)setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName
 {
-    [self setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey dict:nil];
-    [cachedProperties_ removeAllObjects];
+    [self setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
+    
+    [[MJDictionaryCache dictWithDictId:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 + (void)setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
-    [cachedProperties_ removeAllObjects];
+    
+    [[MJDictionaryCache dictWithDictId:&MJCachedPropertiesKey] removeAllObjects];
 }
 @end
