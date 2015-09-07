@@ -33,6 +33,7 @@
 		2D9CAF2E192FA6020011F500 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAF2D192FA6020011F500 /* main.m */; };
 		2D9CAF32192FA6020011F500 /* MJExtensionExample.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */; };
 		89568B751B1B3EAE00B1FACA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89568B741B1B3EAE00B1FACA /* CoreData.framework */; };
+		9CEF71791B9D3AAB00D1A0B9 /* NSDate+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CEF71781B9D3AAB00D1A0B9 /* NSDate+MJExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -101,6 +102,8 @@
 		2D9CAF30192FA6020011F500 /* MJExtensionExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionExample-Prefix.pch"; sourceTree = "<group>"; };
 		2D9CAF31192FA6020011F500 /* MJExtensionExample.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = MJExtensionExample.1; sourceTree = "<group>"; };
 		89568B741B1B3EAE00B1FACA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9CEF71771B9D3AAB00D1A0B9 /* NSDate+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+MJExtension.h"; sourceTree = "<group>"; };
+		9CEF71781B9D3AAB00D1A0B9 /* NSDate+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MJExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,27 +122,29 @@
 		2D4A0BE61B25615600D323A7 /* MJExtension */ = {
 			isa = PBXGroup;
 			children = (
-				2D306F5B1B58A6650069910E /* MJExtensionConst.h */,
-				2D306F5C1B58A6650069910E /* MJExtensionConst.m */,
-				2D4A0BE91B25615600D323A7 /* MJExtension.h */,
-				2D4A0BEA1B25615600D323A7 /* MJFoundation.h */,
-				2D4A0BEB1B25615600D323A7 /* MJFoundation.m */,
 				2D3E79551B878DFD003A2B27 /* MJDictionaryCache.h */,
 				2D3E79561B878DFD003A2B27 /* MJDictionaryCache.m */,
+				2D4A0BE91B25615600D323A7 /* MJExtension.h */,
+				2D306F5B1B58A6650069910E /* MJExtensionConst.h */,
+				2D306F5C1B58A6650069910E /* MJExtensionConst.m */,
+				2D4A0BEA1B25615600D323A7 /* MJFoundation.h */,
+				2D4A0BEB1B25615600D323A7 /* MJFoundation.m */,
 				2D4A0BEC1B25615600D323A7 /* MJProperty.h */,
 				2D4A0BED1B25615600D323A7 /* MJProperty.m */,
 				2D581C7C1B7A2912006ACCEB /* MJPropertyKey.h */,
 				2D581C7D1B7A2912006ACCEB /* MJPropertyKey.m */,
 				2D581C7E1B7A2912006ACCEB /* MJPropertyType.h */,
 				2D581C7F1B7A2912006ACCEB /* MJPropertyType.m */,
+				9CEF71771B9D3AAB00D1A0B9 /* NSDate+MJExtension.h */,
+				9CEF71781B9D3AAB00D1A0B9 /* NSDate+MJExtension.m */,
+				2D581C821B7A291A006ACCEB /* NSObject+MJClass.h */,
+				2D581C831B7A291A006ACCEB /* NSObject+MJClass.m */,
 				2D4A0BF01B25615700D323A7 /* NSObject+MJCoding.h */,
 				2D4A0BF11B25615700D323A7 /* NSObject+MJCoding.m */,
 				2D4A0BF21B25615700D323A7 /* NSObject+MJKeyValue.h */,
 				2D4A0BF31B25615700D323A7 /* NSObject+MJKeyValue.m */,
 				2D4A0BF41B25615700D323A7 /* NSObject+MJProperty.h */,
 				2D4A0BF51B25615700D323A7 /* NSObject+MJProperty.m */,
-				2D581C821B7A291A006ACCEB /* NSObject+MJClass.h */,
-				2D581C831B7A291A006ACCEB /* NSObject+MJClass.m */,
 				2D4A0BF61B25615700D323A7 /* NSString+MJExtension.h */,
 				2D4A0BF71B25615700D323A7 /* NSString+MJExtension.m */,
 			);
@@ -279,6 +284,7 @@
 				2D6CAFF91A5AA0BB00E2BA5E /* User.m in Sources */,
 				2D6CAFF61A5AA0BB00E2BA5E /* Ad.m in Sources */,
 				2D6CAFFC1A5AA34800E2BA5E /* Student.m in Sources */,
+				9CEF71791B9D3AAB00D1A0B9 /* NSDate+MJExtension.m in Sources */,
 				2D4A0BF91B25615700D323A7 /* MJFoundation.m in Sources */,
 				2D4A0BFA1B25615700D323A7 /* MJProperty.m in Sources */,
 				2D581C801B7A2912006ACCEB /* MJPropertyKey.m in Sources */,
