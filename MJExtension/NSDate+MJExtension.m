@@ -17,9 +17,12 @@ static NSMutableSet * _registedDateStrings = nil;
 {
     _theFormatter = [[NSDateFormatter alloc] init];
     _theFormatter.locale = [NSLocale currentLocale];
+    _theFormatter.timeZone = [NSTimeZone localTimeZone];
 
     _registedDateStrings = [NSMutableSet setWithObjects:
-                            @"yyyy-MM-dd'T'HH:mm:ss.sss'Z'",
+                            @"yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+                            @"yyyy-MM-dd'T'HH:mm:ssZ",
+                            @"yyyy-MM-dd HH:mm:ss Z",
                             @"yyyy-MM-dd HH:mm:ss",
                             @"yyyy-MM-dd HH:mm",
                             @"yyyy-MM-dd",
