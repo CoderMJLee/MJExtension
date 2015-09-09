@@ -2,8 +2,8 @@
 ![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
 MJExtension
 ===
-- The fastest, most convenient and most nonintrusive conversion between JSON and model.
-- 世界上转换速度最快、使用最简单方便的字典转模型框架
+- A fast, convenient and nonintrusive conversion between JSON and model.
+- 转换速度快、使用简单方便的字典转模型框架
 
 GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
 
