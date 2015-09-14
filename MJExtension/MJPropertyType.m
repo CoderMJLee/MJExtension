@@ -45,8 +45,6 @@
         _code = [code substringWithRange:NSMakeRange(2, code.length - 3)];
         _typeClass = NSClassFromString(_code);
         _fromFoundation = [MJFoundation isClassFromFoundation:_typeClass];
-        
-        // isSubclassOfClass已经包含了是本类的情况了
         _numberType = [_typeClass isSubclassOfClass:[NSNumber class]];
         
     } else if ([code isEqualToString:MJPropertyTypeSEL] ||
