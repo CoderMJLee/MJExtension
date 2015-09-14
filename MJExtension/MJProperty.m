@@ -37,12 +37,19 @@
 #pragma mark - 缓存
 + (instancetype)cachedPropertyWithProperty:(objc_property_t)property
 {
-    MJProperty *propertyObj = objc_getAssociatedObject(self, property);
-    if (propertyObj == nil) {
-        propertyObj = [[self alloc] init];
-        propertyObj.property = property;
-        objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
+    // 每个属性中的objc_property_t都代表不同的地址,也就是说,即使属性名,属性类型相同,地址也是不一样的
+    // 所以,objc_getAssociatedObject得到的对象总为空
+    
+//    MJProperty *propertyObj = objc_getAssociatedObject(self, property);
+//    if (propertyObj == nil) {
+//        propertyObj = [[self alloc] init];
+//        propertyObj.property = property;
+//        objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    }
+    
+    
+    MJProperty *propertyObj = [[self alloc] init];
+    propertyObj.property = property;
     return propertyObj;
 }
 

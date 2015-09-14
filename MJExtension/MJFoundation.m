@@ -38,7 +38,8 @@ static NSSet *foundationClasses_;
     
     __block BOOL result = NO;
     [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
-        if (c == foundationClass || [c isSubclassOfClass:foundationClass]) {
+         // isSubclassOfClass已经包含了是本类的情况了
+        if ([c isSubclassOfClass:foundationClass]) {
             result = YES;
             *stop = YES;
         }
