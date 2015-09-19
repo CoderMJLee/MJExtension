@@ -237,7 +237,7 @@ static NSNumberFormatter *numberFormatter_;
 + (NSMutableArray *)objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context error:(NSError *__autoreleasing *)error
 {
     // 如果数组里面放的是NSString、NSNumber等数据
-    if ([MJFoundation isClassFromFoundation:self]) return keyValuesArray;
+    if ([MJFoundation isClassFromFoundation:self]) return [NSMutableArray arrayWithArray:keyValuesArray];
     
     // 如果是JSON字符串
     keyValuesArray = [keyValuesArray JSONObject];
