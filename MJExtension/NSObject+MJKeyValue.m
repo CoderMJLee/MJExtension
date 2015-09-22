@@ -15,6 +15,7 @@
 #import "MJFoundation.h"
 #import "NSString+MJExtension.h"
 #import "NSObject+MJClass.h"
+#import "NSDate+MJExtension.h"
 
 @implementation NSObject (MJKeyValue)
 
@@ -129,6 +130,14 @@ static NSNumberFormatter *numberFormatter_;
                 } else if ([value isKindOfClass:[NSURL class]]) {
                     // NSURL -> NSString
                     value = [value absoluteString];
+                }
+            } else if (typeClass == [NSDate class]) {
+                if ([value isKindOfClass:[NSString class]]) {
+                    // NSString -> NSDate
+                    value = [NSDate mj_dateWithString:value];
+                }
+                else if ([value isKindOfClass:[NSNumber class]]) {
+                    value = [NSDate dateWithTimeIntervalSince1970:[value floatValue]];
                 }
             } else if ([value isKindOfClass:[NSString class]]) {
                 if (typeClass == [NSURL class]) {
