@@ -4,9 +4,6 @@
 
 #import <Foundation/Foundation.h>
 
-// 点语法
-#define MJDot(obj, type, prop) ((type)obj).prop
-
 // 过期
 #define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
 
