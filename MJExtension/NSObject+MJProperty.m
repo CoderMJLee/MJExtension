@@ -167,7 +167,7 @@ static const char MJCachedPropertiesKey = '\0';
     }
     
     // 查看静态设置
-    __block id newValue = nil;
+    __block id newValue = oldValue;
     [self enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         MJNewValueFromOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
         if (block) {

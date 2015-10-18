@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MJExtension"
-  s.version      = "2.5.13"
+  s.version      = "2.5.14"
   s.ios.deployment_target = '6.0'
   s.osx.deployment_target = '10.8'
   s.summary      = "The fastest and most convenient conversion between JSON and model"

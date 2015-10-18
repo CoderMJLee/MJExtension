@@ -97,8 +97,7 @@ static NSNumberFormatter *numberFormatter_;
             }
             
             // 值的过滤
-            id newValue = [aClass getNewValueFromObject:self oldValue:value property:property];
-            if (newValue) value = newValue;
+            value = [aClass getNewValueFromObject:self oldValue:value property:property];
             
             // 如果没有值，就直接返回
             if (!value || value == [NSNull null]) return;
