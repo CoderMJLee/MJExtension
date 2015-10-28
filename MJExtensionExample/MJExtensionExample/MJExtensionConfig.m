@@ -21,7 +21,13 @@
  */
 + (void)load
 {
-#pragma mark 如果使用NSObject来调用这些方法，代表所有类都会生效
+#pragma mark 如果使用NSObject来调用这些方法，代表所有继承自NSObject的类都会生效
+#pragma mark NSObject中的ID属性对应着字典中的id
+    [NSObject setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{
+                 @"ID" : @"id"
+                 };
+    }];
     
 #pragma mark User类的只有name、icon属性参与字典转模型
 //    [User setupAllowedPropertyNames:^NSArray *{
@@ -45,18 +51,16 @@
 #pragma mark StatusResult类中的ads数组中存放的是Ad模型
     [StatusResult setupObjectClassInArray:^NSDictionary *{
         return @{
-                 @"statuses" : @"Status",
-//                 @"statuses" : [Status class],
-                 @"ads" : @"Ad"
-//                 @"ads" : [Ad class]
+                 @"statuses" : @"Status", // @"statuses" : [Status class],
+                 @"ads" : @"Ad" // @"ads" : [Ad class]
                  };
     }];
     // 相当于在StatusResult.m中实现了+(NSDictionary *)objectClassInArray方法
     
-#pragma mark Student中的ID属性对应着字典中的id
+#pragma mark Student中的desc属性对应着字典中的desciption
 #pragma mark ....
     [Student setupReplacedKeyFromPropertyName:^NSDictionary *{
-        return @{@"ID" : @"id",
+        return @{
                  @"desc" : @"desciption",
                  @"oldName" : @"name.oldName",
                  @"nowName" : @"name.newName",
