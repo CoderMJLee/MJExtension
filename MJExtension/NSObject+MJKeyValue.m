@@ -17,6 +17,12 @@
 #import "NSObject+MJClass.h"
 #import "NSManagedObject+MJCoreData.h"
 
+@interface NSManagedObject (MJKeyValue)
+
++ (NSArray *)mj_defaultAllowPropertyNamesWithContext:(NSManagedObjectContext *)context;
+
+@end
+
 @implementation NSObject (MJKeyValue)
 
 #pragma mark - 错误
@@ -82,9 +88,16 @@ static NSNumberFormatter *numberFormatter_;
     
     Class clazz = [self class];
     NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
+    if ([self isKindOfClass:[NSManagedObject class]] && allowedPropertyNames.count == 0) {
+        allowedPropertyNames = [clazz mj_defaultAllowPropertyNamesWithContext:context];
+        //加入缓存
+        [clazz mj_setupAllowedPropertyNames:^NSArray *{
+            return allowedPropertyNames;
+        }];
+    }
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
-    
-    //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
+        
+        //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
@@ -310,6 +323,14 @@ static NSNumberFormatter *numberFormatter_;
     
     Class clazz = [self class];
     NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
+    if ([self isKindOfClass:[NSManagedObject class]] && allowedPropertyNames.count == 0) {
+        NSManagedObject *object = (NSManagedObject *)self;
+        allowedPropertyNames = [clazz mj_defaultAllowPropertyNamesWithContext:object.managedObjectContext];
+        //加入缓存
+        [clazz mj_setupAllowedPropertyNames:^NSArray *{
+            return allowedPropertyNames;
+        }];
+    }
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
     
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
@@ -328,7 +349,21 @@ static NSNumberFormatter *numberFormatter_;
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
             if (!type.isFromFoundation && propertyClass) {
-                value = [value mj_keyValues];
+                if ([propertyClass isSubclassOfClass:[NSManagedObject class]] && [self isKindOfClass:[NSManagedObject class]]) {
+                    //core data对象关联另一个core data对象，可能存在inverse关系，需要过滤，否则造成循环调用
+                    NSManagedObject *object = (NSManagedObject *)self;
+                    NSManagedObjectContext *context = object.managedObjectContext;
+                    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+                    NSRelationshipDescription *relationshipDescription = entityDescription.relationshipsByName[property.name];
+                    NSString *inverseRelationName = relationshipDescription.inverseRelationship.name;
+                    NSArray *ignoreKeys;
+                    if (inverseRelationName) {
+                        ignoreKeys = @[inverseRelationName];
+                    }
+                    value = [value mj_keyValuesWithIgnoredKeys:ignoreKeys];
+                } else {
+                    value = [value mj_keyValues];
+                }
             } else if ([MJFoundation isCollectionClass:[value class]]) {
                 // 3.处理数组里面有模型的情况
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
@@ -610,6 +645,12 @@ static NSNumberFormatter *numberFormatter_;
     }
     
     return [mappingObject mj_setKeyValues:keyValues context:context];
+}
+
++ (NSArray *)mj_defaultAllowPropertyNamesWithContext:(NSManagedObjectContext *)context {
+    MJExtensionAssertError(context != nil, nil, self, @"传入的context为nil");
+    NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
+    return [[description propertiesByName].allKeys arrayByAddingObjectsFromArray:[description relationshipsByName].allKeys];
 }
 @end
 
