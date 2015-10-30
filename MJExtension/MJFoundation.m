@@ -11,6 +11,7 @@
 #import <CoreData/CoreData.h>
 
 static NSSet *foundationClasses_;
+static NSSet *collectionClasses_;
 
 @implementation MJFoundation
 
@@ -27,9 +28,24 @@ static NSSet *foundationClasses_;
                               [NSArray class],
                               [NSDictionary class],
                               [NSString class],
-                              [NSAttributedString class], nil];
+                              [NSAttributedString class],
+                              [NSSet class],
+                              [NSOrderedSet class],
+                              nil];
     }
     return foundationClasses_;
+}
+
++ (NSSet *)collectionClass
+{
+    if (collectionClasses_ == nil) {
+        collectionClasses_ = [NSSet setWithObjects:
+                              [NSSet class],
+                              [NSArray class],
+                              [NSOrderedSet class],
+                              nil];
+    }
+    return collectionClasses_;
 }
 
 + (BOOL)isClassFromFoundation:(Class)c
@@ -39,6 +55,17 @@ static NSSet *foundationClasses_;
     __block BOOL result = NO;
     [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
         if ([c isSubclassOfClass:foundationClass]) {
+            result = YES;
+            *stop = YES;
+        }
+    }];
+    return result;
+}
+
++ (BOOL)isCollectionClass:(Class)c {
+    __block BOOL result = NO;
+    [[self collectionClass] enumerateObjectsUsingBlock:^(Class  collectionClass, BOOL * _Nonnull stop) {
+        if ([c isSubclassOfClass:collectionClass]) {
             result = YES;
             *stop = YES;
         }

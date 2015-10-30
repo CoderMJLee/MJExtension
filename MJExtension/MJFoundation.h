@@ -10,4 +10,8 @@
 
 @interface MJFoundation : NSObject
 + (BOOL)isClassFromFoundation:(Class)c;
+/**
+ *  是否是容器，NSArray, NSSet, NSOrderSet
+ */
++ (BOOL)isCollectionClass:(Class)c;
 @end
