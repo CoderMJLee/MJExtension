@@ -45,6 +45,9 @@ static NSNumberFormatter *numberFormatter_;
 + (void)load
 {
     numberFormatter_ = [[NSNumberFormatter alloc] init];
+    
+    // 默认设置
+    [self referenceReplacedKeyWhenCreatingKeyValues:YES];
 }
 
 #pragma mark - --公共方法--

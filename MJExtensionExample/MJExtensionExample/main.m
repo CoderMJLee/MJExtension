@@ -301,7 +301,7 @@ void object2keyValues()
     NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
     NSLog(@"%@", stu.JSONString);
     
-    [Student referenceReplacedKeyWhenCreatingKeyValues:YES];
+    [Student referenceReplacedKeyWhenCreatingKeyValues:NO];
     NSLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.keyValues);
 }
 
