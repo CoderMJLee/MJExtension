@@ -96,12 +96,16 @@ static NSNumberFormatter *numberFormatter_;
         }];
     }
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
+    NSArray *ignoredMappingPropertyNames = [clazz mj_totalIgnoredObjectMappingPropertyNames];
+    NSArray *objectMappingPropertyNames = [clazz mj_totalObjectMappingPropertyNames];
         
         //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
+            if (objectMappingPropertyNames.count && ![objectMappingPropertyNames containsObject:property.name]) return;
+            if ([ignoredMappingPropertyNames containsObject:property.name]) return;
             if ([ignoredPropertyNames containsObject:property.name]) return;
             
             // 1.取出属性值
@@ -331,12 +335,16 @@ static NSNumberFormatter *numberFormatter_;
             return allowedPropertyNames;
         }];
     }
+    NSArray *jsonSerializationPropertyNames = [clazz mj_totalJSONSerializationPropertyNames];
+    NSArray *ignoredJSONSerializationPropertyNames = [clazz mj_totalIgnoredJSONSerializationPropertyNames];
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
     
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
+            if (jsonSerializationPropertyNames.count && ![jsonSerializationPropertyNames containsObject:property.name]) return;
+            if ([ignoredJSONSerializationPropertyNames containsObject:property.name]) return;
             if ([ignoredPropertyNames containsObject:property.name]) return;
             if (keys.count && ![keys containsObject:property.name]) return;
             if ([ignoredKeys containsObject:property.name]) return;
@@ -650,7 +658,7 @@ static NSNumberFormatter *numberFormatter_;
 + (NSArray *)mj_defaultAllowPropertyNamesWithContext:(NSManagedObjectContext *)context {
     MJExtensionAssertError(context != nil, nil, self, @"传入的context为nil");
     NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
-    return [[description propertiesByName].allKeys arrayByAddingObjectsFromArray:[description relationshipsByName].allKeys];
+    return [description propertiesByName].allKeys;
 }
 @end
 

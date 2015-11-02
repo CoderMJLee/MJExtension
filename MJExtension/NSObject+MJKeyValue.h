@@ -27,6 +27,26 @@
 + (NSArray *)mj_ignoredPropertyNames;
 
 /**
+ *  这个数组中的属性名才会进行JSON序列化
+ */
++ (NSArray *)mj_jsonSerializationPropertyNames;
+
+/**
+ *  这个数组中的属性名才会序列化到object中
+ */
++ (NSArray *)mj_objectMappingPropertyNames;
+
+/*
+ * 这个数组中的属性名会被忽略：不会进行JSON序列化
+ */
++ (NSArray *)mj_ignoredJSONSerializaitonPropertyNames;
+
+/**
+ * 这个数组中的属性名会被忽略：不会序列化到object中
+ */
++ (NSArray *)mj_ignoredObjectMappingPropertyNames;
+
+/**
  *  将属性名换为其他key去字典中取值
  *
  *  @return 字典中的key是属性名，value是从字典中取值用的key
