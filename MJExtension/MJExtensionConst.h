@@ -11,6 +11,13 @@
 #define MJExtensionBuildError(error, msg) \
 if (error) *error = [NSError errorWithDomain:msg code:250 userInfo:nil];
 
+// 日志输出
+#ifdef DEBUG
+#define MJExtensionLog(...) NSLog(__VA_ARGS__)
+#else
+#define MJExtensionLog(...)
+#endif
+
 /**
  * 断言
  * @param condition   条件
