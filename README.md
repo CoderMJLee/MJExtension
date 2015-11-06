@@ -11,7 +11,6 @@ GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)]
 ## Contents
 * [Getting Started 【开始使用】](#Getting_Started)
 	* [Features 【能做什么】](#Features)
-	* [Why MJExtension 【为什么使用MJExtension】](#Why_MJExtension)
 	* [Installation 【安装】](#Installation)
 * [Examples 【示例】](#Examples)
 	* [JSON -> Model](#JSON_Model)
@@ -42,24 +41,6 @@ GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)]
 * `Model Array`、`Core Data Model Array` --> `JSON Array`
 * Coding all properties of model in one line code.
     * 只需要一行代码，就能实现模型的所有属性进行Coding（归档和解档）
-
-## <a id="Why_MJExtension"></a> Why use MJExtension, why not use JSONModel or Mantle
-#### MJExtension is faster than JSONModel and Mantle【转换速率】
-- `MJExtension` > `JSONModel` > `Mantle` _(Feel free to test it yourself)_
-- 各位开发者也可以自行测试
-
-#### MJExtension is more easy to go【MJExtension更加容易使用】
-- `JSONModel`
-	- You `must` let `all` model class extend `JSONModel` class
-   - 要求所有模型类`必须`继承自JSONModel基类
-
-- `Mantle`
-	- You `must` let `all` model class extend `MTModel` class.
-   - 要求所有模型类`必须`继承自MTModel基类
-
-- `MJExtension`
-	- Your model class `doesn't need to` extend another base class. You don't need to modify any model file.  `Nonintrusive`, `convenient`.
-   - `不需要`你的模型类继承任何特殊基类，也不需要修改任何模型代码，毫无污染，毫无侵入性
 
 ## <a id="Installation"></a> Installation【安装】
 
