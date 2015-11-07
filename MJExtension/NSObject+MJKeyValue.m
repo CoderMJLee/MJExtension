@@ -79,12 +79,12 @@ static NSNumberFormatter *numberFormatter_;
     
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
     
-    Class aClass = [self class];
-    NSArray *allowedPropertyNames = [aClass mj_totalAllowedPropertyNames];
-    NSArray *ignoredPropertyNames = [aClass mj_totalIgnoredPropertyNames];
+    Class clazz = [self class];
+    NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
+    NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
         
         //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
-    [aClass mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
@@ -92,7 +92,7 @@ static NSNumberFormatter *numberFormatter_;
             
             // 1.取出属性值
             id value;
-            NSArray *propertyKeyses = [property propertyKeysForClass:aClass];
+            NSArray *propertyKeyses = [property propertyKeysForClass:clazz];
             for (NSArray *propertyKeys in propertyKeyses) {
                 value = keyValues;
                 for (MJPropertyKey *propertyKey in propertyKeys) {
@@ -102,7 +102,11 @@ static NSNumberFormatter *numberFormatter_;
             }
             
             // 值的过滤
-            value = [aClass mj_getNewValueFromObject:self oldValue:value property:property];
+            id newValue = [clazz mj_getNewValueFromObject:self oldValue:value property:property];
+            if (newValue != value) { // 有过滤后的新值
+                [property setValue:newValue forObject:self];
+                return;
+            }
             
             // 如果没有值，就直接返回
             if (!value || value == [NSNull null]) return;
@@ -272,11 +276,11 @@ static NSNumberFormatter *numberFormatter_;
     
     id keyValues = [NSMutableDictionary dictionary];
     
-    Class aClass = [self class];
-    NSArray *allowedPropertyNames = [aClass mj_totalAllowedPropertyNames];
-    NSArray *ignoredPropertyNames = [aClass mj_totalIgnoredPropertyNames];
+    Class clazz = [self class];
+    NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
+    NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
     
-    [aClass mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
@@ -301,8 +305,8 @@ static NSNumberFormatter *numberFormatter_;
             }
             
             // 4.赋值
-            if ([aClass mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
-                NSArray *propertyKeys = [[property propertyKeysForClass:aClass] firstObject];
+            if ([clazz mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
+                NSArray *propertyKeys = [[property propertyKeysForClass:clazz] firstObject];
                 NSUInteger keyCount = propertyKeys.count;
                 // 创建字典
                 __block id innerContainer = keyValues;
