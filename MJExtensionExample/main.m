@@ -74,7 +74,7 @@ void keyValues2object()
                            };
 
     // 2.将字典转为User模型
-    User *user = [User objectWithKeyValues:dict];
+    User *user = [User mj_objectWithKeyValues:dict];
 
     // 3.打印User模型的属性
     NSLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
@@ -89,7 +89,7 @@ void keyValues2object1()
     NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20, \"height\":333333.7}";
 
     // 2.将JSON字符串转为User模型
-    User *user = [User objectWithKeyValues:jsonString];
+    User *user = [User mj_objectWithKeyValues:jsonString];
 
     // 3.打印User模型的属性
     NSLog(@"name=%@, icon=%@, age=%d, height=%@", user.name, user.icon, user.age, @(user.height));
@@ -120,7 +120,7 @@ void keyValues2object2()
                            };
 
     // 2.将字典转为Status模型
-    Status *status = [Status objectWithKeyValues:dict];
+    Status *status = [Status mj_objectWithKeyValues:dict];
 
     // 3.打印status的属性
     NSString *text = status.text;
@@ -180,7 +180,7 @@ void keyValues2object3()
                            };
 
     // 2.将字典转为StatusResult模型
-    StatusResult *result = [StatusResult objectWithKeyValues:dict];
+    StatusResult *result = [StatusResult mj_objectWithKeyValues:dict];
 
     // 3.打印StatusResult模型的简单属性
     NSLog(@"totalNumber=%@, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
@@ -226,7 +226,7 @@ void keyValues2object4()
                        };
 
     // 2.将字典转为Student模型
-    Student *stu = [Student objectWithKeyValues:dict];
+    Student *stu = [Student mj_objectWithKeyValues:dict];
 
     // 3.打印Student模型的属性
     NSLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
@@ -254,7 +254,7 @@ void keyValuesArray2objectArray()
                            ];
     
     // 2.将字典数组转为User模型数组
-    NSArray *userArray = [User objectArrayWithKeyValuesArray:dictArray];
+    NSArray *userArray = [User mj_objectArrayWithKeyValuesArray:dictArray];
     
     // 3.打印userArray数组中的User模型属性
     for (User *user in userArray) {
@@ -277,10 +277,10 @@ void object2keyValues()
     status.text = @"今天的心情不错！";
     
     // 2.将模型转为字典
-    NSDictionary *statusDict = status.keyValues;
+    NSDictionary *statusDict = status.mj_keyValues;
     NSLog(@"%@", statusDict);
     
-    NSLog(@"%@", [status keyValuesWithKeys:@[@"text"]]);
+    NSLog(@"%@", [status mj_keyValuesWithKeys:@[@"text"]]);
 
     // 3.新建多级映射的模型
     Student *stu = [[Student alloc] init];
@@ -296,13 +296,13 @@ void object2keyValues()
     bag.price = 205;
     stu.bag = bag;
     
-    NSDictionary *stuDict = stu.keyValues;
+    NSDictionary *stuDict = stu.mj_keyValues;
     NSLog(@"%@", stuDict);
-    NSLog(@"%@", [stu keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
-    NSLog(@"%@", stu.JSONString);
+    NSLog(@"%@", [stu mj_keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
+    NSLog(@"%@", stu.mj_JSONString);
     
-    [Student referenceReplacedKeyWhenCreatingKeyValues:NO];
-    NSLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.keyValues);
+    [Student mj_referenceReplacedKeyWhenCreatingKeyValues:NO];
+    NSLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.mj_keyValues);
 }
 
 /**
@@ -322,7 +322,7 @@ void objectArray2keyValuesArray()
     NSArray *userArray = @[user1, user2];
     
     // 2.将模型数组转为字典数组
-    NSArray *dictArray = [User keyValuesArrayWithObjectArray:userArray];
+    NSArray *dictArray = [User mj_keyValuesArrayWithObjectArray:userArray];
     NSLog(@"%@", dictArray);
 }
 
@@ -344,7 +344,7 @@ void coreData()
 
         // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
         NSManagedObjectContext *context = nil;
-        User *user = [User objectWithKeyValues:dict context:context];
+        User *user = [User mj_objectWithKeyValues:dict context:context];
 
         // 利用CoreData保存模型
         [context save:nil];
@@ -387,7 +387,7 @@ void replacedKeyFromPropertyName121()
                            };
     
     // 2.将字典转为User模型
-    Dog *dog = [Dog objectWithKeyValues:dict];
+    Dog *dog = [Dog mj_objectWithKeyValues:dict];
     
     // 3.打印User模型的属性
     NSLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, dog.runSpeed);
@@ -405,7 +405,7 @@ void newValueFromOldValue()
                            };
     
     // 2.将字典转为User模型
-    Book *book = [Book objectWithKeyValues:dict];
+    Book *book = [Book mj_objectWithKeyValues:dict];
     
     // 3.打印User模型的属性
     NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);

@@ -9,7 +9,7 @@
 #import "User.h"
 
 @implementation User
-//+ (NSArray *)allowedPropertyNames
+//+ (NSArray *)mj_allowedPropertyNames
 //{
 //    return @[@"name", @"icon"];
 //}

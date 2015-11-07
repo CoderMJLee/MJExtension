@@ -30,8 +30,8 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
 /**
  *  遍历所有的类
  */
-+ (void)enumerateClasses:(MJClassesEnumeration)enumeration;
-+ (void)enumerateAllClasses:(MJClassesEnumeration)enumeration;
++ (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration;
++ (void)mj_enumerateAllClasses:(MJClassesEnumeration)enumeration;
 
 #pragma mark - 属性白名单配置
 /**
@@ -39,12 +39,12 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *
  *  @param allowedPropertyNames          这个数组中的属性名才会进行字典和模型的转换
  */
-+ (void)setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames;
++ (void)mj_setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames;
 
 /**
  *  这个数组中的属性名才会进行字典和模型的转换
  */
-+ (NSMutableArray *)totalAllowedPropertyNames;
++ (NSMutableArray *)mj_totalAllowedPropertyNames;
 
 #pragma mark - 属性黑名单配置
 /**
@@ -52,12 +52,12 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *
  *  @param ignoredPropertyNames          这个数组中的属性名将会被忽略：不进行字典和模型的转换
  */
-+ (void)setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames;
++ (void)mj_setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames;
 
 /**
  *  这个数组中的属性名将会被忽略：不进行字典和模型的转换
  */
-+ (NSMutableArray *)totalIgnoredPropertyNames;
++ (NSMutableArray *)mj_totalIgnoredPropertyNames;
 
 #pragma mark - 归档属性白名单配置
 /**
@@ -65,12 +65,12 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *
  *  @param allowedCodingPropertyNames          这个数组中的属性名才会进行归档
  */
-+ (void)setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames;
++ (void)mj_setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames;
 
 /**
  *  这个数组中的属性名才会进行字典和模型的转换
  */
-+ (NSMutableArray *)totalAllowedCodingPropertyNames;
++ (NSMutableArray *)mj_totalAllowedCodingPropertyNames;
 
 #pragma mark - 归档属性黑名单配置
 /**
@@ -78,13 +78,27 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
  *
  *  @param ignoredCodingPropertyNames          这个数组中的属性名将会被忽略：不进行归档
  */
-+ (void)setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames;
++ (void)mj_setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames;
 
 /**
  *  这个数组中的属性名将会被忽略：不进行归档
  */
-+ (NSMutableArray *)totalIgnoredCodingPropertyNames;
++ (NSMutableArray *)mj_totalIgnoredCodingPropertyNames;
 
 #pragma mark - 内部使用
-+ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key;
++ (void)mj_setupBlockReturnValue:(id (^)())block key:(const char *)key;
+@end
+
+@interface NSObject (MJClassDeprecated_v_2_5_16)
++ (void)enumerateClasses:(MJClassesEnumeration)enumeration MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)enumerateAllClasses:(MJClassesEnumeration)enumeration MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (NSMutableArray *)totalAllowedPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (NSMutableArray *)totalIgnoredPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (NSMutableArray *)totalAllowedCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (NSMutableArray *)totalIgnoredCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
 @end

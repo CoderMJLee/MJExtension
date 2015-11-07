@@ -9,7 +9,7 @@
 #import "Student.h"
 
 @implementation Student
-//+ (NSDictionary *)replacedKeyFromPropertyName
+//+ (NSDictionary *)mj_replacedKeyFromPropertyName
 //{
 //    return @{@"ID" : @"id",
 //             @"desc" : @"desciption",

@@ -23,43 +23,43 @@
 {
 #pragma mark 如果使用NSObject来调用这些方法，代表所有继承自NSObject的类都会生效
 #pragma mark NSObject中的ID属性对应着字典中的id
-    [NSObject setupReplacedKeyFromPropertyName:^NSDictionary *{
+    [NSObject mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
         return @{
                  @"ID" : @"id"
                  };
     }];
     
 #pragma mark User类的只有name、icon属性参与字典转模型
-//    [User setupAllowedPropertyNames:^NSArray *{
+//    [User mj_setupAllowedPropertyNames:^NSArray *{
 //        return @[@"name", @"icon"];
 //    }];
-    // 相当于在User.m中实现了+(NSArray *)allowedPropertyNames方法
+    // 相当于在User.m中实现了+(NSArray *)mj_allowedPropertyNames方法
     
 #pragma mark Bag类中的name属性不参与归档
-    [Bag setupIgnoredCodingPropertyNames:^NSArray *{
+    [Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
         return @[@"name"];
     }];
-    // 相当于在Bag.m中实现了+(NSArray *)ignoredCodingPropertyNames方法
+    // 相当于在Bag.m中实现了+(NSArray *)mj_ignoredCodingPropertyNames方法
     
 #pragma mark Bag类中只有price属性参与归档
-//    [Bag setupAllowedCodingPropertyNames:^NSArray *{
+//    [Bag mj_setupAllowedCodingPropertyNames:^NSArray *{
 //        return @[@"price"];
 //    }];
-    // 相当于在Bag.m中实现了+(NSArray *)allowedCodingPropertyNames方法
+    // 相当于在Bag.m中实现了+(NSArray *)mj_allowedCodingPropertyNames方法
     
 #pragma mark StatusResult类中的statuses数组中存放的是Status模型
 #pragma mark StatusResult类中的ads数组中存放的是Ad模型
-    [StatusResult setupObjectClassInArray:^NSDictionary *{
+    [StatusResult mj_setupObjectClassInArray:^NSDictionary *{
         return @{
                  @"statuses" : @"Status", // @"statuses" : [Status class],
                  @"ads" : @"Ad" // @"ads" : [Ad class]
                  };
     }];
-    // 相当于在StatusResult.m中实现了+(NSDictionary *)objectClassInArray方法
+    // 相当于在StatusResult.m中实现了+(NSDictionary *)mj_objectClassInArray方法
     
 #pragma mark Student中的desc属性对应着字典中的desciption
 #pragma mark ....
-    [Student setupReplacedKeyFromPropertyName:^NSDictionary *{
+    [Student mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
         return @{
                  @"desc" : @"desciption",
                  @"oldName" : @"name.oldName",
@@ -69,16 +69,16 @@
                  @"bag" : @"other.bag"
                  };
     }];
-    // 相当于在Student.m中实现了+(NSDictionary *)replacedKeyFromPropertyName方法
+    // 相当于在Student.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName方法
     
 #pragma mark Dog的所有驼峰属性转成下划线key去字典中取值
-    [Dog setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
-        return [propertyName underlineFromCamel];
+    [Dog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
+        return [propertyName mj_underlineFromCamel];
     }];
-    // 相当于在Dog.m中实现了+(NSDictionary *)replacedKeyFromPropertyName121:方法
+    // 相当于在Dog.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName121:方法
     
 #pragma mark Book的日期处理、字符串nil值处理
-    [Book setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
+    [Book mj_setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
         if ([property.name isEqualToString:@"publisher"]) {
             if (oldValue == nil || [oldValue isKindOfClass:[NSNull class]]) return @"";
         } else if (property.type.typeClass == [NSDate class]) {
@@ -89,6 +89,6 @@
             
         return oldValue;
     }];
-    // 相当于在Book.中实现了- (id)newValueFromOldValue:property:方法
+    // 相当于在Book.中实现了- (id)mj_newValueFromOldValue:property:方法
 }
 @end

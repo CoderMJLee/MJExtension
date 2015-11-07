@@ -9,7 +9,7 @@
 #import "NSString+MJExtension.h"
 
 @implementation NSString (MJExtension)
-- (NSString *)underlineFromCamel
+- (NSString *)mj_underlineFromCamel
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -27,7 +27,7 @@
     return string;
 }
 
-- (NSString *)camelFromUnderline
+- (NSString *)mj_camelFromUnderline
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -44,7 +44,7 @@
     return string;
 }
 
-- (NSString *)firstCharLower
+- (NSString *)mj_firstCharLower
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -53,7 +53,7 @@
     return string;
 }
 
-- (NSString *)firstCharUpper
+- (NSString *)mj_firstCharUpper
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -62,15 +62,47 @@
     return string;
 }
 
-- (BOOL)isPureInt
+- (BOOL)mj_isPureInt
 {
     NSScanner *scan = [NSScanner scannerWithString:self];
     int val;
     return [scan scanInt:&val] && [scan isAtEnd];
 }
 
-- (NSURL *)url
+- (NSURL *)mj_url
 {
     return [NSURL URLWithString:(NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self, (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL,kCFStringEncodingUTF8))];
+}
+@end
+
+@implementation NSString (MJExtensionDeprecated_v_2_5_16)
+- (NSString *)underlineFromCamel
+{
+    return self.mj_underlineFromCamel;
+}
+
+- (NSString *)camelFromUnderline
+{
+    return self.mj_camelFromUnderline;
+}
+
+- (NSString *)firstCharLower
+{
+    return self.mj_firstCharLower;
+}
+
+- (NSString *)firstCharUpper
+{
+    return self.mj_firstCharUpper;
+}
+
+- (BOOL)isPureInt
+{
+    return self.mj_isPureInt;
+}
+
+- (NSURL *)url
+{
+    return self.mj_url;
 }
 @end

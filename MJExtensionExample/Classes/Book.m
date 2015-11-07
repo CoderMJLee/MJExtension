@@ -10,7 +10,7 @@
 //#import "MJExtension.h"
 
 @implementation Book
-//- (id)newValueFromOldValue:(id)oldValue property:(MJProperty *)property
+//- (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property
 //{
 //    if ([property.name isEqualToString:@"publisher"]) {
 //        if (oldValue == nil) return @"";

@@ -9,7 +9,7 @@
 #import "StatusResult.h"
 
 @implementation StatusResult
-+ (NSDictionary *)objectClassInArray
++ (NSDictionary *)mj_objectClassInArray
 {
     return @{
              @"statuses" : @"Status",

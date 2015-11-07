@@ -13,7 +13,7 @@
 // NSCoding实现
 MJExtensionCodingImplementation
 
-//+ (NSArray *)ignoredCodingPropertyNames
+//+ (NSArray *)mj_ignoredCodingPropertyNames
 //{
 //    return @[@"name"];
 //}

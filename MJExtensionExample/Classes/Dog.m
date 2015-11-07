@@ -10,7 +10,7 @@
 //#import "MJExtension.h"
 
 @implementation Dog
-//+ (NSString *)replacedKeyFromPropertyName121:(NSString *)propertyName
+//+ (NSString *)mj_replacedKeyFromPropertyName121:(NSString *)propertyName
 //{
 //    // nickName -> nick_name
 //    return [propertyName underlineFromCamel];
