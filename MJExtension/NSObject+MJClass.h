@@ -89,17 +89,3 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)();
 #pragma mark - 内部使用
 + (void)mj_setupBlockReturnValue:(id (^)())block key:(const char *)key;
 @end
-
-@interface NSObject (MJClassDeprecated_v_2_5_16)
-+ (void)enumerateClasses:(MJClassesEnumeration)enumeration MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)enumerateAllClasses:(MJClassesEnumeration)enumeration MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)setupAllowedPropertyNames:(MJAllowedPropertyNames)allowedPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (NSMutableArray *)totalAllowedPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)setupIgnoredPropertyNames:(MJIgnoredPropertyNames)ignoredPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (NSMutableArray *)totalIgnoredPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)setupAllowedCodingPropertyNames:(MJAllowedCodingPropertyNames)allowedCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (NSMutableArray *)totalAllowedCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)setupIgnoredCodingPropertyNames:(MJIgnoredCodingPropertyNames)ignoredCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (NSMutableArray *)totalIgnoredCodingPropertyNames MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (void)setupBlockReturnValue:(id (^)())block key:(const char *)key MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-@end
