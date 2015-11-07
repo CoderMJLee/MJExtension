@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "3.0.0"
   s.ios.deployment_target = '6.0'
   s.osx.deployment_target = '10.8'
-  s.summary      = "The fastest and most convenient conversion between JSON and model"
+  s.summary      = "A fast and convenient conversion between JSON and model"
   s.homepage     = "https://github.com/CoderMJLee/MJExtension"
   s.license      = "MIT"
   s.author             = { "MJLee" => "199109106@qq.com" }
