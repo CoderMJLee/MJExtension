@@ -68,9 +68,9 @@ void keyValues2object()
                            @"height" : @1.55,
                            @"money" : @"100.9",
                            @"sex" : @(SexFemale),
-//                           @"gay" : @"1"
+                           @"gay" : @"1"
 //                           @"gay" : @"NO"
-                           @"gay" : @"true"
+//                           @"gay" : @"true"
                            };
 
     // 2.将字典转为User模型
@@ -221,18 +221,15 @@ void keyValues2object4()
                                     @"name" : @"小书包",
                                     @"price" : @100.7
                                 }
-                           },
-//                           @"otherName" : @"test"
+                           }
                        };
 
     // 2.将字典转为Student模型
     Student *stu = [Student mj_objectWithKeyValues:dict];
 
     // 3.打印Student模型的属性
-    NSLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@",
-          stu.ID, stu.desc, stu.otherName, stu.oldName, stu.nowName, stu.nameChangedTime);
-    NSLog(@"bagName=%@, bagPrice=%f",
-          stu.bag.name, stu.bag.price);
+    NSLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@", stu.ID, stu.desc, stu.otherName, stu.oldName, stu.nowName, stu.nameChangedTime);
+    NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
 }
 
 /**
@@ -331,28 +328,24 @@ void objectArray2keyValuesArray()
  */
 void coreData()
 {
-    @try {
-        NSDictionary *dict = @{
-                               @"name" : @"Jack",
-                               @"icon" : @"lufy.png",
-                               @"age" : @20,
-                               @"height" : @1.55,
-                               @"money" : @"100.9",
-                               @"sex" : @(SexFemale),
-                               @"gay" : @"true"
-                               };
+    NSDictionary *dict = @{
+                           @"name" : @"Jack",
+                           @"icon" : @"lufy.png",
+                           @"age" : @20,
+                           @"height" : @1.55,
+                           @"money" : @"100.9",
+                           @"sex" : @(SexFemale),
+                           @"gay" : @"true"
+                           };
 
-        // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
-        NSManagedObjectContext *context = nil;
-        User *user = [User mj_objectWithKeyValues:dict context:context];
+    // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
+    NSManagedObjectContext *context = nil;
+    User *user = [User mj_objectWithKeyValues:dict context:context];
 
-        // 利用CoreData保存模型
-        [context save:nil];
-        
-        NSLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
-    } @catch (NSException *e) {
+    // 利用CoreData保存模型
+    [context save:nil];
     
-    }
+    NSLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**

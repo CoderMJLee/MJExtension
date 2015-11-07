@@ -9,6 +9,7 @@
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
+#import <objc/message.h>
 
 @interface MJProperty()
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;

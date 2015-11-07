@@ -82,8 +82,8 @@ static NSNumberFormatter *numberFormatter_;
     Class clazz = [self class];
     NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
-        
-        //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
+    
+    //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
@@ -300,13 +300,13 @@ static NSNumberFormatter *numberFormatter_;
             
             // 2.如果是模型属性
             MJPropertyType *type = property.type;
-            Class typeClass = type.typeClass;
-            if (!type.isFromFoundation && typeClass) {
+            Class propertyClass = type.typeClass;
+            if (!type.isFromFoundation && propertyClass) {
                 value = [value mj_keyValues];
             } else if ([value isKindOfClass:[NSArray class]]) {
                 // 3.处理数组里面有模型的情况
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
-            } else if (typeClass == [NSURL class]) {
+            } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
             }
             

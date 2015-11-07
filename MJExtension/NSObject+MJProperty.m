@@ -124,29 +124,14 @@ static const char MJCachedPropertiesKey = '\0';
 #pragma mark - 公共方法
 + (NSMutableArray *)properties
 {
-    // 获得成员变量
-    // 通过关联对象，以及提前定义好的MJCachedPropertiesKey来进行运行时，对所有属性的获取。
-
-    //***objc_getAssociatedObject 方法用于判断当前是否已经获取过MJCachedPropertiesKey对应的关联对象
-    //  1> 关联到的对象
-    //  2> 关联的属性 key
     NSMutableArray *cachedProperties = [MJDictionaryCache objectForKey:NSStringFromClass(self) forDictId:&MJCachedPropertiesKey];
     
-    //***
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
-
-        /** 遍历这个类的所有类()不包括NSObject这些基础类 */
+        
         [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             // 1.获得所有的成员变量
             unsigned int outCount = 0;
-            /**
-                class_copyIvarList 成员变量，提示有很多第三方框架会使用 Ivar，能够获得更多的信息
-                但是：在 swift 中，由于语法结构的变化，使用 Ivar 非常不稳定，经常会崩溃！
-                class_copyPropertyList 属性
-                class_copyMethodList 方法
-                class_copyProtocolList 协议
-                */
             objc_property_t *properties = class_copyPropertyList(c, &outCount);
             
             // 2.遍历每一个成员变量
@@ -169,9 +154,7 @@ static const char MJCachedPropertiesKey = '\0';
             free(properties);
         }];
         
-        //*** 在此时设置当前这个类为关联对象，这样下次就不会重复获取类的相关属性。
         [MJDictionaryCache setObject:cachedProperties forKey:NSStringFromClass(self) forDictId:&MJCachedPropertiesKey];
-        //***
     }
     
     return cachedProperties;
@@ -183,7 +166,7 @@ static const char MJCachedPropertiesKey = '\0';
     objc_setAssociatedObject(self, &MJNewValueFromOldValueKey, newValueFormOldValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-+ (id)mj_getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(MJProperty *__weak)property{
++ (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(MJProperty *__unsafe_unretained)property{
     // 如果有实现方法
     if ([object respondsToSelector:@selector(mj_newValueFromOldValue:property:)]) {
         return [object mj_newValueFromOldValue:oldValue property:property];
@@ -240,7 +223,7 @@ static const char MJCachedPropertiesKey = '\0';
     [self mj_setupNewValueFromOldValue:newValueFormOldValue];
 }
 
-+ (id)getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(__weak MJProperty *)property
++ (id)getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property
 {
     return [self mj_getNewValueFromObject:object oldValue:oldValue property:property];
 }

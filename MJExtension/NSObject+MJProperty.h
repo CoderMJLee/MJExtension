@@ -44,7 +44,7 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
  *  @param newValueFormOldValue 用于过滤字典中的值
  */
 + (void)mj_setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue;
-+ (id)mj_getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(__weak MJProperty *)property;
++ (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property;
 
 #pragma mark - key配置
 /**
@@ -72,7 +72,7 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
 @interface NSObject (MJPropertyDeprecated_v_2_5_16)
 + (void)enumerateProperties:(MJPropertiesEnumeration)enumeration MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
 + (void)setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
-+ (id)getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(__weak MJProperty *)property MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
++ (id)getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
 + (void)setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
 + (void)setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121 MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
 + (void)setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray MJExtensionDeprecated("请在方法名前面加上mj_前缀，使用mj_***");
