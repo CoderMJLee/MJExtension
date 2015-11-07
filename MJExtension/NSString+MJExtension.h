@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MJExtensionConst.h"
 
 @interface NSString (MJExtension)
 /**

@@ -7,6 +7,7 @@
 //
 
 #import "User.h"
+#import "MJExtension.h"
 
 @implementation User
 //+ (NSArray *)mj_allowedPropertyNames
