@@ -111,59 +111,65 @@ static NSNumberFormatter *numberFormatter_;
             // 如果没有值，就直接返回
             if (!value || value == [NSNull null]) return;
             
-            // 2.如果是模型属性
+            // 2.复杂处理
             MJPropertyType *type = property.type;
-            Class typeClass = type.typeClass;
+            Class propertyClass = type.typeClass;
             Class objectClass = [property objectClassInArrayForClass:[self class]];
-            if (!type.isFromFoundation && typeClass) {
-                value = [typeClass mj_objectWithKeyValues:value context:context];
+            if (!type.isFromFoundation && propertyClass) { // 模型属性
+                value = [propertyClass mj_objectWithKeyValues:value context:context];
             } else if (objectClass) {
-                // string array -> url array
                 if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
+                    // string array -> url array
                     NSMutableArray *urlArray = [NSMutableArray array];
                     for (NSString *string in value) {
                         if (![string isKindOfClass:[NSString class]]) continue;
                         [urlArray addObject:string.mj_url];
                     }
                     value = urlArray;
-                } else {
-                    // 3.字典数组-->模型数组
+                } else { // 字典数组-->模型数组
                     value = [objectClass mj_objectArrayWithKeyValuesArray:value context:context];
                 }
-            } else if (typeClass == [NSString class]) {
-                if ([value isKindOfClass:[NSNumber class]]) {
-                    // NSNumber -> NSString
-                    value = [value description];
-                } else if ([value isKindOfClass:[NSURL class]]) {
-                    // NSURL -> NSString
-                    value = [value absoluteString];
-                }
-            } else if ([value isKindOfClass:[NSString class]]) {
-                if (typeClass == [NSURL class]) {
-                    // NSString -> NSURL
-                    // 字符串转码
-                    value = [value mj_url];
-                } else if (type.isNumberType) {
-                    NSString *oldValue = value;
-                    
-                    // NSString -> NSNumber
-                    value = [numberFormatter_ numberFromString:oldValue];
-                    
-                    // 如果是BOOL
-                    if (type.isBoolType) {
-                        // 字符串转BOOL（字符串没有charValue方法）
-                        // 系统会调用字符串的charValue转为BOOL类型
-                        NSString *lower = [oldValue lowercaseString];
-                        if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
-                            value = @YES;
-                        } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
-                            value = @NO;
+            } else {
+                if (propertyClass == [NSString class]) {
+                    if ([value isKindOfClass:[NSNumber class]]) {
+                        // NSNumber -> NSString
+                        value = [value description];
+                    } else if ([value isKindOfClass:[NSURL class]]) {
+                        // NSURL -> NSString
+                        value = [value absoluteString];
+                    }
+                } else if ([value isKindOfClass:[NSString class]]) {
+                    if (propertyClass == [NSURL class]) {
+                        // NSString -> NSURL
+                        // 字符串转码
+                        value = [value mj_url];
+                    } else if (type.isNumberType) {
+                        NSString *oldValue = value;
+                        
+                        // NSString -> NSNumber
+                        value = [numberFormatter_ numberFromString:oldValue];
+                        
+                        // 如果是BOOL
+                        if (type.isBoolType) {
+                            // 字符串转BOOL（字符串没有charValue方法）
+                            // 系统会调用字符串的charValue转为BOOL类型
+                            NSString *lower = [oldValue lowercaseString];
+                            if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
+                                value = @YES;
+                            } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
+                                value = @NO;
+                            }
                         }
                     }
                 }
+                
+                // value和property类型不匹配
+                if (propertyClass && ![value isKindOfClass:propertyClass]) {
+                    value = nil;
+                }
             }
             
-            // 4.赋值
+            // 3.赋值
             [property setValue:value forObject:self];
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
