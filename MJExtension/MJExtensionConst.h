@@ -19,6 +19,17 @@ NSError *error = [NSError errorWithDomain:msg code:250 userInfo:nil]; \
 #define MJExtensionLog(...)
 #endif
 
+// 弱引用
+#undef MJWeakRef
+#undef __MJWeakRef
+#if __has_feature(objc_arc) && __has_feature(objc_arc_weak)
+#define MJWeakRef weak
+#define __MJWeakRef __weak
+#else
+#define MJWeakRef unsafe_unretained
+#define __MJWeakRef __unsafe_unretained
+#endif
+
 /**
  * 断言
  * @param condition   条件
