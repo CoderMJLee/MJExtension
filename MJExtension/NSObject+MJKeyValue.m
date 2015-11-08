@@ -43,7 +43,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 {
     __block id value = objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
     if (!value) {
-        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+        [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
             value = objc_getAssociatedObject(c, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
             
             if (value) *stop = YES;
