@@ -115,6 +115,18 @@ static NSNumberFormatter *numberFormatter_;
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
             Class objectClass = [property objectClassInArrayForClass:[self class]];
+            
+            // 不可变 -> 可变处理
+            if (propertyClass == [NSMutableArray class] && [value isKindOfClass:[NSArray class]]) {
+                value = [NSMutableArray arrayWithArray:value];
+            } else if (propertyClass == [NSMutableDictionary class] && [value isKindOfClass:[NSDictionary class]]) {
+                value = [NSMutableDictionary dictionaryWithDictionary:value];
+            } else if (propertyClass == [NSMutableString class] && [value isKindOfClass:[NSString class]]) {
+                value = [NSMutableString stringWithString:value];
+            } else if (propertyClass == [NSMutableData class] && [value isKindOfClass:[NSData class]]) {
+                value = [NSMutableData dataWithData:value];
+            }
+            
             if (!type.isFromFoundation && propertyClass) { // 模型属性
                 value = [propertyClass mj_objectWithKeyValues:value context:context];
             } else if (objectClass) {
