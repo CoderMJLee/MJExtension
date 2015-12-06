@@ -45,7 +45,7 @@ static const char MJCachedPropertiesKey = '\0';
     
     // 调用block
     if (!key) {
-        [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             MJReplacedKeyFromPropertyName121 block = objc_getAssociatedObject(c, &MJReplacedKeyFromPropertyName121Key);
             if (block) {
                 key = block(propertyName);
@@ -64,7 +64,7 @@ static const char MJCachedPropertiesKey = '\0';
     }
     
     if (!key) {
-        [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             NSDictionary *dict = objc_getAssociatedObject(c, &MJReplacedKeyFromPropertyNameKey);
             if (dict) {
                 key = dict[propertyName];
@@ -91,7 +91,7 @@ static const char MJCachedPropertiesKey = '\0';
     }
     
     if (!clazz) {
-        [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             NSDictionary *dict = objc_getAssociatedObject(c, &MJObjectClassInArrayKey);
             if (dict) {
                 clazz = dict[propertyName];
@@ -129,7 +129,7 @@ static const char MJCachedPropertiesKey = '\0';
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
         
-        [self mj_enumerateClasses:^(__MJWeakRef Class c, BOOL *stop) {
+        [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             // 1.获得所有的成员变量
             unsigned int outCount = 0;
             objc_property_t *properties = class_copyPropertyList(c, &outCount);
@@ -166,7 +166,7 @@ static const char MJCachedPropertiesKey = '\0';
     objc_setAssociatedObject(self, &MJNewValueFromOldValueKey, newValueFormOldValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-+ (id)mj_getNewValueFromObject:(__MJWeakRef id)object oldValue:(__MJWeakRef id)oldValue property:(MJProperty *__MJWeakRef)property{
++ (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(MJProperty *__unsafe_unretained)property{
     // 如果有实现方法
     if ([object respondsToSelector:@selector(mj_newValueFromOldValue:property:)]) {
         return [object mj_newValueFromOldValue:oldValue property:property];
@@ -178,7 +178,7 @@ static const char MJCachedPropertiesKey = '\0';
     
     // 查看静态设置
     __block id newValue = oldValue;
-    [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
+    [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         MJNewValueFromOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
         if (block) {
             newValue = block(object, oldValue, property);
@@ -223,7 +223,7 @@ static const char MJCachedPropertiesKey = '\0';
     [self mj_setupNewValueFromOldValue:newValueFormOldValue];
 }
 
-+ (id)getNewValueFromObject:(__MJWeakRef id)object oldValue:(__MJWeakRef id)oldValue property:(__MJWeakRef MJProperty *)property
++ (id)getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property
 {
     return [self mj_getNewValueFromObject:object oldValue:oldValue property:property];
 }
