@@ -1,10 +1,26 @@
 //
 //  main.m
-//  字典与模型的互转
+//  MJExtensionExample
 //
-//  Created by MJ Lee on 14-5-21.
-//  Copyright (c) 2014年 小码哥. All rights reserved.
+//  Created by MJ Lee on 15/11/8.
+//  Copyright © 2015年 小码哥. All rights reserved.
 //
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "main.h"
+#import "MJExtension.h"
+#import "MJUser.h"
+#import "MJAd.h"
+#import "MJStatus.h"
+#import "MJStudent.h"
+#import "MJStatusResult.h"
+#import "MJBag.h"
+#import "MJDog.h"
+#import "MJBook.h"
+#import "MJBox.h"
+#import <CoreData/CoreData.h>
+
+
 /**
  MJ友情提醒：
  1.MJExtension是一套“字典和模型之间互相转换”的轻量级框架
@@ -16,24 +32,7 @@
  3.具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
  4.希望各位大神能用得爽
  */
-
-#import <Foundation/Foundation.h>
-#import "main.h"
-#import "MJExtension.h"
-#import "User.h"
-#import "Ad.h"
-#import "Status.h"
-#import "Student.h"
-#import "StatusResult.h"
-#import "Bag.h"
-#import "Dog.h"
-#import "Book.h"
-#import "Box.h"
-#import <CoreData/CoreData.h>
-
-/** main函数 */
-int main(int argc, const char * argv[])
-{
+int main(int argc, char * argv[]) {
     @autoreleasepool {
         // 关于模型的具体配置可以参考：MJExtensionConfig.m
         // 或者参考每个模型的.m文件中被注释掉的配置
@@ -50,9 +49,10 @@ int main(int argc, const char * argv[])
         execute(coding, @"NSCoding示例");
         execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
         execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
-        execute(logAllProperties, @"使用NSLog打印模型的所有属性");
+        execute(logAllProperties, @"使用MJExtensionLog打印模型的所有属性");
+        
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
-    return 0;
 }
 
 /**
@@ -69,15 +69,15 @@ void keyValues2object()
                            @"money" : @"100.9",
                            @"sex" : @(SexFemale),
                            @"gay" : @"1"
-//                           @"gay" : @"NO"
-//                           @"gay" : @"true"
+                       //  @"gay" : @"NO"
+                       //  @"gay" : @"true"
                            };
-
-    // 2.将字典转为User模型
-    User *user = [User mj_objectWithKeyValues:dict];
-
-    // 3.打印User模型的属性
-    NSLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    
+    // 2.将字典转为MJUser模型
+    MJUser *user = [MJUser mj_objectWithKeyValues:dict];
+    
+    // 3.打印MJUser模型的属性
+    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**
@@ -87,12 +87,12 @@ void keyValues2object1()
 {
     // 1.定义一个JSON字符串
     NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20, \"height\":333333.7}";
-
-    // 2.将JSON字符串转为User模型
-    User *user = [User mj_objectWithKeyValues:jsonString];
-
-    // 3.打印User模型的属性
-    NSLog(@"name=%@, icon=%@, age=%d, height=%@", user.name, user.icon, user.age, @(user.height));
+    
+    // 2.将JSON字符串转为MJUser模型
+    MJUser *user = [MJUser mj_objectWithKeyValues:jsonString];
+    
+    // 3.打印MJUser模型的属性
+    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@", user.name, user.icon, user.age, @(user.height));
 }
 
 /**
@@ -118,21 +118,21 @@ void keyValues2object2()
                                            }
                                    }
                            };
-
+    
     // 2.将字典转为Status模型
-    Status *status = [Status mj_objectWithKeyValues:dict];
-
+    MJStatus *status = [MJStatus mj_objectWithKeyValues:dict];
+    
     // 3.打印status的属性
     NSString *text = status.text;
     NSString *name = status.user.name;
     NSString *icon = status.user.icon;
-    NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
-
+    MJExtensionLog(@"text=%@, name=%@, icon=%@", text, name, icon);
+    
     // 4.打印status.retweetedStatus的属性
     NSString *text2 = status.retweetedStatus.text;
     NSString *name2 = status.retweetedStatus.user.name;
     NSString *icon2 = status.retweetedStatus.user.icon;
-    NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
+    MJExtensionLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 }
 
 /**
@@ -159,7 +159,7 @@ void keyValues2object3()
                                                @"name" : @"Jack",
                                                @"icon" : @"lufy.png"
                                                }
-                                    }
+                                       }
                                    
                                    ],
                            
@@ -178,24 +178,24 @@ void keyValues2object3()
                            @"previousCursor" : @"13476589",
                            @"nextCursor" : @"13476599"
                            };
-
-    // 2.将字典转为StatusResult模型
-    StatusResult *result = [StatusResult mj_objectWithKeyValues:dict];
-
-    // 3.打印StatusResult模型的简单属性
-    NSLog(@"totalNumber=%@, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
-
+    
+    // 2.将字典转为MJStatusResult模型
+    MJStatusResult *result = [MJStatusResult mj_objectWithKeyValues:dict];
+    
+    // 3.打印MJStatusResult模型的简单属性
+    MJExtensionLog(@"totalNumber=%@, previousCursor=%lld, nextCursor=%lld", result.totalNumber, result.previousCursor, result.nextCursor);
+    
     // 4.打印statuses数组中的模型属性
-    for (Status *status in result.statuses) {
+    for (MJStatus *status in result.statuses) {
         NSString *text = status.text;
         NSString *name = status.user.name;
         NSString *icon = status.user.icon;
-        NSLog(@"text=%@, name=%@, icon=%@", text, name, icon);
+        MJExtensionLog(@"text=%@, name=%@, icon=%@", text, name, icon);
     }
-
+    
     // 5.打印ads数组中的模型属性
-    for (Ad *ad in result.ads) {
-        NSLog(@"image=%@, url=%@", ad.image, ad.url);
+    for (MJAd *ad in result.ads) {
+        MJExtensionLog(@"image=%@, url=%@", ad.image, ad.url);
     }
 }
 
@@ -209,27 +209,34 @@ void keyValues2object4()
                            @"id" : @"20",
                            @"desciption" : @"好孩子",
                            @"name" : @{
-                                @"newName" : @"lufy",
-                                @"oldName" : @"kitty",
-                                @"info" : @[
-                                            @"test-data",
-                                            @{@"nameChangedTime" : @"2013-08-07"}
-                                        ]
-                           },
+                                   @"newName" : @"lufy",
+                                   @"oldName" : @"kitty",
+                                   @"info" : @[
+                                           @"test-data",
+                                           @{@"nameChangedTime" : @"2013-08-07"}
+                                           ]
+                                   },
                            @"other" : @{
-                                @"bag" : @{
-                                    @"name" : @"小书包",
-                                    @"price" : @100.7
-                                }
-                           }
-                       };
-
-    // 2.将字典转为Student模型
-    Student *stu = [Student mj_objectWithKeyValues:dict];
-
-    // 3.打印Student模型的属性
-    NSLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@", stu.ID, stu.desc, stu.otherName, stu.oldName, stu.nowName, stu.nameChangedTime);
-    NSLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
+                                   @"bag" : @{
+                                           @"name" : @"小书包",
+                                           @"price" : @100.7
+                                           }
+                                   }
+                           };
+    
+    // 2.将字典转为MJStudent模型
+    MJStudent *stu = [MJStudent mj_objectWithKeyValues:dict];
+    
+    // 3.打印MJStudent模型的属性
+    MJExtensionLog(@"ID=%@, desc=%@, otherName=%@, oldName=%@, nowName=%@, nameChangedTime=%@", stu.ID, stu.desc, stu.otherName, stu.oldName, stu.nowName, stu.nameChangedTime);
+    MJExtensionLog(@"bagName=%@, bagPrice=%f", stu.bag.name, stu.bag.price);
+    
+    //    CFTimeInterval begin = CFAbsoluteTimeGetCurrent();
+    //    for (int i = 0; i< 10000; i++) {
+    //        [MJStudent mj_objectWithKeyValues:dict];
+    //    }
+    //    CFTimeInterval end = CFAbsoluteTimeGetCurrent();
+    //    MJExtensionLog(@"%f", end - begin);
 }
 
 /**
@@ -250,12 +257,12 @@ void keyValuesArray2objectArray()
                                }
                            ];
     
-    // 2.将字典数组转为User模型数组
-    NSArray *userArray = [User mj_objectArrayWithKeyValuesArray:dictArray];
+    // 2.将字典数组转为MJUser模型数组
+    NSArray *userArray = [MJUser mj_objectArrayWithKeyValuesArray:dictArray];
     
-    // 3.打印userArray数组中的User模型属性
-    for (User *user in userArray) {
-        NSLog(@"name=%@, icon=%@", user.name, user.icon);
+    // 3.打印userArray数组中的MJUser模型属性
+    for (MJUser *user in userArray) {
+        MJExtensionLog(@"name=%@, icon=%@", user.name, user.icon);
     }
 }
 
@@ -265,22 +272,22 @@ void keyValuesArray2objectArray()
 void object2keyValues()
 {
     // 1.新建模型
-    User *user = [[User alloc] init];
+    MJUser *user = [[MJUser alloc] init];
     user.name = @"Jack";
     user.icon = @"lufy.png";
     
-    Status *status = [[Status alloc] init];
+    MJStatus *status = [[MJStatus alloc] init];
     status.user = user;
     status.text = @"今天的心情不错！";
     
     // 2.将模型转为字典
     NSDictionary *statusDict = status.mj_keyValues;
-    NSLog(@"%@", statusDict);
+    MJExtensionLog(@"%@", statusDict);
     
-    NSLog(@"%@", [status mj_keyValuesWithKeys:@[@"text"]]);
-
+    MJExtensionLog(@"%@", [status mj_keyValuesWithKeys:@[@"text"]]);
+    
     // 3.新建多级映射的模型
-    Student *stu = [[Student alloc] init];
+    MJStudent *stu = [[MJStudent alloc] init];
     stu.ID = @"123";
     stu.oldName = @"rose";
     stu.nowName = @"jack";
@@ -288,18 +295,18 @@ void object2keyValues()
     stu.nameChangedTime = @"2018-09-08";
     stu.books = @[@"Good book", @"Red book"];
     
-    Bag *bag = [[Bag alloc] init];
+    MJBag *bag = [[MJBag alloc] init];
     bag.name = @"小书包";
     bag.price = 205;
     stu.bag = bag;
     
     NSDictionary *stuDict = stu.mj_keyValues;
-    NSLog(@"%@", stuDict);
-    NSLog(@"%@", [stu mj_keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
-    NSLog(@"%@", stu.mj_JSONString);
+    MJExtensionLog(@"%@", stuDict);
+    MJExtensionLog(@"%@", [stu mj_keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
+    MJExtensionLog(@"%@", stu.mj_JSONString);
     
-    [Student mj_referenceReplacedKeyWhenCreatingKeyValues:NO];
-    NSLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.mj_keyValues);
+    [MJStudent mj_referenceReplacedKeyWhenCreatingKeyValues:NO];
+    MJExtensionLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.mj_keyValues);
 }
 
 /**
@@ -308,19 +315,19 @@ void object2keyValues()
 void objectArray2keyValuesArray()
 {
     // 1.新建模型数组
-    User *user1 = [[User alloc] init];
+    MJUser *user1 = [[MJUser alloc] init];
     user1.name = @"Jack";
     user1.icon = @"lufy.png";
     
-    User *user2 = [[User alloc] init];
+    MJUser *user2 = [[MJUser alloc] init];
     user2.name = @"Rose";
     user2.icon = @"nami.png";
     
     NSArray *userArray = @[user1, user2];
     
     // 2.将模型数组转为字典数组
-    NSArray *dictArray = [User mj_keyValuesArrayWithObjectArray:userArray];
-    NSLog(@"%@", dictArray);
+    NSArray *dictArray = [MJUser mj_keyValuesArrayWithObjectArray:userArray];
+    MJExtensionLog(@"%@", dictArray);
 }
 
 /**
@@ -337,15 +344,15 @@ void coreData()
                            @"sex" : @(SexFemale),
                            @"gay" : @"true"
                            };
-
+    
     // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
     NSManagedObjectContext *context = nil;
-    User *user = [User mj_objectWithKeyValues:dict context:context];
-
+    MJUser *user = [MJUser mj_objectWithKeyValues:dict context:context];
+    
     // 利用CoreData保存模型
     [context save:nil];
     
-    NSLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**
@@ -354,17 +361,17 @@ void coreData()
 void coding()
 {
     // 创建模型
-    Bag *bag = [[Bag alloc] init];
+    MJBag *bag = [[MJBag alloc] init];
     bag.name = @"Red bag";
     bag.price = 200.8;
-
-    NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
+    
+    NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
     // 归档
     [NSKeyedArchiver archiveRootObject:bag toFile:file];
-
+    
     // 解档
-    Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
-    NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+    MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 }
 
 /**
@@ -379,11 +386,11 @@ void replacedKeyFromPropertyName121()
                            @"run_speed" : @"100.9"
                            };
     
-    // 2.将字典转为User模型
-    Dog *dog = [Dog mj_objectWithKeyValues:dict];
+    // 2.将字典转为MJUser模型
+    MJDog *dog = [MJDog mj_objectWithKeyValues:dict];
     
-    // 3.打印User模型的属性
-    NSLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, dog.runSpeed);
+    // 3.打印MJUser模型的属性
+    MJExtensionLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, dog.runSpeed);
 }
 
 /**
@@ -397,30 +404,30 @@ void newValueFromOldValue()
                            @"publishedTime" : @"2011-09-10"
                            };
     
-    // 2.将字典转为User模型
-    Book *book = [Book mj_objectWithKeyValues:dict];
+    // 2.将字典转为MJUser模型
+    MJBook *book = [MJBook mj_objectWithKeyValues:dict];
     
-    // 3.打印User模型的属性
-    NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
+    // 3.打印MJUser模型的属性
+    MJExtensionLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
 }
 
 /**
- *  使用NSLog打印模型的所有属性
+ *  使用MJExtensionLog打印模型的所有属性
  */
 void logAllProperties()
 {
-    User *user = [[User alloc] init];
+    MJUser *user = [[MJUser alloc] init];
     user.name = @"MJ";
     user.age = 10;
     user.sex = SexMale;
     user.icon = @"test.png";
     
-    NSLog(@"%@", user);
+    MJExtensionLog(@"%@", user);
 }
 
 void execute(void (*fn)(), NSString *comment)
 {
-    NSLog(@"[******************%@******************开始]", comment);
+    MJExtensionLog(@"[******************%@******************开始]", comment);
     fn();
-    NSLog(@"[******************%@******************结尾]\n ", comment);
+    MJExtensionLog(@"[******************%@******************结尾]\n ", comment);
 }

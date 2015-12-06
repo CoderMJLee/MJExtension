@@ -8,12 +8,12 @@
 
 #import "MJExtensionConfig.h"
 #import "MJExtension.h"
-#import "Bag.h"
-#import "User.h"
-#import "StatusResult.h"
-#import "Student.h"
-#import "Dog.h"
-#import "Book.h"
+#import "MJBag.h"
+#import "MJUser.h"
+#import "MJStatusResult.h"
+#import "MJStudent.h"
+#import "MJDog.h"
+#import "MJBook.h"
 
 @implementation MJExtensionConfig
 /**
@@ -33,52 +33,52 @@
 //    [User mj_setupAllowedPropertyNames:^NSArray *{
 //        return @[@"name", @"icon"];
 //    }];
-    // 相当于在User.m中实现了+(NSArray *)mj_allowedPropertyNames方法
+    // 相当于在MJUser.m中实现了+(NSArray *)mj_allowedPropertyNames方法
     
-#pragma mark Bag类中的name属性不参与归档
-    [Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+#pragma mark MJBag类中的name属性不参与归档
+    [MJBag mj_setupIgnoredCodingPropertyNames:^NSArray *{
         return @[@"name"];
     }];
-    // 相当于在Bag.m中实现了+(NSArray *)mj_ignoredCodingPropertyNames方法
+    // 相当于在MJBag.m中实现了+(NSArray *)mj_ignoredCodingPropertyNames方法
     
-#pragma mark Bag类中只有price属性参与归档
-//    [Bag mj_setupAllowedCodingPropertyNames:^NSArray *{
+#pragma mark MJBag类中只有price属性参与归档
+//    [MJBag mj_setupAllowedCodingPropertyNames:^NSArray *{
 //        return @[@"price"];
 //    }];
-    // 相当于在Bag.m中实现了+(NSArray *)mj_allowedCodingPropertyNames方法
+    // 相当于在MJBag.m中实现了+(NSArray *)mj_allowedCodingPropertyNames方法
     
-#pragma mark StatusResult类中的statuses数组中存放的是Status模型
-#pragma mark StatusResult类中的ads数组中存放的是Ad模型
-    [StatusResult mj_setupObjectClassInArray:^NSDictionary *{
+#pragma mark MJStatusResult类中的statuses数组中存放的是MJStatus模型
+#pragma mark MJStatusResult类中的ads数组中存放的是MJAd模型
+    [MJStatusResult mj_setupObjectClassInArray:^NSDictionary *{
         return @{
-                 @"statuses" : @"Status", // @"statuses" : [Status class],
-                 @"ads" : @"Ad" // @"ads" : [Ad class]
+                 @"statuses" : @"MJStatus", // @"statuses" : [MJStatus class],
+                 @"ads" : @"MJAd" // @"ads" : [MJAd class]
                  };
     }];
-    // 相当于在StatusResult.m中实现了+(NSDictionary *)mj_objectClassInArray方法
+    // 相当于在MJStatusResult.m中实现了+(NSDictionary *)mj_objectClassInArray方法
     
-#pragma mark Student中的desc属性对应着字典中的desciption
+#pragma mark MJStudent中的desc属性对应着字典中的desciption
 #pragma mark ....
-    [Student mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-        return @{
-                 @"desc" : @"desciption",
-                 @"oldName" : @"name.oldName",
-                 @"nowName" : @"name.newName",
-                 @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],
-                 @"nameChangedTime" : @"name.info[1].nameChangedTime",
-                 @"bag" : @"other.bag"
-                 };
-    }];
-    // 相当于在Student.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName方法
+//    [MJStudent mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+//        return @{
+//                 @"desc" : @"desciption",
+//                 @"oldName" : @"name.oldName",
+//                 @"nowName" : @"name.newName",
+//                 @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],
+//                 @"nameChangedTime" : @"name.info[1].nameChangedTime",
+//                 @"bag" : @"other.bag"
+//                 };
+//    }];
+    // 相当于在MJStudent.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName方法
     
-#pragma mark Dog的所有驼峰属性转成下划线key去字典中取值
-    [Dog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
+#pragma mark MJDog的所有驼峰属性转成下划线key去字典中取值
+    [MJDog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
         return [propertyName mj_underlineFromCamel];
     }];
     // 相当于在Dog.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName121:方法
     
-#pragma mark Book的日期处理、字符串nil值处理
-    [Book mj_setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
+#pragma mark MJBook的日期处理、字符串nil值处理
+    [MJBook mj_setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
         if ([property.name isEqualToString:@"publisher"]) {
             if (oldValue == nil || [oldValue isKindOfClass:[NSNull class]]) return @"";
         } else if (property.type.typeClass == [NSDate class]) {
@@ -89,6 +89,6 @@
             
         return oldValue;
     }];
-    // 相当于在Book.中实现了- (id)mj_newValueFromOldValue:property:方法
+    // 相当于在MJBook.中实现了- (id)mj_newValueFromOldValue:property:方法
 }
 @end
