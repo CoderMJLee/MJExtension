@@ -19,9 +19,10 @@
 @property (nonatomic, assign) objc_property_t property;
 /** 成员属性的名字 */
 @property (nonatomic, readonly) NSString *name;
-
 /** 成员属性的类型 */
 @property (nonatomic, readonly) MJPropertyType *type;
+/** 只读属性 */
+@property (nonatomic, assign) BOOL readonly;
 /** 成员属性来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
 

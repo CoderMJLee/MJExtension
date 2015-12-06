@@ -68,6 +68,9 @@
         code = [attrs substringWithRange:NSMakeRange(loc, dotLoc - loc)];
     }
     _type = [MJPropertyType cachedTypeWithCode:code];
+    
+    // 3.只读
+    _readonly = property_copyAttributeValue(property, "R") != nil;
 }
 
 /**

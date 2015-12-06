@@ -43,7 +43,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 {
     __block id value = objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
     if (!value) {
-        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+        [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
             value = objc_getAssociatedObject(c, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
             
             if (value) *stop = YES;
@@ -89,7 +89,7 @@ static NSNumberFormatter *numberFormatter_;
             // 0.检测是否被忽略
             if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
             if ([ignoredPropertyNames containsObject:property.name]) return;
-            
+            if (property.readonly) return;
             // 1.取出属性值
             id value;
             NSArray *propertyKeyses = [property propertyKeysForClass:clazz];

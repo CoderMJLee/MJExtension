@@ -138,7 +138,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
         }
     }
     
-    [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+    [self mj_enumerateAllClasses:^(__MJWeakRef Class c, BOOL *stop) {
         NSArray *subArray = objc_getAssociatedObject(c, key);
         [array addObjectsFromArray:subArray];
     }];
