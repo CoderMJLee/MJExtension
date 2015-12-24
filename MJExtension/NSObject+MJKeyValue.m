@@ -53,11 +53,8 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 }
 
 #pragma mark - --常用的对象--
-static NSNumberFormatter *numberFormatter_;
 + (void)load
 {
-    numberFormatter_ = [[NSNumberFormatter alloc] init];
-    
     // 默认设置
     [self mj_referenceReplacedKeyWhenCreatingKeyValues:YES];
 }
@@ -159,7 +156,7 @@ static NSNumberFormatter *numberFormatter_;
                         NSString *oldValue = value;
                         
                         // NSString -> NSNumber
-                        value = [numberFormatter_ numberFromString:oldValue];
+                        value = [NSDecimalNumber decimalNumberWithString:oldValue];
                         
                         // 如果是BOOL
                         if (type.isBoolType) {

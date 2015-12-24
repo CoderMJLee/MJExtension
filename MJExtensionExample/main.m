@@ -77,7 +77,7 @@ void keyValues2object()
     MJUser *user = [MJUser mj_objectWithKeyValues:dict];
     
     // 3.打印MJUser模型的属性
-    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**
@@ -92,7 +92,7 @@ void keyValues2object1()
     MJUser *user = [MJUser mj_objectWithKeyValues:jsonString];
     
     // 3.打印MJUser模型的属性
-    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@", user.name, user.icon, user.age, @(user.height));
+    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@", user.name, user.icon, user.age, user.height);
 }
 
 /**

@@ -29,8 +29,8 @@
                  };
     }];
     
-#pragma mark User类的只有name、icon属性参与字典转模型
-//    [User mj_setupAllowedPropertyNames:^NSArray *{
+#pragma mark MJUser类的只有name、icon属性参与字典转模型
+//    [MJUser mj_setupAllowedPropertyNames:^NSArray *{
 //        return @[@"name", @"icon"];
 //    }];
     // 相当于在MJUser.m中实现了+(NSArray *)mj_allowedPropertyNames方法
@@ -59,23 +59,23 @@
     
 #pragma mark MJStudent中的desc属性对应着字典中的desciption
 #pragma mark ....
-//    [MJStudent mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-//        return @{
-//                 @"desc" : @"desciption",
-//                 @"oldName" : @"name.oldName",
-//                 @"nowName" : @"name.newName",
-//                 @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],
-//                 @"nameChangedTime" : @"name.info[1].nameChangedTime",
-//                 @"bag" : @"other.bag"
-//                 };
-//    }];
+    [MJStudent mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{
+                 @"desc" : @"desciption",
+                 @"oldName" : @"name.oldName",
+                 @"nowName" : @"name.newName",
+                 @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],
+                 @"nameChangedTime" : @"name.info[1].nameChangedTime",
+                 @"bag" : @"other.bag"
+                 };
+    }];
     // 相当于在MJStudent.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName方法
     
 #pragma mark MJDog的所有驼峰属性转成下划线key去字典中取值
     [MJDog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
         return [propertyName mj_underlineFromCamel];
     }];
-    // 相当于在Dog.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName121:方法
+    // 相当于在MJDog.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName121:方法
     
 #pragma mark MJBook的日期处理、字符串nil值处理
     [MJBook mj_setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {

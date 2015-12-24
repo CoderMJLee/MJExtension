@@ -21,9 +21,9 @@ typedef enum {
 /** 年龄 */
 @property (assign, nonatomic) unsigned int age;
 /** 身高 */
-@property (assign, nonatomic) float height;
+@property (strong, nonatomic) NSNumber *height;
 /** 财富 */
-@property (strong, nonatomic) NSNumber *money;
+@property (strong, nonatomic) NSDecimalNumber *money;
 /** 性别 */
 @property (assign, nonatomic) Sex sex;
 /** 同性恋 */
