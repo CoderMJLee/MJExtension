@@ -298,7 +298,7 @@ static NSNumberFormatter *numberFormatter_;
 - (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
 {
     // 如果自己不是模型类, 那就返回自己
-    MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
+    MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], [self isMemberOfClass:[NSDictionary class]]?self.mutableCopy:(NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
     
     id keyValues = [NSMutableDictionary dictionary];
     
