@@ -11,14 +11,35 @@
 #import "NSObject+MJKeyValue.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
-#import "MJDictionaryCache.h"
 
 static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
+static NSMutableDictionary *allowedPropertyNamesDict_;
+static NSMutableDictionary *ignoredPropertyNamesDict_;
+static NSMutableDictionary *allowedCodingPropertyNamesDict_;
+static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
+
 @implementation NSObject (MJClass)
+
++ (void)load
+{
+    allowedPropertyNamesDict_ = [NSMutableDictionary dictionary];
+    ignoredPropertyNamesDict_ = [NSMutableDictionary dictionary];
+    allowedCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
+    ignoredCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
+}
+
++ (NSMutableDictionary *)dictForKey:(const void *)key
+{
+    if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesDict_;
+    if (key == &MJIgnoredPropertyNamesKey) return ignoredPropertyNamesDict_;
+    if (key == &MJAllowedCodingPropertyNamesKey) return allowedCodingPropertyNamesDict_;
+    if (key == &MJIgnoredCodingPropertyNamesKey) return ignoredCodingPropertyNamesDict_;
+    return nil;
+}
 
 + (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration
 {
@@ -117,16 +138,16 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     // 清空数据
-    [[MJDictionaryCache dictWithDictId:key] removeAllObjects];
+    [[self dictForKey:key] removeAllObjects];
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
-    NSMutableArray *array = [MJDictionaryCache objectForKey:NSStringFromClass(self) forDictId:key];
+    NSMutableArray *array = [self dictForKey:key][NSStringFromClass(self)];
     if (array) return array;
     
     // 创建、存储
-    [MJDictionaryCache setObject:array = [NSMutableArray array] forKey:NSStringFromClass(self) forDictId:key];
+    [self dictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
     
     if ([self respondsToSelector:selector]) {
 #pragma clang diagnostic push

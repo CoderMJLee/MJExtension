@@ -16,7 +16,6 @@
 		2DE3CDA51BEF7B3800DA0F2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DE3CDA31BEF7B3800DA0F2E /* LaunchScreen.storyboard */; };
 		2DE3CDB01BEF7B3800DA0F2E /* MJExtensionExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDAF1BEF7B3800DA0F2E /* MJExtensionExampleTests.m */; };
 		2DE3CDBB1BEF7B3800DA0F2E /* MJExtensionExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDBA1BEF7B3800DA0F2E /* MJExtensionExampleUITests.m */; };
-		2DE3CDE01BEF7B9F00DA0F2E /* MJDictionaryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDCA1BEF7B9F00DA0F2E /* MJDictionaryCache.m */; settings = {ASSET_TAGS = (); }; };
 		2DE3CDE11BEF7B9F00DA0F2E /* MJExtensionConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDCD1BEF7B9F00DA0F2E /* MJExtensionConst.m */; settings = {ASSET_TAGS = (); }; };
 		2DE3CDE21BEF7B9F00DA0F2E /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDCF1BEF7B9F00DA0F2E /* MJFoundation.m */; settings = {ASSET_TAGS = (); }; };
 		2DE3CDE31BEF7B9F00DA0F2E /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDD11BEF7B9F00DA0F2E /* MJProperty.m */; settings = {ASSET_TAGS = (); }; };
@@ -75,8 +74,6 @@
 		2DE3CDB61BEF7B3800DA0F2E /* MJExtensionExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MJExtensionExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DE3CDBA1BEF7B3800DA0F2E /* MJExtensionExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJExtensionExampleUITests.m; sourceTree = "<group>"; };
 		2DE3CDBC1BEF7B3800DA0F2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2DE3CDC91BEF7B9F00DA0F2E /* MJDictionaryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJDictionaryCache.h; sourceTree = "<group>"; };
-		2DE3CDCA1BEF7B9F00DA0F2E /* MJDictionaryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJDictionaryCache.m; sourceTree = "<group>"; };
 		2DE3CDCB1BEF7B9F00DA0F2E /* MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
 		2DE3CDCC1BEF7B9F00DA0F2E /* MJExtensionConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConst.h; sourceTree = "<group>"; };
 		2DE3CDCD1BEF7B9F00DA0F2E /* MJExtensionConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJExtensionConst.m; sourceTree = "<group>"; };
@@ -219,8 +216,6 @@
 		2DE3CDC81BEF7B9F00DA0F2E /* MJExtension */ = {
 			isa = PBXGroup;
 			children = (
-				2DE3CDC91BEF7B9F00DA0F2E /* MJDictionaryCache.h */,
-				2DE3CDCA1BEF7B9F00DA0F2E /* MJDictionaryCache.m */,
 				2DE3CDCB1BEF7B9F00DA0F2E /* MJExtension.h */,
 				2DE3CDCC1BEF7B9F00DA0F2E /* MJExtensionConst.h */,
 				2DE3CDCD1BEF7B9F00DA0F2E /* MJExtensionConst.m */,
@@ -449,7 +444,6 @@
 				2DE3CDE21BEF7B9F00DA0F2E /* MJFoundation.m in Sources */,
 				2DE3CDEA1BEF7B9F00DA0F2E /* NSString+MJExtension.m in Sources */,
 				2DE3CD971BEF7B3800DA0F2E /* main.m in Sources */,
-				2DE3CDE01BEF7B9F00DA0F2E /* MJDictionaryCache.m in Sources */,
 				2D8FC6B81BEF7E89004471E9 /* MJExtensionConfig.m in Sources */,
 				2DE3CDE41BEF7B9F00DA0F2E /* MJPropertyKey.m in Sources */,
 			);
