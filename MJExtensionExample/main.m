@@ -19,6 +19,8 @@
 #import "MJBook.h"
 #import "MJBox.h"
 #import <CoreData/CoreData.h>
+#import "Platform.h"
+#import "Games.h"
 
 
 /**
@@ -37,19 +39,19 @@ int main(int argc, char * argv[]) {
         // 关于模型的具体配置可以参考：MJExtensionConfig.m
         // 或者参考每个模型的.m文件中被注释掉的配置
         
-        execute(keyValues2object, @"简单的字典 -> 模型");
-        execute(keyValues2object1, @"JSON字符串 -> 模型");
-        execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
-        execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
-        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
-        execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
-        execute(object2keyValues, @"模型转字典");
-        execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
+//        execute(keyValues2object, @"简单的字典 -> 模型");
+//        execute(keyValues2object1, @"JSON字符串 -> 模型");
+//        execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
+//        execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
+//        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
+//        execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
+//        execute(object2keyValues, @"模型转字典");
+//        execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
         execute(coreData, @"CoreData示例");
-        execute(coding, @"NSCoding示例");
-        execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
-        execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
-        execute(logAllProperties, @"使用MJExtensionLog打印模型的所有属性");
+//        execute(coding, @"NSCoding示例");
+//        execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
+//        execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
+//        execute(logAllProperties, @"使用MJExtensionLog打印模型的所有属性");
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
@@ -330,29 +332,80 @@ void objectArray2keyValuesArray()
     MJExtensionLog(@"%@", dictArray);
 }
 
+static NSManagedObjectContext *moc;
+
+void initializeCoreData()
+{
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"CoreData" withExtension:@"momd"];
+    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+    moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    [moc setPersistentStoreCoordinator:psc];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *documentsURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *storeURL = [documentsURL URLByAppendingPathComponent:@"DataModel.sqlite"];
+    
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSError *error = nil;
+        NSPersistentStoreCoordinator *psc = [moc persistentStoreCoordinator];
+        [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    });
+}
+
 /**
  *  CoreData示例
  */
 void coreData()
 {
-    NSDictionary *dict = @{
-                           @"name" : @"Jack",
-                           @"icon" : @"lufy.png",
-                           @"age" : @20,
-                           @"height" : @1.55,
-                           @"money" : @"100.9",
-                           @"sex" : @(SexFemale),
-                           @"gay" : @"true"
-                           };
+    NSArray *games = @[@{
+                           @"name": @"火影忍者",
+                           @"gameId": @"1"
+                           },
+                       @{
+                           @"name": @"海贼王",
+                           @"gameId": @"2"
+                           }];
+    NSDictionary *platform = @{
+                               @"name": @"QQ",
+                               @"platformId": @"QQ",
+                               @"ignore": @"ignore",
+                               @"games": games
+                               };
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        initializeCoreData();
+    });
     
-    // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
-    NSManagedObjectContext *context = nil;
-    MJUser *user = [MJUser mj_objectWithKeyValues:dict context:context];
+    [Platform mj_objectWithKeyValues:platform context:moc];
     
     // 利用CoreData保存模型
-    [context save:nil];
+    [moc save:nil];
     
-    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%f, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    MJExtensionLog(@"第一次映射core data数据: %@", platform);
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Platform"];
+    NSArray *platforms = [moc executeFetchRequest:request error:nil];
+    for (Platform *p in platforms) {
+        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        for (Games *g in p.games) {
+            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+        }
+    }
+    
+    NSMutableDictionary *newPlatform = (NSMutableDictionary *)platform.mutableCopy;
+    [newPlatform setObject:@"wechat" forKey:@"name"];
+    [Platform mj_objectWithKeyValues:newPlatform context:moc];
+    
+    [moc save:nil];
+    
+    platforms = [moc executeFetchRequest:request error:nil];
+    MJExtensionLog(@"第二次映射core data数据: %@", newPlatform);
+    for (Platform *p in platforms) {
+        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        for (Games *g in p.games) {
+            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+        }
+    }
 }
 
 /**
