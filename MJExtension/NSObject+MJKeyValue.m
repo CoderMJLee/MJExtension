@@ -228,7 +228,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     MJExtensionAssertError(file != nil, nil, [self class], @"file参数为nil");
     
-    return [self mj_objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file]];
+    return [self mj_objectWithKeyValues:[NSMutableDictionary dictionaryWithContentsOfFile:file]];
 }
 
 #pragma mark - 字典数组 -> 模型数组
