@@ -43,7 +43,7 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
  *  @param newValueFormOldValue 用于过滤字典中的值
  */
 + (void)setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue;
-+ (id)getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(__weak MJProperty *)property;
++ (id)getNewValueFromObject:(id)object oldValue:(id)oldValue property:(MJProperty *)property;
 
 #pragma mark - key配置
 /**

@@ -160,7 +160,11 @@ static const char MJCachedPropertiesKey = '\0';
     objc_setAssociatedObject(self, &MJNewValueFromOldValueKey, newValueFormOldValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-+ (id)getNewValueFromObject:(__weak id)object oldValue:(__weak id)oldValue property:(MJProperty *__weak)property{
++ (id)getNewValueFromObject:(id)aObject oldValue:(id)anOldValue property:(MJProperty *)aProperty{
+    __weak id object = aObject;
+    __weak id oldValue = anOldValue;
+    __weak id property = aProperty;
+    
     // 如果有实现方法
     if ([object respondsToSelector:@selector(newValueFromOldValue:property:)]) {
         return [object newValueFromOldValue:oldValue property:property];
