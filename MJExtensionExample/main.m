@@ -48,6 +48,7 @@ int main(int argc, char * argv[]) {
 //        execute(object2keyValues, @"模型转字典");
 //        execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
         execute(coreData, @"CoreData示例");
+        execute(coreData2, @"双向CoreData示例");
 //        execute(coding, @"NSCoding示例");
 //        execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
 //        execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
@@ -360,15 +361,15 @@ void coreData()
 {
     NSArray *games = @[@{
                            @"name": @"火影忍者",
-                           @"gameId": @"1"
+                           @"id": @"1"
                            },
                        @{
                            @"name": @"海贼王",
-                           @"gameId": @"2"
+                           @"id": @"2"
                            }];
     NSDictionary *platform = @{
                                @"name": @"QQ",
-                               @"platformId": @"QQ",
+                               @"id": @"QQ",
                                @"ignore": @"ignore",
                                @"games": games
                                };
@@ -400,6 +401,33 @@ void coreData()
     
     platforms = [moc executeFetchRequest:request error:nil];
     MJExtensionLog(@"第二次映射core data数据: %@", newPlatform);
+    for (Platform *p in platforms) {
+        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        for (Games *g in p.games) {
+            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+        }
+    }
+}
+
+/**
+ *  CoreData示例
+ */
+void coreData2()
+{
+    NSDictionary *games = @{
+                       @"name": @"海贼王*改",
+                       @"id": @"2",
+                       @"platform": @{@"id": @"QQ"}
+                       };
+    
+    [Games mj_objectWithKeyValues:games context:moc];
+    
+    // 利用CoreData保存模型
+    [moc save:nil];
+    
+    MJExtensionLog(@"双向映射core data数据: %@", games);
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Platform"];
+    NSArray *platforms = [moc executeFetchRequest:request error:nil];
     for (Platform *p in platforms) {
         MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
         for (Games *g in p.games) {

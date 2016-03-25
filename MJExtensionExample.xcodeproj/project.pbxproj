@@ -37,11 +37,13 @@
 		2DE3CE091BEF7BE100DA0F2E /* MJStudent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDFE1BEF7BE100DA0F2E /* MJStudent.m */; };
 		2DE3CE0A1BEF7BE100DA0F2E /* MJUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CE001BEF7BE100DA0F2E /* MJUser.m */; };
 		EF0A99911C745504003176D4 /* NSManagedObject+MJCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0A99901C745504003176D4 /* NSManagedObject+MJCoreData.m */; };
+		EF1DD9271C7E9FC90008F3C2 /* Platform+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD91C1C7E9FC90008F3C2 /* Platform+CoreDataProperties.m */; };
+		EF1DD9281C7E9FC90008F3C2 /* Platform.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD91E1C7E9FC90008F3C2 /* Platform.m */; };
+		EF1DD9291C7E9FC90008F3C2 /* Base+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */; };
+		EF1DD92A1C7E9FC90008F3C2 /* Base.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9221C7E9FC90008F3C2 /* Base.m */; };
+		EF1DD92B1C7E9FC90008F3C2 /* Games+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */; };
+		EF1DD92C1C7E9FC90008F3C2 /* Games.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9261C7E9FC90008F3C2 /* Games.m */; };
 		EFF3C5981C746D820021C293 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C5961C746D820021C293 /* CoreData.xcdatamodeld */; };
-		EFF3C5A11C7471830021C293 /* Games+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C59A1C7471830021C293 /* Games+CoreDataProperties.m */; };
-		EFF3C5A21C7471830021C293 /* Games.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C59C1C7471830021C293 /* Games.m */; };
-		EFF3C5A31C7471830021C293 /* Platform+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C59E1C7471830021C293 /* Platform+CoreDataProperties.m */; };
-		EFF3C5A41C7471830021C293 /* Platform.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C5A01C7471830021C293 /* Platform.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,15 +126,19 @@
 		2DE3CE0B1BEF7C2100DA0F2E /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		EF0A998F1C745504003176D4 /* NSManagedObject+MJCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MJCoreData.h"; sourceTree = "<group>"; };
 		EF0A99901C745504003176D4 /* NSManagedObject+MJCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MJCoreData.m"; sourceTree = "<group>"; };
+		EF1DD91B1C7E9FC90008F3C2 /* Platform+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Platform+CoreDataProperties.h"; path = "CoreData/Platform+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EF1DD91C1C7E9FC90008F3C2 /* Platform+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Platform+CoreDataProperties.m"; path = "CoreData/Platform+CoreDataProperties.m"; sourceTree = "<group>"; };
+		EF1DD91D1C7E9FC90008F3C2 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = CoreData/Platform.h; sourceTree = "<group>"; };
+		EF1DD91E1C7E9FC90008F3C2 /* Platform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Platform.m; path = CoreData/Platform.m; sourceTree = "<group>"; };
+		EF1DD91F1C7E9FC90008F3C2 /* Base+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Base+CoreDataProperties.h"; path = "CoreData/Base+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Base+CoreDataProperties.m"; path = "CoreData/Base+CoreDataProperties.m"; sourceTree = "<group>"; };
+		EF1DD9211C7E9FC90008F3C2 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = CoreData/Base.h; sourceTree = "<group>"; };
+		EF1DD9221C7E9FC90008F3C2 /* Base.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base.m; path = CoreData/Base.m; sourceTree = "<group>"; };
+		EF1DD9231C7E9FC90008F3C2 /* Games+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Games+CoreDataProperties.h"; path = "CoreData/Games+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Games+CoreDataProperties.m"; path = "CoreData/Games+CoreDataProperties.m"; sourceTree = "<group>"; };
+		EF1DD9251C7E9FC90008F3C2 /* Games.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Games.h; path = CoreData/Games.h; sourceTree = "<group>"; };
+		EF1DD9261C7E9FC90008F3C2 /* Games.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Games.m; path = CoreData/Games.m; sourceTree = "<group>"; };
 		EFF3C5971C746D820021C293 /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
-		EFF3C5991C7471830021C293 /* Games+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Games+CoreDataProperties.h"; path = "CoreData/Games+CoreDataProperties.h"; sourceTree = "<group>"; };
-		EFF3C59A1C7471830021C293 /* Games+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Games+CoreDataProperties.m"; path = "CoreData/Games+CoreDataProperties.m"; sourceTree = "<group>"; };
-		EFF3C59B1C7471830021C293 /* Games.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Games.h; path = CoreData/Games.h; sourceTree = "<group>"; };
-		EFF3C59C1C7471830021C293 /* Games.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Games.m; path = CoreData/Games.m; sourceTree = "<group>"; };
-		EFF3C59D1C7471830021C293 /* Platform+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Platform+CoreDataProperties.h"; path = "CoreData/Platform+CoreDataProperties.h"; sourceTree = "<group>"; };
-		EFF3C59E1C7471830021C293 /* Platform+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Platform+CoreDataProperties.m"; path = "CoreData/Platform+CoreDataProperties.m"; sourceTree = "<group>"; };
-		EFF3C59F1C7471830021C293 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = CoreData/Platform.h; sourceTree = "<group>"; };
-		EFF3C5A01C7471830021C293 /* Platform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Platform.m; path = CoreData/Platform.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,14 +319,18 @@
 			isa = PBXGroup;
 			children = (
 				EFF3C5961C746D820021C293 /* CoreData.xcdatamodeld */,
-				EFF3C5991C7471830021C293 /* Games+CoreDataProperties.h */,
-				EFF3C59A1C7471830021C293 /* Games+CoreDataProperties.m */,
-				EFF3C59B1C7471830021C293 /* Games.h */,
-				EFF3C59C1C7471830021C293 /* Games.m */,
-				EFF3C59D1C7471830021C293 /* Platform+CoreDataProperties.h */,
-				EFF3C59E1C7471830021C293 /* Platform+CoreDataProperties.m */,
-				EFF3C59F1C7471830021C293 /* Platform.h */,
-				EFF3C5A01C7471830021C293 /* Platform.m */,
+				EF1DD91B1C7E9FC90008F3C2 /* Platform+CoreDataProperties.h */,
+				EF1DD91C1C7E9FC90008F3C2 /* Platform+CoreDataProperties.m */,
+				EF1DD91D1C7E9FC90008F3C2 /* Platform.h */,
+				EF1DD91E1C7E9FC90008F3C2 /* Platform.m */,
+				EF1DD91F1C7E9FC90008F3C2 /* Base+CoreDataProperties.h */,
+				EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */,
+				EF1DD9211C7E9FC90008F3C2 /* Base.h */,
+				EF1DD9221C7E9FC90008F3C2 /* Base.m */,
+				EF1DD9231C7E9FC90008F3C2 /* Games+CoreDataProperties.h */,
+				EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */,
+				EF1DD9251C7E9FC90008F3C2 /* Games.h */,
+				EF1DD9261C7E9FC90008F3C2 /* Games.m */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -460,33 +470,35 @@
 			files = (
 				2DE3CDE51BEF7B9F00DA0F2E /* MJPropertyType.m in Sources */,
 				2DE3CD9D1BEF7B3800DA0F2E /* ViewController.m in Sources */,
-				EFF3C5A11C7471830021C293 /* Games+CoreDataProperties.m in Sources */,
+				EF1DD9281C7E9FC90008F3C2 /* Platform.m in Sources */,
 				2DE3CE091BEF7BE100DA0F2E /* MJStudent.m in Sources */,
-				EFF3C5A41C7471830021C293 /* Platform.m in Sources */,
 				2DE3CE061BEF7BE100DA0F2E /* MJDog.m in Sources */,
 				2DE3CDE11BEF7B9F00DA0F2E /* MJExtensionConst.m in Sources */,
 				2DE3CE031BEF7BE100DA0F2E /* MJBaseObject.m in Sources */,
 				2DE3CDE61BEF7B9F00DA0F2E /* NSObject+MJClass.m in Sources */,
 				EF0A99911C745504003176D4 /* NSManagedObject+MJCoreData.m in Sources */,
 				2DE3CDE91BEF7B9F00DA0F2E /* NSObject+MJProperty.m in Sources */,
+				EF1DD92A1C7E9FC90008F3C2 /* Base.m in Sources */,
 				2DE3CE0A1BEF7BE100DA0F2E /* MJUser.m in Sources */,
 				2DE3CDE81BEF7B9F00DA0F2E /* NSObject+MJKeyValue.m in Sources */,
 				2DE3CDE31BEF7B9F00DA0F2E /* MJProperty.m in Sources */,
+				EF1DD9291C7E9FC90008F3C2 /* Base+CoreDataProperties.m in Sources */,
+				EF1DD92C1C7E9FC90008F3C2 /* Games.m in Sources */,
 				2DE3CE011BEF7BE100DA0F2E /* MJAd.m in Sources */,
 				2DE3CD9A1BEF7B3800DA0F2E /* AppDelegate.m in Sources */,
 				2DE3CE041BEF7BE100DA0F2E /* MJBook.m in Sources */,
 				2DE3CDE71BEF7B9F00DA0F2E /* NSObject+MJCoding.m in Sources */,
 				EFF3C5981C746D820021C293 /* CoreData.xcdatamodeld in Sources */,
 				2DE3CE071BEF7BE100DA0F2E /* MJStatus.m in Sources */,
-				EFF3C5A21C7471830021C293 /* Games.m in Sources */,
+				EF1DD9271C7E9FC90008F3C2 /* Platform+CoreDataProperties.m in Sources */,
 				2DE3CE051BEF7BE100DA0F2E /* MJBox.m in Sources */,
 				2DE3CE021BEF7BE100DA0F2E /* MJBag.m in Sources */,
 				2DE3CE081BEF7BE100DA0F2E /* MJStatusResult.m in Sources */,
-				EFF3C5A31C7471830021C293 /* Platform+CoreDataProperties.m in Sources */,
 				2DE3CDE21BEF7B9F00DA0F2E /* MJFoundation.m in Sources */,
 				2DE3CDEA1BEF7B9F00DA0F2E /* NSString+MJExtension.m in Sources */,
 				2DE3CD971BEF7B3800DA0F2E /* main.m in Sources */,
 				2D8FC6B81BEF7E89004471E9 /* MJExtensionConfig.m in Sources */,
+				EF1DD92B1C7E9FC90008F3C2 /* Games+CoreDataProperties.m in Sources */,
 				2DE3CDE41BEF7B9F00DA0F2E /* MJPropertyKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

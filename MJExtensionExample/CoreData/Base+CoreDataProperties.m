@@ -1,5 +1,5 @@
 //
-//  Games+CoreDataProperties.h
+//  Base+CoreDataProperties.m
 //  MJExtensionExample
 //
 //  Created by 陆晖 on 16/2/25.
@@ -9,15 +9,10 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "Games.h"
+#import "Base+CoreDataProperties.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation Base (CoreDataProperties)
 
-@interface Games (CoreDataProperties)
-
-@property (nullable, nonatomic, retain) NSString *name;
-@property (nullable, nonatomic, retain) Platform *platform;
+@dynamic objectId;
 
 @end
-
-NS_ASSUME_NONNULL_END

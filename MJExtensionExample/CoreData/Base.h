@@ -1,5 +1,5 @@
 //
-//  Games.h
+//  Base.h
 //  MJExtensionExample
 //
 //  Created by 陆晖 on 16/2/25.
@@ -7,14 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Base.h"
+#import <CoreData/CoreData.h>
 #import "MJExtension.h"
-
-@class Platform;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Games : Base
+@interface Base : NSManagedObject<MJCoreDataKeyValue>
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -22,4 +20,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "Games+CoreDataProperties.h"
+#import "Base+CoreDataProperties.h"

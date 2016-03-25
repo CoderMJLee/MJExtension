@@ -2,21 +2,29 @@
 //  Games.m
 //  MJExtensionExample
 //
-//  Created by 陆晖 on 16/2/17.
+//  Created by 陆晖 on 16/2/25.
 //  Copyright © 2016年 小码哥. All rights reserved.
 //
 
 #import "Games.h"
+#import "Platform.h"
 
 @implementation Games
 
-// Insert code here to add functionality to your managed object subclass
+//+ (void)initialize {
+//    if (self == [Games class]) {
+//        [self mj_setupIdentityPropertyNames:^NSArray *{
+//            return @[@"name"];
+//        }];
+//    }
+//}
+
 + (NSMutableArray *)mj_identityPropertyNames {
-    return [NSMutableArray arrayWithObjects:@"gameId", nil];
+    return @[@"name"].mutableCopy;
 }
 
 + (NSArray *)mj_ignoredJSONSerializaitonPropertyNames {
-    return [NSMutableArray arrayWithObjects:@"gameId", nil];
+    return [NSMutableArray arrayWithObjects:@"objectId", nil];
 }
 
 @end

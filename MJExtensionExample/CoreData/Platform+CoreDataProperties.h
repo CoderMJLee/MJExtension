@@ -2,7 +2,7 @@
 //  Platform+CoreDataProperties.h
 //  MJExtensionExample
 //
-//  Created by 陆晖 on 16/2/17.
+//  Created by 陆晖 on 16/2/25.
 //  Copyright © 2016年 小码哥. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -10,15 +10,13 @@
 //
 
 #import "Platform.h"
-@class Games;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Platform (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSString *name;
-@property (nullable, nonatomic, retain) NSString *platformId;
 @property (nullable, nonatomic, retain) NSString *ignore;
+@property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSSet<Games *> *games;
 
 @end
