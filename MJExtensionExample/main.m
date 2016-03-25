@@ -365,7 +365,8 @@ void coreData()
                            },
                        @{
                            @"name": @"海贼王",
-                           @"id": @"2"
+                           @"id": @"2",
+                           @"isHot": @YES
                            }];
     NSDictionary *platform = @{
                                @"name": @"QQ",
@@ -387,9 +388,9 @@ void coreData()
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Platform"];
     NSArray *platforms = [moc executeFetchRequest:request error:nil];
     for (Platform *p in platforms) {
-        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        MJExtensionLog(@"platformJSON = %@", p.mj_JSONString);
         for (Games *g in p.games) {
-            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+            MJExtensionLog(@"gameJson = %@", g.mj_JSONString);
         }
     }
     
@@ -402,9 +403,9 @@ void coreData()
     platforms = [moc executeFetchRequest:request error:nil];
     MJExtensionLog(@"第二次映射core data数据: %@", newPlatform);
     for (Platform *p in platforms) {
-        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        MJExtensionLog(@"platformJSON = %@", p.mj_JSONString);
         for (Games *g in p.games) {
-            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+            MJExtensionLog(@"gameJson = %@", g.mj_JSONString);
         }
     }
 }
@@ -429,9 +430,9 @@ void coreData2()
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Platform"];
     NSArray *platforms = [moc executeFetchRequest:request error:nil];
     for (Platform *p in platforms) {
-        MJExtensionLog(@"platformJSON = %@", p.mj_keyValues);
+        MJExtensionLog(@"platformJSON = %@", p.mj_JSONString);
         for (Games *g in p.games) {
-            MJExtensionLog(@"gameJson = %@", g.mj_keyValues);
+            MJExtensionLog(@"gameJson = %@", g.mj_JSONString);
         }
     }
 }

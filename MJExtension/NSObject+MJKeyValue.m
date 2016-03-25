@@ -98,8 +98,8 @@ static NSNumberFormatter *numberFormatter_;
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
     NSArray *ignoredMappingPropertyNames = [clazz mj_totalIgnoredObjectMappingPropertyNames];
     NSArray *objectMappingPropertyNames = [clazz mj_totalObjectMappingPropertyNames];
-        
-        //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
+    
+    //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
@@ -377,6 +377,18 @@ static NSNumberFormatter *numberFormatter_;
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
             } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
+            }
+            
+            //TODO: 看看有没有办法放在初始化property的时候，为property.type.isBoolType赋值
+            // 如果是CoreData对象，需要判断NSNumber的属性是否bool类型，否则JSON序列化的时候会序列化为0/1
+            if (property.type.isNumberType && [self isKindOfClass:[NSManagedObject class]]) {
+                NSManagedObject *object = (NSManagedObject *)self;
+                NSEntityDescription *entityDescription = [object entity];
+                NSAttributeDescription *attr = [[entityDescription attributesByName] objectForKey:property.name];
+                NSAttributeType type = [attr attributeType];
+                if (type == NSBooleanAttributeType) {
+                    value = [value boolValue]?@YES:@NO;
+                }
             }
             
             // 4.赋值
@@ -672,7 +684,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_setKeyValues:keyValues];
     if (error != NULL) {
-    *error = [self.class mj_error];
+        *error = [self.class mj_error];
     }
     return value;
     
@@ -687,7 +699,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_setKeyValues:keyValues context:context];
     if (error != NULL) {
-    *error = [self.class mj_error];
+        *error = [self.class mj_error];
     }
     return value;
 }
@@ -706,7 +718,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValues];
     if (error != NULL) {
-    *error = [self.class mj_error];
+        *error = [self.class mj_error];
     }
     return value;
 }
@@ -720,7 +732,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValuesWithKeys:keys];
     if (error != NULL) {
-    *error = [self.class mj_error];
+        *error = [self.class mj_error];
     }
     return value;
 }
@@ -734,7 +746,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValuesWithIgnoredKeys:ignoredKeys];
     if (error != NULL) {
-    *error = [self.class mj_error];
+        *error = [self.class mj_error];
     }
     return value;
 }
@@ -748,7 +760,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValuesArrayWithObjectArray:objectArray];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -762,7 +774,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValuesArrayWithObjectArray:objectArray keys:keys];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -776,7 +788,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_keyValuesArrayWithObjectArray:objectArray ignoredKeys:ignoredKeys];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -790,7 +802,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectWithKeyValues:keyValues];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -804,7 +816,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectWithKeyValues:keyValues context:context];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -818,7 +830,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectWithFilename:filename];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -832,7 +844,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectWithFile:file];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -846,7 +858,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectArrayWithKeyValuesArray:keyValuesArray];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -860,7 +872,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectArrayWithKeyValuesArray:keyValuesArray context:context];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -874,7 +886,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectArrayWithFilename:filename];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }
@@ -888,7 +900,7 @@ static NSNumberFormatter *numberFormatter_;
 {
     id value = [self mj_objectArrayWithFile:file];
     if (error != NULL) {
-    *error = [self mj_error];
+        *error = [self mj_error];
     }
     return value;
 }

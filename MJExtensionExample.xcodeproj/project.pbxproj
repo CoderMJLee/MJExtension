@@ -41,8 +41,8 @@
 		EF1DD9281C7E9FC90008F3C2 /* Platform.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD91E1C7E9FC90008F3C2 /* Platform.m */; };
 		EF1DD9291C7E9FC90008F3C2 /* Base+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */; };
 		EF1DD92A1C7E9FC90008F3C2 /* Base.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9221C7E9FC90008F3C2 /* Base.m */; };
-		EF1DD92B1C7E9FC90008F3C2 /* Games+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */; };
 		EF1DD92C1C7E9FC90008F3C2 /* Games.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1DD9261C7E9FC90008F3C2 /* Games.m */; };
+		EF62564D1CA4E9D000AC6DAF /* Games+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EF62564C1CA4E9D000AC6DAF /* Games+CoreDataProperties.m */; };
 		EFF3C5981C746D820021C293 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EFF3C5961C746D820021C293 /* CoreData.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
@@ -134,10 +134,10 @@
 		EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Base+CoreDataProperties.m"; path = "CoreData/Base+CoreDataProperties.m"; sourceTree = "<group>"; };
 		EF1DD9211C7E9FC90008F3C2 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = CoreData/Base.h; sourceTree = "<group>"; };
 		EF1DD9221C7E9FC90008F3C2 /* Base.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base.m; path = CoreData/Base.m; sourceTree = "<group>"; };
-		EF1DD9231C7E9FC90008F3C2 /* Games+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Games+CoreDataProperties.h"; path = "CoreData/Games+CoreDataProperties.h"; sourceTree = "<group>"; };
-		EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Games+CoreDataProperties.m"; path = "CoreData/Games+CoreDataProperties.m"; sourceTree = "<group>"; };
 		EF1DD9251C7E9FC90008F3C2 /* Games.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Games.h; path = CoreData/Games.h; sourceTree = "<group>"; };
 		EF1DD9261C7E9FC90008F3C2 /* Games.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Games.m; path = CoreData/Games.m; sourceTree = "<group>"; };
+		EF62564B1CA4E9D000AC6DAF /* Games+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Games+CoreDataProperties.h"; path = "CoreData/Games+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EF62564C1CA4E9D000AC6DAF /* Games+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Games+CoreDataProperties.m"; path = "CoreData/Games+CoreDataProperties.m"; sourceTree = "<group>"; };
 		EFF3C5971C746D820021C293 /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -327,8 +327,8 @@
 				EF1DD9201C7E9FC90008F3C2 /* Base+CoreDataProperties.m */,
 				EF1DD9211C7E9FC90008F3C2 /* Base.h */,
 				EF1DD9221C7E9FC90008F3C2 /* Base.m */,
-				EF1DD9231C7E9FC90008F3C2 /* Games+CoreDataProperties.h */,
-				EF1DD9241C7E9FC90008F3C2 /* Games+CoreDataProperties.m */,
+				EF62564B1CA4E9D000AC6DAF /* Games+CoreDataProperties.h */,
+				EF62564C1CA4E9D000AC6DAF /* Games+CoreDataProperties.m */,
 				EF1DD9251C7E9FC90008F3C2 /* Games.h */,
 				EF1DD9261C7E9FC90008F3C2 /* Games.m */,
 			);
@@ -497,8 +497,8 @@
 				2DE3CDE21BEF7B9F00DA0F2E /* MJFoundation.m in Sources */,
 				2DE3CDEA1BEF7B9F00DA0F2E /* NSString+MJExtension.m in Sources */,
 				2DE3CD971BEF7B3800DA0F2E /* main.m in Sources */,
+				EF62564D1CA4E9D000AC6DAF /* Games+CoreDataProperties.m in Sources */,
 				2D8FC6B81BEF7E89004471E9 /* MJExtensionConfig.m in Sources */,
-				EF1DD92B1C7E9FC90008F3C2 /* Games+CoreDataProperties.m in Sources */,
 				2DE3CDE41BEF7B9F00DA0F2E /* MJPropertyKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
