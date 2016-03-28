@@ -79,7 +79,8 @@ static NSMutableDictionary *cachedPropertiesDict_;
     }
     
     // 查看有没有需要替换的key
-    if (!key && [self respondsToSelector:@selector(mj_replacedKeyFromPropertyName)]) {
+    if ([self respondsToSelector:@selector(mj_replacedKeyFromPropertyName)] &&
+        [self mj_replacedKeyFromPropertyName][propertyName]) {
         key = [self mj_replacedKeyFromPropertyName][propertyName];
     }
     // 兼容旧版本
