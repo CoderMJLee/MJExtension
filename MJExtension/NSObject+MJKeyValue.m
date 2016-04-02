@@ -190,15 +190,19 @@ static NSNumberFormatter *numberFormatter_;
                             value = [numberFormatter_ numberFromString:oldValue];
                         }
                         
+                        BOOL isBOOLType = type.isBoolType;
+                        
                         if (property.type.isNumberType && [self isKindOfClass:[NSManagedObject class]]) {
                             NSManagedObject *object = (NSManagedObject *)self;
                             NSEntityDescription *entityDescription = [object entity];
                             NSAttributeDescription *attr = [[entityDescription attributesByName] objectForKey:property.name];
                             NSAttributeType type = [attr attributeType];
                             if (type == NSBooleanAttributeType) {
-                                value = [value boolValue]?@YES:@NO;
+                                isBOOLType = YES;
                             }
-                        } else {
+                        }
+                        
+                        if (isBOOLType) {
                             // 如果是BOOL
                             // 字符串转BOOL（字符串没有charValue方法）
                             // 系统会调用字符串的charValue转为BOOL类型
