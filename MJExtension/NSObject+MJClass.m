@@ -16,6 +16,10 @@ static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
+static const char MJJSONSerializationPropertyNamesKey = '\0';
+static const char MJObjectMappingPropertyNamesKey = '\0';
+static const char MJIgnoredJSONSerializationPropertyNamesKey = '\0';
+static const char MJIgnoredObjectMappingPropertyNamesKey = '\0';
 
 static NSMutableDictionary *allowedPropertyNamesDict_;
 static NSMutableDictionary *ignoredPropertyNamesDict_;
@@ -128,6 +132,42 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
 {
     return [self mj_totalObjectsWithSelector:@selector(mj_allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey];
 }
+
+#pragma mark - 序列化白名单配置
++ (void)mj_setupJSONSerializationPropertyNames:(MJJSONSerializationPropertyNames)jsonSerializationPropertyNames {
+    [self mj_setupBlockReturnValue:jsonSerializationPropertyNames key:&MJJSONSerializationPropertyNamesKey];
+}
+
++ (NSMutableArray *)mj_totalJSONSerializationPropertyNames {
+    return [self mj_totalObjectsWithSelector:@selector(mj_jsonSerializationPropertyNames) key:&MJJSONSerializationPropertyNamesKey];
+}
+
++ (void)mj_setupObjectMappingPropertyNames:(MJJSONSerializationPropertyNames)objectMappingPropertyNames {
+    [self mj_setupBlockReturnValue:objectMappingPropertyNames key:&MJObjectMappingPropertyNamesKey];
+}
+
++ (NSMutableArray *)mj_totalObjectMappingPropertyNames {
+    return [self mj_totalObjectsWithSelector:@selector(mj_objectMappingPropertyNames) key:&MJObjectMappingPropertyNamesKey];
+}
+
+#pragma mark - 序列化黑名单配置
+
++ (void)mj_setupIgnoredJSONSerializationPropertyNames:(MJIgnoredJSONSerializationPropertyNames)ignoredJSONSerializationPropertyNames {
+    [self mj_setupBlockReturnValue:ignoredJSONSerializationPropertyNames key:&MJIgnoredJSONSerializationPropertyNamesKey];
+}
+
++ (NSMutableArray *)mj_totalIgnoredJSONSerializationPropertyNames {
+    return [self mj_totalObjectsWithSelector:@selector(mj_ignoredJSONSerializaitonPropertyNames) key:&MJIgnoredJSONSerializationPropertyNamesKey];
+}
+
++ (void)mj_setupIgnoreObjectMappingPropertyNames:(MJIgnoredObjectMappingPropertyNames)ignoredObjectMappingPropertyNames {
+    [self mj_setupBlockReturnValue:ignoredObjectMappingPropertyNames key:&MJIgnoredObjectMappingPropertyNamesKey];
+}
+
++ (NSMutableArray *)mj_totalIgnoredObjectMappingPropertyNames {
+    return [self mj_totalObjectsWithSelector:@selector(mj_ignoredObjectMappingPropertyNames) key:&MJIgnoredObjectMappingPropertyNamesKey];
+}
+
 #pragma mark - block和方法处理:存储block的返回值
 + (void)mj_setupBlockReturnValue:(id (^)())block key:(const char *)key
 {

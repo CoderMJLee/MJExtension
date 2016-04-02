@@ -20,6 +20,7 @@ void keyValuesArray2objectArray();
 void object2keyValues();
 void objectArray2keyValuesArray();
 void coreData();
+void coreData2();
 void coding();
 void replacedKeyFromPropertyName121();
 void newValueFromOldValue();

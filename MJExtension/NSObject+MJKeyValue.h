@@ -27,6 +27,26 @@
 + (NSArray *)mj_ignoredPropertyNames;
 
 /**
+ *  这个数组中的属性名才会进行JSON序列化
+ */
++ (NSArray *)mj_jsonSerializationPropertyNames;
+
+/**
+ *  这个数组中的属性名才会序列化到object中
+ */
++ (NSArray *)mj_objectMappingPropertyNames;
+
+/*
+ * 这个数组中的属性名会被忽略：不会进行JSON序列化
+ */
++ (NSArray *)mj_ignoredJSONSerializaitonPropertyNames;
+
+/**
+ * 这个数组中的属性名会被忽略：不会序列化到object中
+ */
++ (NSArray *)mj_ignoredObjectMappingPropertyNames;
+
+/**
  *  将属性名换为其他key去字典中取值
  *
  *  @return 字典中的key是属性名，value是从字典中取值用的key
@@ -110,6 +130,24 @@
 + (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
 + (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
 
+
+/**
+ *  通过模型数组来创建一个字典数组
+ *  @param objectSet 模型数组
+ *  @return 字典数组
+ */
++ (NSMutableArray *)mj_keyValuesArrayWithObjectSet:(NSSet *)objectSet;
++ (NSMutableArray *)mj_keyValuesArrayWithObjectSet:(NSSet *)objectSet keys:(NSArray *)keys;
++ (NSMutableArray *)mj_keyValuesArrayWithObjectSet:(NSSet *)objectSet ignoredKeys:(NSArray *)ignoredKeys;
+
+/**
+ *  通过模型数组来创建一个字典数组
+ *  @param objectOrderedSet 模型数组
+ *  @return 字典数组
+ */
++ (NSMutableArray *)mj_keyValuesArrayWithObjectOrderedSet:(NSOrderedSet *)objectOrderedSet;
++ (NSMutableArray *)mj_keyValuesArrayWithObjectOrderedSet:(NSOrderedSet *)objectOrderedSet keys:(NSArray *)keys;
++ (NSMutableArray *)mj_keyValuesArrayWithObjectOrderedSet:(NSOrderedSet *)objectOrderedSet ignoredKeys:(NSArray *)ignoredKeys;
 #pragma mark - 字典转模型
 /**
  *  通过字典来创建一个模型
@@ -155,6 +193,36 @@
  *  @return 模型数组
  */
 + (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
+
+/**
+ *  通过字典数组来创建一个模型数组
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
+ *  @return 模型数组
+ */
++ (NSMutableSet *)mj_objectSetWithKeyValuesArray:(id)keyValuesArray;
+
+/**
+ *  通过字典数组来创建一个模型数组，
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
+ *  @param context        CoreData上下文
+ *  @return 模型数组
+ */
++ (NSMutableSet *)mj_objectSetWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
+
+/**
+ *  通过字典数组来创建一个模型数组
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
+ *  @return 模型数组
+ */
++ (NSMutableOrderedSet *)mj_objectOrderedSetWithKeyValuesArray:(id)keyValuesArray;
+
+/**
+ *  通过字典数组来创建一个模型数组，
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
+ *  @param context        CoreData上下文
+ *  @return 模型数组
+ */
++ (NSMutableOrderedSet *)mj_objectOrderedSetWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
 
 /**
  *  通过plist来创建一个模型数组
