@@ -32,7 +32,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     Class c = self;
     
     // 4.开始遍历每一个类
-    while (c && !stop) {
+    while (c != [NSObject class] && !stop) {
         // 4.1.执行操作
         enumeration(c, &stop);
         
