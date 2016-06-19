@@ -4,7 +4,7 @@
 //
 //  Created by MJ Lee on 15/11/8.
 //  Copyright © 2015年 小码哥. All rights reserved.
-//
+//  我发现了一个非常大的Bug, 哈哈哈哈哈哈哈哈哈
 
 #import "AppDelegate.h"
 
