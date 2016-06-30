@@ -38,7 +38,7 @@
  *
  *  @return 从字典中取值用的key
  */
-+ (NSString *)mj_replacedKeyFromPropertyName121:(NSString *)propertyName;
++ (id)mj_replacedKeyFromPropertyName121:(NSString *)propertyName;
 
 /**
  *  数组中需要转换的模型类
