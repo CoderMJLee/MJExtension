@@ -1,7 +1,7 @@
 //
 //  MJExtension.h
 //  MJExtension
-//
+//  还好还好
 //  Created by mj on 14-1-15.
 //  Copyright (c) 2014年 小码哥. All rights reserved.
 //  代码地址:https://github.com/CoderMJLee/MJExtension
