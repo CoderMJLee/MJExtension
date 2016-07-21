@@ -44,12 +44,14 @@ static NSMutableDictionary *cachedPropertiesDict_;
 
 + (NSMutableDictionary *)dictForKey:(const void *)key
 {
-    if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
-    if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict_;
-    if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict_;
-    if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict_;
-    if (key == &MJCachedPropertiesKey) return cachedPropertiesDict_;
-    return nil;
+    @synchronized (self) {
+        if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
+        if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict_;
+        if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict_;
+        if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict_;
+        if (key == &MJCachedPropertiesKey) return cachedPropertiesDict_;
+        return nil;
+    }
 }
 
 #pragma mark - --私有方法--

@@ -22,14 +22,15 @@ static NSMutableDictionary *types_;
 + (instancetype)cachedTypeWithCode:(NSString *)code
 {
     MJExtensionAssertParamNotNil2(code, nil);
-    
-    MJPropertyType *type = types_[code];
-    if (type == nil) {
-        type = [[self alloc] init];
-        type.code = code;
-        types_[code] = type;
+    @synchronized (self) {
+        MJPropertyType *type = types_[code];
+        if (type == nil) {
+            type = [[self alloc] init];
+            type.code = code;
+            types_[code] = type;
+        }
+        return type;
     }
-    return type;
 }
 
 #pragma mark - 公共方法
