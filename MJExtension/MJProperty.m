@@ -18,21 +18,14 @@
 
 @implementation MJProperty
 
-#pragma mark - 懒加载
-- (NSMutableDictionary *)propertyKeysDict
+#pragma mark - 初始化
+- (instancetype)init
 {
-    if (!_propertyKeysDict) {
+    if (self = [super init]) {
         _propertyKeysDict = [NSMutableDictionary dictionary];
-    }
-    return _propertyKeysDict;
-}
-
-- (NSMutableDictionary *)objectClassInArrayDict
-{
-    if (!_objectClassInArrayDict) {
         _objectClassInArrayDict = [NSMutableDictionary dictionary];
     }
-    return _objectClassInArrayDict;
+    return self;
 }
 
 #pragma mark - 缓存
