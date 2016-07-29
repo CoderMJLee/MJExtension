@@ -294,8 +294,12 @@ static NSNumberFormatter *numberFormatter_;
 {
     return [self mj_keyValuesWithKeys:nil ignoredKeys:ignoredKeys];
 }
-
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
+- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys{
+    
+    return [self mj_keyValuesWithKeys:keys ignoredKeys:ignoredKeys visitedInstance:[NSMutableSet new]];
+}
+//- (NSMutableDictionary*)mj_keyValuesWith
+- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys visitedInstance:(NSMutableSet*)visitedInstance
 {
     // 如果自己不是模型类, 那就返回自己
     MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
@@ -321,8 +325,19 @@ static NSNumberFormatter *numberFormatter_;
             // 2.如果是模型属性
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
+            
+            //判断是否有循环引用，循环引用会死循环
+            if (!type.isFromFoundation && propertyClass){
+                if([visitedInstance containsObject:value]){
+                    assert(false);
+                    return;
+                }else{
+                    [visitedInstance addObject:value];
+                }
+            }
+            
             if (!type.isFromFoundation && propertyClass) {
-                value = [value mj_keyValues];
+                value = [value mj_keyValuesWithKeys:nil ignoredKeys:nil visitedInstance:visitedInstance];
             } else if ([value isKindOfClass:[NSArray class]]) {
                 // 3.处理数组里面有模型的情况
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
