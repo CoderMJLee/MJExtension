@@ -18,7 +18,7 @@ NSError *error = [NSError errorWithDomain:msg code:250 userInfo:nil]; \
 #else
 #define MJExtensionLog(...)
 #endif
-
+////////////////////////
 /**
  * 断言
  * @param condition   条件
