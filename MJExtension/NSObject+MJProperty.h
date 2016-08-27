@@ -67,6 +67,11 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
  *  @param objectClassInArray          数组中需要转换的模型类
  */
 + (void)mj_setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray;
+#pragma mark - 清除属性值
+/**
+ * 设置所有属性值为nil
+ */
++ (void)mj_setAllPropertiesNil;
 @end
 
 @interface NSObject (MJPropertyDeprecated_v_2_5_16)

@@ -231,6 +231,13 @@ static NSMutableDictionary *cachedPropertiesDict_;
     
     [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
+#pragma mark - 清除属性值
++ (void)mj_setAllPropertiesNil
+{
+    [self mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+        [self setValue:nil forKeyPath:property.name];
+    }];
+}
 @end
 
 @implementation NSObject (MJPropertyDeprecated_v_2_5_16)
