@@ -69,9 +69,9 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
 + (void)mj_setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray;
 #pragma mark - 清除属性值
 /**
- * 设置所有属性值为nil
+ * 设置所有对象属性值为nil
  */
-+ (void)mj_setAllPropertiesNil;
++ (void)mj_setAllObjectPropertiesNil;
 @end
 
 @interface NSObject (MJPropertyDeprecated_v_2_5_16)
