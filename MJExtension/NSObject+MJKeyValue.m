@@ -318,7 +318,9 @@ static NSNumberFormatter *numberFormatter_;
             // 1.取出属性值
             id value = [property valueForObject:self];
             if (!value) return;
-            
+            if ([value isKindOfClass:[NSObject class]] && [value superclass] == nil ) {
+                return;
+            }
             // 2.如果是模型属性
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
