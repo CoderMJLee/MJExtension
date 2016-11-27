@@ -14,3 +14,8 @@
 /** 广告url */
 @property (strong, nonatomic) NSURL *url;
 @end
+
+
+
+
+
