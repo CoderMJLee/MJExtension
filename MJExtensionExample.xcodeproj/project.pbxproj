@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03271E8B1E1A1371008413D9 /* tth.m in Sources */ = {isa = PBXBuildFile; fileRef = 03271E8A1E1A1371008413D9 /* tth.m */; };
 		2D8FC6B81BEF7E89004471E9 /* MJExtensionConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D8FC6B71BEF7E89004471E9 /* MJExtensionConfig.m */; };
 		2DE3CD971BEF7B3800DA0F2E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CD961BEF7B3800DA0F2E /* main.m */; };
 		2DE3CD9A1BEF7B3800DA0F2E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CD991BEF7B3800DA0F2E /* AppDelegate.m */; };
@@ -100,6 +101,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03271E891E1A1371008413D9 /* tth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tth.h; sourceTree = "<group>"; };
+		03271E8A1E1A1371008413D9 /* tth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tth.m; sourceTree = "<group>"; };
 		2D8FC6B61BEF7E89004471E9 /* MJExtensionConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConfig.h; sourceTree = "<group>"; };
 		2D8FC6B71BEF7E89004471E9 /* MJExtensionConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJExtensionConfig.m; sourceTree = "<group>"; };
 		2DE3CD921BEF7B3800DA0F2E /* MJExtensionExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MJExtensionExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +240,8 @@
 				2DE3CDC81BEF7B9F00DA0F2E /* MJExtension */,
 				2DE3CDEB1BEF7BA400DA0F2E /* Classes */,
 				2DE3CD951BEF7B3800DA0F2E /* Supporting Files */,
+				03271E891E1A1371008413D9 /* tth.h */,
+				03271E8A1E1A1371008413D9 /* tth.m */,
 			);
 			path = MJExtensionExample;
 			sourceTree = "<group>";
@@ -564,6 +569,7 @@
 				2DE3CDEA1BEF7B9F00DA0F2E /* NSString+MJExtension.m in Sources */,
 				2DE3CD971BEF7B3800DA0F2E /* main.m in Sources */,
 				2D8FC6B81BEF7E89004471E9 /* MJExtensionConfig.m in Sources */,
+				03271E8B1E1A1371008413D9 /* tth.m in Sources */,
 				2DE3CDE41BEF7B9F00DA0F2E /* MJPropertyKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -881,6 +887,7 @@
 				C37522BF1CF0AC330037E747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
