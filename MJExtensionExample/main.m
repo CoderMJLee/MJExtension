@@ -267,6 +267,89 @@ void keyValuesArray2objectArray()
 }
 
 /**
+ *  复杂字典数组 -> 模型数组
+ */
+void keyValuesArrayToObjectArray()
+{
+    // 1.1定义第一个字典数组
+    NSArray *dictArray1 =
+    @[
+      @{@"category" :@"美国品牌",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"name":@"耐克"，@"price":@"100元"},
+                @{@"name":@"阿迪达斯"，@"price":@"300元"},
+            ],},
+      @{@"category" :@"中国品牌",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"name":@"特步"，@"price":@"200元"},
+                @{@"name":@"安踏"，@"price":@"500元"},
+            ],},
+      ];
+    // 1.2定义第二个字典数组
+    NSArray *dictArray2 =
+    @[
+      @{@"category" :@"小型宠物狗",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"nickName":@"柯基"，@"salePrice":@"100元"，@"runSpeed":@"10m/s"},
+                @{@"nickName":@"贵宾"，@"salePrice":@"1000元"，@"runSpeed":@"20m/s"},
+                ],},
+      @{@"category" :@"大型宠物狗",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"nickName":@"阿拉斯加"，@"salePrice":@"200元"，@"runSpeed":@"10m/s"},
+                @{@"nickName":@"法国狼犬"，@"salePrice":@"4000元"，@"runSpeed":@"20m/s"},
+                ],},
+      ];
+    // 1.3定义第三个字典数组
+    NSArray *dictArray3 =
+    @[
+      @{@"category" :@"哈佛教育",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"class":@"人工智能"，@"salePrice":@"10000元"},
+                @{@"class":@"量子计算"，@"salePrice":@"20000元"},
+                ],},
+      @{@"category" :@"小码哥教育",@"categoryImage" :@"mj666Image.jpg",
+        @"goods":
+            @[
+                @{@"class":@"iOS"，@"salePrice":@"12000元"},
+                @{@"class":@"android"，@"salePrice":@"9000元"},
+            ],},
+      ];
+    /*2将字典数组都转为MJGoodGroup模型数组
+       <因为MJGoodGroup可为MJBrand，MJDog，MJSchool三者的父模型,或者说是组模型,
+        所以，可用innerObjKeyValue参数直接配置子模型的类名
+       <如果在MJGoodGroup里配置参数，那就固定死了
+       <这种数据格式在分组tableView中经常遇到
+    */
+    NSArray *goodGroups1 = [MJGoodGroup mj_objectArrayWithKeyValuesArray:dictArray1 innerObjKeyValue:@{@"goods":@"MJBrand"}];
+    NSArray *goodGroups1 = [MJGoodGroup mj_objectArrayWithKeyValuesArray:dictArray2 innerObjKeyValue:@{@"goods":@"MJDog"}];
+    NSArray *goodGroups1 = [MJGoodGroup mj_objectArrayWithKeyValuesArray:dictArray3 innerObjKeyValue:@{@"goods":@"MJSchool"}];
+    
+    
+    // 3.打印goodGroup模型
+    for (MJGoodGroup *goodGroup in goodGroups1)
+    {
+        MJExtensionLog(@"goodCategory=%@, goodCategoryImage=%@",goodGroup.goodCategory, goodGroup.goodCategoryImage);
+        MJExtensionLog(@"come");
+    }
+    for (MJGoodGroup *goodGroup in goodGroups2)
+    {
+        MJExtensionLog(@"goodCategory=%@, goodCategoryImage=%@",goodGroup.goodCategory, goodGroup.goodCategoryImage);
+        MJExtensionLog(@"come");
+    }
+    for (MJGoodGroup *goodGroup in goodGroups3)
+    {
+        MJExtensionLog(@"goodCategory=%@, goodCategoryImage=%@",goodGroup.goodCategory, goodGroup.goodCategoryImage);
+        MJExtensionLog(@"come");
+    }
+}
+
+
+/**
  *  模型 -> 字典
  */
 void object2keyValues()

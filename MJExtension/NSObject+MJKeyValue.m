@@ -233,6 +233,19 @@ static NSNumberFormatter *numberFormatter_;
 }
 
 #pragma mark - 字典数组 -> 模型数组
+//DJ pack
++ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray innerObjKeyValue: (NSDictionary *)dict
+{
+    [MJConfig single].mj_innerObjectKeyValue = dict;
+    return [self mj_objectArrayWithKeyValuesArray:keyValuesArray];
+}
++ (NSDictionary*)mj_objectClassInArray
+{
+    return [MJConfig single].mj_innerObjectKeyValue;
+}
+
+
+
 + (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
 {
     return [self mj_objectArrayWithKeyValuesArray:keyValuesArray context:nil];

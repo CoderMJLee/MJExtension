@@ -10,6 +10,8 @@
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
 #import "MJProperty.h"
+#import "MJFoundation.h"
+#import "MJConfig.h"
 
 /**
  *  KeyValue协议
