@@ -78,7 +78,9 @@
 - (void)setValue:(id)value forObject:(id)object
 {
     if (self.type.KVCDisabled || value == nil) return;
-    [object setValue:value forKey:self.name];
+    @synchronized (self) {
+        [object setValue:value forKey:self.name];
+    }
 }
 
 /**
@@ -150,7 +152,9 @@
 - (void)setPorpertyKeys:(NSArray *)propertyKeys forClass:(Class)c
 {
     if (propertyKeys.count == 0) return;
-    self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
+    @synchronized (self) {
+        self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
+    }
 }
 - (NSArray *)propertyKeysForClass:(Class)c
 {
