@@ -329,6 +329,8 @@ static NSNumberFormatter *numberFormatter_;
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
             } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
+            } else if ( class_isMetaClass(object_getClass(value))) {
+                value = NSStringFromClass(value);
             }
             
             // 4.赋值
