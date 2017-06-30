@@ -125,6 +125,8 @@ static NSNumberFormatter *numberFormatter_;
                 value = [NSMutableString stringWithString:value];
             } else if (propertyClass == [NSMutableData class] && [value isKindOfClass:[NSData class]]) {
                 value = [NSMutableData dataWithData:value];
+            } else if ( class_isMetaClass(object_getClass(value))) {
+                value = NSStringFromClass(value);
             }
             
             if (!type.isFromFoundation && propertyClass) { // 模型属性
