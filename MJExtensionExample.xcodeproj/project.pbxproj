@@ -36,6 +36,7 @@
 		2DE3CE081BEF7BE100DA0F2E /* MJStatusResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDFC1BEF7BE100DA0F2E /* MJStatusResult.m */; };
 		2DE3CE091BEF7BE100DA0F2E /* MJStudent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CDFE1BEF7BE100DA0F2E /* MJStudent.m */; };
 		2DE3CE0A1BEF7BE100DA0F2E /* MJUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE3CE001BEF7BE100DA0F2E /* MJUser.m */; };
+		A468C0AF1F46F68B00A8102F /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = A468C0AE1F46F68B00A8102F /* Person.m */; };
 		C37522B81CF0AC320037E747 /* MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = C37522B71CF0AC320037E747 /* MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C37522BC1CF0AC320037E747 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C37522B51CF0AC320037E747 /* MJExtension.framework */; };
 		C37522BD1CF0AC320037E747 /* MJExtension.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C37522B51CF0AC320037E747 /* MJExtension.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -160,6 +161,8 @@
 		2DE3CDFF1BEF7BE100DA0F2E /* MJUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJUser.h; sourceTree = "<group>"; };
 		2DE3CE001BEF7BE100DA0F2E /* MJUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJUser.m; sourceTree = "<group>"; };
 		2DE3CE0B1BEF7C2100DA0F2E /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		A468C0AD1F46F68B00A8102F /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		A468C0AE1F46F68B00A8102F /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		C37522B51CF0AC320037E747 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C37522B71CF0AC320037E747 /* MJExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
 		C37522B91CF0AC320037E747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				2DE3CDDD1BEF7B9F00DA0F2E /* NSObject+MJProperty.m */,
 				2DE3CDDE1BEF7B9F00DA0F2E /* NSString+MJExtension.h */,
 				2DE3CDDF1BEF7B9F00DA0F2E /* NSString+MJExtension.m */,
+				A468C0AD1F46F68B00A8102F /* Person.h */,
+				A468C0AE1F46F68B00A8102F /* Person.m */,
 			);
 			path = MJExtension;
 			sourceTree = SOURCE_ROOT;
@@ -553,6 +558,7 @@
 				2DE3CDE81BEF7B9F00DA0F2E /* NSObject+MJKeyValue.m in Sources */,
 				2DE3CDE31BEF7B9F00DA0F2E /* MJProperty.m in Sources */,
 				2DE3CE011BEF7BE100DA0F2E /* MJAd.m in Sources */,
+				A468C0AF1F46F68B00A8102F /* Person.m in Sources */,
 				2DE3CD9A1BEF7B3800DA0F2E /* AppDelegate.m in Sources */,
 				2DE3CE041BEF7BE100DA0F2E /* MJBook.m in Sources */,
 				2DE3CDE71BEF7B9F00DA0F2E /* NSObject+MJCoding.m in Sources */,
@@ -881,6 +887,7 @@
 				C37522BF1CF0AC330037E747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
