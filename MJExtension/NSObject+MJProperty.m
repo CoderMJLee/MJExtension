@@ -142,6 +142,13 @@ static NSMutableDictionary *cachedPropertiesDict_;
     // 遍历成员变量
     BOOL stop = NO;
     for (MJProperty *property in cachedProperties) {
+        
+#warning 防止遍历到当前类的父类属性，@"hash" 属性是NSObject 中的。
+        if (!property.type.typeClass && [property.name isEqualToString:@"hash"])
+        {
+            break;
+        }
+        
         enumeration(property, &stop);
         if (stop) break;
     }

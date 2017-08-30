@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "MJBag.h"
+#import "MJExtensionConst.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,33 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    /* 目的：想让模型有一个固定的属性名（做唯一标示用），方便存储数据，读取数据用。
+     * 操作：MJBag 模型类遵循了modelProtocol协议，归档。
+     * 结果：程序崩溃。
+     * 原因：modelProtocol协议继承 NSObject协议，遍历属性时，获得了NSObject协议中的属性。导致归档失败。
+     *
+     *  #warning 防止遍历到当前类的父类属性，@"hash" 属性是NSObject 中的。
+     *  if (!property.type.typeClass && [property.name isEqualToString:@"hash"])
+     *  {
+     *      break;
+     *  }
+     *
+     */
+    MJBag *bag = [[MJBag alloc] init];
+    bag.modelID = @"100122222";
+    bag.name = @"商品";
+    bag.price = 11.5;
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:bag.modelID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        id data = [[NSUserDefaults standardUserDefaults] objectForKey:bag.modelID];
+        id <modelProtocol> model = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        MJExtensionLog(@"model.modelID:%@",model.modelID);
+    });
     return YES;
 }
 
