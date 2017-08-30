@@ -10,6 +10,9 @@
 #import "MJExtension.h"
 
 @implementation MJBag
+/** 实现协议属性 */
+@synthesize modelID = _modelID;
+
 // NSCoding实现
 MJExtensionCodingImplementation
 
