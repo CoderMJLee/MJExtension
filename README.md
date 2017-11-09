@@ -268,7 +268,7 @@ for (Ad *ad in result.ads) {
 [Student mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
     return @{
                @"ID" : @"id",
-               @"desc" : @"desciption",
+               @"desc" : @"description",
                @"oldName" : @"name.oldName",
                @"nowName" : @"name.newName",
                @"nameChangedTime" : @"name.info[1].nameChangedTime",
@@ -279,7 +279,7 @@ for (Ad *ad in result.ads) {
 
 NSDictionary *dict = @{
     @"id" : @"20",
-    @"desciption" : @"kids",
+    @"description" : @"kids",
     @"name" : @{
         @"newName" : @"lufy",
         @"oldName" : @"kitty",
