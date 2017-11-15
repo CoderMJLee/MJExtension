@@ -11,6 +11,8 @@
 #import "MJExtensionConst.h"
 #import <objc/message.h>
 
+static dispatch_semaphore_t lock;
+
 @interface MJProperty()
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
 @property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
@@ -24,6 +26,10 @@
     if (self = [super init]) {
         _propertyKeysDict = [NSMutableDictionary dictionary];
         _objectClassInArrayDict = [NSMutableDictionary dictionary];
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            lock = dispatch_semaphore_create(1);
+        });
     }
     return self;
 }
@@ -150,21 +156,32 @@
 - (void)setPorpertyKeys:(NSArray *)propertyKeys forClass:(Class)c
 {
     if (propertyKeys.count == 0) return;
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
     self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
+    dispatch_semaphore_signal(lock);
 }
 - (NSArray *)propertyKeysForClass:(Class)c
 {
-    return self.propertyKeysDict[NSStringFromClass(c)];
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    NSArray *propertyKeys = self.propertyKeysDict[NSStringFromClass(c)];
+    dispatch_semaphore_signal(lock);
+    return propertyKeys;
 }
 
 /** 模型数组中的模型类型 */
 - (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c
 {
     if (!objectClass) return;
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
     self.objectClassInArrayDict[NSStringFromClass(c)] = objectClass;
+    dispatch_semaphore_signal(lock);
 }
 - (Class)objectClassInArrayForClass:(Class)c
 {
-    return self.objectClassInArrayDict[NSStringFromClass(c)];
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    Class cls = self.objectClassInArrayDict[NSStringFromClass(c)];
+    dispatch_semaphore_signal(lock);
+    return cls;
 }
 @end
+
