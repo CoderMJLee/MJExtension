@@ -175,7 +175,9 @@ static NSMutableDictionary *cachedPropertiesDict_;
             free(properties);
         }];
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        @synchronized(self) {
+            [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        }
     }
     
     return cachedProperties;
