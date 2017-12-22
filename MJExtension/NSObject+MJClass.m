@@ -131,7 +131,7 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
     return [self mj_totalObjectsWithSelector:@selector(mj_allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey];
 }
 #pragma mark - block和方法处理:存储block的返回值
-+ (void)mj_setupBlockReturnValue:(id (^)())block key:(const char *)key
++ (void)mj_setupBlockReturnValue:(id (^)(void))block key:(const char *)key
 {
     if (block) {
         objc_setAssociatedObject(self, key, block(), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
