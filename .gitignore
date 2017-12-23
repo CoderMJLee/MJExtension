@@ -21,3 +21,6 @@ profile
 *.swp
 
 *.xcbkptlist
+
+# AppCode
+**/.idea/
