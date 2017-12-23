@@ -532,7 +532,7 @@ NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, boo
 ```
 
 ### <a id="More_use_cases"></a> More use cases【更多用法】
-- Please reference to `NSObject+MJKeyValue.h` and `NSObject+MJCoding.h`
+- Please refer to `NSObject+MJKeyValue.h` and `NSObject+MJCoding.h`
 
 
 ## 期待
