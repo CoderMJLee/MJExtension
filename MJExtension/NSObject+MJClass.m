@@ -17,30 +17,28 @@ static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
-static NSMutableDictionary *allowedPropertyNamesDict_;
-static NSMutableDictionary *ignoredPropertyNamesDict_;
-static NSMutableDictionary *allowedCodingPropertyNamesDict_;
-static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
+static NSCache *allowedPropertyNamesCache_;
+static NSCache *ignoredPropertyNamesCache_;
+static NSCache *allowedCodingPropertyNamesCache_;
+static NSCache *ignoredCodingPropertyNamesCache_;
 
 @implementation NSObject (MJClass)
 
 + (void)load
 {
-    allowedPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    ignoredPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    allowedCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    ignoredCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
+    allowedPropertyNamesCache_ = [[NSCache alloc] init];
+    ignoredPropertyNamesCache_ = [[NSCache alloc] init];
+    allowedCodingPropertyNamesCache_ = [[NSCache alloc] init];
+    ignoredCodingPropertyNamesCache_ = [[NSCache alloc] init];
 }
 
-+ (NSMutableDictionary *)dictForKey:(const void *)key
++ (NSCache *)cacheForKey:(const void *)key
 {
-    @synchronized (self) {
-        if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesDict_;
-        if (key == &MJIgnoredPropertyNamesKey) return ignoredPropertyNamesDict_;
-        if (key == &MJAllowedCodingPropertyNamesKey) return allowedCodingPropertyNamesDict_;
-        if (key == &MJIgnoredCodingPropertyNamesKey) return ignoredCodingPropertyNamesDict_;
-        return nil;
-    }
+    if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesCache_;
+    if (key == &MJIgnoredPropertyNamesKey) return ignoredPropertyNamesCache_;
+    if (key == &MJAllowedCodingPropertyNamesKey) return allowedCodingPropertyNamesCache_;
+    if (key == &MJIgnoredCodingPropertyNamesKey) return ignoredCodingPropertyNamesCache_;
+    return nil;
 }
 
 + (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration
@@ -140,16 +138,17 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
     }
     
     // 清空数据
-    [[self dictForKey:key] removeAllObjects];
+    [[self cacheForKey:key] removeAllObjects];
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
-    NSMutableArray *array = [self dictForKey:key][NSStringFromClass(self)];
+    NSMutableArray *array = [[self cacheForKey:key] objectForKey:NSStringFromClass(self)];
     if (array) return array;
     
     // 创建、存储
-    [self dictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
+    array = [NSMutableArray array];
+    [[self cacheForKey:key] setObject:array forKey:NSStringFromClass(self)];
     
     if ([self respondsToSelector:selector]) {
 #pragma clang diagnostic push
@@ -168,3 +167,5 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
     return array;
 }
 @end
+
+

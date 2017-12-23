@@ -12,8 +12,8 @@
 #import <objc/message.h>
 
 @interface MJProperty()
-@property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
-@property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
+@property (strong, nonatomic) NSCache *propertyKeysCache;
+@property (strong, nonatomic) NSCache *objectClassInArrayCache;
 @end
 
 @implementation MJProperty
@@ -22,8 +22,8 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _propertyKeysDict = [NSMutableDictionary dictionary];
-        _objectClassInArrayDict = [NSMutableDictionary dictionary];
+        _propertyKeysCache = [[NSCache alloc] init];
+        _objectClassInArrayCache = [[NSCache alloc] init];
     }
     return self;
 }
@@ -150,21 +150,22 @@
 - (void)setPorpertyKeys:(NSArray *)propertyKeys forClass:(Class)c
 {
     if (propertyKeys.count == 0) return;
-    self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
+    [self.propertyKeysCache setObject:propertyKeys forKey:NSStringFromClass(c)];
 }
 - (NSArray *)propertyKeysForClass:(Class)c
 {
-    return self.propertyKeysDict[NSStringFromClass(c)];
+    return [self.propertyKeysCache objectForKey:NSStringFromClass(c)];
 }
 
 /** 模型数组中的模型类型 */
 - (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c
 {
     if (!objectClass) return;
-    self.objectClassInArrayDict[NSStringFromClass(c)] = objectClass;
+    [self.objectClassInArrayCache setObject:objectClass forKey:NSStringFromClass(c)];
 }
 - (Class)objectClassInArrayForClass:(Class)c
 {
-    return self.objectClassInArrayDict[NSStringFromClass(c)];
+    return [self.objectClassInArrayCache objectForKey:NSStringFromClass(c)];
 }
 @end
+

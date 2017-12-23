@@ -27,31 +27,29 @@ static const char MJCachedPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
-static NSMutableDictionary *replacedKeyFromPropertyNameDict_;
-static NSMutableDictionary *replacedKeyFromPropertyName121Dict_;
-static NSMutableDictionary *newValueFromOldValueDict_;
-static NSMutableDictionary *objectClassInArrayDict_;
-static NSMutableDictionary *cachedPropertiesDict_;
+static NSCache *replacedKeyFromPropertyNameCache_;
+static NSCache *replacedKeyFromPropertyName121Cache_;
+static NSCache *newValueFromOldValueCache_;
+static NSCache *objectClassInArrayCache_;
+static NSCache *cachedPropertiesCache_;
 
 + (void)load
 {
-    replacedKeyFromPropertyNameDict_ = [NSMutableDictionary dictionary];
-    replacedKeyFromPropertyName121Dict_ = [NSMutableDictionary dictionary];
-    newValueFromOldValueDict_ = [NSMutableDictionary dictionary];
-    objectClassInArrayDict_ = [NSMutableDictionary dictionary];
-    cachedPropertiesDict_ = [NSMutableDictionary dictionary];
+    replacedKeyFromPropertyNameCache_ = [[NSCache alloc] init];
+    replacedKeyFromPropertyName121Cache_ = [[NSCache alloc] init];
+    newValueFromOldValueCache_ = [[NSCache alloc] init];
+    objectClassInArrayCache_ = [[NSCache alloc] init];
+    cachedPropertiesCache_ = [[NSCache alloc] init];
 }
 
-+ (NSMutableDictionary *)dictForKey:(const void *)key
++ (NSCache *)cacheForKey:(const void *)key
 {
-    @synchronized (self) {
-        if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
-        if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict_;
-        if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict_;
-        if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict_;
-        if (key == &MJCachedPropertiesKey) return cachedPropertiesDict_;
-        return nil;
-    }
+    if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameCache_;
+    if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Cache_;
+    if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueCache_;
+    if (key == &MJObjectClassInArrayKey) return objectClassInArrayCache_;
+    if (key == &MJCachedPropertiesKey) return cachedPropertiesCache_;
+    return nil;
 }
 
 #pragma mark - --私有方法--
@@ -150,7 +148,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
 #pragma mark - 公共方法
 + (NSMutableArray *)properties
 {
-    NSMutableArray *cachedProperties = [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
+    NSMutableArray *cachedProperties = [[self cacheForKey:&MJCachedPropertiesKey] objectForKey:NSStringFromClass(self)];
     
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
@@ -175,7 +173,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
             free(properties);
         }];
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        [[self cacheForKey:&MJCachedPropertiesKey] setObject:cachedProperties forKey:NSStringFromClass(self)];
     }
     
     return cachedProperties;
@@ -214,7 +212,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self cacheForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 #pragma mark - key配置
@@ -222,14 +220,14 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self cacheForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self cacheForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 @end
 
@@ -266,3 +264,5 @@ static NSMutableDictionary *cachedPropertiesDict_;
 @end
 
 #pragma clang diagnostic pop
+
+
