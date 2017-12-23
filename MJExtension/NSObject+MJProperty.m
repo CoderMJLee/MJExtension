@@ -175,7 +175,9 @@ static NSMutableDictionary *cachedPropertiesDict_;
             free(properties);
         }];
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        @synchronized(self) {
+            [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        }
     }
     
     return cachedProperties;
@@ -251,12 +253,16 @@ static NSMutableDictionary *cachedPropertiesDict_;
 
 + (void)setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName
 {
-    [self mj_setupReplacedKeyFromPropertyName:replacedKeyFromPropertyName];
+    @synchronized (self) {
+        [self mj_setupReplacedKeyFromPropertyName:replacedKeyFromPropertyName];
+    }
 }
 
 + (void)setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
-    [self mj_setupReplacedKeyFromPropertyName121:replacedKeyFromPropertyName121];
+    @synchronized (self) {
+        [self mj_setupReplacedKeyFromPropertyName121:replacedKeyFromPropertyName121];
+    }
 }
 
 + (void)setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
