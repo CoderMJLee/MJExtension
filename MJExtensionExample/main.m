@@ -425,7 +425,7 @@ void logAllProperties()
     MJExtensionLog(@"%@", user);
 }
 
-void execute(void (*fn)(), NSString *comment)
+void execute(void (*fn)(void), NSString *comment)
 {
     MJExtensionLog(@"[******************%@******************开始]", comment);
     fn();
