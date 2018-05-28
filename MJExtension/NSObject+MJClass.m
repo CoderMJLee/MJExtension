@@ -17,30 +17,28 @@ static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
-static NSMutableDictionary *allowedPropertyNamesDict_;
-static NSMutableDictionary *ignoredPropertyNamesDict_;
-static NSMutableDictionary *allowedCodingPropertyNamesDict_;
-static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
-
 @implementation NSObject (MJClass)
-
-+ (void)load
-{
-    allowedPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    ignoredPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    allowedCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
-    ignoredCodingPropertyNamesDict_ = [NSMutableDictionary dictionary];
-}
 
 + (NSMutableDictionary *)dictForKey:(const void *)key
 {
-    @synchronized (self) {
-        if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesDict_;
-        if (key == &MJIgnoredPropertyNamesKey) return ignoredPropertyNamesDict_;
-        if (key == &MJAllowedCodingPropertyNamesKey) return allowedCodingPropertyNamesDict_;
-        if (key == &MJIgnoredCodingPropertyNamesKey) return ignoredCodingPropertyNamesDict_;
-        return nil;
-    }
+    static NSMutableDictionary *allowedPropertyNamesDict;
+    static NSMutableDictionary *ignoredPropertyNamesDict;
+    static NSMutableDictionary *allowedCodingPropertyNamesDict;
+    static NSMutableDictionary *ignoredCodingPropertyNamesDict;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        allowedPropertyNamesDict = [NSMutableDictionary dictionary];
+        ignoredPropertyNamesDict = [NSMutableDictionary dictionary];
+        allowedCodingPropertyNamesDict = [NSMutableDictionary dictionary];
+        ignoredCodingPropertyNamesDict = [NSMutableDictionary dictionary];
+    });
+    
+    if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesDict;
+    if (key == &MJIgnoredPropertyNamesKey) return ignoredPropertyNamesDict;
+    if (key == &MJAllowedCodingPropertyNamesKey) return allowedCodingPropertyNamesDict;
+    if (key == &MJIgnoredCodingPropertyNamesKey) return ignoredCodingPropertyNamesDict;
+    return nil;
 }
 
 + (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration
@@ -130,6 +128,7 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
 {
     return [self mj_totalObjectsWithSelector:@selector(mj_allowedCodingPropertyNames) key:&MJAllowedCodingPropertyNamesKey];
 }
+
 #pragma mark - block和方法处理:存储block的返回值
 + (void)mj_setupBlockReturnValue:(id (^)())block key:(const char *)key
 {
@@ -145,26 +144,32 @@ static NSMutableDictionary *ignoredCodingPropertyNamesDict_;
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    
     NSMutableArray *array = [self dictForKey:key][NSStringFromClass(self)];
-    if (array) return array;
-    
-    // 创建、存储
-    [self dictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
-    
-    if ([self respondsToSelector:selector]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        NSArray *subArray = [self performSelector:selector];
-#pragma clang diagnostic pop
-        if (subArray) {
-            [array addObjectsFromArray:subArray];
+    if (array == nil) {
+        // 创建、存储
+        [self dictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
+        
+        if ([self respondsToSelector:selector]) {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            NSArray *subArray = [self performSelector:selector];
+    #pragma clang diagnostic pop
+            if (subArray) {
+                [array addObjectsFromArray:subArray];
+            }
         }
+        
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+            NSArray *subArray = objc_getAssociatedObject(c, key);
+            [array addObjectsFromArray:subArray];
+        }];
     }
     
-    [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-        NSArray *subArray = objc_getAssociatedObject(c, key);
-        [array addObjectsFromArray:subArray];
-    }];
+    MJExtensionSemaphoreSignal
+    
     return array;
 }
 @end

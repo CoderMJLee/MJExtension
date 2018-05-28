@@ -27,31 +27,29 @@ static const char MJCachedPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
-static NSMutableDictionary *replacedKeyFromPropertyNameDict_;
-static NSMutableDictionary *replacedKeyFromPropertyName121Dict_;
-static NSMutableDictionary *newValueFromOldValueDict_;
-static NSMutableDictionary *objectClassInArrayDict_;
-static NSMutableDictionary *cachedPropertiesDict_;
-
-+ (void)load
-{
-    replacedKeyFromPropertyNameDict_ = [NSMutableDictionary dictionary];
-    replacedKeyFromPropertyName121Dict_ = [NSMutableDictionary dictionary];
-    newValueFromOldValueDict_ = [NSMutableDictionary dictionary];
-    objectClassInArrayDict_ = [NSMutableDictionary dictionary];
-    cachedPropertiesDict_ = [NSMutableDictionary dictionary];
-}
-
 + (NSMutableDictionary *)dictForKey:(const void *)key
 {
-    @synchronized (self) {
-        if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
-        if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict_;
-        if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict_;
-        if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict_;
-        if (key == &MJCachedPropertiesKey) return cachedPropertiesDict_;
-        return nil;
-    }
+    static NSMutableDictionary *replacedKeyFromPropertyNameDict;
+    static NSMutableDictionary *replacedKeyFromPropertyName121Dict;
+    static NSMutableDictionary *newValueFromOldValueDict;
+    static NSMutableDictionary *objectClassInArrayDict;
+    static NSMutableDictionary *cachedPropertiesDict;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        replacedKeyFromPropertyNameDict = [NSMutableDictionary dictionary];
+        replacedKeyFromPropertyName121Dict = [NSMutableDictionary dictionary];
+        newValueFromOldValueDict = [NSMutableDictionary dictionary];
+        objectClassInArrayDict = [NSMutableDictionary dictionary];
+        cachedPropertiesDict = [NSMutableDictionary dictionary];
+    });
+    
+    if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict;
+    if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict;
+    if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict;
+    if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict;
+    if (key == &MJCachedPropertiesKey) return cachedPropertiesDict;
+    return nil;
 }
 
 #pragma mark - --私有方法--
