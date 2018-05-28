@@ -2,7 +2,7 @@
 ![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
 MJExtension
 ===
-- A fast, convenient and nonintrusive conversion between JSON and model.
+- A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
 GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
@@ -39,7 +39,7 @@ GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)]
 * `JSON Array` --> `Model Array`、`Core Data Model Array`
 * `JSONString` --> `Model Array`、`Core Data Model Array`
 * `Model Array`、`Core Data Model Array` --> `JSON Array`
-* Coding all properties of model in one line code.
+* Coding all properties of a model with only one line of code.
     * 只需要一行代码，就能实现模型的所有属性进行Coding（归档和解档）
 
 ## <a id="Installation"></a> Installation【安装】
@@ -51,7 +51,7 @@ pod 'MJExtension'
 ```
 
 ### Manually【手动导入】
-- Drag all source files under floder `MJExtension` to your project.【将`MJExtension`文件夹中的所有源代码拽入项目中】
+- Drag all source files under folder `MJExtension` to your project.【将`MJExtension`文件夹中的所有源代码拽入项目中】
 - Import the main header file：`#import "MJExtension.h"`【导入主头文件：`#import "MJExtension.h"`】
 
 ```objc
@@ -180,7 +180,7 @@ NSLog(@"text2=%@, name2=%@, icon2=%@", text2, name2, icon2);
 
 /***********************************************/
 
-// Tell MJExtension what type model will be contained in statuses and ads.
+// Tell MJExtension what type of model will be contained in statuses and ads.
 [StatusResult mj_setupObjectClassInArray:^NSDictionary *{
     return @{
                @"statuses" : @"Status",
@@ -268,7 +268,7 @@ for (Ad *ad in result.ads) {
 [Student mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
     return @{
                @"ID" : @"id",
-               @"desc" : @"desciption",
+               @"desc" : @"description",
                @"oldName" : @"name.oldName",
                @"nowName" : @"name.newName",
                @"nameChangedTime" : @"name.info[1].nameChangedTime",
@@ -279,7 +279,7 @@ for (Ad *ad in result.ads) {
 
 NSDictionary *dict = @{
     @"id" : @"20",
-    @"desciption" : @"kids",
+    @"description" : @"kids",
     @"name" : @{
         @"newName" : @"lufy",
         @"oldName" : @"kitty",
