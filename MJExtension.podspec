@@ -3,6 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "3.0.13"
   s.ios.deployment_target = '6.0'
   s.osx.deployment_target = '10.8'
+  s.tvos.deployment_target = '9.0'
   s.summary      = "A fast and convenient conversion between JSON and model"
   s.homepage     = "https://github.com/CoderMJLee/MJExtension"
   s.license      = "MIT"
