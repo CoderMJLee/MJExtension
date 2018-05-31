@@ -27,7 +27,7 @@ static const char MJCachedPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
-+ (NSMutableDictionary *)dictForKey:(const void *)key
++ (NSMutableDictionary *)propertyDictForKey:(const void *)key
 {
     static NSMutableDictionary *replacedKeyFromPropertyNameDict;
     static NSMutableDictionary *replacedKeyFromPropertyName121Dict;
@@ -148,7 +148,7 @@ static const char MJCachedPropertiesKey = '\0';
 #pragma mark - 公共方法
 + (NSMutableArray *)properties
 {
-    NSMutableArray *cachedProperties = [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
+    NSMutableArray *cachedProperties = [self propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
     
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
@@ -173,7 +173,7 @@ static const char MJCachedPropertiesKey = '\0';
             free(properties);
         }];
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        [self propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
     }
     
     return cachedProperties;
@@ -212,7 +212,7 @@ static const char MJCachedPropertiesKey = '\0';
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 #pragma mark - key配置
@@ -220,14 +220,14 @@ static const char MJCachedPropertiesKey = '\0';
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 @end
 

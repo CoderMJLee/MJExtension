@@ -19,7 +19,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
 @implementation NSObject (MJClass)
 
-+ (NSMutableDictionary *)dictForKey:(const void *)key
++ (NSMutableDictionary *)classDictForKey:(const void *)key
 {
     static NSMutableDictionary *allowedPropertyNamesDict;
     static NSMutableDictionary *ignoredPropertyNamesDict;
@@ -139,7 +139,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     // 清空数据
-    [[self dictForKey:key] removeAllObjects];
+    [[self classDictForKey:key] removeAllObjects];
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
@@ -147,10 +147,10 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
     
-    NSMutableArray *array = [self dictForKey:key][NSStringFromClass(self)];
+    NSMutableArray *array = [self classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
-        [self dictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
+        [self classDictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
         
         if ([self respondsToSelector:selector]) {
     #pragma clang diagnostic push
