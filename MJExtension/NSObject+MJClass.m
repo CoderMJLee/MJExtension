@@ -139,7 +139,10 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     // 清空数据
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
     [[self classDictForKey:key] removeAllObjects];
+    MJExtensionSemaphoreSignal
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
