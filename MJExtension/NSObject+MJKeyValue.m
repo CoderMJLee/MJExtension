@@ -193,7 +193,20 @@ static NSNumberFormatter *numberFormatter_;
                         if (type.typeClass == [NSDecimalNumber class]) {
                             value = [NSDecimalNumber decimalNumberWithString:oldValue];
                         } else {
-                            value = [numberFormatter_ numberFromString:oldValue];
+                            if ([type.code isEqualToString:MJPropertyTypeInt]
+                                || [type.code isEqualToString:MJPropertyTypeShort]) {
+                                value = @(oldValue.integerValue);
+                            }
+                            else if ([type.code isEqualToString:MJPropertyTypeLong]
+                                     || [type.code isEqualToString:MJPropertyTypeLongLong]) {
+                                value = @(oldValue.longLongValue);
+                            }
+                            else if ([type.code isEqualToString:MJPropertyTypeFloat]
+                                     || [type.code isEqualToString:MJPropertyTypeDouble]) {
+                                value = @(oldValue.doubleValue);
+                            }
+                            else
+                                value = [numberFormatter_ numberFromString:oldValue];
                         }
                         
                         // 如果是BOOL
