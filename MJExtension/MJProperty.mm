@@ -10,10 +10,13 @@
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 #import <objc/message.h>
-
+#include <map>
 @interface MJProperty()
-@property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
-@property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
+{
+    // 使用C++容器来保存，可以避免查找时的NSStringFromClass性能损耗
+    std::map<std::uintptr_t, NSArray*> _propertyKeysDict;
+    std::map<std::uintptr_t, Class> _objectClassInArrayDict;
+}
 @end
 
 @implementation MJProperty
@@ -22,8 +25,6 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _propertyKeysDict = [NSMutableDictionary dictionary];
-        _objectClassInArrayDict = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -158,15 +159,18 @@
     
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
-    self.propertyKeysDict[key] = propertyKeys;
+    _propertyKeysDict[reinterpret_cast<std::uintptr_t>(c)] = propertyKeys;
     MJExtensionSemaphoreSignal
 }
 
 - (NSArray *)propertyKeysForClass:(Class)c
 {
-    NSString *key = NSStringFromClass(c);
-    if (!key) return nil;
-    return self.propertyKeysDict[key];
+    std::uintptr_t cp = reinterpret_cast<std::uintptr_t>(c);
+    auto it = _propertyKeysDict.find(cp);
+    if (it != _propertyKeysDict.end()) {
+        return it->second;
+    }
+    return nil;
 }
 
 /** 模型数组中的模型类型 */
@@ -178,14 +182,17 @@
     
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
-    self.objectClassInArrayDict[key] = objectClass;
+    _objectClassInArrayDict[reinterpret_cast<std::uintptr_t>(c)] = objectClass;
     MJExtensionSemaphoreSignal
 }
 
 - (Class)objectClassInArrayForClass:(Class)c
 {
-    NSString *key = NSStringFromClass(c);
-    if (!key) return nil;
-    return self.objectClassInArrayDict[key];
+    std::uintptr_t cp = reinterpret_cast<std::uintptr_t>(c);
+    auto it = _objectClassInArrayDict.find(cp);
+    if (it != _objectClassInArrayDict.end()) {
+        return it->second;
+    }
+    return Nil;
 }
 @end
