@@ -146,7 +146,15 @@
  *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
  *  @return 模型数组
  */
-+ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(id)keyValuesArray;
++ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray*)keyValuesArray;
+
+/**
+ *  原有逻辑
+ *  通过字典数组来创建一个模型数组
+ *  @param keyValuesArray 字典数组(可以是NSDictionary、NSData、NSString)
+ *  @return 模型数组
+ */
++ (NSMutableArray *)mj_slowpath_objectArrayWithKeyValuesArray:(NSArray*)keyValuesArray;
 
 /**
  *  通过字典数组来创建一个模型数组
@@ -154,7 +162,7 @@
  *  @param context        CoreData上下文
  *  @return 模型数组
  */
-+ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context;
++ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray*)keyValuesArray context:(NSManagedObjectContext *)context;
 
 /**
  *  通过plist来创建一个模型数组

@@ -16,6 +16,18 @@
 #import "NSString+MJExtension.h"
 #import "NSObject+MJClass.h"
 
+@interface MJArrayModelAcceleration : NSObject
+
+@property (nonatomic) BOOL complemeted;
+@property (nonatomic) NSArray* allowedPropertyNames;
+@property (nonatomic) NSArray* ignoredPropertyNames;
+@property (nonatomic) BOOL willTransfromToNewValue;
+
+@end
+
+@implementation MJArrayModelAcceleration
+@end
+
 @implementation NSObject (MJKeyValue)
 
 #pragma mark - 错误
@@ -72,16 +84,33 @@ static NSNumberFormatter *numberFormatter_;
 /**
  核心代码：
  */
+
 - (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
 {
+    return [self mj_setKeyValues:keyValues context:context acceleration:nil];
+}
+
+- (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context acceleration:(MJArrayModelAcceleration*)acceleration
+{
     // 获得JSON对象
-    keyValues = [keyValues mj_JSONObject];
+    if (![keyValues isKindOfClass:[NSDictionary class]]) {
+        keyValues = [keyValues mj_JSONObject];
+    }
     
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
     
     Class clazz = [self class];
-    NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
-    NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
+    
+    if (acceleration && !acceleration.complemeted) {
+        acceleration.allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
+        acceleration.ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
+        acceleration.willTransfromToNewValue = [clazz mj_hasNewValueFromOldValue];
+        acceleration.complemeted = YES;
+    }
+    
+    NSArray *allowedPropertyNames = acceleration ? acceleration.allowedPropertyNames : [clazz mj_totalAllowedPropertyNames];
+    NSArray *ignoredPropertyNames = acceleration ? acceleration.ignoredPropertyNames : [clazz mj_totalIgnoredPropertyNames];
+    BOOL willTransformToNewValue = acceleration ? acceleration.willTransfromToNewValue : YES;
     
     //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
@@ -102,10 +131,12 @@ static NSNumberFormatter *numberFormatter_;
             }
             
             // 值的过滤
-            id newValue = [clazz mj_getNewValueFromObject:self oldValue:value property:property];
-            if (newValue != value) { // 有过滤后的新值
-                [property setValue:newValue forObject:self];
-                return;
+            if (willTransformToNewValue) {
+                id newValue = [clazz mj_getNewValueFromObject:self oldValue:value property:property];
+                if (newValue != value) { // 有过滤后的新值
+                    [property setValue:newValue forObject:self];
+                    return;
+                }
             }
             
             // 如果没有值，就直接返回
@@ -114,7 +145,7 @@ static NSNumberFormatter *numberFormatter_;
             // 2.复杂处理
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
-            Class objectClass = [property objectClassInArrayForClass:[self class]];
+            Class objectClass = [property objectClassInArrayForClass:clazz];
             
             // 不可变 -> 可变处理
             if (propertyClass == [NSMutableArray class] && [value isKindOfClass:[NSArray class]]) {
@@ -207,15 +238,20 @@ static NSNumberFormatter *numberFormatter_;
 
 + (instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
 {
+    return [self mj_objectWithKeyValues:keyValues context:nil acceleration:nil];
+}
+
++ (instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context  acceleration:(MJArrayModelAcceleration*)acceleration
+{
     // 获得JSON对象
     keyValues = [keyValues mj_JSONObject];
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], nil, [self class], @"keyValues参数不是一个字典");
     
     if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
         NSString *entityName = [NSStringFromClass(self) componentsSeparatedByString:@"."].lastObject;
-        return [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context];
+        return [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context acceleration:acceleration];
     }
-    return [[[self alloc] init] mj_setKeyValues:keyValues];
+    return [[[self alloc] init] mj_setKeyValues:keyValues context:nil acceleration:acceleration];
 }
 
 + (instancetype)mj_objectWithFilename:(NSString *)filename
@@ -238,10 +274,11 @@ static NSNumberFormatter *numberFormatter_;
     return [self mj_objectArrayWithKeyValuesArray:keyValuesArray context:nil];
 }
 
-+ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context
++ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray*)keyValuesArray context:(NSManagedObjectContext *)context
 {
     // 如果是JSON字符串
-    keyValuesArray = [keyValuesArray mj_JSONObject];
+    // 这句话貌似没必要吧，因为传进来是NSArray，mj_JSONObject会返回自己；传进来的不是NSArray又不能工作
+//    keyValuesArray = [keyValuesArray mj_JSONObject];
     
     // 1.判断真实性
     MJExtensionAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, [self class], @"keyValuesArray参数不是一个数组");
@@ -254,11 +291,42 @@ static NSNumberFormatter *numberFormatter_;
     NSMutableArray *modelArray = [NSMutableArray array];
     
     // 3.遍历
+    MJArrayModelAcceleration* acceleration = [[MJArrayModelAcceleration alloc] init];
     for (NSDictionary *keyValues in keyValuesArray) {
         if ([keyValues isKindOfClass:[NSArray class]]){
+            // 真的会有这么奇葩的情况吗？
             [modelArray addObject:[self mj_objectArrayWithKeyValuesArray:keyValues context:context]];
         } else {
-            id model = [self mj_objectWithKeyValues:keyValues context:context];
+            id model = [self mj_objectWithKeyValues:keyValues context:context acceleration:acceleration];
+            if (model) [modelArray addObject:model];
+        }
+    }
+    
+    return modelArray;
+}
+
++ (NSMutableArray *)mj_slowpath_objectArrayWithKeyValuesArray:(NSArray*)keyValuesArray
+{
+    // 如果是JSON字符串
+        keyValuesArray = [keyValuesArray mj_JSONObject];
+    
+    // 1.判断真实性
+    MJExtensionAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, [self class], @"keyValuesArray参数不是一个数组");
+    
+    // 如果数组里面放的是NSString、NSNumber等数据
+    if ([MJFoundation isClassFromFoundation:self]) return [NSMutableArray arrayWithArray:keyValuesArray];
+    
+    
+    // 2.创建数组
+    NSMutableArray *modelArray = [NSMutableArray array];
+    
+    // 3.遍历
+    for (NSDictionary *keyValues in keyValuesArray) {
+        if ([keyValues isKindOfClass:[NSArray class]]){
+            // 真的会有这么奇葩的情况吗？
+            [modelArray addObject:[self mj_objectArrayWithKeyValuesArray:keyValues context:nil]];
+        } else {
+            id model = [self mj_objectWithKeyValues:keyValues context:nil acceleration:nil];
             if (model) [modelArray addObject:model];
         }
     }
