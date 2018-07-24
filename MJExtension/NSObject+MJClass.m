@@ -16,8 +16,26 @@ static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
+/** NSObject will add
+ @"hash", @"description", @"debugDescription", @"superclass"
+ property into our class
+ */
+static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
 
 @implementation NSObject (MJClass)
+
++ (BOOL)isIgnoredDefaultAdditionalProperty {
+    NSNumber *value = objc_getAssociatedObject(self, &MJIsIgnoredDefaultNSObjectAdditionalPropertyNames);
+    // 默认值为 YES
+    if (!value) {
+        return YES;
+    }
+    return [value boolValue];
+}
+
++ (void)setIsIgnoredDefaultAdditionalProperty:(BOOL)isIgnoredDefaultAdditionalProperty {
+    objc_setAssociatedObject(self, &MJIsIgnoredDefaultNSObjectAdditionalPropertyNames, @(isIgnoredDefaultAdditionalProperty), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 + (NSMutableDictionary *)classDictForKey:(const void *)key
 {
@@ -93,7 +111,22 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
 + (NSMutableArray *)mj_totalIgnoredPropertyNames
 {
-    return [self mj_totalObjectsWithSelector:@selector(mj_ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
+    NSMutableArray *m_Arr = [self mj_totalObjectsWithSelector:@selector(mj_ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    if (self.isIgnoredDefaultAdditionalProperty) {
+        // ignore NSObject properties.
+        [m_Arr addObjectsFromArray:@[
+                                     @"hash",
+                                     @"description",
+                                     @"debugDescription",
+                                     @"superclass",
+                                     ]];
+        
+    }
+    MJExtensionSemaphoreSignal
+    
+    return m_Arr;
 }
 
 #pragma mark - 归档属性黑名单配置
