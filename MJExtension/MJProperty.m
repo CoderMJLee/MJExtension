@@ -31,12 +31,15 @@
 #pragma mark - 缓存
 + (instancetype)cachedPropertyWithProperty:(objc_property_t)property
 {
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
     MJProperty *propertyObj = objc_getAssociatedObject(self, property);
     if (propertyObj == nil) {
         propertyObj = [[self alloc] init];
         propertyObj.property = property;
         objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
+    MJExtensionSemaphoreSignal
     return propertyObj;
 }
 
@@ -150,21 +153,39 @@
 - (void)setPorpertyKeys:(NSArray *)propertyKeys forClass:(Class)c
 {
     if (propertyKeys.count == 0) return;
-    self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
+    NSString *key = NSStringFromClass(c);
+    if (!key) return;
+    
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    self.propertyKeysDict[key] = propertyKeys;
+    MJExtensionSemaphoreSignal
 }
+
 - (NSArray *)propertyKeysForClass:(Class)c
 {
-    return self.propertyKeysDict[NSStringFromClass(c)];
+    NSString *key = NSStringFromClass(c);
+    if (!key) return nil;
+    return self.propertyKeysDict[key];
 }
 
 /** 模型数组中的模型类型 */
 - (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c
 {
     if (!objectClass) return;
-    self.objectClassInArrayDict[NSStringFromClass(c)] = objectClass;
+    NSString *key = NSStringFromClass(c);
+    if (!key) return;
+    
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    self.objectClassInArrayDict[key] = objectClass;
+    MJExtensionSemaphoreSignal
 }
+
 - (Class)objectClassInArrayForClass:(Class)c
 {
-    return self.objectClassInArrayDict[NSStringFromClass(c)];
+    NSString *key = NSStringFromClass(c);
+    if (!key) return nil;
+    return self.objectClassInArrayDict[key];
 }
 @end

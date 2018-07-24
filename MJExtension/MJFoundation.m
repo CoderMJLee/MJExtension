@@ -10,15 +10,17 @@
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
 
-static NSSet *foundationClasses_;
-
 @implementation MJFoundation
 
-+ (NSSet *)foundationClasses
++ (BOOL)isClassFromFoundation:(Class)c
 {
-    if (foundationClasses_ == nil) {
+    if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
+    
+    static NSSet *foundationClasses;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         // 集合中没有NSObject，因为几乎所有的类都是继承自NSObject，具体是不是NSObject需要特殊判断
-        foundationClasses_ = [NSSet setWithObjects:
+        foundationClasses = [NSSet setWithObjects:
                               [NSURL class],
                               [NSDate class],
                               [NSValue class],
@@ -28,16 +30,10 @@ static NSSet *foundationClasses_;
                               [NSDictionary class],
                               [NSString class],
                               [NSAttributedString class], nil];
-    }
-    return foundationClasses_;
-}
-
-+ (BOOL)isClassFromFoundation:(Class)c
-{
-    if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
+    });
     
     __block BOOL result = NO;
-    [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
+    [foundationClasses enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
         if ([c isSubclassOfClass:foundationClass]) {
             result = YES;
             *stop = YES;

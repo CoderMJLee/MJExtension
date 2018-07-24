@@ -77,7 +77,7 @@ void keyValues2object()
     MJUser *user = [MJUser mj_objectWithKeyValues:dict];
     
     // 3.打印MJUser模型的属性
-    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**
@@ -352,7 +352,7 @@ void coreData()
     // 利用CoreData保存模型
     [context save:nil];
     
-    MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
 /**
@@ -425,7 +425,7 @@ void logAllProperties()
     MJExtensionLog(@"%@", user);
 }
 
-void execute(void (*fn)(), NSString *comment)
+void execute(void (*fn)(void), NSString *comment)
 {
     MJExtensionLog(@"[******************%@******************开始]", comment);
     fn();

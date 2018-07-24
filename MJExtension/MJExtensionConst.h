@@ -4,6 +4,20 @@
 
 #import <Foundation/Foundation.h>
 
+// 信号量
+#define MJExtensionSemaphoreCreate \
+static dispatch_semaphore_t signalSemaphore; \
+static dispatch_once_t onceTokenSemaphore; \
+dispatch_once(&onceTokenSemaphore, ^{ \
+    signalSemaphore = dispatch_semaphore_create(1); \
+});
+
+#define MJExtensionSemaphoreWait \
+dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+
+#define MJExtensionSemaphoreSignal \
+dispatch_semaphore_signal(signalSemaphore);
+
 // 过期
 #define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
 

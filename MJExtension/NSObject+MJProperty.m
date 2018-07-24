@@ -27,31 +27,29 @@ static const char MJCachedPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
-static NSMutableDictionary *replacedKeyFromPropertyNameDict_;
-static NSMutableDictionary *replacedKeyFromPropertyName121Dict_;
-static NSMutableDictionary *newValueFromOldValueDict_;
-static NSMutableDictionary *objectClassInArrayDict_;
-static NSMutableDictionary *cachedPropertiesDict_;
-
-+ (void)load
++ (NSMutableDictionary *)propertyDictForKey:(const void *)key
 {
-    replacedKeyFromPropertyNameDict_ = [NSMutableDictionary dictionary];
-    replacedKeyFromPropertyName121Dict_ = [NSMutableDictionary dictionary];
-    newValueFromOldValueDict_ = [NSMutableDictionary dictionary];
-    objectClassInArrayDict_ = [NSMutableDictionary dictionary];
-    cachedPropertiesDict_ = [NSMutableDictionary dictionary];
-}
-
-+ (NSMutableDictionary *)dictForKey:(const void *)key
-{
-    @synchronized (self) {
-        if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
-        if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict_;
-        if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict_;
-        if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict_;
-        if (key == &MJCachedPropertiesKey) return cachedPropertiesDict_;
-        return nil;
-    }
+    static NSMutableDictionary *replacedKeyFromPropertyNameDict;
+    static NSMutableDictionary *replacedKeyFromPropertyName121Dict;
+    static NSMutableDictionary *newValueFromOldValueDict;
+    static NSMutableDictionary *objectClassInArrayDict;
+    static NSMutableDictionary *cachedPropertiesDict;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        replacedKeyFromPropertyNameDict = [NSMutableDictionary dictionary];
+        replacedKeyFromPropertyName121Dict = [NSMutableDictionary dictionary];
+        newValueFromOldValueDict = [NSMutableDictionary dictionary];
+        objectClassInArrayDict = [NSMutableDictionary dictionary];
+        cachedPropertiesDict = [NSMutableDictionary dictionary];
+    });
+    
+    if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict;
+    if (key == &MJReplacedKeyFromPropertyName121Key) return replacedKeyFromPropertyName121Dict;
+    if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict;
+    if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict;
+    if (key == &MJCachedPropertiesKey) return cachedPropertiesDict;
+    return nil;
 }
 
 #pragma mark - --私有方法--
@@ -150,32 +148,39 @@ static NSMutableDictionary *cachedPropertiesDict_;
 #pragma mark - 公共方法
 + (NSMutableArray *)properties
 {
-    NSMutableArray *cachedProperties = [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
+    NSMutableArray *cachedProperties = [self propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
     
     if (cachedProperties == nil) {
-        cachedProperties = [NSMutableArray array];
+        MJExtensionSemaphoreCreate
+        MJExtensionSemaphoreWait
         
-        [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-            // 1.获得所有的成员变量
-            unsigned int outCount = 0;
-            objc_property_t *properties = class_copyPropertyList(c, &outCount);
+        if (cachedProperties == nil) {
+            cachedProperties = [NSMutableArray array];
             
-            // 2.遍历每一个成员变量
-            for (unsigned int i = 0; i<outCount; i++) {
-                MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
-                // 过滤掉Foundation框架类里面的属性
-                if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
-                property.srcClass = c;
-                [property setOriginKey:[self propertyKey:property.name] forClass:self];
-                [property setObjectClassInArray:[self propertyObjectClassInArray:property.name] forClass:self];
-                [cachedProperties addObject:property];
-            }
+            [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+                // 1.获得所有的成员变量
+                unsigned int outCount = 0;
+                objc_property_t *properties = class_copyPropertyList(c, &outCount);
+                
+                // 2.遍历每一个成员变量
+                for (unsigned int i = 0; i<outCount; i++) {
+                    MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+                    // 过滤掉Foundation框架类里面的属性
+                    if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
+                    property.srcClass = c;
+                    [property setOriginKey:[self propertyKey:property.name] forClass:self];
+                    [property setObjectClassInArray:[self propertyObjectClassInArray:property.name] forClass:self];
+                    [cachedProperties addObject:property];
+                }
+                
+                // 3.释放内存
+                free(properties);
+            }];
             
-            // 3.释放内存
-            free(properties);
-        }];
+            [self propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        }
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        MJExtensionSemaphoreSignal
     }
     
     return cachedProperties;
@@ -214,7 +219,10 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreSignal
 }
 
 #pragma mark - key配置
@@ -222,14 +230,20 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreSignal
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJExtensionSemaphoreSignal
 }
 @end
 
