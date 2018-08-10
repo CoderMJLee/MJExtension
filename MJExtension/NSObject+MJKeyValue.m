@@ -185,7 +185,7 @@ static NSNumberFormatter *numberFormatter_;
                 }
                 
                 // value和property类型不匹配
-                if (propertyClass && ![value isKindOfClass:propertyClass]){
+                if (propertyClass && ![value isKindOfClass:propertyClass]) {
                     value = nil;
                 }
             }
