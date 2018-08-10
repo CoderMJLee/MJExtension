@@ -177,17 +177,15 @@ static NSNumberFormatter *numberFormatter_;
                             }
                         }
                     }
-                }else if ([value isKindOfClass:[NSNumber class]] && type.typeClass == [NSDecimalNumber class]){
+                } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
                     // 过滤 NSDecimalNumber类型
-                    if ([value isKindOfClass:[NSDecimalNumber class]]) {
-                        
-                    } else {
-                        value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
+                    if (![value isKindOfClass:[NSDecimalNumber class]]) {
+                         value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
                     }
                 }
                 
                 // value和property类型不匹配
-                if (propertyClass && ![value isKindOfClass:propertyClass] && propertyClass != [NSDecimalNumber class]) {
+                if (propertyClass && ![value isKindOfClass:propertyClass]){
                     value = nil;
                 }
             }
