@@ -177,6 +177,11 @@ static NSNumberFormatter *numberFormatter_;
                             }
                         }
                     }
+                } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
+                    // 过滤 NSDecimalNumber类型
+                    if (![value isKindOfClass:[NSDecimalNumber class]]) {
+                         value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
+                    }
                 }
                 
                 // value和property类型不匹配
