@@ -60,6 +60,7 @@
  *  当字典转模型完毕时调用
  */
 - (void)mj_keyValuesDidFinishConvertingToObject;
+- (void)mj_keyValuesDidFinishConvertingToObject:(NSDictionary *)keyValues;
 
 /**
  *  当模型转字典完毕时调用
