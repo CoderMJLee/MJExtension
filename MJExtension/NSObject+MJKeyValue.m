@@ -197,6 +197,9 @@ static NSNumberFormatter *numberFormatter_;
     if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject)]) {
         [self mj_keyValuesDidFinishConvertingToObject];
     }
+    if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject:)]) {
+        [self mj_keyValuesDidFinishConvertingToObject:keyValues];
+    }
     return self;
 }
 
