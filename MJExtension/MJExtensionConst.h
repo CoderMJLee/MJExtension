@@ -81,22 +81,22 @@ MJExtensionAssert2((param) != nil, returnValue)
 /**
  *  类型（属性类型）
  */
-extern NSString *const MJPropertyTypeInt;
-extern NSString *const MJPropertyTypeShort;
-extern NSString *const MJPropertyTypeFloat;
-extern NSString *const MJPropertyTypeDouble;
-extern NSString *const MJPropertyTypeLong;
-extern NSString *const MJPropertyTypeLongLong;
-extern NSString *const MJPropertyTypeChar;
-extern NSString *const MJPropertyTypeBOOL1;
-extern NSString *const MJPropertyTypeBOOL2;
-extern NSString *const MJPropertyTypePointer;
+extern NSString * _Nonnull const MJPropertyTypeInt;
+extern NSString * _Nonnull const MJPropertyTypeShort;
+extern NSString * _Nonnull const MJPropertyTypeFloat;
+extern NSString * _Nonnull const MJPropertyTypeDouble;
+extern NSString * _Nonnull const MJPropertyTypeLong;
+extern NSString * _Nonnull const MJPropertyTypeLongLong;
+extern NSString * _Nonnull const MJPropertyTypeChar;
+extern NSString * _Nonnull const MJPropertyTypeBOOL1;
+extern NSString * _Nonnull const MJPropertyTypeBOOL2;
+extern NSString * _Nonnull const MJPropertyTypePointer;
 
-extern NSString *const MJPropertyTypeIvar;
-extern NSString *const MJPropertyTypeMethod;
-extern NSString *const MJPropertyTypeBlock;
-extern NSString *const MJPropertyTypeClass;
-extern NSString *const MJPropertyTypeSEL;
-extern NSString *const MJPropertyTypeId;
+extern NSString * _Nonnull const MJPropertyTypeIvar;
+extern NSString * _Nonnull const MJPropertyTypeMethod;
+extern NSString * _Nonnull const MJPropertyTypeBlock;
+extern NSString * _Nonnull const MJPropertyTypeClass;
+extern NSString * _Nonnull const MJPropertyTypeSEL;
+extern NSString * _Nonnull const MJPropertyTypeId;
 
 #endif

@@ -20,12 +20,12 @@
 
 #pragma mark - 错误
 static const char MJErrorKey = '\0';
-+ (NSError *)mj_error
++ (nullable NSError *)mj_error
 {
     return objc_getAssociatedObject(self, &MJErrorKey);
 }
 
-+ (void)setMj_error:(NSError *)error
++ (void)setMj_error:(nullable NSError *)error
 {
     objc_setAssociatedObject(self, &MJErrorKey, error, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -64,7 +64,7 @@ static NSNumberFormatter *numberFormatter_;
 
 #pragma mark - --公共方法--
 #pragma mark - 字典 -> 模型
-- (instancetype)mj_setKeyValues:(id)keyValues
+- (nonnull instancetype)mj_setKeyValues:(id)keyValues
 {
     return [self mj_setKeyValues:keyValues context:nil];
 }
@@ -72,7 +72,7 @@ static NSNumberFormatter *numberFormatter_;
 /**
  核心代码：
  */
-- (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
+- (nonnull instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
 {
     // 获得JSON对象
     keyValues = [keyValues mj_JSONObject];
@@ -208,12 +208,12 @@ static NSNumberFormatter *numberFormatter_;
     return self;
 }
 
-+ (instancetype)mj_objectWithKeyValues:(id)keyValues
++ (nonnull instancetype)mj_objectWithKeyValues:(id)keyValues
 {
     return [self mj_objectWithKeyValues:keyValues context:nil];
 }
 
-+ (instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
++ (nonnull instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
 {
     // 获得JSON对象
     keyValues = [keyValues mj_JSONObject];
@@ -226,14 +226,14 @@ static NSNumberFormatter *numberFormatter_;
     return [[[self alloc] init] mj_setKeyValues:keyValues];
 }
 
-+ (instancetype)mj_objectWithFilename:(NSString *)filename
++ (nonnull instancetype)mj_objectWithFilename:(NSString *)filename
 {
     MJExtensionAssertError(filename != nil, nil, [self class], @"filename参数为nil");
     
     return [self mj_objectWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil]];
 }
 
-+ (instancetype)mj_objectWithFile:(NSString *)file
++ (nonnull instancetype)mj_objectWithFile:(NSString *)file
 {
     MJExtensionAssertError(file != nil, nil, [self class], @"file参数为nil");
     
@@ -241,12 +241,12 @@ static NSNumberFormatter *numberFormatter_;
 }
 
 #pragma mark - 字典数组 -> 模型数组
-+ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
++ (nullable NSMutableArray *)mj_objectArrayWithKeyValuesArray:(nullable NSArray *)keyValuesArray
 {
     return [self mj_objectArrayWithKeyValuesArray:keyValuesArray context:nil];
 }
 
-+ (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(id)keyValuesArray context:(NSManagedObjectContext *)context
++ (nullable NSMutableArray *)mj_objectArrayWithKeyValuesArray:(nullable id)keyValuesArray context:(nullable NSManagedObjectContext *)context
 {
     // 如果是JSON字符串
     keyValuesArray = [keyValuesArray mj_JSONObject];
@@ -274,14 +274,14 @@ static NSNumberFormatter *numberFormatter_;
     return modelArray;
 }
 
-+ (NSMutableArray *)mj_objectArrayWithFilename:(NSString *)filename
++ (nullable NSMutableArray *)mj_objectArrayWithFilename:(nullable NSString *)filename
 {
     MJExtensionAssertError(filename != nil, nil, [self class], @"filename参数为nil");
     
     return [self mj_objectArrayWithFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil]];
 }
 
-+ (NSMutableArray *)mj_objectArrayWithFile:(NSString *)file
++ (nullable NSMutableArray *)mj_objectArrayWithFile:(nullable NSString *)file
 {
     MJExtensionAssertError(file != nil, nil, [self class], @"file参数为nil");
     
@@ -289,22 +289,22 @@ static NSNumberFormatter *numberFormatter_;
 }
 
 #pragma mark - 模型 -> 字典
-- (NSMutableDictionary *)mj_keyValues
+- (nullable NSMutableDictionary *)mj_keyValues
 {
     return [self mj_keyValuesWithKeys:nil ignoredKeys:nil];
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys
+- (nullable NSMutableDictionary *)mj_keyValuesWithKeys:(nullable NSArray *)keys
 {
     return [self mj_keyValuesWithKeys:keys ignoredKeys:nil];
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
+- (nullable NSMutableDictionary *)mj_keyValuesWithIgnoredKeys:(nullable NSArray *)ignoredKeys
 {
     return [self mj_keyValuesWithKeys:nil ignoredKeys:ignoredKeys];
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
+- (nullable NSMutableDictionary *)mj_keyValuesWithKeys:(nullable NSArray *)keys ignoredKeys:(nullable NSArray *)ignoredKeys
 {
     // 如果自己不是模型类, 那就返回自己
     MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
@@ -402,22 +402,22 @@ static NSNumberFormatter *numberFormatter_;
     return keyValues;
 }
 #pragma mark - 模型数组 -> 字典数组
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray
++ (nullable NSMutableArray *)mj_keyValuesArrayWithObjectArray:(nullable NSArray *)objectArray
 {
     return [self mj_keyValuesArrayWithObjectArray:objectArray keys:nil ignoredKeys:nil];
 }
 
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys
++ (nullable NSMutableArray *)mj_keyValuesArrayWithObjectArray:(nullable NSArray *)objectArray keys:(nullable NSArray *)keys
 {
     return [self mj_keyValuesArrayWithObjectArray:objectArray keys:keys ignoredKeys:nil];
 }
 
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys
++ (nullable NSMutableArray *)mj_keyValuesArrayWithObjectArray:(nullable NSArray *)objectArray ignoredKeys:(nullable NSArray *)ignoredKeys
 {
     return [self mj_keyValuesArrayWithObjectArray:objectArray keys:nil ignoredKeys:ignoredKeys];
 }
 
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
++ (nullable NSMutableArray *)mj_keyValuesArrayWithObjectArray:(nullable NSArray *)objectArray keys:(nullable NSArray *)keys ignoredKeys:(nullable NSArray *)ignoredKeys
 {
     // 0.判断真实性
     MJExtensionAssertError([objectArray isKindOfClass:[NSArray class]], nil, [self class], @"objectArray参数不是一个数组");
@@ -435,7 +435,7 @@ static NSNumberFormatter *numberFormatter_;
 }
 
 #pragma mark - 转换为JSON
-- (NSData *)mj_JSONData
+- (nullable NSData *)mj_JSONData
 {
     if ([self isKindOfClass:[NSString class]]) {
         return [((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding];
@@ -446,7 +446,7 @@ static NSNumberFormatter *numberFormatter_;
     return [NSJSONSerialization dataWithJSONObject:[self mj_JSONObject] options:kNilOptions error:nil];
 }
 
-- (id)mj_JSONObject
+- (nullable id)mj_JSONObject
 {
     if ([self isKindOfClass:[NSString class]]) {
         return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
@@ -457,7 +457,7 @@ static NSNumberFormatter *numberFormatter_;
     return self.mj_keyValues;
 }
 
-- (NSString *)mj_JSONString
+- (nullable NSString *)mj_JSONString
 {
     if ([self isKindOfClass:[NSString class]]) {
         return (NSString *)self;

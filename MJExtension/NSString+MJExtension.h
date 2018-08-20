@@ -13,23 +13,23 @@
 /**
  *  驼峰转下划线（loveYou -> love_you）
  */
-- (NSString *)mj_underlineFromCamel;
+- (nullable NSString *)mj_underlineFromCamel;
 /**
  *  下划线转驼峰（love_you -> loveYou）
  */
-- (NSString *)mj_camelFromUnderline;
+- (nullable NSString *)mj_camelFromUnderline;
 /**
  * 首字母变大写
  */
-- (NSString *)mj_firstCharUpper;
+- (nullable NSString *)mj_firstCharUpper;
 /**
  * 首字母变小写
  */
-- (NSString *)mj_firstCharLower;
+- (nullable NSString *)mj_firstCharLower;
 
 - (BOOL)mj_isPureInt;
 
-- (NSURL *)mj_url;
+- (nullable NSURL *)mj_url;
 @end
 
 @interface NSString (MJExtensionDeprecated_v_2_5_16)
