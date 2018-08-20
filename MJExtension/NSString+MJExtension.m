@@ -9,7 +9,7 @@
 #import "NSString+MJExtension.h"
 
 @implementation NSString (MJExtension)
-- (NSString *)mj_underlineFromCamel
+- (nullable NSString *)mj_underlineFromCamel
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -27,7 +27,7 @@
     return string;
 }
 
-- (NSString *)mj_camelFromUnderline
+- (nullable NSString *)mj_camelFromUnderline
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -44,7 +44,7 @@
     return string;
 }
 
-- (NSString *)mj_firstCharLower
+- (nullable NSString *)mj_firstCharLower
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -53,7 +53,7 @@
     return string;
 }
 
-- (NSString *)mj_firstCharUpper
+- (nullable NSString *)mj_firstCharUpper
 {
     if (self.length == 0) return self;
     NSMutableString *string = [NSMutableString string];
@@ -69,7 +69,7 @@
     return [scan scanInt:&val] && [scan isAtEnd];
 }
 
-- (NSURL *)mj_url
+- (nullable NSURL *)mj_url
 {
 //    [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"!$&'()*+,-./:;=?@_~%#[]"]];
 #pragma clang diagnostic push

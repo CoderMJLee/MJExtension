@@ -12,7 +12,7 @@
 
 @implementation MJFoundation
 
-+ (BOOL)isClassFromFoundation:(Class)c
++ (BOOL)isClassFromFoundation:(nullable Class)c
 {
     if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
     
