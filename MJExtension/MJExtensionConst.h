@@ -81,22 +81,22 @@ MJExtensionAssert2((param) != nil, returnValue)
 /**
  *  类型（属性类型）
  */
-extern NSString *const MJPropertyTypeInt;
-extern NSString *const MJPropertyTypeShort;
-extern NSString *const MJPropertyTypeFloat;
-extern NSString *const MJPropertyTypeDouble;
-extern NSString *const MJPropertyTypeLong;
-extern NSString *const MJPropertyTypeLongLong;
-extern NSString *const MJPropertyTypeChar;
-extern NSString *const MJPropertyTypeBOOL1;
-extern NSString *const MJPropertyTypeBOOL2;
-extern NSString *const MJPropertyTypePointer;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeInt;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeShort;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeFloat;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeDouble;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeLong;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeLongLong;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeChar;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeBOOL1;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeBOOL2;
+FOUNDATION_EXPORT NSString *const MJPropertyTypePointer;
 
-extern NSString *const MJPropertyTypeIvar;
-extern NSString *const MJPropertyTypeMethod;
-extern NSString *const MJPropertyTypeBlock;
-extern NSString *const MJPropertyTypeClass;
-extern NSString *const MJPropertyTypeSEL;
-extern NSString *const MJPropertyTypeId;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeIvar;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeMethod;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeBlock;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeClass;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeSEL;
+FOUNDATION_EXPORT NSString *const MJPropertyTypeId;
 
 #endif
