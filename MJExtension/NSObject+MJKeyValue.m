@@ -220,7 +220,7 @@ static NSNumberFormatter *numberFormatter_;
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], nil, [self class], @"keyValues参数不是一个字典");
     
     if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
-        NSString *entityName = [NSStringFromClass(self) componentsSeparatedByString:@"."].lastObject;
+		NSString *entityName = [[[(NSManagedObject *)self class] entity] name];
         return [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context];
     }
     return [[[self alloc] init] mj_setKeyValues:keyValues];
