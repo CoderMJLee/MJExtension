@@ -1,5 +1,10 @@
 
 ![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
+
+![](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![](https://img.shields.io/badge/pod-v3.0.15.1-orange.svg)
+![](https://img.shields.io/badge/License-MIT-green.svg)
+
 MJExtension
 ===
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
