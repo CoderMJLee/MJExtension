@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+NSString *const MJjdhhdhd = @"1";
 /**
  *  成员变量类型（属性类型）
  */
