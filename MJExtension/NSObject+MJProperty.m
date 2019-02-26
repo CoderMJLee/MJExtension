@@ -196,7 +196,7 @@ static const char MJCachedPropertiesKey = '\0';
     }
     // 兼容旧版本
     if ([self respondsToSelector:@selector(newValueFromOldValue:property:)]) {
-        return [self performSelector:@selector(newValueFromOldValue:property:)  withObject:oldValue  withObject:property];
+        return [self performSelector:@selector(newValueFromOldValue:property:) withObject:oldValue withObject:property];
     }
     
     // 查看静态设置
