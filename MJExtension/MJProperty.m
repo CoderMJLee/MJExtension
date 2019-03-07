@@ -187,7 +187,8 @@
     MJExtensionSemaphoreSignal
 }
 
-- (Class)objectClassInArrayForClass:(Class)c {
+- (Class)objectClassInArrayForClass:(Class)c
+{
     NSString *key = NSStringFromClass(c);
     if (!key) return nil;
     
