@@ -28,3 +28,7 @@ typedef enum {
 - (id)valueInObject:(id)object;
 
 @end
+
+@interface MJMetaPropertyKey : MJPropertyKey
+
+@end

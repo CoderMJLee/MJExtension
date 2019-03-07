@@ -118,9 +118,9 @@
                 [propertyKeys addObject:subPropertyKey];
             }
         } else { // 没有索引的key
-            MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-            propertyKey.name = oldKey;
-            [propertyKeys addObject:propertyKey];
+			MJPropertyKey *propertyKey = [stringKey hasPrefix:@"@self"] ? [[MJMetaPropertyKey alloc] init] : [[MJPropertyKey alloc] init];
+			propertyKey.name = oldKey;
+			[propertyKeys addObject:propertyKey];
         }
     }
     

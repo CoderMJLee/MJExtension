@@ -23,3 +23,19 @@
     return nil;
 }
 @end
+
+@implementation MJMetaPropertyKey
+
+- (id)valueInObject:(id)object
+{
+	if ([object isKindOfClass:[NSDictionary class]] && self.type == MJPropertyKeyTypeDictionary) {
+		if ([self.name hasPrefix:@"@self"]) {
+			NSString *valuePath = [self.name substringFromIndex:5];
+			return (valuePath && valuePath.length > 0) ? object[valuePath] : object;
+		}
+	}
+	return [super valueInObject:object];
+}
+
+@end
+
