@@ -166,7 +166,12 @@
 {
     NSString *key = NSStringFromClass(c);
     if (!key) return nil;
-    return self.propertyKeysDict[key];
+    
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    NSArray *propertyKeys = self.propertyKeysDict[key];
+    MJExtensionSemaphoreSignal
+    return propertyKeys;
 }
 
 /** 模型数组中的模型类型 */
@@ -182,10 +187,15 @@
     MJExtensionSemaphoreSignal
 }
 
-- (Class)objectClassInArrayForClass:(Class)c
-{
+- (Class)objectClassInArrayForClass:(Class)c {
     NSString *key = NSStringFromClass(c);
     if (!key) return nil;
-    return self.objectClassInArrayDict[key];
+    
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
+    Class objectClass = self.objectClassInArrayDict[key];
+    MJExtensionSemaphoreSignal
+    return objectClass;
 }
+
 @end
