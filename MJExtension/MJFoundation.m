@@ -41,4 +41,23 @@
     }];
     return result;
 }
+
++ (BOOL)isFromNSObjectProtocolProperty:(NSString *)propertyName
+{
+    if (!propertyName) return NO;
+    
+    static NSSet *objectProtocolPropertyNames;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // 如果遵守<NSObject>，过滤`hash`, `superclass`, `description`, `debugDescription`
+        objectProtocolPropertyNames = [NSSet setWithObjects:
+                                       NSStringFromSelector(@selector(hash)),
+                                       NSStringFromSelector(@selector(superclass)),
+                                       NSStringFromSelector(@selector(description)),
+                                       NSStringFromSelector(@selector(debugDescription)),
+                                       nil];
+    });
+    return [objectProtocolPropertyNames containsObject:propertyName];
+}
+
 @end
