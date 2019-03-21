@@ -9,6 +9,7 @@
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
+#import "objc/runtime.h"
 
 @implementation MJFoundation
 
@@ -46,18 +47,27 @@
 {
     if (!propertyName) return NO;
     
-    static NSSet *objectProtocolPropertyNames;
+    static NSSet<NSString *> *mj_NSObjectProtocolPropertyNames;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        // 如果遵守<NSObject>，过滤`hash`, `superclass`, `description`, `debugDescription`
-        objectProtocolPropertyNames = [NSSet setWithObjects:
-                                       NSStringFromSelector(@selector(hash)),
-                                       NSStringFromSelector(@selector(superclass)),
-                                       NSStringFromSelector(@selector(description)),
-                                       NSStringFromSelector(@selector(debugDescription)),
-                                       nil];
+        mj_NSObjectProtocolPropertyNames = [self mj_NSObjectProtocolPropetyNames];
     });
-    return [objectProtocolPropertyNames containsObject:propertyName];
+    return [mj_NSObjectProtocolPropertyNames containsObject:propertyName];
+}
+
++ (NSSet<NSString *> *)mj_NSObjectProtocolPropetyNames {
+    unsigned int count = 0;
+    // get property content
+    objc_property_t *property = protocol_copyPropertyList(@protocol(NSObject), &count);
+    // create collection with capacity
+    NSMutableSet *names = [NSMutableSet setWithCapacity:count];
+    for (int i = 0; i < count; i++) {
+        objc_property_t prop = property[i];
+        // get each propery name
+        NSString *name = [NSString stringWithCString:property_getName(prop) encoding:NSUTF8StringEncoding];
+        [names addObject:name];
+    }
+    return [names copy];
 }
 
 @end
