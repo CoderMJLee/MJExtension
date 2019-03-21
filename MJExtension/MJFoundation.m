@@ -9,6 +9,7 @@
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
+#import "objc/runtime.h"
 
 @implementation MJFoundation
 
@@ -46,17 +47,22 @@
 {
     if (!propertyName) return NO;
     
-    static NSSet *objectProtocolPropertyNames;
+    static NSSet<NSString *> *objectProtocolPropertyNames;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        // 如果遵守<NSObject>，过滤`hash`, `superclass`, `description`, `debugDescription`
-        objectProtocolPropertyNames = [NSSet setWithObjects:
-                                       NSStringFromSelector(@selector(hash)),
-                                       NSStringFromSelector(@selector(superclass)),
-                                       NSStringFromSelector(@selector(description)),
-                                       NSStringFromSelector(@selector(debugDescription)),
-                                       nil];
+        unsigned int count = 0;
+        objc_property_t *propertyList = protocol_copyPropertyList(@protocol(NSObject), &count);
+        NSMutableSet *propertyNames = [NSMutableSet setWithCapacity:count];
+        for (int i = 0; i < count; i++) {
+            objc_property_t property = propertyList[i];
+            NSString *propertyName = [NSString stringWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+            if (propertyName) {
+                [propertyNames addObject:propertyName];
+            }
+        }
+        objectProtocolPropertyNames = [propertyNames copy];
     });
+    
     return [objectProtocolPropertyNames containsObject:propertyName];
 }
 
