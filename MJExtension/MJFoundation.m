@@ -55,19 +55,22 @@
     return [mj_NSObjectProtocolPropertyNames containsObject:propertyName];
 }
 
+/**
+ @return Get all NSObject Protocol property
+ */
 + (NSSet<NSString *> *)mj_NSObjectProtocolPropetyNames {
     unsigned int count = 0;
     // get property content
-    objc_property_t *property = protocol_copyPropertyList(@protocol(NSObject), &count);
+    objc_property_t *propertyList = protocol_copyPropertyList(@protocol(NSObject), &count);
     // create collection with capacity
-    NSMutableSet *names = [NSMutableSet setWithCapacity:count];
+    NSMutableSet *propertyNames = [NSMutableSet setWithCapacity:count];
     for (int i = 0; i < count; i++) {
-        objc_property_t prop = property[i];
+        objc_property_t property = propertyList[i];
         // get each propery name
-        NSString *name = [NSString stringWithCString:property_getName(prop) encoding:NSUTF8StringEncoding];
-        [names addObject:name];
+        NSString *propertyName = [NSString stringWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+        [propertyNames addObject:propertyName];
     }
-    return [names copy];
+    return [propertyNames copy];
 }
 
 @end
