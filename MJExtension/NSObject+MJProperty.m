@@ -27,6 +27,21 @@ static const char MJCachedPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
++ (NSArray<NSString *> *)mj_NSObjectProtocolPropetyNames {
+    unsigned int count = 0;
+    // get property content
+    objc_property_t *property = protocol_copyPropertyList(@protocol(NSObject), &count);
+    // create collection with capacity
+    NSMutableArray *names = [NSMutableArray arrayWithCapacity:count];
+    for (int i = 0; i < count; i++) {
+        objc_property_t prop = property[i];
+        // get each propery name
+        NSString *name = [NSString stringWithCString:property_getName(prop) encoding:NSUTF8StringEncoding];
+        [names addObject:name];
+    }
+    return [names copy];
+}
+
 + (NSMutableDictionary *)propertyDictForKey:(const void *)key
 {
     static NSMutableDictionary *replacedKeyFromPropertyNameDict;

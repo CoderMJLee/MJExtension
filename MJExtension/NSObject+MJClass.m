@@ -9,6 +9,7 @@
 #import "NSObject+MJClass.h"
 #import "NSObject+MJCoding.h"
 #import "NSObject+MJKeyValue.h"
+#import "NSObject+MJProperty.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
 
@@ -16,16 +17,18 @@ static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
-/** NSObject will add
- @"hash", @"description", @"debugDescription", @"superclass"
+/** NSObject (Protocol) will add
+ @"hash", @"description", @"debugDescription", @"superclass", ...
  property into our class
  */
-static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
+static const char MJIsIgnoredNSObjectProtocolPropertyKey = '\0';
+
+static NSArray<NSString *> *mj_IgnoredNSObjectProtocolPropertyNames;
 
 @implementation NSObject (MJClass)
 
-+ (BOOL)isIgnoredDefaultAdditionalProperty {
-    NSNumber *value = objc_getAssociatedObject(self, &MJIsIgnoredDefaultNSObjectAdditionalPropertyNames);
++ (BOOL)mj_ignoredNSObjectProtocolProperty {
+    NSNumber *value = objc_getAssociatedObject(self, &MJIsIgnoredNSObjectProtocolPropertyKey);
     // 默认值为 YES
     if (!value) {
         return YES;
@@ -33,8 +36,8 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
     return [value boolValue];
 }
 
-+ (void)setIsIgnoredDefaultAdditionalProperty:(BOOL)isIgnoredDefaultAdditionalProperty {
-    objc_setAssociatedObject(self, &MJIsIgnoredDefaultNSObjectAdditionalPropertyNames, @(isIgnoredDefaultAdditionalProperty), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
++ (void)mj_setIgnoredNSObjectProtocolProperty:(BOOL)mj_isIgnoredNSObjectProtocolProperty {
+    objc_setAssociatedObject(self, &MJIsIgnoredNSObjectProtocolPropertyKey, @(mj_isIgnoredNSObjectProtocolProperty), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (NSMutableDictionary *)classDictForKey:(const void *)key
@@ -50,6 +53,8 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
         ignoredPropertyNamesDict = [NSMutableDictionary dictionary];
         allowedCodingPropertyNamesDict = [NSMutableDictionary dictionary];
         ignoredCodingPropertyNamesDict = [NSMutableDictionary dictionary];
+        
+        mj_IgnoredNSObjectProtocolPropertyNames = [self mj_NSObjectProtocolPropetyNames];
     });
     
     if (key == &MJAllowedPropertyNamesKey) return allowedPropertyNamesDict;
@@ -111,22 +116,7 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
 
 + (NSMutableArray *)mj_totalIgnoredPropertyNames
 {
-    NSMutableArray *m_Arr = [self mj_totalObjectsWithSelector:@selector(mj_ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
-    MJExtensionSemaphoreCreate
-    MJExtensionSemaphoreWait
-    if (self.isIgnoredDefaultAdditionalProperty) {
-        // ignore NSObject properties.
-        [m_Arr addObjectsFromArray:@[
-                                     @"hash",
-                                     @"description",
-                                     @"debugDescription",
-                                     @"superclass",
-                                     ]];
-        
-    }
-    MJExtensionSemaphoreSignal
-    
-    return m_Arr;
+    return [self mj_totalObjectsWithSelector:@selector(mj_ignoredPropertyNames) key:&MJIgnoredPropertyNamesKey];
 }
 
 #pragma mark - 归档属性黑名单配置
@@ -174,7 +164,8 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
     // 清空数据
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
-    [[self classDictForKey:key] removeAllObjects];
+    NSMutableDictionary *mDict = [self classDictForKey:key];
+    [mDict removeAllObjects];
     MJExtensionSemaphoreSignal
 }
 
@@ -198,6 +189,16 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
             }
         }
         
+        // 对于忽略列表. 在需要忽略 NSObject (Protocol) 方法时, 添加的基础属性
+        if (key == &MJIgnoredPropertyNamesKey && self.mj_ignoredNSObjectProtocolProperty) {
+            [array addObjectsFromArray:@[
+                                         @"hash",
+                                         @"description",
+                                         @"debugDescription",
+                                         @"superclass",
+                                         ]];
+        }
+        
         [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             NSArray *subArray = objc_getAssociatedObject(c, key);
             [array addObjectsFromArray:subArray];
@@ -205,7 +206,7 @@ static const char MJIsIgnoredDefaultNSObjectAdditionalPropertyNames = '\0';
     }
     
     MJExtensionSemaphoreSignal
-    
+    NSLog(@"aaa: %@", array);
     return array;
 }
 @end

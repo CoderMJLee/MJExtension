@@ -28,8 +28,16 @@ typedef NSArray * (^MJIgnoredCodingPropertyNames)(void);
  */
 @interface NSObject (MJClass)
 
-/** 是否清除 NSObject 默认往子类里添加的4个父类方法, 复制子类方法时也会有这4个属性. 默认为 YES 开启忽略状态, 如果需要, 可以关闭 */
-@property (class) BOOL isIgnoredDefaultAdditionalProperty;
+/** 是否清除 NSObject (Protocol) 的默认个父类属性. 默认为 YES 开启忽略状态, 如果需要, 可以关闭
+ @code
+ NSObject (Protocol) has
+        @"hash",
+        @"description",
+        @"debugDescription",
+        @"superclass",
+        ...
+ property */
+@property (class, setter=mj_setIgnoredNSObjectProtocolProperty:) BOOL mj_ignoredNSObjectProtocolProperty;
 /**
  *  遍历所有的类
  */
