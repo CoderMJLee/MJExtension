@@ -18,6 +18,13 @@
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
+#define MJPropertySemaphoreCreate \
+static dispatch_semaphore_t _propertySemaphore; \
+static dispatch_once_t onceTokenSemaphore; \
+dispatch_once(&onceTokenSemaphore, ^{ \
+    _propertySemaphore = dispatch_semaphore_create(1); \
+});
+
 static const char MJReplacedKeyFromPropertyNameKey = '\0';
 static const char MJReplacedKeyFromPropertyName121Key = '\0';
 static const char MJNewValueFromOldValueKey = '\0';
@@ -135,10 +142,10 @@ static const char MJCachedPropertiesKey = '\0';
 + (void)mj_enumerateProperties:(MJPropertiesEnumeration)enumeration
 {
     // 获得成员变量
-    MJExtensionSemaphoreCreate
-    MJExtensionSemaphoreWait
+    MJPropertySemaphoreCreate
+    MJ_LOCK(_propertySemaphore);
     NSArray *cachedProperties = [self properties];
-    MJExtensionSemaphoreSignal
+    MJ_UNLOCK(_propertySemaphore);
     // 遍历成员变量
     BOOL stop = NO;
     for (MJProperty *property in cachedProperties) {
@@ -219,10 +226,10 @@ static const char MJCachedPropertiesKey = '\0';
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    MJExtensionSemaphoreCreate
-    MJExtensionSemaphoreWait
+    MJPropertySemaphoreCreate
+    MJ_LOCK(_propertySemaphore);
     [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    MJExtensionSemaphoreSignal
+    MJ_UNLOCK(_propertySemaphore);
 }
 
 #pragma mark - key配置
@@ -230,20 +237,20 @@ static const char MJCachedPropertiesKey = '\0';
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    MJExtensionSemaphoreCreate
-    MJExtensionSemaphoreWait
+    MJPropertySemaphoreCreate
+    MJ_LOCK(_propertySemaphore);
     [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    MJExtensionSemaphoreSignal
+    MJ_UNLOCK(_propertySemaphore);
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    MJExtensionSemaphoreCreate
-    MJExtensionSemaphoreWait
+    MJPropertySemaphoreCreate
+    MJ_LOCK(_propertySemaphore);
     [[self propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    MJExtensionSemaphoreSignal
+    MJ_UNLOCK(_propertySemaphore);
 }
 @end
 
