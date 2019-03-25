@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "main.h"
-#import "MJExtension.h"
 #import "MJUser.h"
 #import "MJAd.h"
 #import "MJStatus.h"
@@ -21,6 +20,7 @@
 #import <CoreData/CoreData.h>
 
 
+@import MJExtension;
 /**
  MJ友情提醒：
  1.MJExtension是一套“字典和模型之间互相转换”的轻量级框架

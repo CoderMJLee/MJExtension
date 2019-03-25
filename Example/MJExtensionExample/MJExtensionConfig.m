@@ -7,13 +7,14 @@
 //
 
 #import "MJExtensionConfig.h"
-#import "MJExtension.h"
 #import "MJBag.h"
 #import "MJUser.h"
 #import "MJStatusResult.h"
 #import "MJStudent.h"
 #import "MJDog.h"
 #import "MJBook.h"
+
+@import MJExtension;
 
 @implementation MJExtensionConfig
 /**
