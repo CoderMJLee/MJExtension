@@ -7,7 +7,8 @@
 //
 
 #import "MJBox.h"
-#import "MJExtension.h"
+
+@import MJExtension;
 
 @implementation MJBox
 MJExtensionCodingImplementation

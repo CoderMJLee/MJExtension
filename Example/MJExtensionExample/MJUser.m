@@ -7,7 +7,8 @@
 //
 
 #import "MJUser.h"
-#import "MJExtension.h"
+
+@import MJExtension;
 
 @implementation MJUser
 //+ (NSArray *)mj_allowedPropertyNames

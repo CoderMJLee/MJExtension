@@ -7,7 +7,8 @@
 //
 
 #import "MJBag.h"
-#import "MJExtension.h"
+
+@import MJExtension;
 
 @implementation MJBag
 // NSCoding实现
