@@ -214,6 +214,29 @@ static const char MJCachedPropertiesKey = '\0';
     return newValue;
 }
 
++ (BOOL)mj_hasNewValueFromOldValue
+{
+    // 如果有实现方法
+    if ([self instancesRespondToSelector:@selector(mj_newValueFromOldValue:property:)]) {
+        return YES;
+    }
+    // 兼容旧版本
+    if ([self instancesRespondToSelector:@selector(newValueFromOldValue:property:)]) {
+        return YES;
+    }
+    
+    // 查看静态设置
+    __block BOOL hasNewValue = NO;
+    [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+        MJNewValueFromOldValue block = objc_getAssociatedObject(c, &MJNewValueFromOldValueKey);
+        if (block) {
+            hasNewValue = YES;
+            *stop = YES;
+        }
+    }];
+    return hasNewValue;
+}
+
 #pragma mark - array model class配置
 + (void)mj_setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
 {

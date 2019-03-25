@@ -46,6 +46,9 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
 + (void)mj_setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue;
 + (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property;
 
+// 此方法返回布尔类型，告诉你此类是否有可能会触发NewValueFromOldValue的逻辑
++ (BOOL)mj_hasNewValueFromOldValue;
+
 #pragma mark - key配置
 /**
  *  将属性名换为其他key去字典中取值
