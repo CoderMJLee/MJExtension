@@ -12,13 +12,6 @@
 #import "MJFoundation.h"
 #import <objc/runtime.h>
 
-#define MJClassSemaphoreCreate \
-static dispatch_semaphore_t _classSemaphore; \
-static dispatch_once_t onceTokenSemaphore; \
-dispatch_once(&onceTokenSemaphore, ^{ \
-    _classSemaphore = dispatch_semaphore_create(1); \
-});
-
 static const char MJAllowedPropertyNamesKey = '\0';
 static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
@@ -146,16 +139,16 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     // 清空数据
-    MJClassSemaphoreCreate
-    MJ_LOCK(_classSemaphore);
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
     [[self classDictForKey:key] removeAllObjects];
-    MJ_UNLOCK(_classSemaphore);
+    MJExtensionSemaphoreSignal
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
-    MJClassSemaphoreCreate
-    MJ_LOCK(_classSemaphore);
+    MJExtensionSemaphoreCreate
+    MJExtensionSemaphoreWait
     NSMutableArray *array = [self classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
@@ -176,7 +169,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
             [array addObjectsFromArray:subArray];
         }];
     }
-    MJ_UNLOCK(_classSemaphore);
+    MJExtensionSemaphoreSignal
     return array;
 }
 @end
