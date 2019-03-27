@@ -149,7 +149,6 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 {
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
-    
     NSMutableArray *array = [self classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
@@ -170,9 +169,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
             [array addObjectsFromArray:subArray];
         }];
     }
-    
     MJExtensionSemaphoreSignal
-    
     return array;
 }
 @end
