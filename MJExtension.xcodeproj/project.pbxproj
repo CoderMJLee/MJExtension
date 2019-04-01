@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01DD48142248BDB6003A69A6 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DD480A2248BDB5003A69A6 /* MJExtension.framework */; };
 		01DD48192248BDB6003A69A6 /* MJExtensionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48182248BDB6003A69A6 /* MJExtensionTests.m */; };
 		01DD481B2248BDB6003A69A6 /* MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 01DD480D2248BDB5003A69A6 /* MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01DD48382248BFF7003A69A6 /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48242248BFF6003A69A6 /* MJProperty.m */; };
@@ -93,7 +92,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01DD48142248BDB6003A69A6 /* MJExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
