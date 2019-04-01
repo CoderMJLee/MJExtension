@@ -12,7 +12,5 @@ script:
   - xcodebuild -project $FRAMEWORK_NAME.xcodeproj -scheme $FRAMEWORK_NAME build | xcpretty
   - pod lib lint
 
-  - carthage build --no-skip-current
-
 notifications:
   email: false
