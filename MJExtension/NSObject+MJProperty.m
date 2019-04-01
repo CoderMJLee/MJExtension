@@ -64,7 +64,7 @@ static const char MJCachedPropertiesKey = '\0';
     }
     // 兼容旧版本
     if ([self respondsToSelector:@selector(replacedKeyFromPropertyName121:)]) {
-        key = [self performSelector:@selector(replacedKeyFromPropertyName121) withObject:propertyName];
+        key = [self performSelector:@selector(replacedKeyFromPropertyName121:) withObject:propertyName];
     }
     
     // 调用block
