@@ -7,6 +7,9 @@ MJExtension
 
 GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
 
+## 关于 Swift ‼️
+### ‼️ 在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ‼️
+### ‼️ 请勿使用 `Bool` 类型, 因为在 Objc 中并没有桥接该类型, 不能显示的对应 `BOOL`, 请使用 `NSNumber` 替代 ‼️
 
 ## Contents
 * [Getting Started 【开始使用】](#Getting_Started)
