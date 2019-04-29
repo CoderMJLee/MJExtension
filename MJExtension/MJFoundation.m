@@ -61,6 +61,7 @@
             }
         }
         objectProtocolPropertyNames = [propertyNames copy];
+        free(propertyList);
     });
     
     return [objectProtocolPropertyNames containsObject:propertyName];
