@@ -1,0 +1,16 @@
+language: objective-c
+xcode_project: MJExtension.xcodeproj
+xcode_scheme: MJExtension
+
+env:
+  global:
+    - FRAMEWORK_NAME=MJExtension
+before_install:
+  - gem install xcpretty
+  
+script:
+  - xcodebuild -project $FRAMEWORK_NAME.xcodeproj -scheme $FRAMEWORK_NAME build | xcpretty
+  - pod lib lint
+
+notifications:
+  email: false

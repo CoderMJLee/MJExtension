@@ -2,11 +2,15 @@
 ![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
 MJExtension
 ===
+![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
 GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
 
+## 关于 Swift ‼️
+### ‼️ 在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ‼️
+### ‼️ 请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显示的对应 `BOOL`, 请使用 `NSNumber` 替代 ‼️
 
 ## Contents
 * [Getting Started 【开始使用】](#Getting_Started)

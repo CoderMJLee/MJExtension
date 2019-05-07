@@ -4,6 +4,14 @@
 
 #import <Foundation/Foundation.h>
 
+#ifndef MJ_LOCK
+#define MJ_LOCK(lock) dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+#endif
+
+#ifndef MJ_UNLOCK
+#define MJ_UNLOCK(lock) dispatch_semaphore_signal(lock);
+#endif
+
 // 信号量
 #define MJExtensionSemaphoreCreate \
 static dispatch_semaphore_t signalSemaphore; \
@@ -12,11 +20,8 @@ dispatch_once(&onceTokenSemaphore, ^{ \
     signalSemaphore = dispatch_semaphore_create(1); \
 });
 
-#define MJExtensionSemaphoreWait \
-dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
-
-#define MJExtensionSemaphoreSignal \
-dispatch_semaphore_signal(signalSemaphore);
+#define MJExtensionSemaphoreWait MJ_LOCK(signalSemaphore)
+#define MJExtensionSemaphoreSignal MJ_UNLOCK(signalSemaphore)
 
 // 过期
 #define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
@@ -77,6 +82,13 @@ MJExtensionAssert2((param) != nil, returnValue)
     return [self mj_keyValues].description; \
 }
 #define MJExtensionLogAllProperties MJLogAllIvars
+
+/** 仅在 Debugger 展示所有的属性 */
+#define MJImplementDebugDescription \
+-(NSString *)debugDescription \
+{ \
+return [self mj_keyValues].debugDescription; \
+}
 
 /**
  *  类型（属性类型）
