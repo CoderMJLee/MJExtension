@@ -39,6 +39,8 @@
 		01DD48532248BFF7003A69A6 /* MJPropertyKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48362248BFF7003A69A6 /* MJPropertyKey.m */; };
 		01DD48542248BFF7003A69A6 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */; };
 		01DD48552248BFF7003A69A6 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */; };
+		A266C509228823F60029CC87 /* Person.h in Headers */ = {isa = PBXBuildFile; fileRef = A266C507228823F60029CC87 /* Person.h */; };
+		A266C50A228823F60029CC87 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = A266C508228823F60029CC87 /* Person.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,8 @@
 		01DD48352248BFF7003A69A6 /* NSObject+MJClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJClass.h"; sourceTree = "<group>"; };
 		01DD48362248BFF7003A69A6 /* MJPropertyKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPropertyKey.m; sourceTree = "<group>"; };
 		01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJProperty.m"; sourceTree = "<group>"; };
+		A266C507228823F60029CC87 /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		A266C508228823F60029CC87 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +124,8 @@
 			isa = PBXGroup;
 			children = (
 				01DD480D2248BDB5003A69A6 /* MJExtension.h */,
+				A266C507228823F60029CC87 /* Person.h */,
+				A266C508228823F60029CC87 /* Person.m */,
 				01DD482B2248BFF6003A69A6 /* MJExtensionConst.h */,
 				01DD48312248BFF7003A69A6 /* MJExtensionConst.m */,
 				01DD482A2248BFF6003A69A6 /* MJFoundation.h */,
@@ -166,6 +172,7 @@
 				01DD48472248BFF7003A69A6 /* NSString+MJExtension.h in Headers */,
 				01DD48402248BFF7003A69A6 /* NSObject+MJCoding.h in Headers */,
 				01DD48502248BFF7003A69A6 /* NSObject+MJProperty.h in Headers */,
+				A266C509228823F60029CC87 /* Person.h in Headers */,
 				01DD48442248BFF7003A69A6 /* MJExtensionConst.h in Headers */,
 				01DD48482248BFF7003A69A6 /* MJProperty.h in Headers */,
 				01DD484A2248BFF7003A69A6 /* MJPropertyKey.h in Headers */,
@@ -273,6 +280,7 @@
 			files = (
 				01DD484E2248BFF7003A69A6 /* NSObject+MJKeyValue.m in Sources */,
 				01DD48412248BFF7003A69A6 /* MJPropertyType.m in Sources */,
+				A266C50A228823F60029CC87 /* Person.m in Sources */,
 				01DD483C2248BFF7003A69A6 /* MJFoundation.m in Sources */,
 				01DD484B2248BFF7003A69A6 /* MJExtensionConst.m in Sources */,
 				01DD48522248BFF7003A69A6 /* MJPropertyKey.m in Sources */,
