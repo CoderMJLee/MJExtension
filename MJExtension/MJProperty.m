@@ -73,7 +73,18 @@
 - (id)valueForObject:(id)object
 {
     if (self.type.KVCDisabled) return [NSNull null];
-    return [object valueForKey:self.name];
+    
+    id value = [object valueForKey:self.name];
+    
+    // 32位BOOL类型转换json后成Int类型
+    /** https://github.com/CoderMJLee/MJExtension/issues/545 */
+#if defined(__arm__)
+    if(self.type.isBoolType) {
+        value = @([(NSNumber *)value boolValue]);
+    }
+#endif
+    
+    return value;
 }
 
 /**
