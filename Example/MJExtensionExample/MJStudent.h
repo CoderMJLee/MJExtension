@@ -18,4 +18,7 @@
 @property (copy, nonatomic) NSString *desc;
 @property (strong, nonatomic) MJBag *bag;
 @property (strong, nonatomic) NSArray *books;
+
+/** 32 bit bug */
+@property (nonatomic) BOOL isAthlete;
 @end
