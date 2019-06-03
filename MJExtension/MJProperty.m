@@ -10,6 +10,7 @@
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 #import <objc/message.h>
+#include "TargetConditionals.h"
 
 @interface MJProperty()
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
@@ -79,7 +80,7 @@
     // 32位BOOL类型转换json后成Int类型
     /** https://github.com/CoderMJLee/MJExtension/issues/545 */
     // 32 bit device OR 32 bit Simulator
-#if defined(__arm__) || (TARGET_IPHONE_SIMULATOR && !__LP64__)
+#if defined(__arm__) || (TARGET_OS_SIMULATOR && !__LP64__)
     if(self.type.isBoolType) {
         value = @([(NSNumber *)value boolValue]);
     }
