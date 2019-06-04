@@ -294,6 +294,7 @@ void object2keyValues()
     stu.desc = @"handsome";
     stu.nameChangedTime = @"2018-09-08";
     stu.books = @[@"Good book", @"Red book"];
+    stu.isAthlete = YES;
     
     MJBag *bag = [[MJBag alloc] init];
     bag.name = @"小书包";

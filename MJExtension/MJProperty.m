@@ -10,6 +10,7 @@
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
 #import <objc/message.h>
+#include "TargetConditionals.h"
 
 @interface MJProperty()
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
@@ -73,7 +74,19 @@
 - (id)valueForObject:(id)object
 {
     if (self.type.KVCDisabled) return [NSNull null];
-    return [object valueForKey:self.name];
+    
+    id value = [object valueForKey:self.name];
+    
+    // 32位BOOL类型转换json后成Int类型
+    /** https://github.com/CoderMJLee/MJExtension/issues/545 */
+    // 32 bit device OR 32 bit Simulator
+#if defined(__arm__) || (TARGET_OS_SIMULATOR && !__LP64__)
+    if(self.type.isBoolType) {
+        value = @([(NSNumber *)value boolValue]);
+    }
+#endif
+    
+    return value;
 }
 
 /**
