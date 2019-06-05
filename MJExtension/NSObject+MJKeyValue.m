@@ -448,7 +448,10 @@ static NSNumberFormatter *numberFormatter_;
 
 - (id)mj_JSONObject
 {
-    if ([self isKindOfClass:[NSString class]]) {
+    if ([self isKindOfClass:[NSNull class]]) {
+        ///  -[NSNull mj_keyValues] will crash running on iOS 13 developer beta 1
+        return nil;
+    } else if ([self isKindOfClass:[NSString class]]) {
         return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     } else if ([self isKindOfClass:[NSData class]]) {
         return [NSJSONSerialization JSONObjectWithData:(NSData *)self options:kNilOptions error:nil];
