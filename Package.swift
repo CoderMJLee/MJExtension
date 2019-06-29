@@ -4,17 +4,19 @@ import PackageDescription
 
 let package = Package(
     name: "MJExtension",
-     platforms: [
+    platforms: [
         .macOS(.v10_10),
         .iOS(.v8)
     ],
     products: [
-       .library(name: "MJExtension", targets: ["MJExtension"])
-   ],
-   targets: [
+       .library(
+        name: "MJExtension",
+        targets: ["MJExtension"])
+    ],
+    targets: [
        .target(
            name: "MJExtension",
            path: "MJExtension"
        )
-   ]
+    ]
 )
