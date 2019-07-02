@@ -50,6 +50,7 @@ int main(int argc, char * argv[]) {
         execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
         execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
         execute(logAllProperties, @"使用MJExtensionLog打印模型的所有属性");
+        execute(nullSituations, @"测试有关 Null 的情况");
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
@@ -250,7 +251,6 @@ void keyValuesArray2objectArray()
                                @"name" : @"Jack",
                                @"icon" : @"lufy.png",
                                },
-                           
                            @{
                                @"name" : @"Rose",
                                @"icon" : @"nami.png",
@@ -323,7 +323,6 @@ void objectArray2keyValuesArray()
     MJUser *user2 = [[MJUser alloc] init];
     user2.name = @"Rose";
     user2.icon = @"nami.png";
-    
     NSArray *userArray = @[user1, user2];
     
     // 2.将模型数组转为字典数组
@@ -354,6 +353,46 @@ void coreData()
     [context save:nil];
     
     MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
+}
+
+void nullSituations() {
+    NSNull *null = [NSNull null];
+    id obj2 = [null mj_keyValues];
+    MJExtensionLog(@"%@", obj2);
+    
+    MJUser *user1 = [[MJUser alloc] init];
+    user1.name = @"user1";
+    MJUser *user2 = [[MJUser alloc] init];
+    user2.name = @"user2";
+    NSArray *users = @[user1, [NSNull null], user2];
+    NSArray *usersDictArr = [MJUser mj_keyValuesArrayWithObjectArray:users];
+    MJExtensionLog(@"%@", usersDictArr);
+    NSString *str = [usersDictArr mj_JSONObject];
+    MJExtensionLog(@"%@", str);
+    
+    
+    NSArray *dictArray = @[
+                           @{
+                               @"name" : @"Jack",
+                               @"icon" : @"lufy.png",
+                               },
+                           [NSNull null],
+                           @{
+                               @"name" : @"Rose",
+                               @"icon" : @"nami.png",
+                               }
+                           ];
+    
+    NSArray *userArray = [MJUser mj_objectArrayWithKeyValuesArray:dictArray];
+    MJExtensionLog(@"%@", userArray);
+    
+    
+    NSDictionary *dic = @{
+                          @"name": [NSNull null],
+                          @"icon": @"lufy.png"
+                          };
+    MJUser *testNull = [MJUser mj_objectWithKeyValues:dic];
+    MJExtensionLog(@"%@", testNull);
 }
 
 /**

@@ -307,6 +307,11 @@ static NSNumberFormatter *numberFormatter_;
 - (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
 {
     // 如果自己不是模型类, 那就返回自己
+    // 模型类过滤掉 NSNull
+    // 唯一一个不返回自己的
+    if ([self isMemberOfClass:NSNull.class]) { return nil; }
+    // 这里虽然返回了自己, 但是其实是有报错信息的.
+    // TODO: 报错机制不好, 需要重做
     MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
     
     id keyValues = [NSMutableDictionary dictionary];
@@ -426,9 +431,13 @@ static NSNumberFormatter *numberFormatter_;
     NSMutableArray *keyValuesArray = [NSMutableArray array];
     for (id object in objectArray) {
         if (keys) {
-            [keyValuesArray addObject:[object mj_keyValuesWithKeys:keys]];
+            id convertedObj = [object mj_keyValuesWithKeys:keys];
+            if (!convertedObj) { continue; }
+            [keyValuesArray addObject:convertedObj];
         } else {
-            [keyValuesArray addObject:[object mj_keyValuesWithIgnoredKeys:ignoredKeys]];
+            id convertedObj = [object mj_keyValuesWithIgnoredKeys:ignoredKeys];
+            if (!convertedObj) { continue; }
+            [keyValuesArray addObject:convertedObj];
         }
     }
     return keyValuesArray;
