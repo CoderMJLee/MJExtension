@@ -57,6 +57,12 @@
 - (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property;
 
 /**
+ * Validates the converted model object.
+ * 校验从字典转换后的模型对象。
+ */
++ (BOOL)mj_validateConvertedObject:(id)object;
+
+/**
  *  当字典转模型完毕时调用
  */
 - (void)mj_keyValuesDidFinishConvertingToObject;

@@ -219,11 +219,21 @@ static NSNumberFormatter *numberFormatter_;
     keyValues = [keyValues mj_JSONObject];
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], nil, [self class], @"keyValues参数不是一个字典");
     
+    id object = nil;
     if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
         NSString *entityName = [NSStringFromClass(self) componentsSeparatedByString:@"."].lastObject;
-        return [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context];
+        object = [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context];
+    } else {
+        object = [[[self alloc] init] mj_setKeyValues:keyValues];
     }
-    return [[[self alloc] init] mj_setKeyValues:keyValues];
+
+    if ([self respondsToSelector:@selector(mj_validateConvertedObject:)] &&
+        ![self mj_validateConvertedObject:object]) {
+        MJExtensionBuildError([self class], @"转换后的模型校验失败");        
+        object = nil;
+    }
+
+    return object;
 }
 
 + (instancetype)mj_objectWithFilename:(NSString *)filename
