@@ -62,10 +62,6 @@ static const char MJCachedPropertiesKey = '\0';
     if ([self respondsToSelector:@selector(mj_replacedKeyFromPropertyName121:)]) {
         key = [self mj_replacedKeyFromPropertyName121:propertyName];
     }
-    // 兼容旧版本
-    if ([self respondsToSelector:@selector(replacedKeyFromPropertyName121:)]) {
-        key = [self performSelector:@selector(replacedKeyFromPropertyName121:) withObject:propertyName];
-    }
     
     // 调用block
     if (!key) {
@@ -81,10 +77,6 @@ static const char MJCachedPropertiesKey = '\0';
     // 查看有没有需要替换的key
     if ((!key || [key isEqual:propertyName]) && [self respondsToSelector:@selector(mj_replacedKeyFromPropertyName)]) {
         key = [self mj_replacedKeyFromPropertyName][propertyName];
-    }
-    // 兼容旧版本
-    if ((!key || [key isEqual:propertyName]) && [self respondsToSelector:@selector(replacedKeyFromPropertyName)]) {
-        key = [self performSelector:@selector(replacedKeyFromPropertyName)][propertyName];
     }
     
     if (!key || [key isEqual:propertyName]) {
@@ -108,10 +100,6 @@ static const char MJCachedPropertiesKey = '\0';
     __block id clazz = nil;
     if ([self respondsToSelector:@selector(mj_objectClassInArray)]) {
         clazz = [self mj_objectClassInArray][propertyName];
-    }
-    // 兼容旧版本
-    if ([self respondsToSelector:@selector(objectClassInArray)]) {
-        clazz = [self performSelector:@selector(objectClassInArray)][propertyName];
     }
     
     if (!clazz) {
@@ -197,10 +185,6 @@ static const char MJCachedPropertiesKey = '\0';
     if ([object respondsToSelector:@selector(mj_newValueFromOldValue:property:)]) {
         return [object mj_newValueFromOldValue:oldValue property:property];
     }
-    // 兼容旧版本
-    if ([self respondsToSelector:@selector(newValueFromOldValue:property:)]) {
-        return [self performSelector:@selector(newValueFromOldValue:property:) withObject:oldValue withObject:property];
-    }
     
     // 查看静态设置
     __block id newValue = oldValue;
@@ -246,37 +230,4 @@ static const char MJCachedPropertiesKey = '\0';
     MJExtensionSemaphoreSignal
 }
 @end
-
-@implementation NSObject (MJPropertyDeprecated_v_2_5_16)
-+ (void)enumerateProperties:(MJPropertiesEnumeration)enumeration
-{
-    [self mj_enumerateProperties:enumeration];
-}
-
-+ (void)setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue
-{
-    [self mj_setupNewValueFromOldValue:newValueFormOldValue];
-}
-
-+ (id)getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property
-{
-    return [self mj_getNewValueFromObject:object oldValue:oldValue property:property];
-}
-
-+ (void)setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName
-{
-    [self mj_setupReplacedKeyFromPropertyName:replacedKeyFromPropertyName];
-}
-
-+ (void)setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
-{
-    [self mj_setupReplacedKeyFromPropertyName121:replacedKeyFromPropertyName121];
-}
-
-+ (void)setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
-{
-    [self mj_setupObjectClassInArray:objectClassInArray];
-}
-@end
-
 #pragma clang diagnostic pop
