@@ -199,12 +199,18 @@ static NSNumberFormatter *numberFormatter_;
     }];
     
     // 转换完毕
+    if ([self respondsToSelector:@selector(mj_didFinishConvertingToObjectWithKeyValues:)]) {
+        [self mj_didFinishConvertingToObjectWithKeyValues:keyValues];
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
     if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject)]) {
         [self mj_keyValuesDidFinishConvertingToObject];
     }
     if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject:)]) {
         [self mj_keyValuesDidFinishConvertingToObject:keyValues];
     }
+#pragma clang diagnostic pop
     return self;
 }
 

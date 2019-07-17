@@ -77,7 +77,7 @@ MJExtensionAssert2((param) != nil, returnValue)
  * 打印所有的属性
  */
 #define MJLogAllIvars \
--(NSString *)description \
+- (NSString *)description \
 { \
     return [self mj_keyValues].description; \
 }
@@ -85,7 +85,7 @@ MJExtensionAssert2((param) != nil, returnValue)
 
 /** 仅在 Debugger 展示所有的属性 */
 #define MJImplementDebugDescription \
--(NSString *)debugDescription \
+- (NSString *)debugDescription \
 { \
 return [self mj_keyValues].debugDescription; \
 }
