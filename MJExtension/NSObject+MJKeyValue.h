@@ -59,9 +59,9 @@
 /**
  *  当字典转模型完毕时调用
  */
-- (void)mj_keyValuesDidFinishConvertingToObject MJExtensionDeprecated("请使用`mj_didFinishConvertingToObjectWithKeyValues:`替代");
-- (void)mj_keyValuesDidFinishConvertingToObject:(NSDictionary *)keyValues MJExtensionDeprecated("请使用`mj_didFinishConvertingToObjectWithKeyValues:`替代");
-- (void)mj_didFinishConvertingToObjectWithKeyValues:(NSDictionary *)keyValues;
+- (void)mj_keyValuesDidFinishConvertingToObject MJExtensionDeprecated("请使用`mj_didConvertToObjectWithKeyValues:`替代");
+- (void)mj_keyValuesDidFinishConvertingToObject:(NSDictionary *)keyValues MJExtensionDeprecated("请使用`mj_didConvertToObjectWithKeyValues:`替代");
+- (void)mj_didConvertToObjectWithKeyValues:(NSDictionary *)keyValues;
 
 /**
  *  当模型转字典完毕时调用

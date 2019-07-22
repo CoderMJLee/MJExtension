@@ -199,8 +199,8 @@ static NSNumberFormatter *numberFormatter_;
     }];
     
     // 转换完毕
-    if ([self respondsToSelector:@selector(mj_didFinishConvertingToObjectWithKeyValues:)]) {
-        [self mj_didFinishConvertingToObjectWithKeyValues:keyValues];
+    if ([self respondsToSelector:@selector(mj_didConvertToObjectWithKeyValues:)]) {
+        [self mj_didConvertToObjectWithKeyValues:keyValues];
     }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
