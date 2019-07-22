@@ -199,12 +199,18 @@ static NSNumberFormatter *numberFormatter_;
     }];
     
     // 转换完毕
+    if ([self respondsToSelector:@selector(mj_didConvertToObjectWithKeyValues:)]) {
+        [self mj_didConvertToObjectWithKeyValues:keyValues];
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
     if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject)]) {
         [self mj_keyValuesDidFinishConvertingToObject];
     }
     if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject:)]) {
         [self mj_keyValuesDidFinishConvertingToObject:keyValues];
     }
+#pragma clang diagnostic pop
     return self;
 }
 
@@ -400,9 +406,15 @@ static NSNumberFormatter *numberFormatter_;
     }];
     
     // 转换完毕
+    if ([self respondsToSelector:@selector(mj_objectDidConvertToKeyValues:)]) {
+        [self mj_objectDidConvertToKeyValues:keyValues];
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
     if ([self respondsToSelector:@selector(mj_objectDidFinishConvertingToKeyValues)]) {
         [self mj_objectDidFinishConvertingToKeyValues];
     }
+#pragma clang diagnostic pop
     
     return keyValues;
 }

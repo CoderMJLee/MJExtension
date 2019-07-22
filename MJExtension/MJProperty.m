@@ -81,7 +81,7 @@
     /** https://github.com/CoderMJLee/MJExtension/issues/545 */
     // 32 bit device OR 32 bit Simulator
 #if defined(__arm__) || (TARGET_OS_SIMULATOR && !__LP64__)
-    if(self.type.isBoolType) {
+    if (self.type.isBoolType) {
         value = @([(NSNumber *)value boolValue]);
     }
 #endif

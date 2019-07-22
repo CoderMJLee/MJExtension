@@ -59,13 +59,16 @@
 /**
  *  当字典转模型完毕时调用
  */
-- (void)mj_keyValuesDidFinishConvertingToObject;
-- (void)mj_keyValuesDidFinishConvertingToObject:(NSDictionary *)keyValues;
+- (void)mj_keyValuesDidFinishConvertingToObject MJExtensionDeprecated("请使用`mj_didConvertToObjectWithKeyValues:`替代");
+- (void)mj_keyValuesDidFinishConvertingToObject:(NSDictionary *)keyValues MJExtensionDeprecated("请使用`mj_didConvertToObjectWithKeyValues:`替代");
+- (void)mj_didConvertToObjectWithKeyValues:(NSDictionary *)keyValues;
 
 /**
  *  当模型转字典完毕时调用
  */
-- (void)mj_objectDidFinishConvertingToKeyValues;
+- (void)mj_objectDidFinishConvertingToKeyValues MJExtensionDeprecated("请使用`mj_objectDidConvertToKeyValues:`替代");
+- (void)mj_objectDidConvertToKeyValues:(NSDictionary *)keyValues;
+
 @end
 
 @interface NSObject (MJKeyValue) <MJKeyValue>
