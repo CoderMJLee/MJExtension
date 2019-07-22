@@ -66,7 +66,8 @@
 /**
  *  当模型转字典完毕时调用
  */
-- (void)mj_objectDidFinishConvertingToKeyValues;
+- (void)mj_objectDidFinishConvertingToKeyValues MJExtensionDeprecated("请使用`mj_objectDidConvertToKeyValues`替代");
+- (void)mj_objectDidConvertToKeyValues;
 @end
 
 @interface NSObject (MJKeyValue) <MJKeyValue>

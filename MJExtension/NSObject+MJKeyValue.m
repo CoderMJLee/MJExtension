@@ -406,9 +406,15 @@ static NSNumberFormatter *numberFormatter_;
     }];
     
     // 转换完毕
+    if ([self respondsToSelector:@selector(mj_objectDidConvertToKeyValues)]) {
+        [self mj_objectDidConvertToKeyValues];
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
     if ([self respondsToSelector:@selector(mj_objectDidFinishConvertingToKeyValues)]) {
         [self mj_objectDidFinishConvertingToKeyValues];
     }
+#pragma clang diagnostic pop
     
     return keyValues;
 }
