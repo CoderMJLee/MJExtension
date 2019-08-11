@@ -1,7 +1,6 @@
-
-![Logo](http://images.cnitblog.com/blog2015/497279/201505/051004316736641.png)
 MJExtension
 ===
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
