@@ -9,7 +9,7 @@ GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)]
 
 ## ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
 - [项目地址](https://github.com/kakaopensource/KakaJSON)
-- [中文教程](https://www.cnblogs.com/mjios/p/11352776.html]
+- [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
 
 ## 关于在Swift中使用MJExtension ‼️
 ### ‼️ 在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ‼️
