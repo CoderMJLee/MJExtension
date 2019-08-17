@@ -7,7 +7,11 @@ MJExtension
 
 GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
 
-## 关于 Swift ‼️
+## ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
+- [项目地址](https://github.com/kakaopensource/KakaJSON)
+- [中文教程](https://www.cnblogs.com/mjios/p/11352776.html]
+
+## 关于在Swift中使用MJExtension ‼️
 ### ‼️ 在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ‼️
 ### ‼️ 请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代 ‼️
 
