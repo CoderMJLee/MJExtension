@@ -5,17 +5,27 @@ MJExtension
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
-GitHub：[CoderMJLee](https://github.com/CoderMJLee) ｜ Blog：[mjios(Chinese)](http://www.cnblogs.com/mjios) ｜ PR is welcome，or [feedback](mailto:richermj123go@vip.qq.com)
+
 
 ## ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
-- [项目地址](https://github.com/kakaopensource/KakaJSON)
+
+- [KakaJSON](https://github.com/kakaopensource/KakaJSON)
 - [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
+- 如果你的项目是用Swift写的Model，墙裂推荐使用[KakaJSON](https://github.com/kakaopensource/KakaJSON)
+  - 已经对各种常用的数据场景进行了大量的单元测试
+  - 简单易用、功能丰富、转换快速
+
+
 
 ## 关于在Swift中使用MJExtension ‼️
+
 ### ‼️ 在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ‼️
 ### ‼️ 请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代 ‼️
 
+
+
 ## Contents
+
 * [Getting Started 【开始使用】](#Getting_Started)
 	* [Features 【能做什么】](#Features)
 	* [Installation 【安装】](#Installation)
@@ -546,3 +556,4 @@ NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, boo
 * 如果在使用过程中遇到BUG，希望你能Issues我，谢谢（或者尝试下载最新的框架代码看看BUG修复没有）
 * 如果在使用过程中发现功能不够用，希望你能Issues我，我非常想为这个框架增加更多好用的功能，谢谢
 * 如果你想为MJExtension输出代码，请拼命Pull Requests我
+
