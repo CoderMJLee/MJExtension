@@ -5,8 +5,7 @@
 //  Created by MJ Lee on 15/11/8.
 //  Copyright © 2015年 小码哥. All rights reserved.
 //
-#import <UIKit/UIKit.h>
-#import "AppDelegate.h"
+
 #import "main.h"
 #import "MJUser.h"
 #import "MJAd.h"
@@ -32,29 +31,6 @@
  3.具体用法主要参考 main.m中各个函数 以及 "NSObject+MJKeyValue.h"
  4.希望各位大神能用得爽
  */
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        // 关于模型的具体配置可以参考：MJExtensionConfig.m
-        // 或者参考每个模型的.m文件中被注释掉的配置
-        
-        execute(keyValues2object, @"简单的字典 -> 模型");
-        execute(keyValues2object1, @"JSON字符串 -> 模型");
-        execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
-        execute(keyValues2object3, @"复杂的字典 -> 模型 (模型的数组属性里面又装着模型)");
-        execute(keyValues2object4, @"简单的字典 -> 模型（key替换，比如ID和id，支持多级映射）");
-        execute(keyValuesArray2objectArray, @"字典数组 -> 模型数组");
-        execute(object2keyValues, @"模型转字典");
-        execute(objectArray2keyValuesArray, @"模型数组 -> 字典数组");
-        execute(coreData, @"CoreData示例");
-        execute(coding, @"NSCoding示例");
-        execute(replacedKeyFromPropertyName121, @"统一转换属性名（比如驼峰转下划线）");
-        execute(newValueFromOldValue, @"过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）");
-        execute(logAllProperties, @"使用MJExtensionLog打印模型的所有属性");
-        execute(nullSituations, @"测试有关 Null 的情况");
-        
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-    }
-}
 
 /**
  *  简单的字典 -> 模型

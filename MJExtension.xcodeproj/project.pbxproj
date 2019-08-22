@@ -39,6 +39,18 @@
 		01DD48532248BFF7003A69A6 /* MJPropertyKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48362248BFF7003A69A6 /* MJPropertyKey.m */; };
 		01DD48542248BFF7003A69A6 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */; };
 		01DD48552248BFF7003A69A6 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */; };
+		2D49E3CC230E46C500F57D8F /* MJStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3B6230E46C500F57D8F /* MJStatus.m */; };
+		2D49E3CD230E46C500F57D8F /* MJBaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3B8230E46C500F57D8F /* MJBaseObject.m */; };
+		2D49E3CE230E46C500F57D8F /* MJBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3B9230E46C500F57D8F /* MJBox.m */; };
+		2D49E3CF230E46C500F57D8F /* MJStatusResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3BA230E46C500F57D8F /* MJStatusResult.m */; };
+		2D49E3D0230E46C500F57D8F /* MJExtensionConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3BE230E46C500F57D8F /* MJExtensionConfig.m */; };
+		2D49E3D1230E46C500F57D8F /* MJStudent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3C2230E46C500F57D8F /* MJStudent.m */; };
+		2D49E3D2230E46C500F57D8F /* MJUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3C3230E46C500F57D8F /* MJUser.m */; };
+		2D49E3D3230E46C500F57D8F /* MJDog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3C4230E46C500F57D8F /* MJDog.m */; };
+		2D49E3D4230E46C500F57D8F /* MJBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3C5230E46C500F57D8F /* MJBook.m */; };
+		2D49E3D5230E46C500F57D8F /* MJBag.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3CA230E46C500F57D8F /* MJBag.m */; };
+		2D49E3D6230E46C500F57D8F /* MJAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3CB230E46C500F57D8F /* MJAd.m */; };
+		2D49E3D9230E473600F57D8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D49E3D8230E473600F57D8F /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +90,30 @@
 		01DD48352248BFF7003A69A6 /* NSObject+MJClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJClass.h"; sourceTree = "<group>"; };
 		01DD48362248BFF7003A69A6 /* MJPropertyKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPropertyKey.m; sourceTree = "<group>"; };
 		01DD48372248BFF7003A69A6 /* NSObject+MJProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJProperty.m"; sourceTree = "<group>"; };
+		2D49E3B6230E46C500F57D8F /* MJStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJStatus.m; sourceTree = "<group>"; };
+		2D49E3B7230E46C500F57D8F /* MJBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJBook.h; sourceTree = "<group>"; };
+		2D49E3B8230E46C500F57D8F /* MJBaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJBaseObject.m; sourceTree = "<group>"; };
+		2D49E3B9230E46C500F57D8F /* MJBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJBox.m; sourceTree = "<group>"; };
+		2D49E3BA230E46C500F57D8F /* MJStatusResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJStatusResult.m; sourceTree = "<group>"; };
+		2D49E3BB230E46C500F57D8F /* MJBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJBox.h; sourceTree = "<group>"; };
+		2D49E3BC230E46C500F57D8F /* MJExtensionConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConfig.h; sourceTree = "<group>"; };
+		2D49E3BD230E46C500F57D8F /* MJDog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJDog.h; sourceTree = "<group>"; };
+		2D49E3BE230E46C500F57D8F /* MJExtensionConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJExtensionConfig.m; sourceTree = "<group>"; };
+		2D49E3BF230E46C500F57D8F /* MJBaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJBaseObject.h; sourceTree = "<group>"; };
+		2D49E3C0230E46C500F57D8F /* MJStudent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJStudent.h; sourceTree = "<group>"; };
+		2D49E3C1230E46C500F57D8F /* MJAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJAd.h; sourceTree = "<group>"; };
+		2D49E3C2230E46C500F57D8F /* MJStudent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJStudent.m; sourceTree = "<group>"; };
+		2D49E3C3230E46C500F57D8F /* MJUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJUser.m; sourceTree = "<group>"; };
+		2D49E3C4230E46C500F57D8F /* MJDog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJDog.m; sourceTree = "<group>"; };
+		2D49E3C5230E46C500F57D8F /* MJBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJBook.m; sourceTree = "<group>"; };
+		2D49E3C6230E46C500F57D8F /* MJUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJUser.h; sourceTree = "<group>"; };
+		2D49E3C7230E46C500F57D8F /* MJStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJStatus.h; sourceTree = "<group>"; };
+		2D49E3C8230E46C500F57D8F /* MJStatusResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJStatusResult.h; sourceTree = "<group>"; };
+		2D49E3C9230E46C500F57D8F /* MJBag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJBag.h; sourceTree = "<group>"; };
+		2D49E3CA230E46C500F57D8F /* MJBag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJBag.m; sourceTree = "<group>"; };
+		2D49E3CB230E46C500F57D8F /* MJAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJAd.m; sourceTree = "<group>"; };
+		2D49E3D7230E470800F57D8F /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		2D49E3D8230E473600F57D8F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,10 +184,42 @@
 		01DD48172248BDB6003A69A6 /* MJExtensionTests */ = {
 			isa = PBXGroup;
 			children = (
+				2D49E3B5230E469500F57D8F /* Model */,
 				01DD48182248BDB6003A69A6 /* MJExtensionTests.m */,
+				2D49E3D7230E470800F57D8F /* main.h */,
+				2D49E3D8230E473600F57D8F /* main.m */,
 				01DD481A2248BDB6003A69A6 /* Info.plist */,
 			);
 			path = MJExtensionTests;
+			sourceTree = "<group>";
+		};
+		2D49E3B5230E469500F57D8F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2D49E3C1230E46C500F57D8F /* MJAd.h */,
+				2D49E3CB230E46C500F57D8F /* MJAd.m */,
+				2D49E3C9230E46C500F57D8F /* MJBag.h */,
+				2D49E3CA230E46C500F57D8F /* MJBag.m */,
+				2D49E3BF230E46C500F57D8F /* MJBaseObject.h */,
+				2D49E3B8230E46C500F57D8F /* MJBaseObject.m */,
+				2D49E3B7230E46C500F57D8F /* MJBook.h */,
+				2D49E3C5230E46C500F57D8F /* MJBook.m */,
+				2D49E3BB230E46C500F57D8F /* MJBox.h */,
+				2D49E3B9230E46C500F57D8F /* MJBox.m */,
+				2D49E3BD230E46C500F57D8F /* MJDog.h */,
+				2D49E3C4230E46C500F57D8F /* MJDog.m */,
+				2D49E3BC230E46C500F57D8F /* MJExtensionConfig.h */,
+				2D49E3BE230E46C500F57D8F /* MJExtensionConfig.m */,
+				2D49E3C7230E46C500F57D8F /* MJStatus.h */,
+				2D49E3B6230E46C500F57D8F /* MJStatus.m */,
+				2D49E3C8230E46C500F57D8F /* MJStatusResult.h */,
+				2D49E3BA230E46C500F57D8F /* MJStatusResult.m */,
+				2D49E3C0230E46C500F57D8F /* MJStudent.h */,
+				2D49E3C2230E46C500F57D8F /* MJStudent.m */,
+				2D49E3C6230E46C500F57D8F /* MJUser.h */,
+				2D49E3C3230E46C500F57D8F /* MJUser.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,12 +356,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D49E3D5230E46C500F57D8F /* MJBag.m in Sources */,
+				2D49E3CC230E46C500F57D8F /* MJStatus.m in Sources */,
 				01DD484C2248BFF7003A69A6 /* MJExtensionConst.m in Sources */,
+				2D49E3D6230E46C500F57D8F /* MJAd.m in Sources */,
 				01DD48462248BFF7003A69A6 /* NSObject+MJCoding.m in Sources */,
 				01DD48552248BFF7003A69A6 /* NSObject+MJProperty.m in Sources */,
+				2D49E3CD230E46C500F57D8F /* MJBaseObject.m in Sources */,
 				01DD48192248BDB6003A69A6 /* MJExtensionTests.m in Sources */,
 				01DD48392248BFF7003A69A6 /* MJProperty.m in Sources */,
+				2D49E3D2230E46C500F57D8F /* MJUser.m in Sources */,
+				2D49E3D9230E473600F57D8F /* main.m in Sources */,
+				2D49E3D3230E46C500F57D8F /* MJDog.m in Sources */,
 				01DD484F2248BFF7003A69A6 /* NSObject+MJKeyValue.m in Sources */,
+				2D49E3D1230E46C500F57D8F /* MJStudent.m in Sources */,
+				2D49E3D0230E46C500F57D8F /* MJExtensionConfig.m in Sources */,
+				2D49E3CE230E46C500F57D8F /* MJBox.m in Sources */,
+				2D49E3D4230E46C500F57D8F /* MJBook.m in Sources */,
+				2D49E3CF230E46C500F57D8F /* MJStatusResult.m in Sources */,
 				01DD483B2248BFF7003A69A6 /* NSString+MJExtension.m in Sources */,
 				01DD48422248BFF7003A69A6 /* MJPropertyType.m in Sources */,
 				01DD48532248BFF7003A69A6 /* MJPropertyKey.m in Sources */,

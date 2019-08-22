@@ -6,6 +6,8 @@
 //  Copyright (c) 2015年 小码哥. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifndef MJExtensionExample_other_h
 #define MJExtensionExample_other_h
 
