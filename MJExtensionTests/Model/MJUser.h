@@ -28,4 +28,11 @@ typedef enum {
 @property (assign, nonatomic) Sex sex;
 /** 同性恋 */
 @property (assign, nonatomic, getter=isGay) BOOL gay;
+/** 速度 */
+@property (assign, nonatomic) NSInteger speed;
+/** 标识 */
+@property (assign, nonatomic) long long identifier;
+/** 价格 */
+@property (assign, nonatomic) double price;
+
 @end
