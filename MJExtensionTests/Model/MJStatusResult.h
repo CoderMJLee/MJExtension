@@ -7,12 +7,13 @@
 //  微博结果（用来表示大批量的微博数据）
 
 #import "MJBaseObject.h"
+@class MJStatus, MJAd;
 
 @interface MJStatusResult : MJBaseObject
 /** 存放着某一页微博数据（里面都是Status模型） */
-@property (strong, nonatomic) NSMutableArray *statuses;
+@property (strong, nonatomic) NSMutableArray<MJStatus *> *statuses;
 /** 存放着一堆的广告数据（里面都是MJAd模型） */
-@property (strong, nonatomic) NSArray *ads;
+@property (strong, nonatomic) NSArray<MJAd *> *ads;
 /** 总数 */
 @property (strong, nonatomic) NSNumber *totalNumber;
 /** 上一页的游标 */

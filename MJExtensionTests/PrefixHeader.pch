@@ -1,0 +1,14 @@
+//
+//  PrefixHeader.pch
+//  MJExtensionTests
+//
+//  Created by MJ Lee on 2019/8/29.
+//  Copyright © 2019 MJ Lee. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+@import MJExtension;
+
+#endif /* PrefixHeader_pch */
