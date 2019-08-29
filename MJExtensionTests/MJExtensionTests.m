@@ -34,7 +34,10 @@
                            @"height" : @1.55,
                            @"money" : @"100.9",
                            @"sex" : @(SexFemale),
-                           @"gay" : @"1"
+                           @"gay" : @"1",
+                           @"speed" : @"120.5",
+                           @"identifier" : @"3443623624362",
+                           @"price" : @"20.3",
                            //  @"gay" : @"NO"
                            //  @"gay" : @"true"
                            };
@@ -50,6 +53,9 @@
     XCTAssert(user.money.doubleValue == 100.9);
     XCTAssert(user.sex == SexFemale);
     XCTAssert(user.gay == YES);
+    XCTAssert(user.speed == 120);
+    XCTAssert(user.identifier == 3443623624362);
+    XCTAssert(user.price == 20.3);
 }
 
 #pragma mark JSON字符串 -> 模型
