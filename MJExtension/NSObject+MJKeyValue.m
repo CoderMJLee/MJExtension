@@ -159,7 +159,8 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                         if (type.typeClass == [NSDecimalNumber class]) {
                             value = [NSDecimalNumber decimalNumberWithString:oldValue];
                         } else {
-                            value = @([NSDecimalNumber decimalNumberWithString:oldValue].doubleValue);
+                            NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue];
+                            value = decimalValue == [NSDecimalNumber notANumber] ? @(0) : @(decimalValue.doubleValue);
                         }
                         
                         // 如果是BOOL
