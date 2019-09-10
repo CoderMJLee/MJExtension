@@ -38,8 +38,8 @@
                            @"speed" : @"120.5",
                            @"identifier" : @"3443623624362",
                            @"price" : @"20.3",
-                           //  @"gay" : @"NO"
-                           //  @"gay" : @"true"
+                           @"rich" : @"2",
+                           @"collect" : @"40个"
                            };
     
     // 2.将字典转为MJUser模型
@@ -56,6 +56,38 @@
     XCTAssert(user.speed == 120);
     XCTAssert(user.identifier == 3443623624362);
     XCTAssert(user.price == 20.3);
+    XCTAssert(user.rich == YES);
+    XCTAssert(user.collect == 40);
+}
+
+- (void)testJSON2NumberModel {
+    // 1.定义一个字典
+    NSDictionary *dict = @{
+                           @"age" : @"20",
+                           @"height" : @1.55,
+                           @"money" : @"100.9",
+                           @"gay" : @"",
+                           @"speed" : @"120.5",
+                           @"identifier" : @"3443623624362",
+                           @"price" : @"20.3",
+                           @"like" : @"20个",
+                           @"collect" : @"收藏5",
+                           @"rich" : @"hehe",
+                           };
+    
+    // 2.将字典转为MJUser模型
+    MJUser *user = [MJUser mj_objectWithKeyValues:dict];
+    
+    XCTAssert(user.age == 20);
+    XCTAssert(user.height.doubleValue == 1.55);
+    XCTAssert(user.money.doubleValue == 100.9);
+    XCTAssert(user.gay == NO);
+    XCTAssert(user.speed == 120);
+    XCTAssert(user.identifier == 3443623624362);
+    XCTAssert(user.price == 20.3);
+    XCTAssert(user.like == 20);
+    XCTAssert(user.collect == 0);
+    XCTAssert(user.rich == NO);
 }
 
 #pragma mark JSON字符串 -> 模型

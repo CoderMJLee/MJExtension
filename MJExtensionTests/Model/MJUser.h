@@ -34,5 +34,11 @@ typedef enum {
 @property (assign, nonatomic) long long identifier;
 /** 价格 */
 @property (assign, nonatomic) double price;
+/** 赞 */
+@property (assign, nonatomic) int like;
+/** 收藏 */
+@property (assign, nonatomic) int collect;
+/** 富有 */
+@property (assign, nonatomic) BOOL rich;
 
 @end
