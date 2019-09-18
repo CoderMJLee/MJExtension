@@ -155,12 +155,23 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     } else if (type.isNumberType) {
                         NSString *oldValue = value;
                         
-                        // NSString -> NSNumber
-                        if (type.typeClass == [NSDecimalNumber class]) {
-                            value = [NSDecimalNumber decimalNumberWithString:oldValue];
+                        // NSString -> NSDecimalNumber
+                        NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue locale:nil];
+                        
+                        // 检查特殊情况
+                        if (decimalValue == NSDecimalNumber.notANumber) {
+                            value = @(0);
+                        }
+                        
+                        if (propertyClass != [NSDecimalNumber class]) {
+                            // 检查类型是否为 long long, 由于精度原因, 使用 Double 后会丢失精度
+                            if ([type.code isEqualToString:MJPropertyTypeLongLong]) {
+                                value = @(decimalValue.longLongValue);
+                            } else {// 其余类型全部使用 double
+                                value = @(decimalValue.doubleValue);
+                            }
                         } else {
-                            NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue];
-                            value = decimalValue == [NSDecimalNumber notANumber] ? @(0) : @(decimalValue.doubleValue);
+                            value = decimalValue;
                         }
                         
                         // 如果是BOOL

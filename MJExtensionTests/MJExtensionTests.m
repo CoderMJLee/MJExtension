@@ -36,7 +36,7 @@
                            @"sex" : @(SexFemale),
                            @"gay" : @"1",
                            @"speed" : @"120.5",
-                           @"identifier" : @"3443623624362",
+                           @"identifier" : @"132009969506862891",
                            @"price" : @"20.3",
                            @"rich" : @"2",
                            @"collect" : @"40个"
@@ -54,7 +54,7 @@
     XCTAssert(user.sex == SexFemale);
     XCTAssert(user.gay == YES);
     XCTAssert(user.speed == 120);
-    XCTAssert(user.identifier == 3443623624362);
+    XCTAssert(user.identifier == 132009969506862891);
     XCTAssert(user.price == 20.3);
     XCTAssert(user.rich == YES);
     XCTAssert(user.collect == 40);
