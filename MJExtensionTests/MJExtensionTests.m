@@ -30,16 +30,19 @@
     NSDictionary *dict = @{
                            @"name" : @"Jack",
                            @"icon" : @"lufy.png",
-                           @"age" : @"20",
+                           @"age" : @"2147483647",
+                           @"age2": @"4294967295",
                            @"height" : @1.55,
-                           @"money" : @"100.9",
+                           @"money" : @"100.7777777",
                            @"sex" : @(SexFemale),
                            @"gay" : @"1",
                            @"speed" : @"120.5",
-                           @"identifier" : @"132009969506862891",
+                           @"identifier" : @"9223372036854775807",
+                           @"identifier2" : @"18446744073709551615",
                            @"price" : @"20.3",
                            @"rich" : @"2",
-                           @"collect" : @"40个"
+                           @"collect" : @"40个",
+                           @"alien": @"yr Joking"
                            };
     
     // 2.将字典转为MJUser模型
@@ -48,16 +51,19 @@
     // 3.检测
     XCTAssert([user.name isEqual:@"Jack"]);
     XCTAssert([user.icon isEqual:@"lufy.png"]);
-    XCTAssert(user.age == 20);
-    XCTAssert(user.height.doubleValue == 1.55);
-    XCTAssert(user.money.doubleValue == 100.9);
+    XCTAssert(user.age == INT_MAX);
+    XCTAssert(user.age2 == UINT_MAX);
+    XCTAssert([user.height isEqualToNumber:@(1.55)]);
+    XCTAssert([user.money compare:[NSDecimalNumber decimalNumberWithString:@"100.7777777"]] == NSOrderedSame);
     XCTAssert(user.sex == SexFemale);
-    XCTAssert(user.gay == YES);
+    XCTAssert(user.gay);
     XCTAssert(user.speed == 120);
-    XCTAssert(user.identifier == 132009969506862891);
+    XCTAssert(user.identifier == LONG_LONG_MAX);
+    XCTAssert(user.identifier2 == ULONG_LONG_MAX);
     XCTAssert(user.price == 20.3);
-    XCTAssert(user.rich == YES);
+    XCTAssert(user.rich);
     XCTAssert(user.collect == 40);
+    XCTAssert(!user.alien);
 }
 
 - (void)testJSON2NumberModel {

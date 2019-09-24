@@ -16,6 +16,26 @@
 #import "NSString+MJExtension.h"
 #import "NSObject+MJClass.h"
 
+@implementation NSDecimalNumber(MJKeyValue)
+
+- (id)standardValueWithTypeCode:(NSString *)typeCode {
+    // 由于这里涉及到编译器问题, 暂时保留 Long, 实际上在 64 位系统上, 这 2 个精度范围相同,
+    // 32 位略有不同, 其余都可使用 Double 进行强转不丢失精度
+    if ([typeCode isEqualToString:MJPropertyTypeLongLong]) {
+        return @(self.longLongValue);
+    } else if ([typeCode isEqualToString:MJPropertyTypeLongLong.uppercaseString]) {
+        return @(self.unsignedLongLongValue);
+    } else if ([typeCode isEqualToString:MJPropertyTypeLong]) {
+        return @(self.longValue);
+    } else if ([typeCode isEqualToString:MJPropertyTypeLong.uppercaseString]) {
+        return @(self.unsignedLongValue);
+    } else {
+        return @(self.doubleValue);
+    }
+}
+
+@end
+
 @implementation NSObject (MJKeyValue)
 
 #pragma mark - 错误
@@ -138,65 +158,53 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 } else { // 字典数组-->模型数组
                     value = [objectClass mj_objectArrayWithKeyValuesArray:value context:context];
                 }
-            } else {
-                if (propertyClass == [NSString class]) {
-                    if ([value isKindOfClass:[NSNumber class]]) {
-                        // NSNumber -> NSString
-                        value = [value description];
-                    } else if ([value isKindOfClass:[NSURL class]]) {
-                        // NSURL -> NSString
-                        value = [value absoluteString];
+            } else if (propertyClass == [NSString class]) {
+                if ([value isKindOfClass:[NSNumber class]]) {
+                    // NSNumber -> NSString
+                    value = [value description];
+                } else if ([value isKindOfClass:[NSURL class]]) {
+                    // NSURL -> NSString
+                    value = [value absoluteString];
+                }
+            } else if ([value isKindOfClass:[NSString class]]) {
+                if (propertyClass == [NSURL class]) {
+                    // NSString -> NSURL
+                    // 字符串转码
+                    value = [value mj_url];
+                } else if (type.isNumberType) {
+                    NSString *oldValue = value;
+                    
+                    // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
+                    NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue locale:nil];
+                    
+                    // 检查特殊情况
+                    if (decimalValue == NSDecimalNumber.notANumber) {
+                        value = @(0);
+                    }else if (propertyClass != [NSDecimalNumber class]) {
+                        value = [decimalValue standardValueWithTypeCode:type.code];
+                    } else {
+                        value = decimalValue;
                     }
-                } else if ([value isKindOfClass:[NSString class]]) {
-                    if (propertyClass == [NSURL class]) {
-                        // NSString -> NSURL
-                        // 字符串转码
-                        value = [value mj_url];
-                    } else if (type.isNumberType) {
-                        NSString *oldValue = value;
-                        
-                        // NSString -> NSDecimalNumber
-                        NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue locale:nil];
-                        
-                        // 检查特殊情况
-                        if (decimalValue == NSDecimalNumber.notANumber) {
-                            value = @(0);
+                    
+                    // 如果是BOOL
+                    if (type.isBoolType) {
+                        // 字符串转BOOL（字符串没有charValue方法）
+                        // 系统会调用字符串的charValue转为BOOL类型
+                        NSString *lower = [oldValue lowercaseString];
+                        if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
+                            value = @YES;
+                        } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
+                            value = @NO;
                         }
-                        
-                        if (propertyClass != [NSDecimalNumber class]) {
-                            // 检查类型是否为 long long, 由于精度原因, 使用 Double 后会丢失精度
-                            if ([type.code isEqualToString:MJPropertyTypeLongLong]) {
-                                value = @(decimalValue.longLongValue);
-                            } else {// 其余类型全部使用 double
-                                value = @(decimalValue.doubleValue);
-                            }
-                        } else {
-                            value = decimalValue;
-                        }
-                        
-                        // 如果是BOOL
-                        if (type.isBoolType) {
-                            // 字符串转BOOL（字符串没有charValue方法）
-                            // 系统会调用字符串的charValue转为BOOL类型
-                            NSString *lower = [oldValue lowercaseString];
-                            if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
-                                value = @YES;
-                            } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
-                                value = @NO;
-                            }
-                        }
-                    }
-                } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
-                    // 过滤 NSDecimalNumber类型
-                    if (![value isKindOfClass:[NSDecimalNumber class]]) {
-                        value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
                     }
                 }
-                
-                // value和property类型不匹配
-                if (propertyClass && ![value isKindOfClass:propertyClass]) {
-                    value = nil;
+            } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
+                // 过滤 NSDecimalNumber类型
+                if (![value isKindOfClass:[NSDecimalNumber class]]) {
+                    value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
                 }
+            } else if (propertyClass && ![value isKindOfClass:propertyClass]) { // value和property类型不匹配
+                value = nil;
             }
             
             // 3.赋值
