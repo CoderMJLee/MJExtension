@@ -100,6 +100,11 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
     
+    NSLocale *numberLocale = nil;
+    if ([self.class respondsToSelector:@selector(mj_numberLocale)]) {
+        numberLocale = self.class.mj_numberLocale;
+    }
+    
     //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
@@ -175,7 +180,8 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     NSString *oldValue = value;
                     
                     // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
-                    NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue locale:nil];
+                    NSDecimalNumber *decimalValue = [NSDecimalNumber decimalNumberWithString:oldValue
+                                                                                      locale:numberLocale];
                     
                     // 检查特殊情况
                     if (decimalValue == NSDecimalNumber.notANumber) {

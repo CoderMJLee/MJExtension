@@ -47,6 +47,10 @@
  */
 + (NSDictionary *)mj_objectClassInArray;
 
+
+/** 特殊地区在字符串格式化数字时使用 */
++ (NSLocale *)mj_numberLocale;
+
 /**
  *  旧值换新值，用于过滤字典中的值
  *
