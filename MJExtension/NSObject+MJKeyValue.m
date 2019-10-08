@@ -209,7 +209,10 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 if (![value isKindOfClass:[NSDecimalNumber class]]) {
                     value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
                 }
-            } else if (propertyClass && ![value isKindOfClass:propertyClass]) { // value和property类型不匹配
+            }
+            
+            // 经过转换后, 最终检查 value 与 property 是否匹配
+            if (propertyClass && ![value isKindOfClass:propertyClass]) {
                 value = nil;
             }
             
