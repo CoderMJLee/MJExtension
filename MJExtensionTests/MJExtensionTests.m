@@ -332,11 +332,15 @@
     status.user = user;
     status.text = @"今天的心情不错！";
     
+    status.weirdDict = @{@"1": user};
+    
     // 2.将模型转为字典
     NSDictionary *statusDict = status.mj_keyValues;
     MJExtensionLog(@"%@", statusDict);
-    
+
     MJExtensionLog(@"%@", [status mj_keyValuesWithKeys:@[@"text"]]);
+    id userDict = statusDict[@"weirdDict"][@"1"];
+    XCTAssert([userDict isKindOfClass:NSDictionary.class]);
     
     // 3.新建多级映射的模型
     MJStudent *stu = [[MJStudent alloc] init];
@@ -503,5 +507,17 @@
     user.icon = @"test.png";
     
     MJExtensionLog(@"%@", user);
+}
+
+#pragma mark 将含有模型的字典转字典
+- (void)testModelDict2Dict {
+    MJUser *user = [[MJUser alloc] init];
+    user.name = @"Frank";
+    
+    NSDictionary *testDict = @{@"1": user};
+    NSDictionary *resultDict = testDict.mj_keyValues;
+    MJExtensionLog(@"%@", resultDict);
+    
+    XCTAssert([resultDict[@"1"] isKindOfClass:NSDictionary.class]);
 }
 @end
