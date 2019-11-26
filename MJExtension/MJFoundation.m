@@ -30,6 +30,7 @@
                              [NSArray class],
                              [NSDictionary class],
                              [NSString class],
+                             [NSNull class],
                              [NSAttributedString class], nil];
     });
     
