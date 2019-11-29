@@ -23,9 +23,9 @@ assignees: ''
 如果有必要的话，请上传几张截图
 
 **运行环境**
- - iPhone6
- - iOS8.1
- - Xcode10
+ - iPhoneX
+ - iOS 12
+ - Xcode 11
 
-**额外的**
+## 为了排除自己的问题, 请写一个 Demo
 最好能提供出现bug的Demo
