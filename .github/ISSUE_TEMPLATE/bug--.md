@@ -1,6 +1,6 @@
 ---
 name: Bug上报
-about: 提交Bug让框架更加健壮
+about: 提交Bug让框架更加健壮, 务必提供 Demo
 title: ''
 labels: ''
 assignees: ''
