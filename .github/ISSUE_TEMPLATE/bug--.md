@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+## 为了排除你自己的问题, 请写一个 Demo
+最好能提供出现bug的Demo
+
 **描述bug**
 清晰简单地描述这个bug是啥
 
@@ -26,6 +29,3 @@ assignees: ''
  - iPhoneX
  - iOS 12
  - Xcode 11
-
-## 为了排除自己的问题, 请写一个 Demo
-最好能提供出现bug的Demo
