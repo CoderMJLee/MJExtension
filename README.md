@@ -84,7 +84,7 @@ NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
 
 # <a id="Examples"></a> Examples【示例】
 
-** Add `MJKeyValue` protocol to your model if needed【如果有需要, 请在模型中加入 `MJKeyValue` 协议】**
+**Add `MJKeyValue` protocol to your model if needed【如果有需要, 请在模型中加入 `MJKeyValue` 协议】**
 
 ### <a id="JSON_Model"></a> The most simple JSON -> Model【最简单的字典转模型】
 
