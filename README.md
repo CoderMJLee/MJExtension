@@ -5,9 +5,9 @@ MJExtension
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
+[📜✍🏻**Release Notes**: more details](https://github.com/CoderMJLee/MJExtension/releases)
 
-
-## ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
+### ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
 
 - [KakaJSON](https://github.com/kakaopensource/KakaJSON)
 - [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
@@ -17,10 +17,10 @@ MJExtension
 
 
 
-## 关于在Swift中使用MJExtension ‼️
+### 关于在Swift中使用MJExtension ‼️
 
-### ‼️ `@objc` attributes should be added to class and property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ]‼️
-### ‼️ Use `NSNumber` instead of `Bool`, which is not bridged to `BOOL`. [请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代] ‼️
+#### ‼️ `@objc` attributes should be added to class and property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ]‼️
+#### ‼️ Use `NSNumber` instead of `Bool`, which is not bridged to `BOOL`. [请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代] ‼️
 
 
 
