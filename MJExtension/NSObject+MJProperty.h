@@ -45,7 +45,7 @@ typedef id (^MJNewValueFromOldValue)(id object, id oldValue, MJProperty *propert
  */
 + (void)mj_setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue;
 + (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property;
-
++ (id)mj_getNewValueFromObjectWhenTranslateToJson:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(__unsafe_unretained MJProperty *)property;
 #pragma mark - key配置
 /**
  *  将属性名换为其他key去字典中取值

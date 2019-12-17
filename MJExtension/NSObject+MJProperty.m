@@ -198,6 +198,14 @@ static const char MJCachedPropertiesKey = '\0';
     return newValue;
 }
 
++ (id)mj_getNewValueFromObjectWhenTranslateToJson:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(MJProperty *__unsafe_unretained)property{
+    // 如果有实现方法
+    if ([object respondsToSelector:@selector(mj_newValueFromOldValueWhenTranslateToJson:property:)]) {
+        return [object mj_newValueFromOldValueWhenTranslateToJson:oldValue property:property];
+    }
+
+    return oldValue;
+}
 #pragma mark - array model class配置
 + (void)mj_setupObjectClassInArray:(MJObjectClassInArray)objectClassInArray
 {

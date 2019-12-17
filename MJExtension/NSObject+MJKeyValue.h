@@ -61,6 +61,14 @@
 - (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property;
 
 /**
+ *  旧值换新值，用于过滤模型中的值
+ *
+ *  @param oldValue 旧值
+ *
+ *  @return 新值
+ */
+- (id)mj_newValueFromOldValueWhenTranslateToJson:(id)oldValue property:(MJProperty *)property;
+/**
  *  当字典转模型完毕时调用
  */
 - (void)mj_keyValuesDidFinishConvertingToObject MJExtensionDeprecated("请使用`mj_didConvertToObjectWithKeyValues:`替代");

@@ -363,7 +363,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             // 1.取出属性值
             id value = [property valueForObject:self];
             if (!value) return;
-            
+
             // 2.如果是模型属性
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
@@ -375,7 +375,10 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
             }
-            
+
+            // fix 给予模型一个机会去修改转成字典的值
+            value = [clazz mj_getNewValueFromObjectWhenTranslateToJson:self oldValue:value property:property];
+
             // 4.赋值
             if ([clazz mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
                 NSArray *propertyKeys = [[property propertyKeysForClass:clazz] firstObject];
