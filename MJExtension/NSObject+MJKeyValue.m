@@ -15,6 +15,7 @@
 #import "MJFoundation.h"
 #import "NSString+MJExtension.h"
 #import "NSObject+MJClass.h"
+#import "NSDictionary+MJExtension.h"
 
 @implementation NSDecimalNumber(MJKeyValue)
 
@@ -341,7 +342,13 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     // 如果自己不是模型类, 那就返回自己
     // 模型类过滤掉 NSNull
     // 唯一一个不返回自己的
-    if ([self isMemberOfClass:NSNull.class]) { return nil; }
+    if ([self isMemberOfClass:NSNull.class]) {
+        return nil;
+    } else if ([self isKindOfClass:NSDictionary.class]) {
+        // 特殊检测: 如果是 Dictionary, 则嵌套扫描一遍
+        NSDictionary *dict = (NSMutableDictionary *)self;
+        return dict.mj_enumerateKeyValues;
+    }
     // 这里虽然返回了自己, 但是其实是有报错信息的.
     // TODO: 报错机制不好, 需要重做
     MJExtensionAssertError(![MJFoundation isClassFromFoundation:[self class]], (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
@@ -374,6 +381,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
             } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
+            } else if ([value isKindOfClass:NSDictionary.class]) {
+                NSDictionary *dict = (NSDictionary *)value;
+                value = dict.mj_enumerateKeyValues;
             }
             
             // 4.赋值

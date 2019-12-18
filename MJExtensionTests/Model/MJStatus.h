@@ -16,4 +16,6 @@
 @property (strong, nonatomic) MJUser *user;
 /** 转发的微博 */
 @property (strong, nonatomic) MJStatus *retweetedStatus;
+/** 测试专用, 模型中包含字典(内含模型) */
+@property (strong, nonatomic) NSDictionary *weirdDict;
 @end
