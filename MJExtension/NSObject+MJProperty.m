@@ -140,35 +140,32 @@ static const char MJCachedPropertiesKey = '\0';
 {
     NSMutableArray *cachedProperties = [self mj_propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
     if (cachedProperties == nil) {
-    
-        if (cachedProperties == nil) {
-            cachedProperties = [NSMutableArray array];
+        cachedProperties = [NSMutableArray array];
+        
+        [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+            // 1.获得所有的成员变量
+            unsigned int outCount = 0;
+            objc_property_t *properties = class_copyPropertyList(c, &outCount);
             
-            [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-                // 1.获得所有的成员变量
-                unsigned int outCount = 0;
-                objc_property_t *properties = class_copyPropertyList(c, &outCount);
+            // 2.遍历每一个成员变量
+            for (unsigned int i = 0; i<outCount; i++) {
+                MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+                // 过滤掉Foundation框架类里面的属性
+                if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
+                // 过滤掉`hash`, `superclass`, `description`, `debugDescription`
+                if ([MJFoundation isFromNSObjectProtocolProperty:property.name]) continue;
                 
-                // 2.遍历每一个成员变量
-                for (unsigned int i = 0; i<outCount; i++) {
-                    MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
-                    // 过滤掉Foundation框架类里面的属性
-                    if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
-                    // 过滤掉`hash`, `superclass`, `description`, `debugDescription`
-                    if ([MJFoundation isFromNSObjectProtocolProperty:property.name]) continue;
-                    
-                    property.srcClass = c;
-                    [property setOriginKey:[self mj_propertyKey:property.name] forClass:self];
-                    [property setObjectClassInArray:[self mj_propertyObjectClassInArray:property.name] forClass:self];
-                    [cachedProperties addObject:property];
-                }
-                
-                // 3.释放内存
-                free(properties);
-            }];
+                property.srcClass = c;
+                [property setOriginKey:[self mj_propertyKey:property.name] forClass:self];
+                [property setObjectClassInArray:[self mj_propertyObjectClassInArray:property.name] forClass:self];
+                [cachedProperties addObject:property];
+            }
             
-            [self mj_propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
-        }
+            // 3.释放内存
+            free(properties);
+        }];
+        
+        [self mj_propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
     }
     
     return cachedProperties;
