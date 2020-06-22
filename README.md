@@ -42,7 +42,7 @@ MJExtension
 	* [Coding](#Coding)
 	* [Camel -> underline](#Camel_underline)
 	* [NSString -> NSDate, nil -> @""](#NSString_NSDate)
-	* [NSDate -> NSString](#NSDate -> NSString)
+	* [NSDate -> NSString](#NSDate_NSString)
 	* [More use cases](#More_use_cases)
 
 ---
@@ -551,9 +551,7 @@ Book *book = [Book mj_objectWithKeyValues:dict];
 NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
 ```
 
-### NSDate -> NSString
-
-**模型转字典时, 修改 Date 类型至 String**
+### <a id="NSDate_NSString"></a> NSDate -> NSString【模型转字典时, 修改 Date 类型至 String】
 
 ```objc
 - (void)mj_objectDidConvertToKeyValues:(NSMutableDictionary *)keyValues {
