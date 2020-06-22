@@ -42,6 +42,7 @@ MJExtension
 	* [Coding](#Coding)
 	* [Camel -> underline](#Camel_underline)
 	* [NSString -> NSDate, nil -> @""](#NSString_NSDate)
+	* [NSDate -> NSString](#NSDate -> NSString)
 	* [More use cases](#More_use_cases)
 
 ---
@@ -550,7 +551,23 @@ Book *book = [Book mj_objectWithKeyValues:dict];
 NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
 ```
 
+### NSDate -> NSString
+
+**模型转字典时, 修改 Date 类型至 String**
+
+```objc
+- (void)mj_objectDidConvertToKeyValues:(NSMutableDictionary *)keyValues {
+    // NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    // formatter.dateFormat = @"yyy-MM-dd";
+    // should use sharedFormatter for better performance  
+    keyValues[@"publishedTime"] = [sharedFormatter stringFromDate:self.publishedTime];
+}
+```
+
+
+
 ### <a id="More_use_cases"></a> More use cases【更多用法】
+
 - Please reference to `NSObject+MJKeyValue.h` and `NSObject+MJCoding.h`
 
 

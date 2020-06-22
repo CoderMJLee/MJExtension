@@ -18,6 +18,7 @@
 #import "MJBox.h"
 #import <CoreData/CoreData.h>
 #import "MJFrenchUser.h"
+#import "MJCat.h"
 
 @interface MJExtensionTests : XCTestCase
 
@@ -440,6 +441,19 @@
                           };
     MJUser *testNull = [MJUser mj_objectWithKeyValues:dic];
     MJExtensionLog(@"%@", testNull);
+    
+    
+    NSDictionary *catDict = @{
+        @"name": @"Tom",
+        @"address": [NSNull null],
+        @"nicknames": @[
+                @"Jerry's Heart",
+                [NSNull null],
+                @"Cowboy Tom",
+        ]
+    };
+    MJCat *cat = [MJCat mj_objectWithKeyValues:catDict];
+    MJExtensionLog(@"%@", cat);
 }
 
 #pragma mark NSCoding示例
@@ -478,6 +492,7 @@
 
 #pragma mark 过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）
 - (void)testNewValueFromOldValue {
+    // JSON -> Object
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"name" : @"5分钟突破iOS开发",
@@ -492,6 +507,12 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     fmt.dateFormat = @"yyyy-MM-dd";
     XCTAssert([[fmt stringFromDate:book.publishedTime] isEqual:@"2011-09-10"]);
+    
+    //Object -> JSON
+    NSDictionary *bookDict = [book mj_keyValues];
+    
+    XCTAssert([bookDict[@"name"] isEqualToString:@"5分钟突破iOS开发"]);
+    XCTAssert([bookDict[@"publishedTime"] isEqualToString:@"2011-09-10"]);
 }
 
 #pragma mark 使用MJExtensionLog打印模型的所有属性
