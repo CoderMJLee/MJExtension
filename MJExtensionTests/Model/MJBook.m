@@ -22,4 +22,11 @@
 //    
 //    return oldValue;
 //}
+
+- (void)mj_objectDidConvertToKeyValues:(NSMutableDictionary *)keyValues {
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyy-MM-dd";
+    // should use sharedFormatter for better performance
+    keyValues[@"publishedTime"] = [fmt stringFromDate:self.publishedTime];
+}
 @end
