@@ -13,8 +13,8 @@ class MJTester: NSObject {
     var isSpecialAgent: Bool { _isSpecialAgent?.boolValue ?? false }
     var age: Int { _age?.intValue ?? 0 }
     
-    @objc var _isSpecialAgent: NSNumber?
-    @objc var _age: NSNumber?
+    @objc private var _isSpecialAgent: NSNumber?
+    @objc private var _age: NSNumber?
     @objc var name: String?
     @objc var identifier: String?
     
