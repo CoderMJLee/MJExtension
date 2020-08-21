@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
+		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
+		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
 		01F28187248F64ED008775BA /* MJCat.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F28186248F64ED008775BA /* MJCat.m */; };
 		2D2DB9CD2317DA07005A689E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DB9CC2317DA07005A689E /* AppDelegate.m */; };
 		2D2DB9D02317DA07005A689E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DB9CF2317DA07005A689E /* ViewController.m */; };
@@ -87,6 +89,9 @@
 /* Begin PBXFileReference section */
 		0130EE7E233C56D8008D2386 /* MJFrenchUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJFrenchUser.h; sourceTree = "<group>"; };
 		0130EE7F233C56D8008D2386 /* MJFrenchUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJFrenchUser.m; sourceTree = "<group>"; };
+		0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		0179886B24EFA460007F7FBC /* MJTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJTester.swift; sourceTree = "<group>"; };
+		0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModelTests.swift; sourceTree = "<group>"; };
 		01F28185248F64ED008775BA /* MJCat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJCat.h; sourceTree = "<group>"; };
 		01F28186248F64ED008775BA /* MJCat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJCat.m; sourceTree = "<group>"; };
 		2D2DB9C82317DA07005A689E /* MJExtensionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MJExtensionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +183,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0179886924EFA422007F7FBC /* SwiftModel */ = {
+			isa = PBXGroup;
+			children = (
+				0179886B24EFA460007F7FBC /* MJTester.swift */,
+			);
+			path = SwiftModel;
+			sourceTree = "<group>";
+		};
 		2D2DB9BF2317DA07005A689E = {
 			isa = PBXGroup;
 			children = (
@@ -246,8 +259,11 @@
 		2D2DBA562317DBB9005A689E /* MJExtensionTests */ = {
 			isa = PBXGroup;
 			children = (
+				0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */,
+				0179886924EFA422007F7FBC /* SwiftModel */,
 				2D2DBA5F2317DBDF005A689E /* Model */,
 				2D2DBA572317DBB9005A689E /* MJExtensionTests.m */,
+				0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */,
 				2D2DBA592317DBB9005A689E /* Info.plist */,
 				2D2DBA872317DCCF005A689E /* PrefixHeader.pch */,
 			);
@@ -385,6 +401,7 @@
 					};
 					2D2DBA542317DBB9005A689E = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1200;
 						TestTargetID = 2D2DB9C72317DA07005A689E;
 					};
 				};
@@ -473,8 +490,10 @@
 				2D2DBA822317DBE0005A689E /* MJStatus.m in Sources */,
 				2D2DBA832317DBE0005A689E /* MJAd.m in Sources */,
 				2D2DBA802317DBE0005A689E /* MJUser.m in Sources */,
+				0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */,
 				0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */,
 				01F28187248F64ED008775BA /* MJCat.m in Sources */,
+				0179886C24EFA460007F7FBC /* MJTester.swift in Sources */,
 				2D2DBA852317DBE0005A689E /* MJPerson.m in Sources */,
 				2D2DBA7B2317DBE0005A689E /* MJBox.m in Sources */,
 				2D2DBA582317DBB9005A689E /* MJExtensionTests.m in Sources */,
@@ -725,6 +744,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MJExtensionTests/PrefixHeader.pch;
@@ -736,6 +756,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MJExtensionTests/MJExtensionTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MJExtensionDemo.app/MJExtensionDemo";
 			};
@@ -745,6 +768,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MJExtensionTests/PrefixHeader.pch;
@@ -756,6 +780,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MJExtensionTests/MJExtensionTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MJExtensionDemo.app/MJExtensionDemo";
 			};
