@@ -130,6 +130,9 @@ static const char MJCachedPropertiesKey = '\0';
     // 遍历成员变量
     BOOL stop = NO;
     for (MJProperty *property in cachedProperties) {
+        if (!property.type.isFromFoundation) { // 非Fundation的key，直接舍弃
+            continue;
+        }
         enumeration(property, &stop);
         if (stop) break;
     }
