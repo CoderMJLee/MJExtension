@@ -155,7 +155,7 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
         NSMutableSet *classMethodSets = NSMutableSet.set;
         [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             Method method = class_getClassMethod(c, selector);
-            NSString *methodAddress = [NSString stringWithFormat:@"%p", method];
+            NSNumber *methodAddress = @((int64_t)(void *)method);
             if (method && ![classMethodSets containsObject:methodAddress]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
