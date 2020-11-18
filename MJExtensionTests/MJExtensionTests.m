@@ -19,7 +19,6 @@
 #import <CoreData/CoreData.h>
 #import "MJFrenchUser.h"
 #import "MJCat.h"
-#import "MJElement.h"
 
 @interface MJExtensionTests : XCTestCase
 
@@ -526,16 +525,4 @@
     
     MJExtensionLog(@"%@", user);
 }
-
-#pragma mark 使用 mj_ignoredPropertyNames/mj_allowedPropertyNames 存在继承
-- (void)testIgnoredInheritedProperties {
-    NSDictionary *dict = @{
-        @"count" : @"100",
-        @"renderName" : @"MJRenderElementName"
-    };
-    MJRenderElement *renderElement = [MJRenderElement mj_objectWithKeyValues:dict];
-    XCTAssert(renderElement.count == 0);
-    XCTAssertFalse(renderElement.renderName);
-}
-
 @end

@@ -145,27 +145,26 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     MJExtensionSemaphoreSignal
 }
 
-+ (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key {
++ (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
+{
     MJExtensionSemaphoreCreate
     MJExtensionSemaphoreWait
     NSMutableArray *array = [self mj_classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
         [self mj_classDictForKey:key][NSStringFromClass(self)] = array = [NSMutableArray array];
-        NSMutableSet *classMethodSets = NSMutableSet.set;
-        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-            Method method = class_getClassMethod(c, selector);
-            NSNumber *methodAddress = @((int64_t)(void *)method);
-            if (method && ![classMethodSets containsObject:methodAddress]) {
+        
+        if ([self respondsToSelector:selector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                NSArray *subArray = [c performSelector:selector];
+            NSArray *subArray = [self performSelector:selector];
 #pragma clang diagnostic pop
-                if (subArray) {
-                    [array addObjectsFromArray:subArray];
-                }
-                [classMethodSets addObject:methodAddress];
+            if (subArray) {
+                [array addObjectsFromArray:subArray];
             }
+        }
+        
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             NSArray *subArray = objc_getAssociatedObject(c, key);
             [array addObjectsFromArray:subArray];
         }];
@@ -173,5 +172,4 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     MJExtensionSemaphoreSignal
     return array;
 }
-
 @end
