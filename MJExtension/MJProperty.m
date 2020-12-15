@@ -75,7 +75,12 @@
 {
     if (self.type.KVCDisabled) return [NSNull null];
     
-    id value = [object valueForKey:self.name];
+    id value;
+    @try {
+        value = [object valueForKey:self.name];
+    } @catch (NSException *exception) {
+        NSLog(@"[MJExtension]: crash %@", exception);
+    }
     
     // 32位BOOL类型转换json后成Int类型
     /** https://github.com/CoderMJLee/MJExtension/issues/545 */
@@ -95,7 +100,11 @@
 - (void)setValue:(id)value forObject:(id)object
 {
     if (self.type.KVCDisabled || value == nil) return;
-    [object setValue:value forKey:self.name];
+    @try {
+        [object setValue:value forKey:self.name];
+    } @catch (NSException *exception) {
+        NSLog(@"[MJExtension]: crash %@", exception);
+    }
 }
 
 /**

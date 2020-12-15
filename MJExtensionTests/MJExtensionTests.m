@@ -525,4 +525,20 @@
     
     MJExtensionLog(@"%@", user);
 }
+
+- (void)testProtocolProperty {
+    MJBox *box = [[MJBox alloc] init];
+    box.weight = 100.1;
+    box.size = 10;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:box];
+    XCTAssertTrue(data != nil);
+    MJBox *newBox = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+#pragma clang diagnostic pop
+    
+    XCTAssertEqual(newBox.weight, 100.1);
+    XCTAssertEqual(newBox.size, 10);
+}
+
 @end
