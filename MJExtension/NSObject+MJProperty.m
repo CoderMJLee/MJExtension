@@ -24,7 +24,6 @@ static const char MJNewValueFromOldValueKey = '\0';
 static const char MJObjectClassInArrayKey = '\0';
 
 static const char MJCachedPropertiesKey = '\0';
-static const char MJCachedProtocolPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
@@ -35,7 +34,6 @@ static const char MJCachedProtocolPropertiesKey = '\0';
     static NSMutableDictionary *newValueFromOldValueDict;
     static NSMutableDictionary *objectClassInArrayDict;
     static NSMutableDictionary *cachedPropertiesDict;
-    static NSMutableDictionary *cachedProtocolPropertiesDict;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -44,7 +42,6 @@ static const char MJCachedProtocolPropertiesKey = '\0';
         newValueFromOldValueDict = [NSMutableDictionary dictionary];
         objectClassInArrayDict = [NSMutableDictionary dictionary];
         cachedPropertiesDict = [NSMutableDictionary dictionary];
-        cachedProtocolPropertiesDict = [NSMutableDictionary dictionary];
     });
     
     if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict;
@@ -52,7 +49,6 @@ static const char MJCachedProtocolPropertiesKey = '\0';
     if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict;
     if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict;
     if (key == &MJCachedPropertiesKey) return cachedPropertiesDict;
-    if (key == &MJCachedProtocolPropertiesKey) return cachedProtocolPropertiesDict;
     return nil;
 }
 
@@ -141,11 +137,14 @@ static const char MJCachedProtocolPropertiesKey = '\0';
 
 #pragma mark - 公共方法
 + (NSMutableArray *)mj_properties {
+    NSMutableDictionary *cachedInfo = [self mj_propertyDictForKey:&MJCachedPropertiesKey];
     
-    NSMutableDictionary *cachedProtocalInfo = [self mj_propertyDictForKey:&MJCachedProtocolPropertiesKey];
-    NSMutableSet<NSString *> *cachedProtocolProperties = cachedProtocalInfo[NSStringFromClass(self)];
+    // 获取协议中的属性的 name
+    NSString *cachedProtocolPropertieKey = [NSString stringWithFormat:@"%@_protocol", NSStringFromClass(self)];
+    NSMutableSet<NSString *> *cachedProtocolProperties = cachedInfo[cachedProtocolPropertieKey];
     if (cachedProtocolProperties == nil) {
         cachedProtocolProperties = [NSMutableSet set];
+        
         [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
             unsigned int protocolsCount = 0;
             Protocol * __unsafe_unretained *protocols = class_copyProtocolList(c, &protocolsCount);
@@ -159,10 +158,9 @@ static const char MJCachedProtocolPropertiesKey = '\0';
             }
             free(protocols);
         }];
-        [self mj_propertyDictForKey:&MJCachedProtocolPropertiesKey][NSStringFromClass(self)] = cachedProtocolProperties;
+        [self mj_propertyDictForKey:&MJCachedPropertiesKey][cachedProtocolPropertieKey] = cachedProtocolProperties;
     }
     
-    NSMutableDictionary *cachedInfo = [self mj_propertyDictForKey:&MJCachedPropertiesKey];
     NSMutableArray *cachedProperties = cachedInfo[NSStringFromClass(self)];
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
