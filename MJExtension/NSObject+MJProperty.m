@@ -24,6 +24,7 @@ static const char MJNewValueFromOldValueKey = '\0';
 static const char MJObjectClassInArrayKey = '\0';
 
 static const char MJCachedPropertiesKey = '\0';
+static const char MJCachedProtocolPropertiesKey = '\0';
 
 @implementation NSObject (Property)
 
@@ -34,6 +35,7 @@ static const char MJCachedPropertiesKey = '\0';
     static NSMutableDictionary *newValueFromOldValueDict;
     static NSMutableDictionary *objectClassInArrayDict;
     static NSMutableDictionary *cachedPropertiesDict;
+    static NSMutableDictionary *cachedProtocolPropertiesDict;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -42,6 +44,7 @@ static const char MJCachedPropertiesKey = '\0';
         newValueFromOldValueDict = [NSMutableDictionary dictionary];
         objectClassInArrayDict = [NSMutableDictionary dictionary];
         cachedPropertiesDict = [NSMutableDictionary dictionary];
+        cachedProtocolPropertiesDict = [NSMutableDictionary dictionary];
     });
     
     if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict;
@@ -49,6 +52,7 @@ static const char MJCachedPropertiesKey = '\0';
     if (key == &MJNewValueFromOldValueKey) return newValueFromOldValueDict;
     if (key == &MJObjectClassInArrayKey) return objectClassInArrayDict;
     if (key == &MJCachedPropertiesKey) return cachedPropertiesDict;
+    if (key == &MJCachedProtocolPropertiesKey) return cachedProtocolPropertiesDict;
     return nil;
 }
 
@@ -136,8 +140,28 @@ static const char MJCachedPropertiesKey = '\0';
 }
 
 #pragma mark - 公共方法
-+ (NSMutableArray *)mj_properties
-{
++ (NSMutableArray *)mj_properties {
+    
+    NSMutableDictionary *cachedProtocalInfo = [self mj_propertyDictForKey:&MJCachedProtocolPropertiesKey];
+    NSMutableSet<NSString *> *cachedProtocolProperties = cachedProtocalInfo[NSStringFromClass(self)];
+    if (cachedProtocolProperties == nil) {
+        cachedProtocolProperties = [NSMutableSet set];
+        [self mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+            unsigned int protocolsCount = 0;
+            Protocol * __unsafe_unretained *protocols = class_copyProtocolList(c, &protocolsCount);
+            for (unsigned int i = 0; i < protocolsCount; i++) {
+                unsigned int protocolCount = 0;
+                objc_property_t *protocolProperties = protocol_copyPropertyList(protocols[i], &protocolCount);
+                for (unsigned int j = 0; j < protocolCount; j++) {
+                    [cachedProtocolProperties addObject:@(property_getName(protocolProperties[j]))];
+                }
+                free(protocolProperties);
+            }
+            free(protocols);
+        }];
+        [self mj_propertyDictForKey:&MJCachedProtocolPropertiesKey][NSStringFromClass(self)] = cachedProtocolProperties;
+    }
+    
     NSMutableDictionary *cachedInfo = [self mj_propertyDictForKey:&MJCachedPropertiesKey];
     NSMutableArray *cachedProperties = cachedInfo[NSStringFromClass(self)];
     if (cachedProperties == nil) {
@@ -151,6 +175,8 @@ static const char MJCachedPropertiesKey = '\0';
             // 2.遍历每一个成员变量
             for (unsigned int i = 0; i<outCount; i++) {
                 MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+                // 过滤协议中的属性
+                if ([cachedProtocolProperties containsObject:property.name]) continue;
                 // 过滤掉Foundation框架类里面的属性
                 if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
                 // 过滤掉`hash`, `superclass`, `description`, `debugDescription`
