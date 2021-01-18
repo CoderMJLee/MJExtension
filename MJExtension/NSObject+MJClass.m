@@ -141,15 +141,15 @@ extern dispatch_semaphore_t signalSemaphore;
     }
     
     // 清空数据
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     [[self mj_classDictForKey:key] removeAllObjects];
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
     
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     NSMutableArray *array = [self mj_classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
@@ -170,7 +170,7 @@ extern dispatch_semaphore_t signalSemaphore;
             [array addObjectsFromArray:subArray];
         }];
     }
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
     return array;
 }
 @end
