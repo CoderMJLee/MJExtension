@@ -12,6 +12,13 @@
 #define MJ_UNLOCK(lock) dispatch_semaphore_signal(lock);
 #endif
 
+// 信号量
+#define MJExtensionSemaphoreCreate \
+extern dispatch_semaphore_t mje_signalSemaphore; \
+extern dispatch_once_t mje_onceTokenSemaphore; \
+dispatch_once(&mje_onceTokenSemaphore, ^{ \
+    mje_signalSemaphore = dispatch_semaphore_create(1); \
+});
 
 // 过期
 #define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
