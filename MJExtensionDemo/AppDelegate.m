@@ -17,6 +17,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    extern mje_a;
+    
+    NSLog(@"tttt: %d", mje_a);
     return YES;
 }
 

@@ -17,8 +17,6 @@ static const char MJIgnoredPropertyNamesKey = '\0';
 static const char MJAllowedCodingPropertyNamesKey = '\0';
 static const char MJIgnoredCodingPropertyNamesKey = '\0';
 
-extern dispatch_semaphore_t signalSemaphore;
-
 @implementation NSObject (MJClass)
 
 + (NSMutableDictionary *)mj_classDictForKey:(const void *)key
@@ -141,15 +139,16 @@ extern dispatch_semaphore_t signalSemaphore;
     }
     
     // 清空数据
-    MJ_LOCK(signalSemaphore);
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     [[self mj_classDictForKey:key] removeAllObjects];
-    MJ_UNLOCK(signalSemaphore);
+    MJ_UNLOCK(mje_signalSemaphore);
 }
 
 + (NSMutableArray *)mj_totalObjectsWithSelector:(SEL)selector key:(const char *)key
 {
-    
-    MJ_LOCK(signalSemaphore);
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     NSMutableArray *array = [self mj_classDictForKey:key][NSStringFromClass(self)];
     if (array == nil) {
         // 创建、存储
@@ -170,7 +169,7 @@ extern dispatch_semaphore_t signalSemaphore;
             [array addObjectsFromArray:subArray];
         }];
     }
-    MJ_UNLOCK(signalSemaphore);
+    MJ_UNLOCK(mje_signalSemaphore);
     return array;
 }
 @end
