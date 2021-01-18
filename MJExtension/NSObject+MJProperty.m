@@ -133,9 +133,9 @@ dispatch_semaphore_t signalSemaphore;
 + (void)mj_enumerateProperties:(MJPropertiesEnumeration)enumeration
 {
     // 获得成员变量
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     NSArray *cachedProperties = [self mj_properties];
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
     // 遍历成员变量
     BOOL stop = NO;
     for (MJProperty *property in [cachedProperties copy]) {
@@ -210,9 +210,9 @@ dispatch_semaphore_t signalSemaphore;
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
 }
 
 #pragma mark - key配置
@@ -220,18 +220,18 @@ dispatch_semaphore_t signalSemaphore;
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    dispatch_semaphore_wait(signalSemaphore, DISPATCH_TIME_FOREVER);
+    MJ_LOCK(signalSemaphore);
     [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    dispatch_semaphore_signal(signalSemaphore);
+    MJ_UNLOCK(signalSemaphore);
 }
 @end
 #pragma clang diagnostic pop
