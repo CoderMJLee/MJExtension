@@ -130,8 +130,9 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
 }
 
 #pragma mark - block和方法处理:存储block的返回值
-+ (void)mj_setupBlockReturnValue:(id (^)(void))block key:(const char *)key
-{
++ (void)mj_setupBlockReturnValue:(id (^)(void))block key:(const char *)key {
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     if (block) {
         objc_setAssociatedObject(self, key, block(), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     } else {
@@ -139,8 +140,6 @@ static const char MJIgnoredCodingPropertyNamesKey = '\0';
     }
     
     // 清空数据
-    MJExtensionSemaphoreCreate
-    MJ_LOCK(mje_signalSemaphore);
     [[self mj_classDictForKey:key] removeAllObjects];
     MJ_UNLOCK(mje_signalSemaphore);
 }

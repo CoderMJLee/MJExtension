@@ -45,10 +45,10 @@ class MultiThreadTests: XCTestCase {
                     return
                 }
                 print("tester: \(id)")
-                XCTAssert(tester.isSpecialAgent)
-                XCTAssert(tester.identifier == testerDict["identifier"] as? String)
-                XCTAssert(tester.age == testerDict["age"] as! Int)
-                XCTAssert(tester.name == testerDict["name"] as? String)
+//                XCTAssert(tester.isSpecialAgent)
+//                XCTAssert(tester.identifier == testerDict["identifier"] as? String)
+//                XCTAssert(tester.age == testerDict["age"] as! Int)
+//                XCTAssert(tester.name == testerDict["name"] as? String)
                 
                 if id == 99 {
                     expectation4Tester.fulfill()
@@ -63,15 +63,47 @@ class MultiThreadTests: XCTestCase {
                     return
                 }
                 print("cat: \(id)")
-                cat.nicknames?.forEach({ (nickname) in
-                    XCTAssert((catDict["nicknames"] as! [String]?)?.contains(nickname) ?? false)
-                })
-                XCTAssert(cat.identifier == catDict["identifier"] as? String)
-                XCTAssert(cat.name == catDict["name"] as? String)
+//                cat.nicknames?.forEach({ (nickname) in
+//                    XCTAssert((catDict["nicknames"] as! [String]?)?.contains(nickname) ?? false)
+//                })
+//                XCTAssert(cat.identifier == catDict["identifier"] as? String)
+//                XCTAssert(cat.name == catDict["name"] as? String)
                 
                 if id == 99 {
                     expectation4Cat.fulfill()
                 }
+            }
+            
+            concurrentQueue.async {
+                sleep(1)
+                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
+                    ["name", "identifier"]
+                }
+                print("change allowPropertyNames: (name, identifier) \(id)")
+            }
+            
+            concurrentQueue.async {
+                sleep(1)
+                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
+                    ["name"]
+                }
+                print("change allowPropertyNames: (name) \(id)")
+            }
+            
+            concurrentQueue.async {
+                sleep(1)
+                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
+                    ["isSpecialAgent", "age"]
+                }
+                print("change allowPropertyNames: (isSpecialAgent, age) \(id)")
+            }
+            
+            concurrentQueue.async {
+                sleep(1)
+                MJUser.mj_setupAllowedPropertyNames { () -> [Any]? in
+                    ["name", "nicknames"]
+                }
+                print("change allowPropertyNames: (name, nicknames) \(id)")
             }
         }
         
