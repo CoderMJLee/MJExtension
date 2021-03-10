@@ -19,7 +19,7 @@ class SwiftModelTests: XCTestCase {
         ]
         
         guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
-            XCTAssert(false, "convertion failed")
+            XCTAssert(false, "conversion failed")
             return
         }
         XCTAssert(tester.isSpecialAgent)
@@ -38,7 +38,7 @@ class SwiftModelTests: XCTestCase {
         ]
         
         guard let user = MJUser.mj_object(withKeyValues: userDict) else {
-            XCTAssert(false, "convertion failed")
+            XCTAssert(false, "conversion failed")
             return
         }
         XCTAssert(user.rich)

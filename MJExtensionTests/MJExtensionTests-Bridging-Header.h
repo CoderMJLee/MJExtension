@@ -5,3 +5,4 @@
 #import "MJExtension.h"
 
 #import "MJUser.h"
+#import "MJCat.h"
