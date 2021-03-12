@@ -221,6 +221,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
             MJExtensionLog(@"%@", exception);
+#ifdef DEBUG
+            [exception raise];
+#endif
         }
     }];
     
@@ -428,6 +431,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
             MJExtensionLog(@"%@", exception);
+#ifdef DEBUG
+            [exception raise];
+#endif
         }
     }];
     
