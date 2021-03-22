@@ -126,21 +126,20 @@ dispatch_once_t mje_onceTokenSemaphore;
 + (void)mj_enumerateProperties:(MJPropertiesEnumeration)enumeration
 {
     // 获得成员变量
-    MJExtensionSemaphoreCreate
-    MJ_LOCK(mje_signalSemaphore);
     NSArray *cachedProperties = [self mj_properties];
-    MJ_UNLOCK(mje_signalSemaphore);
     // 遍历成员变量
     BOOL stop = NO;
-    for (MJProperty *property in [cachedProperties copy]) {
+    for (MJProperty *property in cachedProperties) {
         enumeration(property, &stop);
         if (stop) break;
     }
 }
 
 #pragma mark - 公共方法
-+ (NSMutableArray *)mj_properties
++ (NSArray *)mj_properties
 {
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     NSMutableDictionary *cachedInfo = [self mj_propertyDictForKey:&MJCachedPropertiesKey];
     NSMutableArray *cachedProperties = cachedInfo[NSStringFromClass(self)];
     if (cachedProperties == nil) {
@@ -169,16 +168,20 @@ dispatch_once_t mje_onceTokenSemaphore;
             free(properties);
         }];
         
-        [self mj_propertyDictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        cachedInfo[NSStringFromClass(self)] = cachedProperties;
     }
+    NSArray *properties = [cachedProperties copy];
+    MJ_UNLOCK(mje_signalSemaphore);
     
-    return cachedProperties;
+    return properties;
 }
 
 #pragma mark - 新值配置
-+ (void)mj_setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue
-{
++ (void)mj_setupNewValueFromOldValue:(MJNewValueFromOldValue)newValueFormOldValue {
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     objc_setAssociatedObject(self, &MJNewValueFromOldValueKey, newValueFormOldValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    MJ_UNLOCK(mje_signalSemaphore);
 }
 
 + (id)mj_getNewValueFromObject:(__unsafe_unretained id)object oldValue:(__unsafe_unretained id)oldValue property:(MJProperty *__unsafe_unretained)property{
@@ -187,6 +190,8 @@ dispatch_once_t mje_onceTokenSemaphore;
         return [object mj_newValueFromOldValue:oldValue property:property];
     }
     
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
     // 查看静态设置
     __block id newValue = oldValue;
     [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
@@ -196,7 +201,15 @@ dispatch_once_t mje_onceTokenSemaphore;
             *stop = YES;
         }
     }];
+    MJ_UNLOCK(mje_signalSemaphore);
     return newValue;
+}
+
++ (void)mj_removeCachedProperties {
+    MJExtensionSemaphoreCreate
+    MJ_LOCK(mje_signalSemaphore);
+    [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    MJ_UNLOCK(mje_signalSemaphore);
 }
 
 #pragma mark - array model class配置
@@ -204,29 +217,22 @@ dispatch_once_t mje_onceTokenSemaphore;
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    MJExtensionSemaphoreCreate
-    MJ_LOCK(mje_signalSemaphore);
-    [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    MJ_UNLOCK(mje_signalSemaphore);
+    [self mj_removeCachedProperties];
 }
 
 #pragma mark - key配置
-+ (void)mj_setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName
-{
+
++ (void)mj_setupReplacedKeyFromPropertyName:(MJReplacedKeyFromPropertyName)replacedKeyFromPropertyName {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    MJExtensionSemaphoreCreate
-    MJ_LOCK(mje_signalSemaphore);
-    [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
-    MJ_UNLOCK(mje_signalSemaphore);
+    [self mj_removeCachedProperties];
 }
 
-+ (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
-{
-    objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
-    
++ (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121 {
     MJExtensionSemaphoreCreate
     MJ_LOCK(mje_signalSemaphore);
+    objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    
     [[self mj_propertyDictForKey:&MJCachedPropertiesKey] removeAllObjects];
     MJ_UNLOCK(mje_signalSemaphore);
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01052EAD25F872D00049EC6F /* MultiThreadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01052EAC25F872D00049EC6F /* MultiThreadTests.swift */; };
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
@@ -87,6 +88,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01052EAC25F872D00049EC6F /* MultiThreadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiThreadTests.swift; sourceTree = "<group>"; };
 		0130EE7E233C56D8008D2386 /* MJFrenchUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJFrenchUser.h; sourceTree = "<group>"; };
 		0130EE7F233C56D8008D2386 /* MJFrenchUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJFrenchUser.m; sourceTree = "<group>"; };
 		0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				2D2DBA5F2317DBDF005A689E /* Model */,
 				2D2DBA572317DBB9005A689E /* MJExtensionTests.m */,
 				0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */,
+				01052EAC25F872D00049EC6F /* MultiThreadTests.swift */,
 				2D2DBA592317DBB9005A689E /* Info.plist */,
 				2D2DBA872317DCCF005A689E /* PrefixHeader.pch */,
 			);
@@ -502,6 +505,7 @@
 				2D2DBA7F2317DBE0005A689E /* MJBaseObject.m in Sources */,
 				2D2DBA7D2317DBE0005A689E /* MJBook.m in Sources */,
 				2D2DBA7A2317DBE0005A689E /* MJDog.m in Sources */,
+				01052EAD25F872D00049EC6F /* MultiThreadTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

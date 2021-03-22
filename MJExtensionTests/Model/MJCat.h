@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *name;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *nicknames;
-@property (nonatomic, copy, nullable) NSString *address; 
+@property (nonatomic, copy, nullable) NSString *address;
+@property (nonatomic, copy, nullable) NSString *identifier;
 
 @end
 
