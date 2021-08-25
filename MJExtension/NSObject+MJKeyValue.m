@@ -354,7 +354,10 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     Class clazz = [self class];
     NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
     NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
-    
+    if ([NSStringFromClass(clazz) isEqualToString:@"NSNull"]) {
+        //解决当在新系统 为null时，会造成递归无法结束，死循环奔溃的问题
+        return keyValues;
+    }
     [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         @try {
             // 0.检测是否被忽略
