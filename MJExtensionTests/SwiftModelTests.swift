@@ -9,6 +9,15 @@
 import XCTest
 
 class SwiftModelTests: XCTestCase {
+    override class func setUp() {
+        MJTester.mj_setupAllowedPropertyNames {
+            nil
+        }
+        MJUser.mj_setupAllowedPropertyNames {
+            nil
+        }
+    }
+    
     // MARK: 🌈 Use Swift model
     func testNormalModel() throws {
         let testerDict: [String: Any] = [
