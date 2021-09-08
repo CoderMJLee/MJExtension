@@ -17,7 +17,7 @@
                BlueprintIdentifier = "2D2DB9F32317DA64005A689E"
                BuildableName = "MJExtension.framework"
                BlueprintName = "MJExtension"
-               ReferencedContainer = "container:MJExtensionDemo.xcodeproj">
+               ReferencedContainer = "container:MJExtension.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,9 +28,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2D2DBA542317DBB9005A689E"
+               BuildableName = "MJExtensionTests.xctest"
+               BlueprintName = "MJExtensionTests"
+               ReferencedContainer = "container:MJExtension.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -48,11 +56,9 @@
             BlueprintIdentifier = "2D2DB9F32317DA64005A689E"
             BuildableName = "MJExtension.framework"
             BlueprintName = "MJExtension"
-            ReferencedContainer = "container:MJExtensionDemo.xcodeproj">
+            ReferencedContainer = "container:MJExtension.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -66,7 +72,7 @@
             BlueprintIdentifier = "2D2DB9F32317DA64005A689E"
             BuildableName = "MJExtension.framework"
             BlueprintName = "MJExtension"
-            ReferencedContainer = "container:MJExtensionDemo.xcodeproj">
+            ReferencedContainer = "container:MJExtension.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -380,28 +380,6 @@
     MJExtensionLog(@"%@", dictArray);
 }
 
-#pragma mark CoreData示例
-- (void)testCoreData {
-    NSDictionary *dict = @{
-                           @"name" : @"Jack",
-                           @"icon" : @"lufy.png",
-                           @"age" : @20,
-                           @"height" : @1.55,
-                           @"money" : @"100.9",
-                           @"sex" : @(SexFemale),
-                           @"gay" : @"true"
-                           };
-    
-    // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
-    NSManagedObjectContext *context = nil;
-    MJUser *user = [MJUser mj_objectWithKeyValues:dict context:context];
-    
-    // 利用CoreData保存模型
-    [context save:nil];
-    
-    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
-}
-
 #pragma mark NSNull相关的测试
 - (void)testNull {
     NSNull *null = [NSNull null];
