@@ -50,6 +50,17 @@ return self; \
 - (void)encodeWithCoder:(NSCoder *)encoder \
 { \
 [self mj_encode:encoder]; \
-}
+}\
 
 #define MJExtensionCodingImplementation MJCodingImplementation
+
+#define MJExtensionSecureCodingImplementationSupport(CLASS, FLAG) \
+@interface CLASS (MJSecureCoding) <NSSecureCoding> \
+@end \
+@implementation CLASS (MJSecureCoding) \
+MJCodingImplementation \
++ (BOOL)supportsSecureCoding { \
+return FLAG; \
+} \
+@end \
+

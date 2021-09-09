@@ -28,8 +28,6 @@ MJExtension
 #### ‼️ `@objc` or `objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]‼️
 #### ‼️ Use `NSNumber` instead of `Bool`, which is not bridged to `BOOL`. [请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代] ‼️
 
-
-
 ## Contents
 
 * [Getting Started 【开始使用】](#Getting_Started)
@@ -46,6 +44,7 @@ MJExtension
 	* [Model array -> JSON array](#Model_array_JSON_array)
 	* [Core Data](#Core_Data)
 	* [Coding](#Coding)
+	* [Secure Coding](#SecureCoding)
 	* [Camel -> underline](#Camel_underline)
 	* [NSString -> NSDate, nil -> @""](#NSString_NSDate)
 	* [NSDate -> NSString](#NSDate_NSString)
@@ -64,7 +63,7 @@ MJExtension
 * `JSONString` --> `Model Array`、`Core Data Model Array`
 * `Model Array`、`Core Data Model Array` --> `JSON Array`
 * Coding all properties of a model with only one line of code.
-    * 只需要一行代码，就能实现模型的所有属性进行Coding（归档和解档）
+    * 只需要一行代码，就能实现模型的所有属性进行Coding / SecureCoding（归档和解档）
 
 ## <a id="Installation"></a> Installation【安装】
 
@@ -466,7 +465,7 @@ User *user = [User mj_objectWithKeyValues:dict context:context];
 [context save:nil];
 ```
 
-### <a id="Coding"></a> Coding
+### <a id="Coding"></a> Coding (Archive & Unarchive methods are deprecated in iOS 12)
 
 ```objc
 #import "MJExtension.h"
@@ -499,7 +498,50 @@ NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 // name=(null), price=200.800000
 ```
 
+### <a id="SecureCoding"></a> Secure Coding
+
+Using `MJExtensionSecureCodingImplementationSupport(class, isSupport)` macro.
+
+```objc
+@import MJExtension;
+
+// NSSecureCoding Implementation
+MJExtensionSecureCodingImplementationSupport(MJBag, YES)
+
+@implementation MJBag
+@end
+
+ /***********************************************/
+
+// what properties not to be coded
+[Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+    return @[@"name"];
+}];
+// Equals: Bag.m implements +mj_ignoredCodingPropertyNames method.
+
+// Create model
+MJBag *bag = [[MJBag alloc] init];
+bag.name = @"Red bag";
+bag.price = 200.8;
+bag.isBig = YES;
+bag.weight = 200;
+
+NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
+
+NSError *error = nil;
+// Encoding
+NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
+[data writeToFile:file atomically:true];
+
+// Decoding
+NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+error = nil;
+MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
+MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+```
+
 ### <a id="Camel_underline"></a> Camel -> underline【统一转换属性名（比如驼峰转下划线）】
+
 ```objc
 // Dog
 #import "MJExtension.h"
