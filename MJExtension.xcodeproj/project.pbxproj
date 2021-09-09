@@ -14,12 +14,10 @@
 		0107507E26E890C100AAEA10 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0107507D26E890C100AAEA10 /* CoreDataTests.swift */; };
 		0107508726E8C2DB00AAEA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2DB9F42317DA64005A689E /* MJExtension.framework */; };
 		0107508F26E8C59F00AAEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0107508E26E8C59F00AAEA10 /* AppDelegate.swift */; };
-		0107509126E8C5A000AAEA10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0107509026E8C5A000AAEA10 /* SceneDelegate.swift */; };
-		0107509326E8C5A000AAEA10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0107509226E8C5A000AAEA10 /* ViewController.swift */; };
 		0107509626E8C5A000AAEA10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0107509426E8C5A000AAEA10 /* Main.storyboard */; };
 		0107509826E8C5A300AAEA10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0107509726E8C5A300AAEA10 /* Assets.xcassets */; };
 		0107509B26E8C5A300AAEA10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0107509926E8C5A300AAEA10 /* LaunchScreen.storyboard */; };
-		010750A226E8C5EB00AAEA10 /* MJCoreDataTestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0107507626E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld */; };
+		0121B2CE26E9B277008EE973 /* MJCoreDataTestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0107507626E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld */; };
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
@@ -78,8 +76,6 @@
 		0107507D26E890C100AAEA10 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		0107508C26E8C59F00AAEA10 /* MJExtensionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MJExtensionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0107508E26E8C59F00AAEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0107509026E8C5A000AAEA10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0107509226E8C5A000AAEA10 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0107509526E8C5A000AAEA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0107509726E8C5A300AAEA10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0107509A26E8C5A300AAEA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -191,8 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				0107508E26E8C59F00AAEA10 /* AppDelegate.swift */,
-				0107509026E8C5A000AAEA10 /* SceneDelegate.swift */,
-				0107509226E8C5A000AAEA10 /* ViewController.swift */,
 				0107509426E8C5A000AAEA10 /* Main.storyboard */,
 				0107509726E8C5A300AAEA10 /* Assets.xcassets */,
 				0107509926E8C5A300AAEA10 /* LaunchScreen.storyboard */,
@@ -463,10 +457,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0107509326E8C5A000AAEA10 /* ViewController.swift in Sources */,
+				0121B2CE26E9B277008EE973 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
 				0107508F26E8C59F00AAEA10 /* AppDelegate.swift in Sources */,
-				010750A226E8C5EB00AAEA10 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
-				0107509126E8C5A000AAEA10 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,9 +545,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = MJExtensionDemo/MJExtensionDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = NA88Z4T63A;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MJExtensionDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -563,7 +556,6 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -571,6 +563,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtension.MJExtensionDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -586,9 +579,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = MJExtensionDemo/MJExtensionDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = NA88Z4T63A;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MJExtensionDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -596,7 +590,6 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -604,6 +597,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtension.MJExtensionDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -747,6 +741,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtension;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -774,6 +769,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mj.MJExtension;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -786,6 +782,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MJExtensionTests/PrefixHeader.pch;
 				INFOPLIST_FILE = MJExtensionTests/Info.plist;
@@ -809,6 +806,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MJExtensionTests/PrefixHeader.pch;
 				INFOPLIST_FILE = MJExtensionTests/Info.plist;
