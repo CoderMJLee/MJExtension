@@ -40,7 +40,7 @@ class MultiThreadTests: XCTestCase {
             concurrentQueue.async {
                 sleep(1)
                 let testerDict = self.testerJSON(id)
-                guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
+                guard let _ = MJTester.mj_object(withKeyValues: testerDict) else {
                     XCTAssert(false, "conversion failed")
                     return
                 }
@@ -58,7 +58,7 @@ class MultiThreadTests: XCTestCase {
             concurrentQueue.async {
                 sleep(1)
                 let catDict = self.catJSON(id)
-                guard let cat = MJCat.mj_object(withKeyValues: catDict) else {
+                guard let _ = MJCat.mj_object(withKeyValues: catDict) else {
                     XCTAssert(false, "convertion failed")
                     return
                 }
