@@ -489,10 +489,10 @@ bag.name = @"Red bag";
 bag.price = 200.8;
 
 NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
-// Encoding
+// Encoding by archiving
 [NSKeyedArchiver archiveRootObject:bag toFile:file];
 
-// Decoding
+// Decoding by unarchiving
 Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 // name=(null), price=200.800000
@@ -529,11 +529,11 @@ bag.weight = 200;
 NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
 
 NSError *error = nil;
-// Encoding
+// Encoding by archiving
 NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
 [data writeToFile:file atomically:true];
 
-// Decoding
+// Decoding by unarchiving
 NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
 error = nil;
 MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
