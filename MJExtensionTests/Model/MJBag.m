@@ -11,7 +11,7 @@
 @import MJExtension;
 
 // NSSecureCoding实现
-MJExtensionSecureCodingImplementationSupport(MJBag, YES)
+MJSecureCodingImplementation(MJBag, YES)
 
 @implementation MJBag
 

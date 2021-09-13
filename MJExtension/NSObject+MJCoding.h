@@ -54,7 +54,7 @@ return self; \
 
 #define MJExtensionCodingImplementation MJCodingImplementation
 
-#define MJExtensionSecureCodingImplementationSupport(CLASS, FLAG) \
+#define MJSecureCodingImplementation(CLASS, FLAG) \
 @interface CLASS (MJSecureCoding) <NSSecureCoding> \
 @end \
 @implementation CLASS (MJSecureCoding) \

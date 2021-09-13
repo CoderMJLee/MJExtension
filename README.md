@@ -470,21 +470,21 @@ User *user = [User mj_objectWithKeyValues:dict context:context];
 ```objc
 #import "MJExtension.h"
 
-@implementation Bag
+@implementation MJBag
 // NSCoding Implementation
-MJExtensionCodingImplementation
+MJCodingImplementation
 @end
 
 /***********************************************/
 
 // what properties not to be coded
-[Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+[MJBag mj_setupIgnoredCodingPropertyNames:^NSArray *{
     return @[@"name"];
 }];
-// Equals: Bag.m implements +mj_ignoredCodingPropertyNames method.
+// Equals: MJBag.m implements +mj_ignoredCodingPropertyNames method.
 
 // Create model
-Bag *bag = [[Bag alloc] init];
+MJBag *bag = [[MJBag alloc] init];
 bag.name = @"Red bag";
 bag.price = 200.8;
 
@@ -493,20 +493,20 @@ NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag
 [NSKeyedArchiver archiveRootObject:bag toFile:file];
 
 // Decoding by unarchiving
-Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 // name=(null), price=200.800000
 ```
 
 ### <a id="SecureCoding"></a> Secure Coding
 
-Using `MJExtensionSecureCodingImplementationSupport(class, isSupport)` macro.
+Using `MJSecureCodingImplementation(class, isSupport)` macro.
 
 ```objc
 @import MJExtension;
 
 // NSSecureCoding Implementation
-MJExtensionSecureCodingImplementationSupport(MJBag, YES)
+MJSecureCodingImplementation(MJBag, YES)
 
 @implementation MJBag
 @end
@@ -514,10 +514,10 @@ MJExtensionSecureCodingImplementationSupport(MJBag, YES)
  /***********************************************/
 
 // what properties not to be coded
-[Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+[MJBag mj_setupIgnoredCodingPropertyNames:^NSArray *{
     return @[@"name"];
 }];
-// Equals: Bag.m implements +mj_ignoredCodingPropertyNames method.
+// Equals: MJBag.m implements +mj_ignoredCodingPropertyNames method.
 
 // Create model
 MJBag *bag = [[MJBag alloc] init];
