@@ -19,6 +19,7 @@
 #import <CoreData/CoreData.h>
 #import "MJFrenchUser.h"
 #import "MJCat.h"
+#import <MJExtensionTests-Swift.h>
 
 @interface MJExtensionTests : XCTestCase
 
@@ -440,13 +441,20 @@
     MJBag *bag = [[MJBag alloc] init];
     bag.name = @"Red bag";
     bag.price = 200.8;
+    bag.isBig = YES;
+    bag.weight = 200;
     
     NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
-    // 归档
-    [NSKeyedArchiver archiveRootObject:bag toFile:file];
     
+    NSError *error = nil;
+    // 归档
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
+    [data writeToFile:file atomically:true];
+
     // 解档
-    MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+    error = nil;
+    MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
     MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 }
 

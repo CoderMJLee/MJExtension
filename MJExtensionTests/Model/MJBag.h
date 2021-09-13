@@ -11,4 +11,6 @@
 @interface MJBag : NSObject
 @property (copy, nonatomic) NSString *name;
 @property (assign, nonatomic) double price;
+@property (nonatomic) BOOL isBig;
+@property (nonatomic) NSInteger weight;
 @end
