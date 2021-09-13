@@ -8,54 +8,34 @@ MJExtension
 
 [📜✍🏻**Release Notes**: more details](https://github.com/CoderMJLee/MJExtension/releases)
 
-### ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
-
-- [KakaJSON](https://github.com/kakaopensource/KakaJSON)
-- [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
-- 如果你的项目是用Swift写的Model，墙裂推荐使用[KakaJSON](https://github.com/kakaopensource/KakaJSON)
-  - 已经对各种常用的数据场景进行了大量的单元测试
-  - 简单易用、功能丰富、转换快速
-
-
-
-### Use the Framework in Swift [关于在Swift中使用MJExtension] ‼️
-
-> Example: 
->
-> - [Model - MJTester.swift](MJExtensionTests/SwiftModel/MJTester.swift)
->
-> - [Usage - SwiftModelTests.swift](MJExtensionTests/SwiftModelTests.swift)
-
-#### ‼️ `@objc` or `objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]‼️
-#### ‼️ Use `NSNumber` instead of `Bool`, which is not bridged to `BOOL`. [请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代] ‼️
-
 ## Contents
 
 * [Getting Started 【开始使用】](#Getting_Started)
 	* [Features 【能做什么】](#Features)
 	* [Installation 【安装】](#Installation)
 * [Examples 【示例】](#Examples)
-	* [JSON -> Model](#JSON_Model)
-	* [JSONString -> Model](#JSONString_Model)
-	* [Model contains model](#Model_contains_model)
-	* [Model contains model-array](#Model_contains_model_array)
-	* [Model name - JSON key mapping](#Model_name_JSON_key_mapping)
-	* [JSON array -> model array](#JSON_array_model_array)
-	* [Model -> JSON](#Model_JSON)
-	* [Model array -> JSON array](#Model_array_JSON_array)
-	* [Core Data](#Core_Data)
-	* [Coding](#Coding)
-	* [Secure Coding](#SecureCoding)
-	* [Camel -> underline](#Camel_underline)
-	* [NSString -> NSDate, nil -> @""](#NSString_NSDate)
-	* [NSDate -> NSString](#NSDate_NSString)
-	* [More use cases](#More_use_cases)
+  * [Usage in Swift](#usage_in_swift)
+  * [JSON -> Model](#JSON_Model)
+  * [JSONString -> Model](#JSONString_Model)
+  * [Model contains model](#Model_contains_model)
+  * [Model contains model-array](#Model_contains_model_array)
+  * [Model name - JSON key mapping](#Model_name_JSON_key_mapping)
+  * [JSON array -> model array](#JSON_array_model_array)
+  * [Model -> JSON](#Model_JSON)
+  * [Model array -> JSON array](#Model_array_JSON_array)
+  * [Core Data](#Core_Data)
+  * [Coding](#Coding)
+  * [Secure Coding](#SecureCoding)
+  * [Camel -> underline](#Camel_underline)
+  * [NSString -> NSDate, nil -> @""](#NSString_NSDate)
+  * [NSDate -> NSString](#NSDate_NSString)
+  * [More use cases](#More_use_cases)
 
 ---
 
-# <a id="Getting_Started"></a> Getting Started【开始使用】
+## <a id="Getting_Started"></a> Getting Started【开始使用】
 
-## <a id="Features"></a> Features【能做什么】
+### <a id="Features"></a> Features【能做什么】
 - MJExtension是一套字典和模型之间互相转换的超轻量级框架
 * `JSON` --> `Model`、`Core Data Model`
 * `JSONString` --> `Model`、`Core Data Model`
@@ -66,15 +46,15 @@ MJExtension
 * Coding all properties of a model with only one line of code.
     * 只需要一行代码，就能实现模型的所有属性进行Coding / SecureCoding（归档和解档）
 
-## <a id="Installation"></a> Installation【安装】
+### <a id="Installation"></a> Installation【安装】
 
-### From CocoaPods【使用CocoaPods】
+#### From CocoaPods【使用CocoaPods】
 
 ```ruby
 pod 'MJExtension'
 ```
 
-### Manually【手动导入】
+#### Manually【手动导入】
 - Drag all source files under folder `MJExtension` to your project.【将`MJExtension`文件夹中的所有源代码拽入项目中】
 - Import the main header file：`#import "MJExtension.h"`【导入主头文件：`#import "MJExtension.h"`】
 
@@ -89,9 +69,28 @@ NSObject+MJProperty.h   NSObject+MJProperty.m
 NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
 ```
 
-# <a id="Examples"></a> Examples【示例】
+## <a id="Examples"></a> Examples【示例】
 
 **Add `MJKeyValue` protocol to your model if needed【如果有需要, 请在模型中加入 `MJKeyValue` 协议】**
+
+### <a id="usage_in_swift"></a> Usage in Swift [关于在Swift中使用MJExtension] ‼️
+
+> Example: 
+>
+> - [Model - MJTester.swift](MJExtensionTests/SwiftModel/MJTester.swift)
+>
+> - [Usage - SwiftModelTests.swift](MJExtensionTests/SwiftModelTests.swift)
+
+1.  `@objc` or `@objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `@objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]
+2.  If you let `Bool` & `Int` as property type, make sure that using `dynamic` to attribute it. It must be `Non-Optional` type and assign `a default value`.
+
+> 纯Swift版的JSON与Model转换框架已经开源上架
+>
+> - [KakaJSON](https://github.com/kakaopensource/KakaJSON)
+> - [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
+> - 如果你的项目是用Swift写的Model，墙裂推荐使用[KakaJSON](https://github.com/kakaopensource/KakaJSON)
+>   - 已经对各种常用的数据场景进行了大量的单元测试
+>   - 简单易用、功能丰富、转换快速
 
 ### <a id="JSON_Model"></a> The most simple JSON -> Model【最简单的字典转模型】
 
