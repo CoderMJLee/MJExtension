@@ -12,7 +12,7 @@ import MJExtension
 @objc(MJTester)
 @objcMembers
 class MJTester: NSObject {
-    // be sure use dynamic attribute for basic type & must use as Non-Optional & must set initial value
+    // make sure to use `dynamic` attribute for basic type & must use as Non-Optional & must set initial value
     dynamic var isSpecialAgent: Bool = false
     dynamic var age: Int = 0
     
