@@ -7,21 +7,15 @@
 //
 
 import Foundation
+import MJExtension
 
 @objc(MJTester)
+@objcMembers
 class MJTester: NSObject {
-    var isSpecialAgent: Bool { _isSpecialAgent?.boolValue ?? false }
-    var age: Int { _age?.intValue ?? 0 }
+    // make sure to use `dynamic` attribute for basic type & must use as Non-Optional & must set initial value
+    dynamic var isSpecialAgent: Bool = false
+    dynamic var age: Int = 0
     
-    @objc private var _isSpecialAgent: NSNumber?
-    @objc private var _age: NSNumber?
-    @objc var name: String?
-    @objc var identifier: String?
-    
-    override class func mj_replacedKeyFromPropertyName() -> [AnyHashable : Any]! {
-        return [
-            "_isSpecialAgent": "isSpecialAgent",
-            "_age": "age"
-        ]
-    }
+    var name: String?
+    var identifier: String?
 }
