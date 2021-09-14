@@ -97,7 +97,7 @@ class MJTester: NSObject {
 ```
 
 1.  `@objc` or `@objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `@objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]
-2.  If you let `Bool` & `Int` as property type, make sure that using `dynamic` to attribute it. It must be `Non-Optional` type and assign `a default value`.
+2.  If you let `Bool` & `Int` as property type, make sure that using `dynamic` to attribute it. It must be `Non-Optional` type and assign `a default value`.[如果要使用 `Bool` 和 `Int` 等 Swfit 专用基本类型, 请使用 `dynamic` 关键字修饰, 类型为 `Non-Optional`, 並且给定初始值.]
 
 > 纯Swift版的JSON与Model转换框架已经开源上架
 >
