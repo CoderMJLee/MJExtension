@@ -1,8 +1,10 @@
 MJExtension
 ===
+[![SPM supported](https://img.shields.io/badge/SPM-supported-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)
 ![Platform](https://img.shields.io/cocoapods/p/MJExtension.svg?style=flat)
+
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
@@ -48,26 +50,26 @@ MJExtension
 
 ### <a id="Installation"></a> Installation【安装】
 
-#### From CocoaPods【使用CocoaPods】
+#### CocoaPods【使用CocoaPods】
 
 ```ruby
 pod 'MJExtension'
 ```
 
+#### Carthage
+
+```ruby
+github "CoderMJLee/MJExtension"
+```
+
+#### Swift Package Manager
+
+Released from [`3.4.0`](https://github.com/CoderMJLee/MJExtension/releases/)
+
 #### Manually【手动导入】
+
 - Drag all source files under folder `MJExtension` to your project.【将`MJExtension`文件夹中的所有源代码拽入项目中】
 - Import the main header file：`#import "MJExtension.h"`【导入主头文件：`#import "MJExtension.h"`】
-
-```objc
-MJExtension.h
-MJConst.h               MJConst.m
-MJFoundation.h          MJFoundation.m
-MJProperty.h            MJProperty.m
-MJType.h                MJType.m
-NSObject+MJCoding.h     NSObject+MJCoding.m
-NSObject+MJProperty.h   NSObject+MJProperty.m
-NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
-```
 
 ## <a id="Examples"></a> Examples【示例】
 
