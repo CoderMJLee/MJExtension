@@ -81,6 +81,19 @@ NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
 >
 > - [Usage - SwiftModelTests.swift](MJExtensionTests/SwiftModelTests.swift)
 
+```swift
+@objc(MJTester)
+@objcMembers
+class MJTester: NSObject {
+    // make sure to use `dynamic` attribute for basic type & must use as Non-Optional & must set initial value
+    dynamic var isSpecialAgent: Bool = false
+    dynamic var age: Int = 0
+    
+    var name: String?
+    var identifier: String?
+}
+```
+
 1.  `@objc` or `@objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `@objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]
 2.  If you let `Bool` & `Int` as property type, make sure that using `dynamic` to attribute it. It must be `Non-Optional` type and assign `a default value`.
 
