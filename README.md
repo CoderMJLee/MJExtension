@@ -462,22 +462,20 @@ NSLog(@"%@", dictArray);
 
 ### <a id="Core_Data"></a> Core Data
 
-```objc
-NSDictionary *dict = @{
-                         @"name" : @"Jack",
-                         @"icon" : @"lufy.png",
-                         @"age" : @20,
-                         @"height" : @1.55,
-                         @"money" : @"100.9",
-                         @"sex" : @(SexFemale),
-                         @"gay" : @"true"
-                     };
+```swift
+func json2CoreDataObject() {
+    context.performAndWait {
+        let object = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context)
+        // use the object
+    }
+}
 
-// This demo just provide simple steps
-NSManagedObjectContext *context = nil;
-User *user = [User mj_objectWithKeyValues:dict context:context];
-
-[context save:nil];
+func coreDataObject2JSON() {
+    context.performAndWait {        
+        let dict = coreDataObject.mj_keyValues()
+        // use dict
+    }
+}
 ```
 
 ### <a id="Coding"></a> Coding (Archive & Unarchive methods are deprecated in iOS 12)

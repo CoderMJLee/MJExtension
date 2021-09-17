@@ -17,10 +17,8 @@ class CoreDataTests: XCTestCase {
         try super.setUpWithError()
         
         let container = NSPersistentContainer(name: "MJCoreDataTestModel")
-        let description = NSPersistentStoreDescription()
-        description.url = URL(fileURLWithPath: "/dev/null")
-        
-        container.persistentStoreDescriptions = [description]
+        // Test in memory. This is important.
+        container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         container.loadPersistentStores { description, error in
             XCTAssertNil(error)
         }
@@ -56,19 +54,22 @@ class CoreDataTests: XCTestCase {
         coreDataObject2JSON()
     }
     
-    func json2CoreDataObject() {
+func json2CoreDataObject() {
+    context.performAndWait {
         guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
             XCTAssert(false, "conversion to core data object failed")
             return
         }
-        
+    
         XCTAssert(tester.isJuan == Values.isJuan)
         XCTAssert(tester.identifier == Values.identifier)
         XCTAssert(tester.name == Values.name)
         XCTAssert(tester.age == Values.age)
     }
-    
-    func coreDataObject2JSON() {
+}
+
+func coreDataObject2JSON() {
+    context.performAndWait {
         let coreDataObject =  NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
         coreDataObject.name = Values.name
         coreDataObject.age = Int16(Values.age)
@@ -85,5 +86,6 @@ class CoreDataTests: XCTestCase {
         XCTAssert(dict["name"] as? String == Values.name)
         XCTAssert(dict["age"] as! Int == Values.age)
     }
+}
 
 }
