@@ -54,38 +54,38 @@ class CoreDataTests: XCTestCase {
         coreDataObject2JSON()
     }
     
-func json2CoreDataObject() {
-    context.performAndWait {
-        guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
-            XCTAssert(false, "conversion to core data object failed")
-            return
+    func json2CoreDataObject() {
+        context.performAndWait {
+            guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
+                XCTAssert(false, "conversion to core data object failed")
+                return
+            }
+            
+            XCTAssert(tester.isJuan == Values.isJuan)
+            XCTAssert(tester.identifier == Values.identifier)
+            XCTAssert(tester.name == Values.name)
+            XCTAssert(tester.age == Values.age)
         }
+    }
     
-        XCTAssert(tester.isJuan == Values.isJuan)
-        XCTAssert(tester.identifier == Values.identifier)
-        XCTAssert(tester.name == Values.name)
-        XCTAssert(tester.age == Values.age)
-    }
-}
-
-func coreDataObject2JSON() {
-    context.performAndWait {
-        let coreDataObject =  NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
-        coreDataObject.name = Values.name
-        coreDataObject.age = Int16(Values.age)
-        coreDataObject.isJuan = Values.isJuan
-        coreDataObject.identifier = Values.identifier
-        
-        guard let dict = coreDataObject.mj_keyValues() else {
-            XCTAssert(false, "conversion to keyValues failed")
-            return
+    func coreDataObject2JSON() {
+        context.performAndWait {
+            let coreDataObject =  NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
+            coreDataObject.name = Values.name
+            coreDataObject.age = Int16(Values.age)
+            coreDataObject.isJuan = Values.isJuan
+            coreDataObject.identifier = Values.identifier
+            
+            guard let dict = coreDataObject.mj_keyValues() else {
+                XCTAssert(false, "conversion to keyValues failed")
+                return
+            }
+            
+            XCTAssert(dict["isJuan"] as! Bool == Values.isJuan)
+            XCTAssert(dict["identifier"] as? String == Values.identifier)
+            XCTAssert(dict["name"] as? String == Values.name)
+            XCTAssert(dict["age"] as! Int == Values.age)
         }
-        
-        XCTAssert(dict["isJuan"] as! Bool == Values.isJuan)
-        XCTAssert(dict["identifier"] as? String == Values.identifier)
-        XCTAssert(dict["name"] as? String == Values.name)
-        XCTAssert(dict["age"] as! Int == Values.age)
     }
-}
 
 }
