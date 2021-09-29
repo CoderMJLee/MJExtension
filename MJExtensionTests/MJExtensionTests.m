@@ -18,6 +18,8 @@
 #import "MJBox.h"
 #import <CoreData/CoreData.h>
 #import "MJFrenchUser.h"
+#import "MJCat.h"
+#import <MJExtensionTests-Swift.h>
 
 @interface MJExtensionTests : XCTestCase
 
@@ -383,28 +385,6 @@
     MJExtensionLog(@"%@", dictArray);
 }
 
-#pragma mark CoreData示例
-- (void)testCoreData {
-    NSDictionary *dict = @{
-                           @"name" : @"Jack",
-                           @"icon" : @"lufy.png",
-                           @"age" : @20,
-                           @"height" : @1.55,
-                           @"money" : @"100.9",
-                           @"sex" : @(SexFemale),
-                           @"gay" : @"true"
-                           };
-    
-    // 这个Demo仅仅提供思路，具体的方法参数需要自己创建
-    NSManagedObjectContext *context = nil;
-    MJUser *user = [MJUser mj_objectWithKeyValues:dict context:context];
-    
-    // 利用CoreData保存模型
-    [context save:nil];
-    
-    MJExtensionLog(@"name=%@, icon=%@, age=%d, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
-}
-
 #pragma mark NSNull相关的测试
 - (void)testNull {
     NSNull *null = [NSNull null];
@@ -444,6 +424,19 @@
                           };
     MJUser *testNull = [MJUser mj_objectWithKeyValues:dic];
     MJExtensionLog(@"%@", testNull);
+    
+    
+    NSDictionary *catDict = @{
+        @"name": @"Tom",
+        @"address": [NSNull null],
+        @"nicknames": @[
+                @"Jerry's Heart",
+                [NSNull null],
+                @"Cowboy Tom",
+        ]
+    };
+    MJCat *cat = [MJCat mj_objectWithKeyValues:catDict];
+    MJExtensionLog(@"%@", cat);
 }
 
 #pragma mark NSCoding示例
@@ -452,13 +445,20 @@
     MJBag *bag = [[MJBag alloc] init];
     bag.name = @"Red bag";
     bag.price = 200.8;
+    bag.isBig = YES;
+    bag.weight = 200;
     
     NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
-    // 归档
-    [NSKeyedArchiver archiveRootObject:bag toFile:file];
     
+    NSError *error = nil;
+    // 归档
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
+    [data writeToFile:file atomically:true];
+
     // 解档
-    MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+    error = nil;
+    MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
     MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 }
 
@@ -482,6 +482,7 @@
 
 #pragma mark 过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）
 - (void)testNewValueFromOldValue {
+    // JSON -> Object
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"name" : @"5分钟突破iOS开发",
@@ -496,6 +497,12 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     fmt.dateFormat = @"yyyy-MM-dd";
     XCTAssert([[fmt stringFromDate:book.publishedTime] isEqual:@"2011-09-10"]);
+    
+    //Object -> JSON
+    NSDictionary *bookDict = [book mj_keyValues];
+    
+    XCTAssert([bookDict[@"name"] isEqualToString:@"5分钟突破iOS开发"]);
+    XCTAssert([bookDict[@"publishedTime"] isEqualToString:@"2011-09-10"]);
 }
 
 #pragma mark 使用MJExtensionLog打印模型的所有属性

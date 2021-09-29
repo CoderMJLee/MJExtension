@@ -10,9 +10,10 @@
 
 @import MJExtension;
 
+// NSSecureCoding实现
+MJSecureCodingImplementation(MJBag, YES)
+
 @implementation MJBag
-// NSCoding实现
-MJExtensionCodingImplementation
 
 //+ (NSArray *)mj_ignoredCodingPropertyNames
 //{

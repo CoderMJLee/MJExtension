@@ -1,11 +1,14 @@
 ---
 name: Bug上报
-about: 提交Bug让框架更加健壮
+about: 提交Bug让框架更加健壮, 务必提供 Demo
 title: ''
 labels: ''
 assignees: ''
 
 ---
+
+## 为了排除你自己的问题, 请写一个 Demo
+最好能提供出现bug的Demo
 
 **描述bug**
 清晰简单地描述这个bug是啥
@@ -23,9 +26,6 @@ assignees: ''
 如果有必要的话，请上传几张截图
 
 **运行环境**
- - iPhone6
- - iOS8.1
- - Xcode10
-
-**额外的**
-最好能提供出现bug的Demo
+ - iPhoneX
+ - iOS 12
+ - Xcode 11

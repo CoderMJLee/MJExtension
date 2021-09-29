@@ -19,7 +19,7 @@
 
 @implementation NSDecimalNumber(MJKeyValue)
 
-- (id)standardValueWithTypeCode:(NSString *)typeCode {
+- (id)mj_standardValueWithTypeCode:(NSString *)typeCode {
     // 由于这里涉及到编译器问题, 暂时保留 Long, 实际上在 64 位系统上, 这 2 个精度范围相同,
     // 32 位略有不同, 其余都可使用 Double 进行强转不丢失精度
     if ([typeCode isEqualToString:MJPropertyTypeLongLong]) {
@@ -188,7 +188,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     if (decimalValue == NSDecimalNumber.notANumber) {
                         value = @(0);
                     }else if (propertyClass != [NSDecimalNumber class]) {
-                        value = [decimalValue standardValueWithTypeCode:type.code];
+                        value = [decimalValue mj_standardValueWithTypeCode:type.code];
                     } else {
                         value = decimalValue;
                     }
@@ -222,6 +222,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
             MJExtensionLog(@"%@", exception);
+#ifdef DEBUG
+            [exception raise];
+#endif
         }
     }];
     
@@ -253,7 +256,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], nil, [self class], @"keyValues参数不是一个字典");
     
     if ([self isSubclassOfClass:[NSManagedObject class]] && context) {
-        NSString *entityName = [NSStringFromClass(self) componentsSeparatedByString:@"."].lastObject;
+        NSString *entityName = [(NSManagedObject *)self entity].name;
         return [[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context] mj_setKeyValues:keyValues context:context];
     }
     return [[[self alloc] init] mj_setKeyValues:keyValues];
@@ -438,6 +441,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
             MJExtensionLog(@"%@", exception);
+#ifdef DEBUG
+            [exception raise];
+#endif
         }
     }];
     

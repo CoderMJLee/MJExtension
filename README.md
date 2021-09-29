@@ -1,28 +1,14 @@
 MJExtension
 ===
+[![SPM supported](https://img.shields.io/badge/SPM-supported-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)
+![Platform](https://img.shields.io/cocoapods/p/MJExtension.svg?style=flat)
+
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
 - 转换速度快、使用简单方便的字典转模型框架
 
-
-
-## ‼️ 纯Swift版的JSON与Model转换框架已经开源上架 ‼️
-
-- [KakaJSON](https://github.com/kakaopensource/KakaJSON)
-- [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
-- 如果你的项目是用Swift写的Model，墙裂推荐使用[KakaJSON](https://github.com/kakaopensource/KakaJSON)
-  - 已经对各种常用的数据场景进行了大量的单元测试
-  - 简单易用、功能丰富、转换快速
-
-
-
-## 关于在Swift中使用MJExtension ‼️
-
-### ‼️ `@objc` attributes should be added to class and property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰. 以保证 Swift 的属性能够暴露给 Objc 使用. ]‼️
-### ‼️ Use `NSNumber` instead of `Bool`, which is not bridged to `BOOL`. [请勿使用 `Bool` 类型, 因为在 Swift 中并没有桥接该类型, 不能显式的对应 `BOOL`, 请使用 `NSNumber` 替代] ‼️
-
-
+[📜✍🏻**Release Notes**: more details](https://github.com/CoderMJLee/MJExtension/releases)
 
 ## Contents
 
@@ -30,25 +16,28 @@ MJExtension
 	* [Features 【能做什么】](#Features)
 	* [Installation 【安装】](#Installation)
 * [Examples 【示例】](#Examples)
-	* [JSON -> Model](#JSON_Model)
-	* [JSONString -> Model](#JSONString_Model)
-	* [Model contains model](#Model_contains_model)
-	* [Model contains model-array](#Model_contains_model_array)
-	* [Model name - JSON key mapping](#Model_name_JSON_key_mapping)
-	* [JSON array -> model array](#JSON_array_model_array)
-	* [Model -> JSON](#Model_JSON)
-	* [Model array -> JSON array](#Model_array_JSON_array)
-	* [Core Data](#Core_Data)
-	* [Coding](#Coding)
-	* [Camel -> underline](#Camel_underline)
-	* [NSString -> NSDate, nil -> @""](#NSString_NSDate)
-	* [More use cases](#More_use_cases)
+  * [Usage in Swift](#usage_in_swift)
+  * [JSON -> Model](#JSON_Model)
+  * [JSONString -> Model](#JSONString_Model)
+  * [Model contains model](#Model_contains_model)
+  * [Model contains model-array](#Model_contains_model_array)
+  * [Model name - JSON key mapping](#Model_name_JSON_key_mapping)
+  * [JSON array -> model array](#JSON_array_model_array)
+  * [Model -> JSON](#Model_JSON)
+  * [Model array -> JSON array](#Model_array_JSON_array)
+  * [Core Data](#Core_Data)
+  * [Coding](#Coding)
+  * [Secure Coding](#SecureCoding)
+  * [Camel -> underline](#Camel_underline)
+  * [NSString -> NSDate, nil -> @""](#NSString_NSDate)
+  * [NSDate -> NSString](#NSDate_NSString)
+  * [More use cases](#More_use_cases)
 
 ---
 
-# <a id="Getting_Started"></a> Getting Started【开始使用】
+## <a id="Getting_Started"></a> Getting Started【开始使用】
 
-## <a id="Features"></a> Features【能做什么】
+### <a id="Features"></a> Features【能做什么】
 - MJExtension是一套字典和模型之间互相转换的超轻量级框架
 * `JSON` --> `Model`、`Core Data Model`
 * `JSONString` --> `Model`、`Core Data Model`
@@ -57,32 +46,66 @@ MJExtension
 * `JSONString` --> `Model Array`、`Core Data Model Array`
 * `Model Array`、`Core Data Model Array` --> `JSON Array`
 * Coding all properties of a model with only one line of code.
-    * 只需要一行代码，就能实现模型的所有属性进行Coding（归档和解档）
+    * 只需要一行代码，就能实现模型的所有属性进行Coding / SecureCoding（归档和解档）
 
-## <a id="Installation"></a> Installation【安装】
+### <a id="Installation"></a> Installation【安装】
 
-### From CocoaPods【使用CocoaPods】
+#### CocoaPods【使用CocoaPods】
 
 ```ruby
 pod 'MJExtension'
 ```
 
-### Manually【手动导入】
+#### Carthage
+
+```ruby
+github "CoderMJLee/MJExtension"
+```
+
+#### Swift Package Manager
+
+Released from [`3.4.0`](https://github.com/CoderMJLee/MJExtension/releases/)
+
+#### Manually【手动导入】
+
 - Drag all source files under folder `MJExtension` to your project.【将`MJExtension`文件夹中的所有源代码拽入项目中】
 - Import the main header file：`#import "MJExtension.h"`【导入主头文件：`#import "MJExtension.h"`】
 
-```objc
-MJExtension.h
-MJConst.h               MJConst.m
-MJFoundation.h          MJFoundation.m
-MJProperty.h            MJProperty.m
-MJType.h                MJType.m
-NSObject+MJCoding.h     NSObject+MJCoding.m
-NSObject+MJProperty.h   NSObject+MJProperty.m
-NSObject+MJKeyValue.h   NSObject+MJKeyValue.m
+## <a id="Examples"></a> Examples【示例】
+
+**Add `MJKeyValue` protocol to your model if needed【如果有需要, 请在模型中加入 `MJKeyValue` 协议】**
+
+### <a id="usage_in_swift"></a> Usage in Swift [关于在Swift中使用MJExtension] ‼️
+
+> Example: 
+>
+> - [Model - MJTester.swift](MJExtensionTests/SwiftModel/MJTester.swift)
+>
+> - [Usage - SwiftModelTests.swift](MJExtensionTests/SwiftModelTests.swift)
+
+```swift
+@objc(MJTester)
+@objcMembers
+class MJTester: NSObject {
+    // make sure to use `dynamic` attribute for basic type & must use as Non-Optional & must set initial value
+    dynamic var isSpecialAgent: Bool = false
+    dynamic var age: Int = 0
+    
+    var name: String?
+    var identifier: String?
+}
 ```
 
-# <a id="Examples"></a> Examples【示例】
+1.  `@objc` or `@objcMembers` attributes should be added to class or property for declaration of Objc accessibility [在 Swift4 之后, 请在属性前加 `@objc` 修饰或在类前增加 `@objcMembers`. 以保证 Swift 的属性能够暴露给 Objc 使用. ]
+2.  If you let `Bool` & `Int` as property type, make sure that using `dynamic` to attribute it. It must be `Non-Optional` type and assign `a default value`.[如果要使用 `Bool` 和 `Int` 等 Swfit 专用基本类型, 请使用 `dynamic` 关键字修饰, 类型为 `Non-Optional`, 並且给定初始值.]
+
+> 纯Swift版的JSON与Model转换框架已经开源上架
+>
+> - [KakaJSON](https://github.com/kakaopensource/KakaJSON)
+> - [中文教程](https://www.cnblogs.com/mjios/p/11352776.html)
+> - 如果你的项目是用Swift写的Model，墙裂推荐使用[KakaJSON](https://github.com/kakaopensource/KakaJSON)
+>   - 已经对各种常用的数据场景进行了大量的单元测试
+>   - 简单易用、功能丰富、转换快速
 
 ### <a id="JSON_Model"></a> The most simple JSON -> Model【最简单的字典转模型】
 
@@ -439,58 +462,99 @@ NSLog(@"%@", dictArray);
 
 ### <a id="Core_Data"></a> Core Data
 
-```objc
-NSDictionary *dict = @{
-                         @"name" : @"Jack",
-                         @"icon" : @"lufy.png",
-                         @"age" : @20,
-                         @"height" : @1.55,
-                         @"money" : @"100.9",
-                         @"sex" : @(SexFemale),
-                         @"gay" : @"true"
-                     };
+```swift
+func json2CoreDataObject() {
+    context.performAndWait {
+        let object = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context)
+        // use the object
+    }
+}
 
-// This demo just provide simple steps
-NSManagedObjectContext *context = nil;
-User *user = [User mj_objectWithKeyValues:dict context:context];
-
-[context save:nil];
+func coreDataObject2JSON() {
+    context.performAndWait {        
+        let dict = coreDataObject.mj_keyValues()
+        // use dict
+    }
+}
 ```
 
-### <a id="Coding"></a> Coding
+### <a id="Coding"></a> Coding (Archive & Unarchive methods are deprecated in iOS 12)
 
 ```objc
 #import "MJExtension.h"
 
-@implementation Bag
+@implementation MJBag
 // NSCoding Implementation
-MJExtensionCodingImplementation
+MJCodingImplementation
 @end
 
 /***********************************************/
 
 // what properties not to be coded
-[Bag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+[MJBag mj_setupIgnoredCodingPropertyNames:^NSArray *{
     return @[@"name"];
 }];
-// Equals: Bag.m implements +mj_ignoredCodingPropertyNames method.
+// Equals: MJBag.m implements +mj_ignoredCodingPropertyNames method.
 
 // Create model
-Bag *bag = [[Bag alloc] init];
+MJBag *bag = [[MJBag alloc] init];
 bag.name = @"Red bag";
 bag.price = 200.8;
 
 NSString *file = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/bag.data"];
-// Encoding
+// Encoding by archiving
 [NSKeyedArchiver archiveRootObject:bag toFile:file];
 
-// Decoding
-Bag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+// Decoding by unarchiving
+MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 NSLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
 // name=(null), price=200.800000
 ```
 
+### <a id="SecureCoding"></a> Secure Coding
+
+Using `MJSecureCodingImplementation(class, isSupport)` macro.
+
+```objc
+@import MJExtension;
+
+// NSSecureCoding Implementation
+MJSecureCodingImplementation(MJBag, YES)
+
+@implementation MJBag
+@end
+
+ /***********************************************/
+
+// what properties not to be coded
+[MJBag mj_setupIgnoredCodingPropertyNames:^NSArray *{
+    return @[@"name"];
+}];
+// Equals: MJBag.m implements +mj_ignoredCodingPropertyNames method.
+
+// Create model
+MJBag *bag = [[MJBag alloc] init];
+bag.name = @"Red bag";
+bag.price = 200.8;
+bag.isBig = YES;
+bag.weight = 200;
+
+NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"bag.data"];
+
+NSError *error = nil;
+// Encoding by archiving
+NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
+[data writeToFile:file atomically:true];
+
+// Decoding by unarchiving
+NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+error = nil;
+MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
+MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+```
+
 ### <a id="Camel_underline"></a> Camel -> underline【统一转换属性名（比如驼峰转下划线）】
+
 ```objc
 // Dog
 #import "MJExtension.h"
@@ -548,7 +612,21 @@ Book *book = [Book mj_objectWithKeyValues:dict];
 NSLog(@"name=%@, publisher=%@, publishedTime=%@", book.name, book.publisher, book.publishedTime);
 ```
 
+### <a id="NSDate_NSString"></a> NSDate -> NSString【模型转字典时, 修改 Date 类型至 String】
+
+```objc
+- (void)mj_objectDidConvertToKeyValues:(NSMutableDictionary *)keyValues {
+    // NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    // formatter.dateFormat = @"yyy-MM-dd";
+    // should use sharedFormatter for better performance  
+    keyValues[@"publishedTime"] = [sharedFormatter stringFromDate:self.publishedTime];
+}
+```
+
+
+
 ### <a id="More_use_cases"></a> More use cases【更多用法】
+
 - Please reference to `NSObject+MJKeyValue.h` and `NSObject+MJCoding.h`
 
 
