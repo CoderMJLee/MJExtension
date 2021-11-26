@@ -2,7 +2,7 @@ MJExtension
 ===
 [![SPM supported](https://img.shields.io/badge/SPM-supported-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)
+[![podversion](https://img.shields.io/cocoapods/v/MJExtension.svg)](https://cocoapods.org/pods/MJExtension)
 ![Platform](https://img.shields.io/cocoapods/p/MJExtension.svg?style=flat)
 
 - A fast, convenient and nonintrusive conversion framework between JSON and model.
