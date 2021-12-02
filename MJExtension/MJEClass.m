@@ -101,6 +101,8 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
             }
         }
         
+        if (!shouldAutoInheritFromSuper) break;
+        
         Class superClass = class_getSuperclass(currentClass);
         // current class is root class (NSObject / NSProxy)
         if (currentClass && !superClass) break;
