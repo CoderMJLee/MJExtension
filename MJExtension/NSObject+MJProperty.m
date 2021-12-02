@@ -13,6 +13,7 @@
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import <objc/runtime.h>
+#import "MJEClass.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -29,6 +30,10 @@ dispatch_semaphore_t mje_signalSemaphore;
 dispatch_once_t mje_onceTokenSemaphore;
 
 @implementation NSObject (Property)
+
++ (NSArray *)mj_properties_refactored {
+    return [MJEClass cachedClass:self]->_allProperties;
+}
 
 + (NSMutableDictionary *)mj_propertyDictForKey:(const void *)key
 {
@@ -138,6 +143,8 @@ dispatch_once_t mje_onceTokenSemaphore;
 #pragma mark - 公共方法
 + (NSArray *)mj_properties
 {
+    return [self mj_properties_refactored];
+    
     MJExtensionSemaphoreCreate
     MJ_LOCK(mje_signalSemaphore);
     NSMutableDictionary *cachedInfo = [self mj_propertyDictForKey:&MJCachedPropertiesKey];
@@ -159,8 +166,8 @@ dispatch_once_t mje_onceTokenSemaphore;
                 if ([MJFoundation isFromNSObjectProtocolProperty:property.name]) continue;
                 
                 property.srcClass = c;
-                [property setOriginKey:[self mj_propertyKey:property.name] forClass:self];
-                [property setObjectClassInArray:[self mj_propertyObjectClassInArray:property.name] forClass:self];
+                [property handleOriginKey:[self mj_propertyKey:property.name]];
+                property.classInArray = [self mj_propertyObjectClassInArray:property.name];
                 [cachedProperties addObject:property];
             }
             
@@ -168,9 +175,9 @@ dispatch_once_t mje_onceTokenSemaphore;
             free(properties);
         }];
         
-        cachedInfo[NSStringFromClass(self)] = cachedProperties;
+        cachedInfo[NSStringFromClass(self)] = cachedProperties.copy;
     }
-    NSArray *properties = [cachedProperties copy];
+    NSArray *properties = cachedProperties;
     MJ_UNLOCK(mje_signalSemaphore);
     
     return properties;

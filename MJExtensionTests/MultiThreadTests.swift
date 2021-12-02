@@ -73,38 +73,6 @@ class MultiThreadTests: XCTestCase {
                     expectation4Cat.fulfill()
                 }
             }
-            
-            concurrentQueue.async {
-                sleep(1)
-                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
-                    ["name", "identifier"]
-                }
-                print("change allowPropertyNames: (name, identifier) \(id)")
-            }
-            
-            concurrentQueue.async {
-                sleep(1)
-                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
-                    ["name"]
-                }
-                print("change allowPropertyNames: (name) \(id)")
-            }
-            
-            concurrentQueue.async {
-                sleep(1)
-                MJTester.mj_setupAllowedPropertyNames { () -> [Any]? in
-                    ["isSpecialAgent", "age"]
-                }
-                print("change allowPropertyNames: (isSpecialAgent, age) \(id)")
-            }
-            
-            concurrentQueue.async {
-                sleep(1)
-                MJUser.mj_setupAllowedPropertyNames { () -> [Any]? in
-                    ["name", "nicknames"]
-                }
-                print("change allowPropertyNames: (name, nicknames) \(id)")
-            }
         }
         
         waitForExpectations(timeout: 15, handler: nil)

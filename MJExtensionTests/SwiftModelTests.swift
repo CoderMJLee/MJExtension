@@ -24,17 +24,25 @@ class SwiftModelTests: XCTestCase {
             "isSpecialAgent": true,
             "identifier": "007",
             "age": 22,
-            "name": "Juan"
+            "name": "Juan",
+            "child": "im"
         ]
         
-        guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
-            XCTAssert(false, "conversion failed")
-            return
+        for _ in 0...5 {
+            guard let tester1 = MJSuperTester.mj_object(withKeyValues: testerDict) else {
+                XCTAssert(false, "conversion failed")
+                return
+            }
+            guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
+                XCTAssert(false, "conversion failed")
+                return
+            }
+            
+            XCTAssert(tester.isSpecialAgent)
+            XCTAssert(tester.identifier == testerDict["identifier"] as? String)
+            XCTAssert(tester.age == testerDict["age"] as! Int)
+            XCTAssert(tester.name == testerDict["name"] as? String)
         }
-        XCTAssert(tester.isSpecialAgent)
-        XCTAssert(tester.identifier == testerDict["identifier"] as? String)
-        XCTAssert(tester.age == testerDict["age"] as! Int)
-        XCTAssert(tester.name == testerDict["name"] as? String)
     }
 
     // MARK: 🌈 Use Objective-C model code

@@ -25,15 +25,16 @@
 /** 成员属性来源于哪个类（可能是父类） */
 @property (nonatomic, assign) Class srcClass;
 
+@property (strong, readonly, nonatomic) NSArray *propertyKeys;
+@property (nonatomic) Class classInArray;
+@property (nonatomic, assign) BOOL isMultiMapping;
+@property (nonatomic, strong) NSString *originalKey;
+
 /**** 同一个成员属性 - 父类和子类的行为可能不一致（originKey、propertyKeys、objectClassInArray） ****/
 /** 设置最原始的key */
-- (void)setOriginKey:(id)originKey forClass:(Class)c;
-/** 对应着字典中的多级key（里面存放的数组，数组里面都是MJPropertyKey对象） */
-- (NSArray *)propertyKeysForClass:(Class)c;
+- (void)handleOriginKey:(id)originKey;
 
 /** 模型数组中的模型类型 */
-- (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c;
-- (Class)objectClassInArrayForClass:(Class)c;
 /**** 同一个成员变量 - 父类和子类的行为可能不一致（key、keys、objectClassInArray） ****/
 
 /**

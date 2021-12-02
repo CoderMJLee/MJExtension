@@ -15,8 +15,12 @@ MJSecureCodingImplementation(MJBag, YES)
 
 @implementation MJBag
 
-//+ (NSArray *)mj_ignoredCodingPropertyNames
-//{
-//    return @[@"name"];
++ (NSArray *)mj_ignoredCodingPropertyNames {
+    return @[@"name"];
+}
+
+//+ (NSArray *)mj_allowedCodingPropertyNames {
+//    return @[@"price"];
 //}
+
 @end

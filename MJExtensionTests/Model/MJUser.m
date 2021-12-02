@@ -11,8 +11,7 @@
 @import MJExtension;
 
 @implementation MJUser
-//+ (NSArray *)mj_allowedPropertyNames
-//{
+//+ (NSArray *)mj_allowedPropertyNames {
 //    return @[@"name", @"icon"];
 //}
 MJExtensionLogAllProperties

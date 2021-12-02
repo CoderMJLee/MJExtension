@@ -9,13 +9,19 @@
 import Foundation
 import MJExtension
 
-@objc(MJTester)
+@objc(MJSuperTester)
 @objcMembers
-class MJTester: NSObject {
+class MJSuperTester: NSObject {
     // make sure to use `dynamic` attribute for basic type & must use as Non-Optional & must set initial value
     dynamic var isSpecialAgent: Bool = false
     dynamic var age: Int = 0
     
     var name: String?
     var identifier: String?
+}
+
+@objc(MJTester)
+@objcMembers
+class MJTester: MJSuperTester {
+    var child: String?
 }

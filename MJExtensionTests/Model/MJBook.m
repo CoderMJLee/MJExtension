@@ -10,18 +10,17 @@
 //#import "MJExtension.h"
 
 @implementation MJBook
-//- (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property
-//{
-//    if ([property.name isEqualToString:@"publisher"]) {
-//        if (oldValue == nil) return @"";
-//    } else if (property.type.typeClass == [NSDate class]) {
-//        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-//        fmt.dateFormat = @"yyyy-MM-dd";
-//        return [fmt dateFromString:oldValue];
-//    }
-//    
-//    return oldValue;
-//}
+- (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property {
+    if ([property.name isEqualToString:@"publisher"]) {
+        if (oldValue == nil || oldValue == NSNull.null) return @"";
+    } else if (property.type.typeClass == [NSDate class]) {
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        fmt.dateFormat = @"yyyy-MM-dd";
+        return [fmt dateFromString:oldValue];
+    }
+        
+    return oldValue;
+}
 
 - (void)mj_objectDidConvertToKeyValues:(NSMutableDictionary *)keyValues {
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];

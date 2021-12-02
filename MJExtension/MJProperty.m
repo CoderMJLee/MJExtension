@@ -13,35 +13,19 @@
 #include "TargetConditionals.h"
 
 @interface MJProperty()
-@property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
-@property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
-@property (strong, nonatomic) dispatch_semaphore_t propertyKeysLock;
-@property (strong, nonatomic) dispatch_semaphore_t objectClassInArrayLock;
 @end
 
 @implementation MJProperty
 
-#pragma mark - 初始化
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _propertyKeysDict = [NSMutableDictionary dictionary];
-        _objectClassInArrayDict = [NSMutableDictionary dictionary];
-        _propertyKeysLock = dispatch_semaphore_create(1);
-        _objectClassInArrayLock = dispatch_semaphore_create(1);
-    }
-    return self;
-}
-
 #pragma mark - 缓存
 + (instancetype)cachedPropertyWithProperty:(objc_property_t)property
 {
-    MJProperty *propertyObj = objc_getAssociatedObject(self, property);
-    if (propertyObj == nil) {
-        propertyObj = [[self alloc] init];
-        propertyObj.property = property;
-        objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
+//    MJProperty *propertyObj = objc_getAssociatedObject(self, property);
+//    if (propertyObj == nil) {
+    MJProperty *propertyObj = [[self alloc] init];
+    propertyObj.property = property;
+//        objc_setAssociatedObject(self, property, propertyObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    }
     return propertyObj;
 }
 
@@ -73,7 +57,7 @@
  */
 - (id)valueForObject:(id)object
 {
-    if (self.type.KVCDisabled) return [NSNull null];
+    if (self.type.KVCDisabled) return NSNull.null;
     
     id value = [object valueForKey:self.name];
     
@@ -95,6 +79,7 @@
 - (void)setValue:(id)value forObject:(id)object
 {
     if (self.type.KVCDisabled || value == nil) return;
+    //FIXME: Bottleneck #4: Enhanced
     [object setValue:value forKey:self.name];
 }
 
@@ -142,14 +127,18 @@
 }
 
 /** 对应着字典中的key */
-- (void)setOriginKey:(id)originKey forClass:(Class)c
-{
+- (void)handleOriginKey:(id)originKey {
     if ([originKey isKindOfClass:[NSString class]]) { // 字符串类型的key
-        NSArray *propertyKeys = [self propertyKeysWithStringKey:originKey];
-        if (propertyKeys.count) {
-            [self setPropertyKeys:@[propertyKeys] forClass:c];
+        NSArray<MJPropertyKey *> *propertyKeys = [self propertyKeysWithStringKey:originKey];
+        NSUInteger keysCount = propertyKeys.count;
+        if (keysCount > 1) {
+            _isMultiMapping = YES;
+            _propertyKeys = @[propertyKeys];
+        } else if (keysCount == 1) {
+            _originalKey = originKey;
         }
     } else if ([originKey isKindOfClass:[NSArray class]]) {
+        _isMultiMapping = YES;
         NSMutableArray *keyses = [NSMutableArray array];
         for (NSString *stringKey in originKey) {
             NSArray *propertyKeys = [self propertyKeysWithStringKey:stringKey];
@@ -158,54 +147,8 @@
             }
         }
         if (keyses.count) {
-            [self setPropertyKeys:keyses forClass:c];
+            _propertyKeys = keyses;
         }
     }
-}
-
-/** 对应着字典中的多级key */
-- (void)setPropertyKeys:(NSArray *)propertyKeys forClass:(Class)c
-{
-    if (propertyKeys.count == 0) return;
-    NSString *key = NSStringFromClass(c);
-    if (!key) return;
-    
-    MJ_LOCK(self.propertyKeysLock);
-    self.propertyKeysDict[key] = propertyKeys;
-    MJ_UNLOCK(self.propertyKeysLock);
-}
-
-- (NSArray *)propertyKeysForClass:(Class)c
-{
-    NSString *key = NSStringFromClass(c);
-    if (!key) return nil;
-    
-    MJ_LOCK(self.propertyKeysLock);
-    NSArray *propertyKeys = self.propertyKeysDict[key];
-    MJ_UNLOCK(self.propertyKeysLock);
-    return propertyKeys;
-}
-
-/** 模型数组中的模型类型 */
-- (void)setObjectClassInArray:(Class)objectClass forClass:(Class)c
-{
-    if (!objectClass) return;
-    NSString *key = NSStringFromClass(c);
-    if (!key) return;
-    
-    MJ_LOCK(self.objectClassInArrayLock);
-    self.objectClassInArrayDict[key] = objectClass;
-    MJ_UNLOCK(self.objectClassInArrayLock);
-}
-
-- (Class)objectClassInArrayForClass:(Class)c
-{
-    NSString *key = NSStringFromClass(c);
-    if (!key) return nil;
-    
-    MJ_LOCK(self.objectClassInArrayLock);
-    Class objectClass = self.objectClassInArrayDict[key];
-    MJ_UNLOCK(self.objectClassInArrayLock);
-    return objectClass;
 }
 @end

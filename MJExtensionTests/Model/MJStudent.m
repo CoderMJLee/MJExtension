@@ -9,14 +9,14 @@
 #import "MJStudent.h"
 
 @implementation MJStudent
-//+ (NSDictionary *)mj_replacedKeyFromPropertyName
-//{
-//    return @{@"ID" : @"id",
-//             @"desc" : @"desciption",
-//             @"oldName" : @"name.oldName",
-//             @"nowName" : @"name.newName",
-//             @"nameChangedTime" : @"name.info[1].nameChangedTime",
-//             @"bag" : @"other.bag"
-//             };
-//}
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+        @"desc" : @"desciption",
+        @"oldName" : @"name.oldName",
+        @"nowName" : @"name.newName",
+        @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],
+        @"nameChangedTime" : @"name.info[1].nameChangedTime",
+        @"bag" : @"other.bag"
+        };
+}
 @end

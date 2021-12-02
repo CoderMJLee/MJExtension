@@ -81,10 +81,10 @@ class CoreDataTests: XCTestCase {
                 return
             }
             
-            XCTAssert(dict["isJuan"] as! Bool == Values.isJuan)
+            XCTAssert(dict["isJuan"] as? Bool == Values.isJuan)
             XCTAssert(dict["identifier"] as? String == Values.identifier)
             XCTAssert(dict["name"] as? String == Values.name)
-            XCTAssert(dict["age"] as! Int == Values.age)
+            XCTAssert(dict["age"] as? Int == Values.age)
         }
     }
 
