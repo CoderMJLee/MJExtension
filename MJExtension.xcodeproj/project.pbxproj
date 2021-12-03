@@ -515,7 +515,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0121B2CE26E9B277008EE973 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
+				01D3949B26FACE7D00457B88 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
 				0107508F26E8C59F00AAEA10 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,6 +525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D2DBA172317DB33005A689E /* NSObject+MJCoding.m in Sources */,
+				01F5515F2757144500518218 /* MJEClass.m in Sources */,
 				2D2DBA232317DB33005A689E /* NSObject+MJProperty.m in Sources */,
 				2D2DBA182317DB33005A689E /* MJProperty.m in Sources */,
 				2D2DBA162317DB33005A689E /* MJExtensionConst.m in Sources */,
@@ -551,6 +552,7 @@
 				0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */,
 				01F28187248F64ED008775BA /* MJCat.m in Sources */,
 				0179886C24EFA460007F7FBC /* MJTester.swift in Sources */,
+				01F551642758C74F00518218 /* NSObject+MJExtensionExample.m in Sources */,
 				2D2DBA852317DBE0005A689E /* MJPerson.m in Sources */,
 				0107507C26E88EAC00AAEA10 /* MJCoreDataTester+CoreDataProperties.swift in Sources */,
 				2D2DBA7B2317DBE0005A689E /* MJBox.m in Sources */,
