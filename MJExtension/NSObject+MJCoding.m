@@ -45,11 +45,10 @@
         
         // fixed `-[NSKeyedUnarchiver validateAllowedClass:forKey:] allowed unarchiving safe plist type ''NSNumber'(This will be disallowed in the future.)` warning.
         NSMutableSet *setM = [NSMutableSet setWithObjects:NSNumber.class, property.type.typeClass, nil];
-        Class subclazz = [property objectClassInArrayForClass:property.srcClass];
-        if (subclazz) {
-            [setM addObject:subclazz];
+        Class classInArray = [property objectClassInArrayForClass:property.srcClass];
+        if (classInArray) {
+            [setM addObject:classInArray];
         }
-        
         id value = [decoder decodeObjectOfClasses:[setM copy] forKey:property.name];
         if (value == nil) { // 兼容以前的MJExtension版本
             value = [decoder decodeObjectForKey:[@"_" stringByAppendingString:property.name]];
