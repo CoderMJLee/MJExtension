@@ -10,7 +10,7 @@
 #import <MJExtension/MJExtension.h>
 
 @implementation MJPerson
-+ (NSDictionary *)mj_objectClassInArray {
++ (NSDictionary *)mj_objectClassInCollection {
     return  @{@"friends" : @"MJPerson"};
 }
 @end

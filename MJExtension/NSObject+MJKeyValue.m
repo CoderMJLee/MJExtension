@@ -7,15 +7,13 @@
 //
 
 #import "NSObject+MJKeyValue.h"
-#import "NSObject+MJProperty.h"
 #import "NSString+MJExtension.h"
 #import "MJProperty.h"
 #import "MJPropertyType.h"
 #import "MJExtensionConst.h"
 #import "MJFoundation.h"
-#import "NSString+MJExtension.h"
-#import "NSObject+MJClass.h"
-#import "NSObject+MJProperty.h"
+#import "MJEClass.h"
+#import "MJExtensionProtocols.h"
 
 @implementation NSDecimalNumber(MJKeyValue)
 
@@ -34,6 +32,10 @@
         return @(self.doubleValue);
     }
 }
+
+@end
+
+@interface NSObject () <MJEConfiguration>
 
 @end
 
@@ -62,14 +64,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 
 + (BOOL)mj_isReferenceReplacedKeyWhenCreatingKeyValues
 {
-    __block id value = objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
-    if (!value) {
-        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
-            value = objc_getAssociatedObject(c, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
-            
-            if (value) *stop = YES;
-        }];
-    }
+    id value = objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
     return [value boolValue];
 }
 
@@ -97,15 +92,15 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     
     MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
     
-    Class clazz = [self class];
+    MJEClass *mjeClass = [MJEClass cachedClass:self.class];
+    NSArray<MJProperty *> *allProperties = mjeClass->_allProperties;
     
     NSLocale *numberLocale = nil;
-    if ([self.class respondsToSelector:@selector(mj_numberLocale)]) {
-        numberLocale = self.class.mj_numberLocale;
+    if (mjeClass->_hasLocaleModifier) {
+        numberLocale = self.class.mj_locale;
     }
     
-    //通过封装的方法回调一个通过运行时编写的，用于返回属性列表的方法。
-    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+    [allProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         @try {
             // 1.取出属性值
             id value;
@@ -123,10 +118,13 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             
             // 值的过滤
             // FIXME: Bottleneck: Enhanced
-            id newValue = [clazz mj_getNewValueFromObject:self oldValue:value property:property];
-            if (newValue != value) { // 有过滤后的新值
-                [property setValue:newValue forObject:self];
-                return;
+            if (mjeClass->_hasOld2NewModifier
+                && property->hasValueModifier) {
+                id newValue = [self mj_newValueFromOldValue:value property:property];
+                if (newValue != value) { // 有过滤后的新值
+                    [property setValue:newValue forObject:self];
+                    return;
+                }
             }
             
             // 如果没有值，就直接返回
@@ -136,7 +134,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             MJPropertyType *type = property.type;
             Class propertyClass = type.typeClass;
             Class objectClass = property.classInArray;
-
+            
             // 不可变 -> 可变处理
             if (propertyClass == [NSMutableArray class] && [value isKindOfClass:[NSArray class]]) {
                 value = [NSMutableArray arrayWithArray:value];
@@ -227,18 +225,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     }];
     
     // 转换完毕
-    if ([self respondsToSelector:@selector(mj_didConvertToObjectWithKeyValues:)]) {
+    if (mjeClass->_hasDictionary2ObjectModifier) {
         [self mj_didConvertToObjectWithKeyValues:keyValues];
     }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject)]) {
-        [self mj_keyValuesDidFinishConvertingToObject];
-    }
-    if ([self respondsToSelector:@selector(mj_keyValuesDidFinishConvertingToObject:)]) {
-        [self mj_keyValuesDidFinishConvertingToObject:keyValues];
-    }
-#pragma clang diagnostic pop
     return self;
 }
 
@@ -291,7 +280,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     // 如果数组里面放的是NSString、NSNumber等数据
     if ([MJFoundation isClassFromFoundation:self]) return [NSMutableArray arrayWithArray:keyValuesArray];
     
-
+    
     // 2.创建数组
     NSMutableArray *modelArray = [NSMutableArray array];
     
@@ -350,15 +339,12 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     
     id keyValues = [NSMutableDictionary dictionary];
     
-    Class clazz = [self class];
-    NSArray *allowedPropertyNames = [clazz mj_totalAllowedPropertyNames];
-    NSArray *ignoredPropertyNames = [clazz mj_totalIgnoredPropertyNames];
+    MJEClass *mjeClass = [MJEClass cachedClass:self.class ];
+    NSArray<MJProperty *> *allProperties = mjeClass->_allProperties;
     
-    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+    [allProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         @try {
             // 0.检测是否被忽略
-            if (allowedPropertyNames.count && ![allowedPropertyNames containsObject:property.name]) return;
-            if ([ignoredPropertyNames containsObject:property.name]) return;
             if (keys.count && ![keys containsObject:property.name]) return;
             if ([ignoredKeys containsObject:property.name]) return;
             
@@ -379,7 +365,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             }
             
             // 4.赋值
-            if ([clazz mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
+            if ([self.class mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
                 if (property.isMultiMapping) {
                     NSArray *propertyKeys = [property.propertyKeys firstObject];
                     NSUInteger keyCount = propertyKeys.count;
@@ -441,15 +427,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     }];
     
     // 转换完毕
-    if ([self respondsToSelector:@selector(mj_objectDidConvertToKeyValues:)]) {
+    if (mjeClass->_hasObject2DictionaryModifier) {
         [self mj_objectDidConvertToKeyValues:keyValues];
     }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self respondsToSelector:@selector(mj_objectDidFinishConvertingToKeyValues)]) {
-        [self mj_objectDidFinishConvertingToKeyValues];
-    }
-#pragma clang diagnostic pop
     
     return keyValues;
 }

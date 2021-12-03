@@ -9,10 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "MJExtensionConst.h"
 #import <CoreData/CoreData.h>
-#import "MJProperty.h"
-#import "MJKeyValue.h"
 
-@interface NSObject (MJKeyValue) <MJKeyValue>
+
+@interface NSObject (MJKeyValue)
 #pragma mark - 类方法
 /**
  * 字典转模型过程中遇到的错误

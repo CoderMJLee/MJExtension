@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MJCat : NSObject <MJKeyValue>
+@interface MJCat : NSObject <MJEConfiguration>
 
 @property (nonatomic, copy, nullable) NSString *name;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *nicknames;

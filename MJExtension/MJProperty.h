@@ -11,11 +11,14 @@
 #import "MJPropertyType.h"
 #import "MJPropertyKey.h"
 
-/**
- *  包装一个成员
- */
-@interface MJProperty : NSObject
-/** 成员属性 */
+// Objc property wrapper
+@interface MJProperty : NSObject {
+    /// has old to new value modifying method in Class containing.
+    @package
+    BOOL hasValueModifier;
+}
+
+/// 成员属性
 @property (nonatomic, assign) objc_property_t property;
 /** 成员属性的名字 */
 @property (nonatomic, readonly) NSString *name;

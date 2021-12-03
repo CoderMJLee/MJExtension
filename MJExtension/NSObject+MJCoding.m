@@ -7,42 +7,23 @@
 //
 
 #import "NSObject+MJCoding.h"
-#import "NSObject+MJClass.h"
-#import "NSObject+MJProperty.h"
 #import "MJProperty.h"
+#import "MJEClass.h"
 
 @implementation NSObject (MJCoding)
 
-- (void)mj_encode:(NSCoder *)encoder
-{
-    Class clazz = [self class];
-    
-    NSArray *allowedCodingPropertyNames = [clazz mj_totalAllowedCodingPropertyNames];
-    NSArray *ignoredCodingPropertyNames = [clazz mj_totalIgnoredCodingPropertyNames];
-    
-    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
-        // 检测是否被忽略
-        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
-        if ([ignoredCodingPropertyNames containsObject:property.name]) return;
-        
+- (void)mj_encode:(NSCoder *)encoder {
+    MJEClass *mjeClass = [MJEClass cachedClass:self.class];
+    [mjeClass->_allCodingProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         id value = [property valueForObject:self];
         if (value == nil) return;
         [encoder encodeObject:value forKey:property.name];
     }];
 }
 
-- (void)mj_decode:(NSCoder *)decoder
-{
-    Class clazz = [self class];
-    
-    NSArray *allowedCodingPropertyNames = [clazz mj_totalAllowedCodingPropertyNames];
-    NSArray *ignoredCodingPropertyNames = [clazz mj_totalIgnoredCodingPropertyNames];
-    
-    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
-        // 检测是否被忽略
-        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
-        if ([ignoredCodingPropertyNames containsObject:property.name]) return;
-        
+- (void)mj_decode:(NSCoder *)decoder {
+    MJEClass *mjeClass = [MJEClass cachedClass:self.class];
+    [mjeClass->_allCodingProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         // fixed `-[NSKeyedUnarchiver validateAllowedClass:forKey:] allowed unarchiving safe plist type ''NSNumber'(This will be disallowed in the future.)` warning.
         id value = [decoder decodeObjectOfClasses:[NSSet setWithObjects:NSNumber.class, property.type.typeClass, nil] forKey:property.name];
         if (value == nil) { // 兼容以前的MJExtension版本

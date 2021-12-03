@@ -10,7 +10,7 @@
 #import "MJAd.h"
 
 @implementation MJStatusResult
-+ (NSDictionary *)mj_objectClassInArray {
++ (NSDictionary *)mj_objectClassInCollection {
     return @{
              @"statuses" : @"MJStatus",
              @"ads" : MJAd.class // @"ads" : [MJAd class]

@@ -10,7 +10,7 @@
 
 @implementation MJCat
 
-+ (NSDictionary *)mj_objectClassInArray {
++ (NSDictionary *)mj_objectClassInCollection {
     return @{
         @"nicknames" : NSString.class
     };

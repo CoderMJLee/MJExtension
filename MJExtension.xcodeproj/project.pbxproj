@@ -24,24 +24,20 @@
 		01F28187248F64ED008775BA /* MJCat.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F28186248F64ED008775BA /* MJCat.m */; };
 		01F5515E2757144500518218 /* MJEClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F5515C2757144500518218 /* MJEClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		01F5515F2757144500518218 /* MJEClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F5515D2757144500518218 /* MJEClass.m */; };
-		01F55161275758C900518218 /* MJKeyValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F55160275758C900518218 /* MJKeyValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		01F55161275758C900518218 /* MJExtensionProtocols.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F55160275758C900518218 /* MJExtensionProtocols.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01F551642758C74F00518218 /* NSObject+MJExtensionExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F551632758C74F00518218 /* NSObject+MJExtensionExample.m */; };
 		2D2DB9F82317DA64005A689E /* MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DB9F62317DA64005A689E /* MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D2DBA152317DB33005A689E /* NSObject+MJProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA012317DB32005A689E /* NSObject+MJProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D2DBA162317DB33005A689E /* MJExtensionConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA022317DB32005A689E /* MJExtensionConst.m */; };
 		2D2DBA172317DB33005A689E /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA032317DB32005A689E /* NSObject+MJCoding.m */; };
 		2D2DBA182317DB33005A689E /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA042317DB32005A689E /* MJProperty.m */; };
 		2D2DBA192317DB33005A689E /* MJPropertyKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA052317DB32005A689E /* MJPropertyKey.m */; };
 		2D2DBA1A2317DB33005A689E /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA062317DB32005A689E /* NSObject+MJKeyValue.m */; };
-		2D2DBA1B2317DB33005A689E /* NSObject+MJClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA072317DB32005A689E /* NSObject+MJClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D2DBA1C2317DB33005A689E /* MJExtensionConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA082317DB32005A689E /* MJExtensionConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D2DBA1D2317DB33005A689E /* NSObject+MJClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA092317DB32005A689E /* NSObject+MJClass.m */; };
 		2D2DBA1E2317DB33005A689E /* MJPropertyType.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA0A2317DB32005A689E /* MJPropertyType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D2DBA1F2317DB33005A689E /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA0B2317DB32005A689E /* NSString+MJExtension.m */; };
 		2D2DBA202317DB33005A689E /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA0C2317DB32005A689E /* MJFoundation.m */; };
 		2D2DBA212317DB33005A689E /* NSObject+MJCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA0D2317DB32005A689E /* NSObject+MJCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D2DBA222317DB33005A689E /* MJFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA0E2317DB32005A689E /* MJFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D2DBA232317DB33005A689E /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA0F2317DB32005A689E /* NSObject+MJProperty.m */; };
+		2D2DBA222317DB33005A689E /* MJFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA0E2317DB32005A689E /* MJFoundation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D2DBA242317DB33005A689E /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DBA102317DB32005A689E /* MJPropertyType.m */; };
 		2D2DBA252317DB33005A689E /* MJPropertyKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA112317DB32005A689E /* MJPropertyKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D2DBA262317DB33005A689E /* MJProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D2DBA122317DB32005A689E /* MJProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -99,27 +95,23 @@
 		01F28186248F64ED008775BA /* MJCat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJCat.m; sourceTree = "<group>"; };
 		01F5515C2757144500518218 /* MJEClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJEClass.h; sourceTree = "<group>"; };
 		01F5515D2757144500518218 /* MJEClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJEClass.m; sourceTree = "<group>"; };
-		01F55160275758C900518218 /* MJKeyValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJKeyValue.h; sourceTree = "<group>"; };
+		01F55160275758C900518218 /* MJExtensionProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJExtensionProtocols.h; sourceTree = "<group>"; };
 		01F551622758C74F00518218 /* NSObject+MJExtensionExample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJExtensionExample.h"; sourceTree = "<group>"; };
 		01F551632758C74F00518218 /* NSObject+MJExtensionExample.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJExtensionExample.m"; sourceTree = "<group>"; };
 		2D2DB9F42317DA64005A689E /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2DB9F62317DA64005A689E /* MJExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
 		2D2DB9F72317DA64005A689E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D2DBA012317DB32005A689E /* NSObject+MJProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJProperty.h"; sourceTree = "<group>"; };
 		2D2DBA022317DB32005A689E /* MJExtensionConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJExtensionConst.m; sourceTree = "<group>"; };
 		2D2DBA032317DB32005A689E /* NSObject+MJCoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJCoding.m"; sourceTree = "<group>"; };
 		2D2DBA042317DB32005A689E /* MJProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJProperty.m; sourceTree = "<group>"; };
 		2D2DBA052317DB32005A689E /* MJPropertyKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPropertyKey.m; sourceTree = "<group>"; };
 		2D2DBA062317DB32005A689E /* NSObject+MJKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJKeyValue.m"; sourceTree = "<group>"; };
-		2D2DBA072317DB32005A689E /* NSObject+MJClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJClass.h"; sourceTree = "<group>"; };
 		2D2DBA082317DB32005A689E /* MJExtensionConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConst.h; sourceTree = "<group>"; };
-		2D2DBA092317DB32005A689E /* NSObject+MJClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJClass.m"; sourceTree = "<group>"; };
 		2D2DBA0A2317DB32005A689E /* MJPropertyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPropertyType.h; sourceTree = "<group>"; };
 		2D2DBA0B2317DB32005A689E /* NSString+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MJExtension.m"; sourceTree = "<group>"; };
 		2D2DBA0C2317DB32005A689E /* MJFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJFoundation.m; sourceTree = "<group>"; };
 		2D2DBA0D2317DB32005A689E /* NSObject+MJCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MJCoding.h"; sourceTree = "<group>"; };
 		2D2DBA0E2317DB32005A689E /* MJFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJFoundation.h; sourceTree = "<group>"; };
-		2D2DBA0F2317DB32005A689E /* NSObject+MJProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJProperty.m"; sourceTree = "<group>"; };
 		2D2DBA102317DB32005A689E /* MJPropertyType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPropertyType.m; sourceTree = "<group>"; };
 		2D2DBA112317DB32005A689E /* MJPropertyKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPropertyKey.h; sourceTree = "<group>"; };
 		2D2DBA122317DB32005A689E /* MJProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJProperty.h; sourceTree = "<group>"; };
@@ -248,19 +240,15 @@
 				2D2DBA042317DB32005A689E /* MJProperty.m */,
 				01F5515C2757144500518218 /* MJEClass.h */,
 				01F5515D2757144500518218 /* MJEClass.m */,
-				01F55160275758C900518218 /* MJKeyValue.h */,
+				01F55160275758C900518218 /* MJExtensionProtocols.h */,
 				2D2DBA112317DB32005A689E /* MJPropertyKey.h */,
 				2D2DBA052317DB32005A689E /* MJPropertyKey.m */,
 				2D2DBA0A2317DB32005A689E /* MJPropertyType.h */,
 				2D2DBA102317DB32005A689E /* MJPropertyType.m */,
-				2D2DBA072317DB32005A689E /* NSObject+MJClass.h */,
-				2D2DBA092317DB32005A689E /* NSObject+MJClass.m */,
 				2D2DBA0D2317DB32005A689E /* NSObject+MJCoding.h */,
 				2D2DBA032317DB32005A689E /* NSObject+MJCoding.m */,
 				2D2DBA132317DB33005A689E /* NSObject+MJKeyValue.h */,
 				2D2DBA062317DB32005A689E /* NSObject+MJKeyValue.m */,
-				2D2DBA012317DB32005A689E /* NSObject+MJProperty.h */,
-				2D2DBA0F2317DB32005A689E /* NSObject+MJProperty.m */,
 				2D2DBA142317DB33005A689E /* NSString+MJExtension.h */,
 				2D2DBA0B2317DB32005A689E /* NSString+MJExtension.m */,
 				2D2DB9F62317DA64005A689E /* MJExtension.h */,
@@ -329,18 +317,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D2DBA272317DB33005A689E /* NSObject+MJKeyValue.h in Headers */,
-				2D2DBA222317DB33005A689E /* MJFoundation.h in Headers */,
-				2D2DBA1B2317DB33005A689E /* NSObject+MJClass.h in Headers */,
 				2D2DBA282317DB33005A689E /* NSString+MJExtension.h in Headers */,
 				2D2DBA212317DB33005A689E /* NSObject+MJCoding.h in Headers */,
 				2D2DBA1C2317DB33005A689E /* MJExtensionConst.h in Headers */,
+				01F55161275758C900518218 /* MJExtensionProtocols.h in Headers */,
 				2D2DBA262317DB33005A689E /* MJProperty.h in Headers */,
-				2D2DBA1E2317DB33005A689E /* MJPropertyType.h in Headers */,
-				01F55161275758C900518218 /* MJKeyValue.h in Headers */,
 				2D2DBA252317DB33005A689E /* MJPropertyKey.h in Headers */,
-				2D2DBA152317DB33005A689E /* NSObject+MJProperty.h in Headers */,
+				2D2DBA1E2317DB33005A689E /* MJPropertyType.h in Headers */,
 				01F5515E2757144500518218 /* MJEClass.h in Headers */,
 				2D2DB9F82317DA64005A689E /* MJExtension.h in Headers */,
+				2D2DBA222317DB33005A689E /* MJFoundation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,12 +512,10 @@
 			files = (
 				2D2DBA172317DB33005A689E /* NSObject+MJCoding.m in Sources */,
 				01F5515F2757144500518218 /* MJEClass.m in Sources */,
-				2D2DBA232317DB33005A689E /* NSObject+MJProperty.m in Sources */,
 				2D2DBA182317DB33005A689E /* MJProperty.m in Sources */,
 				2D2DBA162317DB33005A689E /* MJExtensionConst.m in Sources */,
 				2D2DBA1F2317DB33005A689E /* NSString+MJExtension.m in Sources */,
 				2D2DBA242317DB33005A689E /* MJPropertyType.m in Sources */,
-				2D2DBA1D2317DB33005A689E /* NSObject+MJClass.m in Sources */,
 				2D2DBA1A2317DB33005A689E /* NSObject+MJKeyValue.m in Sources */,
 				2D2DBA192317DB33005A689E /* MJPropertyKey.m in Sources */,
 				2D2DBA202317DB33005A689E /* MJFoundation.m in Sources */,
