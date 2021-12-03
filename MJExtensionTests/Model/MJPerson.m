@@ -14,6 +14,7 @@ MJSecureCodingImplementation(MJPerson, YES)
 
 @implementation MJPerson
 + (NSDictionary *)mj_objectClassInArray {
-    return  @{@"friends" : [MJPerson class]};
+    return @{@"friends": [MJPerson class],
+             @"books": [NSString class]};
 }
 @end

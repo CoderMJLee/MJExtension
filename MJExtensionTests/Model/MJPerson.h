@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MJPerson : NSObject
 @property (copy, nonatomic) NSString *name;
 @property (strong, nonatomic) NSArray<MJPerson *> *friends;
+@property (strong, nonatomic) NSArray<NSString *> *books;
 @end
 
 NS_ASSUME_NONNULL_END

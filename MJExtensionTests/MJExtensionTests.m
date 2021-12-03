@@ -471,6 +471,7 @@
     friend2.name = @"friend2";
 
     person.friends = @[friend1, friend2];
+    person.books = @[@"book1", @"book2"];
     
     NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"person.data"];
     NSError *error = nil;
@@ -488,6 +489,7 @@
                                                                   fromData:readData
                                                                      error:&error];
     XCTAssert(decodedPerson.friends.count == 2);
+    XCTAssert(decodedPerson.books.count == 2);
 }
 
 #pragma mark  统一转换属性名（比如驼峰转下划线）
