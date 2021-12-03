@@ -20,6 +20,7 @@
 #import "MJFrenchUser.h"
 #import "MJCat.h"
 #import <MJExtensionTests-Swift.h>
+#import "MJPerson.h"
 
 @interface MJExtensionTests : XCTestCase
 
@@ -456,6 +457,37 @@
     error = nil;
     MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
     MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+}
+
+- (void)testCodingModelArrayProperty {
+    // 有 NSArray 属性 模型
+    MJPerson *person = [[MJPerson alloc] init];
+    person.name = @"boy1";
+    
+    MJPerson *friend1 = [[MJPerson alloc] init];
+    friend1.name = @"friend1";
+    
+    MJPerson *friend2 = [[MJPerson alloc] init];
+    friend2.name = @"friend2";
+
+    person.friends = @[friend1, friend2];
+    
+    NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@"person.data"];
+    NSError *error = nil;
+    // 归档
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:person
+                                         requiringSecureCoding:YES
+                                                         error:&error];
+    BOOL write = [data writeToFile:file atomically:true];
+    XCTAssert(write);
+    
+    // 解档
+    NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+    error = nil;
+    MJPerson *decodedPerson = [NSKeyedUnarchiver unarchivedObjectOfClass:MJPerson.class
+                                                                  fromData:readData
+                                                                     error:&error];
+    XCTAssert(decodedPerson.friends.count == 2);
 }
 
 #pragma mark  统一转换属性名（比如驼峰转下划线）
