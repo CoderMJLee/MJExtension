@@ -44,7 +44,13 @@
         if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
         // fixed `-[NSKeyedUnarchiver validateAllowedClass:forKey:] allowed unarchiving safe plist type ''NSNumber'(This will be disallowed in the future.)` warning.
-        id value = [decoder decodeObjectOfClasses:[NSSet setWithObjects:NSNumber.class, property.type.typeClass, nil] forKey:property.name];
+        NSMutableSet *setM = [NSMutableSet setWithObjects:NSNumber.class, property.type.typeClass, nil];
+        Class subclazz = [property objectClassInArrayForClass:property.srcClass];
+        if (subclazz) {
+            [setM addObject:subclazz];
+        }
+        
+        id value = [decoder decodeObjectOfClasses:[setM copy] forKey:property.name];
         if (value == nil) { // 兼容以前的MJExtension版本
             value = [decoder decodeObjectForKey:[@"_" stringByAppendingString:property.name]];
         }
