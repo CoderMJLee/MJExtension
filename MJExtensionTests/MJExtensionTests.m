@@ -463,12 +463,15 @@
     // 有 NSArray 属性 模型
     MJPerson *person = [[MJPerson alloc] init];
     person.name = @"boy1";
+    person.isVIP = YES;
     
     MJPerson *friend1 = [[MJPerson alloc] init];
     friend1.name = @"friend1";
+    friend1.isVIP = YES;
     
     MJPerson *friend2 = [[MJPerson alloc] init];
     friend2.name = @"friend2";
+    friend2.isVIP = NO;
 
     person.friends = @[friend1, friend2];
     person.books = @[@"book1", @"book2"];
