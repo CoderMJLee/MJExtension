@@ -9,8 +9,12 @@
 #import "MJPerson.h"
 #import <MJExtension/MJExtension.h>
 
+// NSSecureCoding实现
+MJSecureCodingImplementation(MJPerson, YES)
+
 @implementation MJPerson
 + (NSDictionary *)mj_objectClassInCollection {
-    return  @{@"friends" : @"MJPerson"};
+    return @{@"friends": MJPerson.class,
+             @"books": NSString.class};
 }
 @end

@@ -25,7 +25,10 @@
     MJEClass *mjeClass = [MJEClass cachedClass:self.class];
     [mjeClass->_allCodingProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         // fixed `-[NSKeyedUnarchiver validateAllowedClass:forKey:] allowed unarchiving safe plist type ''NSNumber'(This will be disallowed in the future.)` warning.
-        id value = [decoder decodeObjectOfClasses:[NSSet setWithObjects:NSNumber.class, property.type.typeClass, nil] forKey:property.name];
+        // If genericClass exists, property.type.typeClass would be a collection type(Array, Set, Dictionary). This scenario([obj, nil, obj, nil]) would not happened.
+        NSSet *classes = [NSSet setWithObjects:NSNumber.class,
+                          property.type.typeClass, property.classInArray, nil];
+        id value = [decoder decodeObjectOfClasses:classes forKey:property.name];
         if (value == nil) { // 兼容以前的MJExtension版本
             value = [decoder decodeObjectForKey:[@"_" stringByAppendingString:property.name]];
         }
