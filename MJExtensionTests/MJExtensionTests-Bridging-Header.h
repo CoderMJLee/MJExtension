@@ -6,3 +6,4 @@
 
 #import "MJUser.h"
 #import "MJCat.h"
+#import "MJBag.h"

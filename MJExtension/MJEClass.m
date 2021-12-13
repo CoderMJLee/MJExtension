@@ -12,8 +12,6 @@
 #import "MJFoundation.h"
 #import "MJProperty.h"
 
-#define always_inline __inline__ __attribute__((always_inline))
-
 typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
 
 @interface NSObject (MJEClass)
@@ -48,6 +46,8 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     
     NSMutableSet *ignoredList = [NSMutableSet new];
     NSMutableSet *allowedList = [NSMutableSet new];
+    NSMutableSet *ignoredCodingList = [NSMutableSet new];
+    NSMutableSet *allowedCodingList = [NSMutableSet new];
     NSMutableDictionary *genericClasses = [NSMutableDictionary new];
     NSMutableDictionary *replacedKeys = [NSMutableDictionary new];
     NSMutableSet *old2NewList = [NSMutableSet new];
@@ -63,6 +63,16 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
         MJEAddSelectorResult2Set(currentClass,
                                  @selector(mj_allowedPropertyNames),
                                  allowedList);
+        
+        // get ignored property names
+        MJEAddSelectorResult2Set(currentClass,
+                                 @selector(mj_ignoredCodingPropertyNames),
+                                 ignoredCodingList);
+        
+        // get allowed property names
+        MJEAddSelectorResult2Set(currentClass,
+                                 @selector(mj_allowedCodingPropertyNames),
+                                 allowedCodingList);
         
         // get old value to new one property name list
         MJEAddSelectorResult2Set(currentClass,
@@ -90,15 +100,16 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     
     // Check replacing modifier
     BOOL hasKeyReplacementModifier = [cls respondsToSelector:@selector(mj_replacedKeyFromPropertyName121:)];
-    // get the property list
-    _allProperties = [self
-                      mj_allPropertiesWithAllowedList:allowedList
-                      ignoredList:ignoredList
-                      old2NewList:old2NewList
-                      genericClasses:genericClasses
-                      replacedKeys:replacedKeys
-                      hasKeyReplacementModifier:hasKeyReplacementModifier
-                      inClass:cls];
+    // get the property lists
+    [self mj_handlePropertiesWithAllowedList:allowedList
+                                 ignoredList:ignoredList
+                           allowedCodingList:allowedCodingList
+                           ignoredCodingList:ignoredCodingList
+                                 old2NewList:old2NewList
+                              genericClasses:genericClasses
+                                replacedKeys:replacedKeys
+                   hasKeyReplacementModifier:hasKeyReplacementModifier
+                                     inClass:cls];
     
     _hasLocaleModifier = [cls respondsToSelector:@selector(mj_locale)];
     _hasOld2NewModifier = [cls instancesRespondToSelector:@selector(mj_newValueFromOldValue:property:)];
@@ -126,43 +137,58 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     if (!cachedClass || cachedClass->_needsUpdate) {
         cachedClass = [[MJEClass alloc] initWithClass:cls];
         classCache[(id)cls] = cachedClass;
+        cachedClass->_needsUpdate = NO;
     }
     MJ_UNLOCK(lock);
     
     return cachedClass;
 }
 
-- (NSArray<MJProperty *> *)mj_allPropertiesWithAllowedList:(NSSet *)allowedList
-                                               ignoredList:(NSSet *)ignoredList
-                                               old2NewList:(NSSet *)old2NewList
-                                            genericClasses:(NSDictionary *)genericClasses
-                                              replacedKeys:(NSDictionary *)replacedKeys
-                                 hasKeyReplacementModifier:(BOOL)hasKeyReplacementModifier
-                                                   inClass:(Class)cls {
+- (void)mj_handlePropertiesWithAllowedList:(NSSet *)allowedList
+                               ignoredList:(NSSet *)ignoredList
+                         allowedCodingList:(NSSet *)allowedCodingList
+                         ignoredCodingList:(NSSet *)ignoredCodingList
+                               old2NewList:(NSSet *)old2NewList
+                            genericClasses:(NSDictionary *)genericClasses
+                              replacedKeys:(NSDictionary *)replacedKeys
+                 hasKeyReplacementModifier:(BOOL)hasKeyReplacementModifier
+                                   inClass:(Class)cls {
     NSMutableArray<MJProperty *> *allProperties = [NSMutableArray array];
+    NSMutableArray<MJProperty *> *codingProperties = [NSMutableArray array];
+    NSMutableDictionary *mapper = [NSMutableDictionary new];
+    // TODO: 4.0.0 new feature
+//    NSMutableArray<MJProperty *> *allProperties2JSON = [NSMutableArray array];
     [cls mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         // 1. get all property list
         unsigned int outCount = 0;
         objc_property_t *properties = class_copyPropertyList(c, &outCount);
         
-        // 2. interate property list
+        // 2. iterate property list
         for (unsigned int i = 0; i < outCount; i++) {
-            MJProperty *property = [MJProperty cachedPropertyWithProperty:properties[i]];
+            MJProperty *property = [[MJProperty alloc]
+                                    initWithProperty:properties[i] inClass:c];
+            // If neither of setter and getter is not existed, this value should not be treated as property we cares.
+            // e.g.: NSObject default properties `hash`, `superclass`, `description`, `debugDescription`, , which is defined by `NSObject` protocol.
+            // Computed property (readonly). It is not a real property, which is just a get method.
+            if (!property.setter || !property.getter) continue;
+            // Filter out Foundation classes
+            if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
+            // handle properties for coding
+            if (!allowedCodingList.count || [allowedCodingList containsObject:property.name]) {
+                if (![ignoredCodingList containsObject:property.name]) {
+                    [codingProperties addObject:property];
+                }
+            }
             // check allowed list
             if (allowedList.count && ![allowedList containsObject:property.name]) continue;
             // check ingored list
             if ([ignoredList containsObject:property.name]) continue;
-            
-            // filter out Foundation classes
-            if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
-            // filter out NSObject default properties `hash`, `superclass`, `description`, `debugDescription`
-            if ([MJFoundation isFromNSObjectProtocolProperty:property.name]) continue;
             // only 2 ways to set value modifier flag to true
             // 1. old2NewList exists and contains specific value
             // 2. old2NewList does not exist (that would be allowed but converting speed will be slower.)
             if ([old2NewList containsObject:property.name]
                 || !old2NewList.count) {
-                property->hasValueModifier = YES;
+                property->_hasValueModifier = YES;
             }
             
             id key = property.name;
@@ -173,15 +199,20 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
             // serch key in replaced dictionary
             key = replacedKeys[property.name] ?: key;
             
-            property.srcClass = c;
             // handle keypath / keypath array / keypath array(with subkey)
             [property handleOriginKey:key];
+            // The property matched with a singular key is only condition that should be considered.
+            if (!property->_isMultiMapping) {
+                property->_nextSame = mapper[property->_mappedKey] ?: nil;
+                mapper[property->_mappedKey] = property;
+            }
+            
             // handle generic class
             id clazz = genericClasses[property.name];
-            if ([clazz isKindOfClass:[NSString class]]) {
+            if ([clazz isKindOfClass:NSString.class]) {
                 clazz = NSClassFromString(clazz);
             }
-            property.classInArray = clazz;
+            property.classInCollection = clazz;
             
             [allProperties addObject:property];
         }
@@ -190,7 +221,9 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
         free(properties);
     }];
     
-    return allProperties.copy;
+    _allProperties = allProperties.copy;
+    _allCodingProperties = codingProperties.copy;
+    _mapper = mapper.copy;
 }
 
 - (void)setNeedsUpdate {
@@ -207,6 +240,7 @@ always_inline void MJEAddSelectorResult2Set(Class cls, SEL selector, NSMutableSe
             [set addObjectsFromArray:result];
         }
     }
+    if (!set.count) set = nil;
 }
 
 always_inline void MJEAddSelectorResult2Dictionary(Class cls, SEL selector, NSMutableDictionary *dictionary) {
@@ -219,6 +253,7 @@ always_inline void MJEAddSelectorResult2Dictionary(Class cls, SEL selector, NSMu
             [dictionary addEntriesFromDictionary:result];
         }
     }
+    if (!dictionary.count) dictionary = nil;
 }
 
 @end

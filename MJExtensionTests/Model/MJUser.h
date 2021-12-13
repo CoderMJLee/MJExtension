@@ -13,7 +13,7 @@ typedef enum {
     SexFemale
 } Sex;
 
-@interface MJUser : NSObject
+@interface MJUser : NSObject <MJEConfiguration>
 /** 名称 */
 @property (copy, nonatomic) NSString *name;
 /** 头像 */

@@ -7,6 +7,7 @@
 //
 
 #import "NSString+MJExtension.h"
+#import <locale>
 
 @implementation NSString (MJExtension)
 - (NSString *)mj_underlineFromCamel
@@ -47,19 +48,18 @@
 - (NSString *)mj_firstCharLower
 {
     if (self.length == 0) return self;
-    NSMutableString *string = [NSMutableString string];
-    [string appendString:[NSString stringWithFormat:@"%c", [self characterAtIndex:0]].lowercaseString];
-    if (self.length >= 2) [string appendString:[self substringFromIndex:1]];
-    return string;
+    return [NSString stringWithFormat:@"%@%@", [self substringToIndex:1].lowercaseString, [self substringFromIndex:1]];
 }
 
 - (NSString *)mj_firstCharUpper
 {
     if (self.length == 0) return self;
-    NSMutableString *string = [NSMutableString string];
-    [string appendString:[NSString stringWithFormat:@"%c", [self characterAtIndex:0]].uppercaseString];
-    if (self.length >= 2) [string appendString:[self substringFromIndex:1]];
-    return string;
+    return [NSString stringWithFormat:@"%@%@", [self substringToIndex:1].uppercaseString, [self substringFromIndex:1]];
+}
+
+- (SEL)mj_defaultSetter {
+    NSString *setterName = [NSString stringWithFormat:@"set%@%@:", [self substringToIndex:1].uppercaseString, [self substringFromIndex:1]];
+    return NSSelectorFromString(setterName);
 }
 
 - (BOOL)mj_isPureInt
@@ -76,5 +76,18 @@
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
     return [NSURL URLWithString:(NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self, (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL,kCFStringEncodingUTF8))];
 #pragma clang diagnostic pop
+}
+
+- (long double)mj_longDoubleValueWithLocale:(NSLocale *)locale {
+    const char *str = [self cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *localeIdentifier = [locale.localeIdentifier cStringUsingEncoding:NSUTF8StringEncoding];
+    locale_t loc = newlocale(LC_ALL_MASK, localeIdentifier, nil);
+    long double num = strtold_l(str, NULL, loc);
+    freelocale(loc);
+    return num;
+}
+
+- (long double)mj_longDoubleValue {
+    return [self mj_longDoubleValueWithLocale:nil];
 }
 @end

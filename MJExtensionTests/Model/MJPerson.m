@@ -17,4 +17,6 @@ MJSecureCodingImplementation(MJPerson, YES)
     return @{@"friends": MJPerson.class,
              @"books": NSString.class};
 }
+@synthesize oldCrash;
+
 @end

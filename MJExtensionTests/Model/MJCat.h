@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSArray<NSString *> *nicknames;
 @property (nonatomic, copy, nullable) NSString *address;
 @property (nonatomic, copy, nullable) NSString *identifier;
+
+@property (nonatomic) UIColor *color;
 
 @end
 

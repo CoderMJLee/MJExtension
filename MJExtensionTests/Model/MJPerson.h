@@ -10,7 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MJPerson : NSObject
+@protocol TestCrashProtocol <NSObject>
+
+@property (copy, readonly, nonatomic) NSString *oldCrash;
+
+@end
+
+@interface MJPerson : NSObject <TestCrashProtocol>
 @property (copy, nonatomic) NSString *name;
 @property (nonatomic) BOOL isVIP;
 @property (strong, nonatomic) NSArray<MJPerson *> *friends;

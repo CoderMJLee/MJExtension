@@ -14,5 +14,11 @@
 //+ (NSArray *)mj_allowedPropertyNames {
 //    return @[@"name", @"icon"];
 //}
+
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+        @"speed": @[@"size.width", @"speed"]
+    };
+}
 MJExtensionLogAllProperties
 @end

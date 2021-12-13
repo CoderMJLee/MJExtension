@@ -3,6 +3,17 @@
 #define __MJExtensionConst__H__
 
 #import <Foundation/Foundation.h>
+#ifndef always_inline
+#define always_inline __inline__ __attribute__((always_inline))
+#endif
+
+#import <objc/message.h>
+#ifndef mj_msgSendOne
+#define mj_msgSendOne(obj, sel, type, value) ((void (*)(id, SEL, type))objc_msgSend)(obj, sel, value)
+#endif
+#ifndef mj_msgSendGet
+#define mj_msgSendGet(obj, sel, type) ((type (*)(id, SEL))objc_msgSend)(obj, sel)
+#endif
 
 #ifndef MJ_LOCK
 #define MJ_LOCK(lock) dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);

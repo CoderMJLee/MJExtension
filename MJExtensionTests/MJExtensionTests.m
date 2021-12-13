@@ -125,6 +125,7 @@
                            @"like" : @"20个",
                            @"collect" : @"收藏5",
                            @"rich" : @"hehe",
+                           @"money_longDouble": @"120,5"
                            };
     
     // 2.将字典转为MJFrenchUser模型
@@ -140,12 +141,13 @@
     XCTAssert(user.like == 20);
     XCTAssert(user.collect == 0);
     XCTAssert(user.rich == NO);
+    XCTAssertEqual(user.money_longDouble, 120.5);
 }
 
 #pragma mark JSON字符串 -> 模型
 - (void)testJSONString2Model {
     // 1.定义一个JSON字符串
-    NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20, \"height\":333333.7}";
+    NSString *jsonString = @"{\"name\":\"Jack\", \"icon\":\"lufy.png\", \"age\":20, \"height\":333333.7, \"size.width\":55}";
     
     // 2.将JSON字符串转为MJUser模型
     MJUser *user = [MJUser mj_objectWithKeyValues:jsonString];
@@ -155,6 +157,7 @@
     XCTAssert([user.icon isEqual:@"lufy.png"]);
     XCTAssert(user.age == 20);
     XCTAssert(user.height.doubleValue == 333333.7);
+    XCTAssert(user.speed == 55, "带点的特殊 key 解析失败");
 }
 
 #pragma mark 复杂的字典 -> 模型 (模型里面包含了模型)
@@ -450,13 +453,20 @@
     NSError *error = nil;
     // 归档
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:bag requiringSecureCoding:YES error:&error];
-    [data writeToFile:file atomically:true];
+    BOOL isFinished = [data writeToFile:file atomically:true];
+    XCTAssertNil(error);
+    XCTAssert(isFinished);
 
     // 解档
     NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
     error = nil;
     MJBag *decodedBag = [NSKeyedUnarchiver unarchivedObjectOfClass:MJBag.class fromData:readData error:&error];
-    MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
+    // name has been ignored
+    XCTAssertNotEqual(decodedBag.name, bag.name);
+    XCTAssertNil(decodedBag.name);
+    XCTAssert(decodedBag.price == bag.price);
+    XCTAssertEqual(decodedBag.isBig, bag.isBig);
+    XCTAssert(decodedBag.weight == bag.weight);
 }
 
 - (void)testCodingModelArrayProperty {
@@ -519,8 +529,12 @@
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"name" : @"5分钟突破iOS开发",
-                           @"publishedTime" : @"2011-09-10"
-                           };
+                           @"publishedTime" : @"2011-09-10",
+                           @"box": @{
+                               @"name": @"bee",
+                               @"weight": @(15)
+                           }
+    };
     
     // 2.将字典转为MJUser模型
     MJBook *book = [MJBook mj_objectWithKeyValues:dict];
@@ -547,5 +561,63 @@
     user.icon = @"test.png";
     
     MJExtensionLog(@"%@", user);
+}
+
+#pragma mark 测试含有 UIColor 的属性
+- (void)testUIColorPropertyModel {
+    NSDictionary *catDict = @{
+        @"name": @"五更琉璃",
+        @"address": [NSNull null],
+        @"nicknames": @[
+                @"黑猫",
+                @"我老婆",
+        ],
+        @"color": @{
+            @"systemColorName": @"blackColor"
+        },
+    };
+    MJCat *cat = [MJCat mj_objectWithKeyValues:catDict];
+    
+    XCTAssertEqual(cat.name, catDict[@"name"]);
+    XCTAssertNil(cat.address);
+    XCTAssert(cat.nicknames.count == 2);
+    // 这个 Color 是不能被正常当普通的 UIColor 使用的.
+    XCTAssert(cat.color);
+}
+
+- (void)testUIColor2JSON {
+    MJCat *ごこうるり = [[MJCat alloc] init];
+    ごこうるり.name = @"五更瑠璃";
+    ごこうるり.nicknames = @[@"黑猫", @"我老婆"];
+    ごこうるり.color = UIColor.blackColor;
+    
+    NSDictionary *JSON = ごこうるり.mj_keyValues;
+    XCTAssertEqual(JSON[@"name"], ごこうるり.name);
+    XCTAssert(((NSArray *)JSON[@"nicknames"]).count == 2);
+}
+
+- (void)testUIColorCoding {
+    // 创建模型
+    MJCat *master = [[MJCat alloc] init];
+    master.name = @"要变了";
+    master.color = UIColor.whiteColor;
+    master.nicknames = @[@"主人", @"陛下"];
+    
+    NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:@" cat.data"];
+    NSError *error = nil;
+    // 归档
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:master requiringSecureCoding:YES error:&error];
+    BOOL isFinished = [data writeToFile:file atomically:true];
+    XCTAssertNil(error);
+    XCTAssert(isFinished);
+
+    // 解档
+    NSData *readData = [NSFileManager.defaultManager contentsAtPath:file];
+    error = nil;
+    MJCat *decodedMaster = [NSKeyedUnarchiver unarchivedObjectOfClass:MJCat.class fromData:readData error:&error];
+    XCTAssertNil(error);
+    XCTAssert([decodedMaster.name isEqualToString:master.name]);
+    XCTAssert(decodedMaster.nicknames.count == 2);
+    XCTAssert(decodedMaster.color == master.color);
 }
 @end

@@ -13,7 +13,7 @@
 - (id)mj_newValueFromOldValue:(id)oldValue property:(MJProperty *)property {
     if ([property.name isEqualToString:@"publisher"]) {
         if (oldValue == nil || oldValue == NSNull.null) return @"";
-    } else if (property.type.typeClass == [NSDate class]) {
+    } else if (property.typeClass == NSDate.class) {
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
         fmt.dateFormat = @"yyyy-MM-dd";
         return [fmt dateFromString:oldValue];

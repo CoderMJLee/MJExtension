@@ -13,4 +13,6 @@
 @property (assign, nonatomic) double price;
 @property (nonatomic) BOOL isBig;
 @property (nonatomic) NSInteger weight;
+
+@property (nonatomic) long double price_longDouble;
 @end

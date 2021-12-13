@@ -27,7 +27,15 @@
  */
 - (NSString *)mj_firstCharLower;
 
+- (SEL)mj_defaultSetter;
+
 - (BOOL)mj_isPureInt;
 
 - (NSURL *)mj_url;
+
+/// The same with `[self mj_longDoubleValueWithLocale:nil];`
+- (long double)mj_longDoubleValue;
+/// Use `strtold_l` method to convert the string.
+/// @param locale maybe Franch number need this.
+- (long double)mj_longDoubleValueWithLocale:(NSLocale *)locale;
 @end
