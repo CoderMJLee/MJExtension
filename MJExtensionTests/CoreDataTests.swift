@@ -57,8 +57,7 @@ class CoreDataTests: XCTestCase {
     func json2CoreDataObject() {
         context.performAndWait {
             guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
-                XCTAssert(false, "conversion to core data object failed")
-                return
+                fatalError("conversion to core data object failed")
             }
             
             XCTAssert(tester.isJuan == Values.isJuan)
@@ -77,8 +76,7 @@ class CoreDataTests: XCTestCase {
             coreDataObject.identifier = Values.identifier
             
             guard let dict = coreDataObject.mj_keyValues() else {
-                XCTAssert(false, "conversion to keyValues failed")
-                return
+                fatalError("conversion to core data object failed")
             }
             
             XCTAssert(dict["isJuan"] as? Bool == Values.isJuan)

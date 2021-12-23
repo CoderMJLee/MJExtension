@@ -20,21 +20,23 @@ class SwiftModelTests: XCTestCase {
             "child": "im"
         ]
         
-        for _ in 0...5 {
-            guard let tester1 = MJSuperTester.mj_object(withKeyValues: testerDict) else {
-                XCTAssert(false, "conversion failed")
-                return
-            }
-            guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
-                XCTAssert(false, "conversion failed")
-                return
-            }
-            
-            XCTAssert(tester.isSpecialAgent)
-            XCTAssert(tester.identifier == testerDict["identifier"] as? String)
-            XCTAssert(tester.age == testerDict["age"] as! Int)
-            XCTAssert(tester.name == testerDict["name"] as? String)
+        guard let tester1 = MJSuperTester.mj_object(withKeyValues: testerDict) else {
+            fatalError("conversion failed")
         }
+        XCTAssert(tester1.isSpecialAgent)
+        XCTAssert(tester1.identifier == testerDict["identifier"] as? String)
+        XCTAssert(tester1.age == testerDict["age"] as! Int)
+        XCTAssert(tester1.name == testerDict["name"] as? String)
+        
+        guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
+            fatalError("conversion failed")
+        }
+        
+        XCTAssert(tester.isSpecialAgent)
+        XCTAssert(tester.identifier == testerDict["identifier"] as? String)
+        XCTAssert(tester.age == testerDict["age"] as! Int)
+        XCTAssert(tester.name == testerDict["name"] as? String)
+        XCTAssertEqual(tester.child, testerDict["child"] as? String)
     }
 
     // MARK: 🌈 Use Objective-C model code
@@ -47,7 +49,7 @@ class SwiftModelTests: XCTestCase {
         ]
         
         guard let user = MJUser.mj_object(withKeyValues: userDict) else {
-            XCTAssert(false, "conversion failed")
+            fatalError("conversion failed")
             return
         }
         XCTAssert(user.rich)

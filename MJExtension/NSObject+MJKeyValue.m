@@ -79,38 +79,63 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 
 #pragma mark - --公共方法--
 #pragma mark - 字典 -> 模型
-- (instancetype)mj_setKeyValues:(id)keyValues
-{
+- (instancetype)mj_setKeyValues:(id)keyValues {
     return [self mj_setKeyValues:keyValues context:nil];
 }
 
 /**
  核心代码：
  */
-- (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context
-{
+- (instancetype)mj_setKeyValues:(id)keyValues
+                        context:(NSManagedObjectContext *)context {
     // 获得JSON对象
-    keyValues = [keyValues mj_JSONObject];
+    id object = [keyValues mj_JSONObject];
     
-    MJExtensionAssertError([keyValues isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
+    MJExtensionAssertError([object isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
     
     MJEClass *mjeClass = [MJEClass cachedClass:self.class];
-    NSArray<MJProperty *> *allProperties = mjeClass->_allProperties;
+    NSDictionary *dict = object;
     
-    NSLocale *numberLocale = nil;
-    if (mjeClass->_hasLocaleModifier) {
-        numberLocale = self.class.mj_locale;
+    if (mjeClass->_propertiesCount > dict.count) {
+        [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, id value, BOOL *stop) {
+            MJProperty *property = mjeClass->_mapper[key];
+            while (property) {
+                [self mj_setValue:value forProperty:property
+                          context:context locale:mjeClass->_locale
+                       classCache:mjeClass];
+                property = property->_nextSame;
+            }
+        }];
+        if (mjeClass->_multiKeysProperties.count) {
+            [self mj_enumerateProperties:mjeClass->_multiKeysProperties
+                          withDictionary:dict classCache:mjeClass context:context];
+        }
+    } else {
+        [self mj_enumerateProperties:mjeClass->_allProperties
+                   withDictionary:dict classCache:mjeClass
+                          context:context];
     }
-    
-    [allProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
+
+    // 转换完毕
+    if (mjeClass->_hasDictionary2ObjectModifier) {
+        [self mj_didConvertToObjectWithKeyValues:keyValues];
+    }
+    return self;
+}
+
+- (void)mj_enumerateProperties:(NSArray<MJProperty *> *)properties
+                withDictionary:(NSDictionary *)dictionary
+                    classCache:(MJEClass *)classCache
+                       context:(NSManagedObjectContext *)context {
+    [properties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
         @try {
             // 1.取出属性值
             id value;
             if (!property->_isMultiMapping) {
-                value = keyValues[property->_mappedKey];
+                value = dictionary[property->_mappedKey];
             } else {
                 for (NSArray *propertyKeys in property->_mappedMultiKeys) {
-                    value = keyValues;
+                    value = dictionary;
                     for (MJPropertyKey *propertyKey in propertyKeys) {
                         value = [propertyKey valueInObject:value];
                     }
@@ -118,17 +143,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 }
             }
             
-            if (mjeClass->_hasOld2NewModifier
-                && property->_hasValueModifier) {
-                id newValue = [self mj_newValueFromOldValue:value property:property];
-                if (newValue != value) { // 有过滤后的新值
-                    [property setValue:newValue forObject:self];
-                    return;
-                }
-            }
-            
             [self mj_setValue:value forProperty:property
-                    inContext:context locale:numberLocale];
+                      context:context locale:classCache->_locale
+                   classCache:classCache];
             
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
@@ -138,17 +155,21 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 #endif
         }
     }];
-    
-    // 转换完毕
-    if (mjeClass->_hasDictionary2ObjectModifier) {
-        [self mj_didConvertToObjectWithKeyValues:keyValues];
-    }
-    return self;
 }
 
 - (void)mj_setValue:(id)value forProperty:(MJProperty *)property
-          inContext:(NSManagedObjectContext *)context
-             locale:(NSLocale *)locale {
+          context:(NSManagedObjectContext *)context
+             locale:(NSLocale *)locale
+         classCache:(MJEClass *)classCache {
+    if (classCache->_hasOld2NewModifier
+        && property->_hasValueModifier) {
+        id newValue = [self mj_newValueFromOldValue:value property:property];
+        if (newValue != value) { // 有过滤后的新值
+            [property setValue:newValue forObject:self];
+            return;
+        }
+    }
+    
     // 如果没有值，就直接返回
     if (!value || value == NSNull.null) return;
     // 2.复杂处理
@@ -198,6 +219,8 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             long double num = [value mj_longDoubleValueWithLocale:locale];
             mj_selfSend(property.setter, long double, num);
             return;
+        } else if (property->_basicObjectType == MJEBasicTypeData || property->_basicObjectType == MJEBasicTypeMutableData) {
+            value = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding].mutableCopy;
         } else if (property.isNumber) {
             NSString *oldValue = value;
             
@@ -377,8 +400,10 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             } else if ([value isKindOfClass:[NSArray class]]) {
                 // 3.处理数组里面有模型的情况
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
-            } else if (propertyClass == [NSURL class]) {
+            } else if (property->_basicObjectType == MJEBasicTypeURL) {
                 value = [value absoluteString];
+            } else if (property->_basicObjectType == MJEBasicTypeAttributedString || property->_basicObjectType == MJEBasicTypeMutableAttributedString) {
+                value = [(NSAttributedString *)value string];
             }
             
             // 4.赋值

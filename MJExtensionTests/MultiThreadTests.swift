@@ -41,8 +41,7 @@ class MultiThreadTests: XCTestCase {
                 sleep(1)
                 let testerDict = self.testerJSON(id)
                 guard let _ = MJTester.mj_object(withKeyValues: testerDict) else {
-                    XCTAssert(false, "conversion failed")
-                    return
+                    fatalError("conversion failed")
                 }
                 print("tester: \(id)")
 //                XCTAssert(tester.isSpecialAgent)
@@ -59,8 +58,7 @@ class MultiThreadTests: XCTestCase {
                 sleep(1)
                 let catDict = self.catJSON(id)
                 guard let _ = MJCat.mj_object(withKeyValues: catDict) else {
-                    XCTAssert(false, "convertion failed")
-                    return
+                    fatalError("conversion failed")
                 }
                 print("cat: \(id)")
 //                cat.nicknames?.forEach({ (nickname) in

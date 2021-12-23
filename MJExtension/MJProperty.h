@@ -55,6 +55,7 @@ typedef NS_ENUM(NSUInteger, MJEBasicType) {
     MJEBasicTypeMutableDictionary,
     MJEBasicTypeMutableData,
     MJEBasicTypeDecimalNumber,
+    MJEBasicTypeMutableAttributedString,
     
     MJEBasicTypeString,
     MJEBasicTypeSet,
@@ -62,6 +63,7 @@ typedef NS_ENUM(NSUInteger, MJEBasicType) {
     MJEBasicTypeDictionary,
     MJEBasicTypeData,
     MJEBasicTypeNumber,
+    MJEBasicTypeAttributedString,
     
     MJEBasicTypeValue,
     MJEBasicTypeDate,

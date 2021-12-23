@@ -18,14 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
     
     NSArray<MJProperty *> * _Nullable _allProperties2JSON;
     NSDictionary <NSString *, MJProperty *> *_mapper;
+    NSArray<MJProperty *> *_multiKeysProperties;
     
     BOOL _hasOld2NewModifier;
-    BOOL _hasLocaleModifier;
     BOOL _hasDictionary2ObjectModifier;
     BOOL _hasObject2DictionaryModifier;
     BOOL _hasClassModifier;
     
     BOOL _needsUpdate;
+    /// = _allProperties.count
+    NSInteger _propertiesCount;
+    NSLocale * _Nullable _locale;
 }
 
 - (void)setNeedsUpdate;
