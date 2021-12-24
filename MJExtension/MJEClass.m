@@ -238,7 +238,7 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     _needsUpdate = YES;
 }
 
-always_inline void MJEAddSelectorResult2Set(Class cls, SEL selector, NSMutableSet *set) {
+mj_inline void MJEAddSelectorResult2Set(Class cls, SEL selector, NSMutableSet *set) {
     if ([cls respondsToSelector:selector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -251,7 +251,7 @@ always_inline void MJEAddSelectorResult2Set(Class cls, SEL selector, NSMutableSe
     if (!set.count) set = nil;
 }
 
-always_inline void MJEAddSelectorResult2Dictionary(Class cls, SEL selector, NSMutableDictionary *dictionary) {
+mj_inline void MJEAddSelectorResult2Dictionary(Class cls, SEL selector, NSMutableDictionary *dictionary) {
     if ([cls respondsToSelector:selector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"

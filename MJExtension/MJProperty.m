@@ -164,7 +164,7 @@
 /**
  *  通过字符串key创建对应的keys
  */
- always_inline NSArray * MultiKeysWithStringKey(NSString *stringKey) {
+mj_inline NSArray * MultiKeysWithStringKey(NSString *stringKey) {
     if (stringKey.length == 0) return nil;
     
     NSMutableArray *multiKeys = [NSMutableArray array];
@@ -205,7 +205,7 @@
 
 ///  If JSON key is "xxx.xxx", so add one more key for it.
 /// @param dotKey dot key such as xxx.xxx
-always_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
+mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
     MJPropertyKey *specialKey = [[MJPropertyKey alloc] init];
     specialKey.name = dotKey;
     return @[specialKey];
@@ -241,7 +241,7 @@ always_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
     }
 }
 
-always_inline MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
+mj_inline MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
     if (!typeEncoding) return MJEPropertyTypeUndefined;
     size_t length = strlen(typeEncoding);
     if (length == 0) return MJEPropertyTypeUndefined;
@@ -280,7 +280,7 @@ always_inline MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
     }
 }
 
-always_inline MJEBasicType MJEGetBasicObjectType(Class cls) {
+mj_inline MJEBasicType MJEGetBasicObjectType(Class cls) {
     if (!cls) return MJEBasicTypeUndefined;
     if ([cls isSubclassOfClass:NSMutableString.class]) return MJEBasicTypeMutableString;
     if ([cls isSubclassOfClass:NSMutableSet.class]) return MJEBasicTypeMutableSet;

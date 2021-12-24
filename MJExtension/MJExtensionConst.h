@@ -3,8 +3,8 @@
 #define __MJExtensionConst__H__
 
 #import <Foundation/Foundation.h>
-#ifndef always_inline
-#define always_inline __inline__ __attribute__((always_inline))
+#ifndef mj_inline
+#define mj_inline __inline__ __attribute__((always_inline))
 #endif
 
 #import <objc/message.h>
