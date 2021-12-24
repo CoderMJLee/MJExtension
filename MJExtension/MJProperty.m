@@ -213,7 +213,7 @@
 
 ///  If JSON key is "xxx.xxx", so add one more key for it.
 /// @param dotKey dot key such as xxx.xxx
-mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
+NS_INLINE NSArray * SpecialWithDotKey(NSString *dotKey) {
     MJPropertyKey *specialKey = [[MJPropertyKey alloc] init];
     specialKey.name = dotKey;
     return @[specialKey];
@@ -249,7 +249,7 @@ mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
     }
 }
 
-mj_inline MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
+MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
     if (!typeEncoding) return MJEPropertyTypeUndefined;
     size_t length = strlen(typeEncoding);
     if (length == 0) return MJEPropertyTypeUndefined;
@@ -288,7 +288,7 @@ mj_inline MJEPropertyType MJEGetPropertyType(const char *typeEncoding) {
     }
 }
 
-mj_inline MJEBasicType MJEGetBasicObjectType(Class cls) {
+MJEBasicType MJEGetBasicObjectType(Class cls) {
     if (!cls) return MJEBasicTypeUndefined;
     if ([cls isSubclassOfClass:NSMutableString.class]) return MJEBasicTypeMutableString;
     if ([cls isSubclassOfClass:NSMutableSet.class]) return MJEBasicTypeMutableSet;

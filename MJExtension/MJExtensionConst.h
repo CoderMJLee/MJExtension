@@ -3,9 +3,6 @@
 #define __MJExtensionConst__H__
 
 #import <Foundation/Foundation.h>
-#ifndef mj_inline
-#define mj_inline __inline__ __attribute__((always_inline))
-#endif
 
 #import <objc/message.h>
 #ifndef mj_msgSendOne
