@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "E951DA72-7722-4100-A767-DB89DD56EA00",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MJExtension.xcodeproj",
+        "identifier" : "2D2DBA542317DBB9005A689E",
+        "name" : "MJExtensionTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -99,6 +99,8 @@
 		01BC91E327741956004E5265 /* MJCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJCredential.swift; sourceTree = "<group>"; };
 		01BC91E527741D8C004E5265 /* MJArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJArticle.swift; sourceTree = "<group>"; };
 		01BC920B27747C05004E5265 /* Benchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
+		01BC923C2775AEDF004E5265 /* TestAllConversionCorrectness.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestAllConversionCorrectness.xctestplan; sourceTree = "<group>"; };
+		01BC923D2775B047004E5265 /* MJExtension.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MJExtension.xctestplan; sourceTree = "<group>"; };
 		01F28185248F64ED008775BA /* MJCat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJCat.h; sourceTree = "<group>"; };
 		01F28186248F64ED008775BA /* MJCat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJCat.m; sourceTree = "<group>"; };
 		01F5515C2757144500518218 /* MJEClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJEClass.h; sourceTree = "<group>"; };
@@ -216,6 +218,15 @@
 			path = SwiftModel;
 			sourceTree = "<group>";
 		};
+		01BC923E2775B11F004E5265 /* Plans */ = {
+			isa = PBXGroup;
+			children = (
+				01BC923C2775AEDF004E5265 /* TestAllConversionCorrectness.xctestplan */,
+				01BC923D2775B047004E5265 /* MJExtension.xctestplan */,
+			);
+			path = Plans;
+			sourceTree = "<group>";
+		};
 		2D2DB9BF2317DA07005A689E = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +277,7 @@
 		2D2DBA562317DBB9005A689E /* MJExtensionTests */ = {
 			isa = PBXGroup;
 			children = (
+				01BC923E2775B11F004E5265 /* Plans */,
 				0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */,
 				0179886924EFA422007F7FBC /* SwiftModel */,
 				0107507526E88DA600AAEA10 /* CoreDataModel */,

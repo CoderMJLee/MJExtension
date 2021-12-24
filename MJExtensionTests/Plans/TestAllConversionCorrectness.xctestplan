@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "A3EFF1C1-EE22-4FF3-BC9D-E5B0692467F8",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MJExtension.xcodeproj",
+      "identifier" : "2D2DB9F32317DA64005A689E",
+      "name" : "MJExtension"
+    },
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "skippedTests" : [
+        "Benchmark",
+        "MultiThreadTests"
+      ],
+      "target" : {
+        "containerPath" : "container:MJExtension.xcodeproj",
+        "identifier" : "2D2DBA542317DBB9005A689E",
+        "name" : "MJExtensionTests"
+      }
+    }
+  ],
+  "version" : 1
+}

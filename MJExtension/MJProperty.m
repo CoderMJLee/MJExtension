@@ -13,6 +13,56 @@
 #include "TargetConditionals.h"
 #import "NSString+MJExtension.h"
 
+@interface NSString (MJPropertyKey)
+
+/// 通过字符串key创建对应的keys
+- (NSArray<MJPropertyKey *> *)mj_multiKeys;
+
+@end
+
+@implementation NSString (MJPropertyKey)
+
+- (NSArray<MJPropertyKey *> *)mj_multiKeys {
+    if (self.length == 0) return nil;
+    
+    NSMutableArray *multiKeys = [NSMutableArray array];
+    // 如果有多级映射
+    NSArray *oldKeys = [self componentsSeparatedByString:@"."];
+    
+    for (NSString *oldKey in oldKeys) {
+        NSUInteger start = [oldKey rangeOfString:@"["].location;
+        if (start != NSNotFound) { // 有索引的key
+            NSString *prefixKey = [oldKey substringToIndex:start];
+            NSString *indexKey = prefixKey;
+            if (prefixKey.length) {
+                MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
+                propertyKey.name = prefixKey;
+                [multiKeys addObject:propertyKey];
+                
+                indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
+            }
+            
+            /** 解析索引 **/
+            // 元素
+            NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
+            for (NSInteger i = 0; i<cmps.count - 1; i++) {
+                MJPropertyKey *subPropertyKey = [[MJPropertyKey alloc] init];
+                subPropertyKey.type = MJPropertyKeyTypeArray;
+                subPropertyKey.name = cmps[i];
+                [multiKeys addObject:subPropertyKey];
+            }
+        } else { // 没有索引的key
+            MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
+            propertyKey.name = oldKey;
+            [multiKeys addObject:propertyKey];
+        }
+    }
+    
+    return multiKeys;
+}
+
+@end
+
 @import CoreData;
 
 @interface MJProperty()
@@ -161,48 +211,6 @@
     [object setValue:value forKey:self.name];
 }
 
-/**
- *  通过字符串key创建对应的keys
- */
-mj_inline NSArray * MultiKeysWithStringKey(NSString *stringKey) {
-    if (stringKey.length == 0) return nil;
-    
-    NSMutableArray *multiKeys = [NSMutableArray array];
-    // 如果有多级映射
-    NSArray *oldKeys = [stringKey componentsSeparatedByString:@"."];
-    
-    for (NSString *oldKey in oldKeys) {
-        NSUInteger start = [oldKey rangeOfString:@"["].location;
-        if (start != NSNotFound) { // 有索引的key
-            NSString *prefixKey = [oldKey substringToIndex:start];
-            NSString *indexKey = prefixKey;
-            if (prefixKey.length) {
-                MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-                propertyKey.name = prefixKey;
-                [multiKeys addObject:propertyKey];
-                
-                indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
-            }
-            
-            /** 解析索引 **/
-            // 元素
-            NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
-            for (NSInteger i = 0; i<cmps.count - 1; i++) {
-                MJPropertyKey *subPropertyKey = [[MJPropertyKey alloc] init];
-                subPropertyKey.type = MJPropertyKeyTypeArray;
-                subPropertyKey.name = cmps[i];
-                [multiKeys addObject:subPropertyKey];
-            }
-        } else { // 没有索引的key
-            MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-            propertyKey.name = oldKey;
-            [multiKeys addObject:propertyKey];
-        }
-    }
-    
-    return multiKeys;
-}
-
 ///  If JSON key is "xxx.xxx", so add one more key for it.
 /// @param dotKey dot key such as xxx.xxx
 mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
@@ -214,7 +222,7 @@ mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
 /** 对应着字典中的key */
 - (void)handleOriginKey:(id)originKey {
     if ([originKey isKindOfClass:NSString.class]) { // 字符串类型的key
-        NSArray<MJPropertyKey *> *multiKeys = MultiKeysWithStringKey(originKey);
+        NSArray<MJPropertyKey *> *multiKeys = ((NSString *)originKey).mj_multiKeys;
         NSUInteger keysCount = multiKeys.count;
         if (keysCount > 1) {
             _isMultiMapping = YES;
@@ -227,7 +235,7 @@ mj_inline NSArray * SpecialWithDotKey(NSString *dotKey) {
         _isMultiMapping = YES;
         NSMutableArray *keyses = [NSMutableArray array];
         for (NSString *stringKey in originKey) {
-            NSArray *multiKeys = MultiKeysWithStringKey(stringKey);
+            NSArray *multiKeys = stringKey.mj_multiKeys;
             if (!multiKeys.count) continue;
             if (multiKeys.count > 1) {
                 // If JSON key is "xxx.xxx", so add one more key for it.
