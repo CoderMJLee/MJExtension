@@ -15,12 +15,21 @@
 
 @interface NSString (MJPropertyKey)
 
-/// 通过字符串key创建对应的keys
+///  If JSON key is "xxx.xxx", so add one more key for it.
+- (MJPropertyKey *)propertyKey;
+
+/// Create keys with dot form, which is splitted by dot.
 - (NSArray<MJPropertyKey *> *)mj_multiKeys;
 
 @end
 
 @implementation NSString (MJPropertyKey)
+
+- (MJPropertyKey *)propertyKey {
+    MJPropertyKey *specialKey = [[MJPropertyKey alloc] init];
+    specialKey.name = self;
+    return specialKey;
+}
 
 - (NSArray<MJPropertyKey *> *)mj_multiKeys {
     if (self.length == 0) return nil;
@@ -211,23 +220,16 @@
     [object setValue:value forKey:self.name];
 }
 
-///  If JSON key is "xxx.xxx", so add one more key for it.
-/// @param dotKey dot key such as xxx.xxx
-NS_INLINE NSArray * SpecialWithDotKey(NSString *dotKey) {
-    MJPropertyKey *specialKey = [[MJPropertyKey alloc] init];
-    specialKey.name = dotKey;
-    return @[specialKey];
-}
-
 /** 对应着字典中的key */
 - (void)handleOriginKey:(id)originKey {
     if ([originKey isKindOfClass:NSString.class]) { // 字符串类型的key
-        NSArray<MJPropertyKey *> *multiKeys = ((NSString *)originKey).mj_multiKeys;
+        NSString *stringKey = originKey;
+        NSArray<MJPropertyKey *> *multiKeys = stringKey.mj_multiKeys;
         NSUInteger keysCount = multiKeys.count;
         if (keysCount > 1) {
             _isMultiMapping = YES;
             // If JSON key is "xxx.xxx", so add one more key for it.
-            _mappedMultiKeys = @[multiKeys, SpecialWithDotKey(originKey)];
+            _mappedMultiKeys = @[multiKeys, @[stringKey.propertyKey]];
         } else if (keysCount == 1) {
             _mappedKey = originKey;
         }
@@ -239,7 +241,7 @@ NS_INLINE NSArray * SpecialWithDotKey(NSString *dotKey) {
             if (!multiKeys.count) continue;
             if (multiKeys.count > 1) {
                 // If JSON key is "xxx.xxx", so add one more key for it.
-                [keyses addObject:SpecialWithDotKey(stringKey)];
+                [keyses addObject:@[stringKey.propertyKey]];
             }
             [keyses addObject:multiKeys];
         }
