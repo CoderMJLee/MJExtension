@@ -24,6 +24,7 @@
 		01BC91E2277418DF004E5265 /* ValueTransformingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E1277418DF004E5265 /* ValueTransformingTest.swift */; };
 		01BC91E427741956004E5265 /* MJCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E327741956004E5265 /* MJCredential.swift */; };
 		01BC91E627741D8C004E5265 /* MJArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E527741D8C004E5265 /* MJArticle.swift */; };
+		01BC921327747C06004E5265 /* Benchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC920B27747C05004E5265 /* Benchmark.swift */; };
 		01D3949B26FACE7D00457B88 /* MJCoreDataTestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0107507626E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld */; };
 		01F28187248F64ED008775BA /* MJCat.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F28186248F64ED008775BA /* MJCat.m */; };
 		01F5515E2757144500518218 /* MJEClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F5515C2757144500518218 /* MJEClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -97,6 +98,7 @@
 		01BC91E1277418DF004E5265 /* ValueTransformingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformingTest.swift; sourceTree = "<group>"; };
 		01BC91E327741956004E5265 /* MJCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJCredential.swift; sourceTree = "<group>"; };
 		01BC91E527741D8C004E5265 /* MJArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJArticle.swift; sourceTree = "<group>"; };
+		01BC920B27747C05004E5265 /* Benchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
 		01F28185248F64ED008775BA /* MJCat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJCat.h; sourceTree = "<group>"; };
 		01F28186248F64ED008775BA /* MJCat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJCat.m; sourceTree = "<group>"; };
 		01F5515C2757144500518218 /* MJEClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJEClass.h; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */,
 				01052EAC25F872D00049EC6F /* MultiThreadTests.swift */,
 				0107507D26E890C100AAEA10 /* CoreDataTests.swift */,
+				01BC920B27747C05004E5265 /* Benchmark.swift */,
 				2D2DBA592317DBB9005A689E /* Info.plist */,
 				2D2DBA872317DCCF005A689E /* PrefixHeader.pch */,
 			);
@@ -543,6 +546,7 @@
 				0179886C24EFA460007F7FBC /* MJTester.swift in Sources */,
 				01F551642758C74F00518218 /* NSObject+MJExtensionExample.m in Sources */,
 				2D2DBA852317DBE0005A689E /* MJPerson.m in Sources */,
+				01BC921327747C06004E5265 /* Benchmark.swift in Sources */,
 				0107507C26E88EAC00AAEA10 /* MJCoreDataTester+CoreDataProperties.swift in Sources */,
 				01BC91E2277418DF004E5265 /* ValueTransformingTest.swift in Sources */,
 				2D2DBA7B2317DBE0005A689E /* MJBox.m in Sources */,

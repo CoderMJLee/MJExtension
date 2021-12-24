@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MJExtension"
-  s.version      = "3.4.0"
+  s.version      = "4.0.0"
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.8'
   s.tvos.deployment_target = '9.0'

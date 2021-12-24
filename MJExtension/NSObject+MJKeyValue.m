@@ -95,25 +95,25 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     
     MJEClass *mjeClass = [MJEClass cachedClass:self.class];
     NSDictionary *dict = object;
-    
-    if (mjeClass->_propertiesCount > dict.count) {
-        [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, id value, BOOL *stop) {
+    // 在循环数量超出不多的情况下, 优先按所有属性列表遍历, threshold = 1.3
+    if (mjeClass->_propertiesCount < dict.count * 1.3) {
+        [self mj_enumerateProperties:mjeClass->_allProperties
+                   withDictionary:dict classCache:mjeClass
+                          context:context];
+    } else {
+        for (NSString *key in dict) {
+            id value = dict[key];
             MJProperty *property = mjeClass->_mapper[key];
             while (property) {
                 [self mj_setValue:value forProperty:property
-                          context:context locale:mjeClass->_locale
-                       classCache:mjeClass];
+                          context:context classCache:mjeClass];
                 property = property->_nextSame;
             }
-        }];
+        }
         if (mjeClass->_multiKeysProperties.count) {
             [self mj_enumerateProperties:mjeClass->_multiKeysProperties
                           withDictionary:dict classCache:mjeClass context:context];
         }
-    } else {
-        [self mj_enumerateProperties:mjeClass->_allProperties
-                   withDictionary:dict classCache:mjeClass
-                          context:context];
     }
 
     // 转换完毕
@@ -127,7 +127,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 withDictionary:(NSDictionary *)dictionary
                     classCache:(MJEClass *)classCache
                        context:(NSManagedObjectContext *)context {
-    [properties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (MJProperty *property in properties) {
         @try {
             // 1.取出属性值
             id value;
@@ -144,8 +144,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             }
             
             [self mj_setValue:value forProperty:property
-                      context:context locale:classCache->_locale
-                   classCache:classCache];
+                      context:context classCache:classCache];
             
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
@@ -154,12 +153,11 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             [exception raise];
 #endif
         }
-    }];
+    }
 }
 
 - (void)mj_setValue:(id)value forProperty:(MJProperty *)property
           context:(NSManagedObjectContext *)context
-             locale:(NSLocale *)locale
          classCache:(MJEClass *)classCache {
     if (classCache->_hasOld2NewModifier
         && property->_hasValueModifier) {
@@ -216,7 +214,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             // 字符串转码
             value = [value mj_url];
         } else if (type == MJEPropertyTypeLongDouble) {
-            long double num = [value mj_longDoubleValueWithLocale:locale];
+            long double num = [value mj_longDoubleValueWithLocale:classCache->_locale];
             mj_selfSend(property.setter, long double, num);
             return;
         } else if (property->_basicObjectType == MJEBasicTypeData || property->_basicObjectType == MJEBasicTypeMutableData) {
@@ -227,7 +225,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
             NSDecimalNumber *decimalValue = [NSDecimalNumber
                                              decimalNumberWithString:oldValue
-                                             locale:locale];
+                                             locale:classCache->_locale];
             
             // 检查特殊情况
             if (decimalValue == NSDecimalNumber.notANumber) {
@@ -314,7 +312,6 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
 {
     // 如果是JSON字符串
     keyValuesArray = [keyValuesArray mj_JSONObject];
-    
     // 1.判断真实性
     MJExtensionAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, [self class], @"keyValuesArray参数不是一个数组");
     
@@ -383,15 +380,15 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     MJEClass *mjeClass = [MJEClass cachedClass:self.class ];
     NSArray<MJProperty *> *allProperties = mjeClass->_allProperties;
     
-    [allProperties enumerateObjectsUsingBlock:^(MJProperty * _Nonnull property, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (MJProperty *property in allProperties) {
         @try {
             // 0.检测是否被忽略
-            if (keys.count && ![keys containsObject:property.name]) return;
-            if ([ignoredKeys containsObject:property.name]) return;
+            if (keys.count && ![keys containsObject:property.name]) continue;
+            if ([ignoredKeys containsObject:property.name]) continue;
             
             // 1.取出属性值
             id value = [property valueForObject:self];
-            if (!value) return;
+            if (!value) continue;
             
             // 2.如果是模型属性
             Class propertyClass = property.typeClass;
@@ -466,7 +463,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             [exception raise];
 #endif
         }
-    }];
+    }
     
     // 转换完毕
     if (mjeClass->_hasObject2DictionaryModifier) {
