@@ -93,31 +93,14 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     
     MJExtensionAssertError([object isKindOfClass:[NSDictionary class]], self, [self class], @"keyValues参数不是一个字典");
     
-    MJEClass *mjeClass = [MJEClass cachedClass:self.class];
+    MJEClass *classCache = [MJEClass cachedClass:self.class];
     NSDictionary *dict = object;
-    // 在循环数量超出不多的情况下, 优先按所有属性列表遍历, threshold = 1.3
-    if (mjeClass->_propertiesCount < dict.count * 1.3) {
-        [self mj_enumerateProperties:mjeClass->_allProperties
-                   withDictionary:dict classCache:mjeClass
-                          context:context];
-    } else {
-        for (NSString *key in dict) {
-            id value = dict[key];
-            MJProperty *property = mjeClass->_mapper[key];
-            while (property) {
-                [self mj_setValue:value forProperty:property
-                          context:context classCache:mjeClass];
-                property = property->_nextSame;
-            }
-        }
-        if (mjeClass->_multiKeysProperties.count) {
-            [self mj_enumerateProperties:mjeClass->_multiKeysProperties
-                          withDictionary:dict classCache:mjeClass context:context];
-        }
-    }
+
+    [self mj_enumerateProperties:classCache->_allProperties
+                  withDictionary:dict classCache:classCache context:context];
 
     // 转换完毕
-    if (mjeClass->_hasDictionary2ObjectModifier) {
+    if (classCache->_hasDictionary2ObjectModifier) {
         [self mj_didConvertToObjectWithKeyValues:keyValues];
     }
     return self;
@@ -143,9 +126,120 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 }
             }
             
-            [self mj_setValue:value forProperty:property
-                      context:context classCache:classCache];
+            if (classCache->_hasOld2NewModifier
+                && property->_hasValueModifier) {
+                id newValue = [self mj_newValueFromOldValue:value property:property];
+                if (newValue != value) { // 有过滤后的新值
+                    [property setValue:newValue forObject:self];
+                    return;
+                }
+            }
             
+            // 如果没有值，就直接返回
+            if (!value || value == NSNull.null) return;
+            // 2.复杂处理
+            MJEPropertyType type = property.type;
+            Class propertyClass = property.typeClass;
+            Class objectClass = property.classInCollection;
+            
+            // 不可变 -> 可变处理
+            if (propertyClass == [NSMutableArray class] && [value isKindOfClass:[NSArray class]]) {
+                value = [NSMutableArray arrayWithArray:value];
+            } else if (propertyClass == [NSMutableDictionary class] && [value isKindOfClass:[NSDictionary class]]) {
+                value = [NSMutableDictionary dictionaryWithDictionary:value];
+            } else if (propertyClass == [NSMutableString class] && [value isKindOfClass:[NSString class]]) {
+                value = [NSMutableString stringWithString:value];
+            } else if (propertyClass == [NSMutableData class] && [value isKindOfClass:[NSData class]]) {
+                value = [NSMutableData dataWithData:value];
+            }
+            
+            if (property->_basicObjectType == MJEBasicTypeUndefined && propertyClass) { // 模型属性
+                value = [propertyClass mj_objectWithKeyValues:value context:context];
+            } else if (objectClass) {
+                if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
+                    // string array -> url array
+                    NSMutableArray *urlArray = [NSMutableArray array];
+                    for (NSString *string in value) {
+                        if (![string isKindOfClass:[NSString class]]) continue;
+                        [urlArray addObject:string.mj_url];
+                    }
+                    value = urlArray;
+                } else { // 字典数组-->模型数组
+                    value = [objectClass mj_objectArrayWithKeyValuesArray:value context:context];
+                }
+            } else if (propertyClass == [NSString class]) {
+                if ([value isKindOfClass:[NSNumber class]]) {
+                    // NSNumber -> NSString
+                    value = [value description];
+                } else if ([value isKindOfClass:[NSURL class]]) {
+                    // NSURL -> NSString
+                    value = [value absoluteString];
+                }
+            } else if ([value isKindOfClass:[NSString class]]) {
+                if (propertyClass == [NSURL class]) {
+                    // NSString -> NSURL
+                    // 字符串转码
+                    value = [value mj_url];
+                } else if (type == MJEPropertyTypeLongDouble) {
+                    long double num = [value mj_longDoubleValueWithLocale:classCache->_locale];
+                    mj_selfSend(property.setter, long double, num);
+                    return;
+                } else if (property->_basicObjectType == MJEBasicTypeData || property->_basicObjectType == MJEBasicTypeMutableData) {
+                    value = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding].mutableCopy;
+                } else if (property.isNumber) {
+                    NSString *oldValue = value;
+                    
+                    // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
+                    NSDecimalNumber *decimalValue = [NSDecimalNumber
+                                                     decimalNumberWithString:oldValue
+                                                     locale:classCache->_locale];
+                    
+                    // 检查特殊情况
+                    if (decimalValue == NSDecimalNumber.notANumber) {
+                        value = @(0);
+                    } else if (propertyClass != [NSDecimalNumber class]) {
+                        value = [decimalValue mj_standardValueWithType:type];
+                    } else {
+                        value = decimalValue;
+                    }
+                    
+                    // 如果是BOOL
+                    if (type == MJEPropertyTypeBool || type == MJEPropertyTypeInt8) {
+                        // 字符串转BOOL（字符串没有charValue方法）
+                        // 系统会调用字符串的charValue转为BOOL类型
+                        NSString *lower = [oldValue lowercaseString];
+                        if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
+                            value = @YES;
+                        } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
+                            value = @NO;
+                        }
+                    }
+                }
+            } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
+                // 过滤 NSDecimalNumber类型
+                if (![value isKindOfClass:[NSDecimalNumber class]]) {
+                    value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
+                }
+            }
+            
+            // 经过转换后, 最终检查 value 与 property 是否匹配
+            if (propertyClass && ![value isKindOfClass:propertyClass]) {
+                value = nil;
+            }
+            
+            // 3.赋值
+            // long double 是不支持 KVC 的
+            if (property.type == MJEPropertyTypeLongDouble) {
+                mj_selfSend(property.setter, long double, ((NSNumber *)value).doubleValue);
+                return;
+            } else {
+                //FIXME: Bottleneck #4: Do not call method
+                [property setValue:value forObject:self];
+//                if (!property->_isKVCCompliant || value == nil) return;
+//                //FIXME: Bottleneck #4: Enhanced
+//                [self setValue:value forKey:property.name];
+//            //    mj_msgSendOne(object, _setter, id, value);
+            }
         } @catch (NSException *exception) {
             MJExtensionBuildError([self class], exception.reason);
             MJExtensionLog(@"%@", exception);
@@ -153,120 +247,6 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
             [exception raise];
 #endif
         }
-    }
-}
-
-- (void)mj_setValue:(id)value forProperty:(MJProperty *)property
-          context:(NSManagedObjectContext *)context
-         classCache:(MJEClass *)classCache {
-    if (classCache->_hasOld2NewModifier
-        && property->_hasValueModifier) {
-        id newValue = [self mj_newValueFromOldValue:value property:property];
-        if (newValue != value) { // 有过滤后的新值
-            [property setValue:newValue forObject:self];
-            return;
-        }
-    }
-    
-    // 如果没有值，就直接返回
-    if (!value || value == NSNull.null) return;
-    // 2.复杂处理
-    MJEPropertyType type = property.type;
-    Class propertyClass = property.typeClass;
-    Class objectClass = property.classInCollection;
-    
-    // 不可变 -> 可变处理
-    if (propertyClass == [NSMutableArray class] && [value isKindOfClass:[NSArray class]]) {
-        value = [NSMutableArray arrayWithArray:value];
-    } else if (propertyClass == [NSMutableDictionary class] && [value isKindOfClass:[NSDictionary class]]) {
-        value = [NSMutableDictionary dictionaryWithDictionary:value];
-    } else if (propertyClass == [NSMutableString class] && [value isKindOfClass:[NSString class]]) {
-        value = [NSMutableString stringWithString:value];
-    } else if (propertyClass == [NSMutableData class] && [value isKindOfClass:[NSData class]]) {
-        value = [NSMutableData dataWithData:value];
-    }
-    
-    if (property->_basicObjectType == MJEBasicTypeUndefined && propertyClass) { // 模型属性
-        value = [propertyClass mj_objectWithKeyValues:value context:context];
-    } else if (objectClass) {
-        if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
-            // string array -> url array
-            NSMutableArray *urlArray = [NSMutableArray array];
-            for (NSString *string in value) {
-                if (![string isKindOfClass:[NSString class]]) continue;
-                [urlArray addObject:string.mj_url];
-            }
-            value = urlArray;
-        } else { // 字典数组-->模型数组
-            value = [objectClass mj_objectArrayWithKeyValuesArray:value context:context];
-        }
-    } else if (propertyClass == [NSString class]) {
-        if ([value isKindOfClass:[NSNumber class]]) {
-            // NSNumber -> NSString
-            value = [value description];
-        } else if ([value isKindOfClass:[NSURL class]]) {
-            // NSURL -> NSString
-            value = [value absoluteString];
-        }
-    } else if ([value isKindOfClass:[NSString class]]) {
-        if (propertyClass == [NSURL class]) {
-            // NSString -> NSURL
-            // 字符串转码
-            value = [value mj_url];
-        } else if (type == MJEPropertyTypeLongDouble) {
-            long double num = [value mj_longDoubleValueWithLocale:classCache->_locale];
-            mj_selfSend(property.setter, long double, num);
-            return;
-        } else if (property->_basicObjectType == MJEBasicTypeData || property->_basicObjectType == MJEBasicTypeMutableData) {
-            value = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding].mutableCopy;
-        } else if (property.isNumber) {
-            NSString *oldValue = value;
-            
-            // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
-            NSDecimalNumber *decimalValue = [NSDecimalNumber
-                                             decimalNumberWithString:oldValue
-                                             locale:classCache->_locale];
-            
-            // 检查特殊情况
-            if (decimalValue == NSDecimalNumber.notANumber) {
-                value = @(0);
-            } else if (propertyClass != [NSDecimalNumber class]) {
-                value = [decimalValue mj_standardValueWithType:type];
-            } else {
-                value = decimalValue;
-            }
-            
-            // 如果是BOOL
-            if (type == MJEPropertyTypeBool || type == MJEPropertyTypeInt8) {
-                // 字符串转BOOL（字符串没有charValue方法）
-                // 系统会调用字符串的charValue转为BOOL类型
-                NSString *lower = [oldValue lowercaseString];
-                if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
-                    value = @YES;
-                } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
-                    value = @NO;
-                }
-            }
-        }
-    } else if ([value isKindOfClass:[NSNumber class]] && propertyClass == [NSDecimalNumber class]){
-        // 过滤 NSDecimalNumber类型
-        if (![value isKindOfClass:[NSDecimalNumber class]]) {
-            value = [NSDecimalNumber decimalNumberWithDecimal:[((NSNumber *)value) decimalValue]];
-        }
-    }
-    
-    // 经过转换后, 最终检查 value 与 property 是否匹配
-    if (propertyClass && ![value isKindOfClass:propertyClass]) {
-        value = nil;
-    }
-    
-    // 3.赋值
-    // long double 是不支持 KVC 的
-    if (property.type == MJEPropertyTypeLongDouble) {
-        mj_selfSend(property.setter, long double, ((NSNumber *)value).doubleValue);
-        return;
-    } else {
-        [property setValue:value forObject:self];
     }
 }
 

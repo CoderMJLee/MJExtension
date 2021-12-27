@@ -17,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<MJProperty *> * _Nullable _allCodingProperties;
     
     NSArray<MJProperty *> * _Nullable _allProperties2JSON;
-    NSDictionary <NSString *, MJProperty *> *_mapper;
-    NSArray<MJProperty *> *_multiKeysProperties;
     
     BOOL _hasOld2NewModifier;
     BOOL _hasDictionary2ObjectModifier;
