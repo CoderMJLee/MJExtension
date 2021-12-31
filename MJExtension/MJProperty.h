@@ -77,6 +77,8 @@ NS_ASSUME_NONNULL_BEGIN
     @package
     /// has old to new value modifying method in Class containing.
     BOOL _hasValueModifier;
+    /// has the ability to change generic class or common class(base class) based on value type.
+    BOOL _hasClassModifier;
     /// If mappedMultiKeys exist, this value would be true
     BOOL _isMultiMapping;
     /// For multiple keys,  keypath, subkeys mapping.
@@ -117,6 +119,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setValue:(id)value forObject:(id)object;
 - (id)valueForObject:(id)object;
+
+- (id)valueInDictionary:(NSDictionary *)dictionary;
 
 /// Initializer by a objc_property_t struct
 - (instancetype)initWithProperty:(objc_property_t)property inClass:(Class)cls;

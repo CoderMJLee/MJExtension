@@ -21,12 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _hasOld2NewModifier;
     BOOL _hasDictionary2ObjectModifier;
     BOOL _hasObject2DictionaryModifier;
-    BOOL _hasClassModifier;
     
     BOOL _needsUpdate;
     /// = _allProperties.count
     NSInteger _propertiesCount;
     NSLocale * _Nullable _locale;
+    NSNumberFormatter * _Nullable _numberFormatter;
+    NSDateFormatter * _Nullable _dateFormatter;
 }
 
 - (void)setNeedsUpdate;

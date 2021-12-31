@@ -90,4 +90,68 @@
 - (long double)mj_longDoubleValue {
     return [self mj_longDoubleValueWithLocale:nil];
 }
+
+- (NSDate *)mj_date {
+    static NSArray<NSDateFormatter *> *formatters;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableArray *_formatters = [NSMutableArray arrayWithCapacity:7];
+        // Reference: https://developer.apple.com/library/archive/qa/qa1480/
+        NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        
+        NSArray<NSString *> *strings = @[@"yyyy-MM-dd",
+                                        @"yyyy-MM-dd'T'HH:mm:ss",
+                                        @"yyyy-MM-dd'T'HH:mm:ss.SSS",
+                                        @"yyyy-MM-dd'T'HH:mm:ssZ",
+                                        @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        ];
+        for (NSString *formatterString in strings) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.locale = locale;
+            formatter.timeZone = timeZone;
+            formatter.dateFormat = formatterString;
+            [_formatters addObject:formatter];
+        }
+        
+        formatters = _formatters.copy;
+    });
+    /// "yyyy-MM-dd"
+    /// "yyyy-MM-dd'T'HH:mm:ss"
+    /// "yyyy-MM-dd'T'HH:mm:ss.SSS"
+    /// "yyyy-MM-dd'T'HH:mm:ssZ"
+    /// "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    typedef NS_ENUM(NSUInteger, FormatterString) {
+        FormatterStringShort = 10,
+        FormatterStringLong = 19,
+        FormatterStringLongMSec = 23,
+        FormatterStringFull = 20,
+        FormatterStringFullOrMSec = 24,
+        FormatterStringFull1 = 25,
+        FormatterStringFullMSec = 28,
+        FormatterStringFullMSec1 = 29,
+    };
+    NSDateFormatter *shortFormatter = formatters[0];
+    NSDateFormatter *longFormatter = formatters[1];
+    NSDateFormatter *longMSecFormatter = formatters[2];
+    NSDateFormatter *fullFormatter = formatters[3];
+    NSDateFormatter *fullMSecFormatter = formatters[4];
+    switch (self.length) {
+        case FormatterStringShort:
+            return [shortFormatter dateFromString:self];
+        case FormatterStringLong:
+            return [longFormatter dateFromString:self];
+        case FormatterStringLongMSec:
+            return [longMSecFormatter dateFromString:self];
+        case FormatterStringFull:
+        case FormatterStringFull1:
+            return [fullFormatter dateFromString:self];
+        case FormatterStringFullOrMSec:
+            return [fullFormatter dateFromString:self] ?: [fullMSecFormatter dateFromString:self];
+        case FormatterStringFullMSec:
+        case FormatterStringFullMSec1:
+            return [fullMSecFormatter dateFromString:self];
+        default: return nil;
+    }
+}
 @end

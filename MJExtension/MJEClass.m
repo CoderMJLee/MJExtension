@@ -81,8 +81,14 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
         
         // get generic classes
         MJEAddSelectorResult2Dictionary(currentClass,
-                                        @selector(mj_objectClassInCollection),
+                                        @selector(mj_classInfoInCollection),
                                         genericClasses);
+        // Deprecated API compatible
+        if (![currentClass respondsToSelector:@selector(mj_classInfoInCollection)]) {
+            MJEAddSelectorResult2Dictionary(currentClass,
+                                            @selector(mj_objectClassInArray),
+                                            genericClasses);
+        }
         
         // get replaced keys
         MJEAddSelectorResult2Dictionary(currentClass,
@@ -113,10 +119,17 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     
     if ([cls respondsToSelector:@selector(mj_locale)]) {
         _locale = [(Class<MJEConfiguration>)cls mj_locale];
+    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) { // Deprecated API compatible
+        _locale = [(Class<MJEConfiguration>)cls mj_numberLocale];
+    }
+    if (_locale) {
+        _numberFormatter = [NSNumberFormatter new];
+        _numberFormatter.locale = _locale;
+    }
+    if ([cls respondsToSelector:@selector(mj_dateFormatter)]) {
+        _dateFormatter = [(Class<MJEConfiguration>)cls mj_dateFormatter];
     }
     _hasOld2NewModifier = [cls instancesRespondToSelector:@selector(mj_newValueFromOldValue:property:)];
-    // TODO: 4.0.0 new feature
-//    _hasClassModifier = [
     _hasDictionary2ObjectModifier = [cls instancesRespondToSelector:@selector(mj_didConvertToObjectWithKeyValues:)];
     _hasObject2DictionaryModifier = [cls instancesRespondToSelector:@selector(mj_objectDidConvertToKeyValues:)];
     
@@ -209,6 +222,13 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
                 clazz = NSClassFromString(clazz);
             }
             property.classInCollection = clazz;
+            
+            // check the ability to change class.
+            if (clazz) { // generic
+                property->_hasClassModifier = [clazz respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
+            } else if (property.typeClass && property->_basicObjectType == MJEBasicTypeUndefined) { // common class (base class)
+                property->_hasClassModifier = [property.typeClass respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
+            }
             
             [allProperties addObject:property];
         }

@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MJBaseObject : NSObject
+@interface MJBaseObject : NSObject <MJEConfiguration>
 @property (copy, nonatomic) NSString *name;
 @end

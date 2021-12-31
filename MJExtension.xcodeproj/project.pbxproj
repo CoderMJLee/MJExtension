@@ -21,7 +21,10 @@
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
-		01BC91E2277418DF004E5265 /* ValueTransformingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E1277418DF004E5265 /* ValueTransformingTest.swift */; };
+		01BB00FD277EC1FF002EF5B3 /* DeprecatedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */; };
+		01BB0100277EE8DC002EF5B3 /* NSDate+MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		01BB0101277EE8DC002EF5B3 /* NSDate+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */; };
+		01BC91E2277418DF004E5265 /* ValueTransformingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E1277418DF004E5265 /* ValueTransformingTests.swift */; };
 		01BC91E427741956004E5265 /* MJCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E327741956004E5265 /* MJCredential.swift */; };
 		01BC91E627741D8C004E5265 /* MJArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC91E527741D8C004E5265 /* MJArticle.swift */; };
 		01BC921327747C06004E5265 /* Benchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BC920B27747C05004E5265 /* Benchmark.swift */; };
@@ -95,7 +98,10 @@
 		0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		0179886B24EFA460007F7FBC /* MJTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJTester.swift; sourceTree = "<group>"; };
 		0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModelTests.swift; sourceTree = "<group>"; };
-		01BC91E1277418DF004E5265 /* ValueTransformingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformingTest.swift; sourceTree = "<group>"; };
+		01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeprecatedAPITests.swift; sourceTree = "<group>"; };
+		01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+MJExtension.h"; sourceTree = "<group>"; };
+		01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MJExtension.m"; sourceTree = "<group>"; };
+		01BC91E1277418DF004E5265 /* ValueTransformingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformingTests.swift; sourceTree = "<group>"; };
 		01BC91E327741956004E5265 /* MJCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJCredential.swift; sourceTree = "<group>"; };
 		01BC91E527741D8C004E5265 /* MJArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJArticle.swift; sourceTree = "<group>"; };
 		01BC920B27747C05004E5265 /* Benchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
@@ -268,6 +274,8 @@
 				2D2DBA062317DB32005A689E /* NSObject+MJKeyValue.m */,
 				2D2DBA142317DB33005A689E /* NSString+MJExtension.h */,
 				2D2DBA0B2317DB32005A689E /* NSString+MJExtension.mm */,
+				01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */,
+				01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */,
 				2D2DB9F62317DA64005A689E /* MJExtension.h */,
 				2D2DB9F72317DA64005A689E /* Info.plist */,
 			);
@@ -283,11 +291,12 @@
 				0107507526E88DA600AAEA10 /* CoreDataModel */,
 				2D2DBA5F2317DBDF005A689E /* Model */,
 				2D2DBA572317DBB9005A689E /* MJExtensionTests.m */,
-				01BC91E1277418DF004E5265 /* ValueTransformingTest.swift */,
+				01BC91E1277418DF004E5265 /* ValueTransformingTests.swift */,
 				010DF01D2761D90A0007EEF0 /* SpecialPropertyTypeTests.swift */,
 				0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */,
 				01052EAC25F872D00049EC6F /* MultiThreadTests.swift */,
 				0107507D26E890C100AAEA10 /* CoreDataTests.swift */,
+				01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */,
 				01BC920B27747C05004E5265 /* Benchmark.swift */,
 				2D2DBA592317DBB9005A689E /* Info.plist */,
 				2D2DBA872317DCCF005A689E /* PrefixHeader.pch */,
@@ -345,6 +354,7 @@
 				2D2DBA262317DB33005A689E /* MJProperty.h in Headers */,
 				2D2DBA252317DB33005A689E /* MJPropertyKey.h in Headers */,
 				01F5515E2757144500518218 /* MJEClass.h in Headers */,
+				01BB0100277EE8DC002EF5B3 /* NSDate+MJExtension.h in Headers */,
 				2D2DB9F82317DA64005A689E /* MJExtension.h in Headers */,
 				2D2DBA222317DB33005A689E /* MJFoundation.h in Headers */,
 			);
@@ -538,6 +548,7 @@
 				2D2DBA1A2317DB33005A689E /* NSObject+MJKeyValue.m in Sources */,
 				2D2DBA192317DB33005A689E /* MJPropertyKey.m in Sources */,
 				2D2DBA202317DB33005A689E /* MJFoundation.m in Sources */,
+				01BB0101277EE8DC002EF5B3 /* NSDate+MJExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,12 +571,13 @@
 				2D2DBA852317DBE0005A689E /* MJPerson.m in Sources */,
 				01BC921327747C06004E5265 /* Benchmark.swift in Sources */,
 				0107507C26E88EAC00AAEA10 /* MJCoreDataTester+CoreDataProperties.swift in Sources */,
-				01BC91E2277418DF004E5265 /* ValueTransformingTest.swift in Sources */,
+				01BC91E2277418DF004E5265 /* ValueTransformingTests.swift in Sources */,
 				2D2DBA7B2317DBE0005A689E /* MJBox.m in Sources */,
 				2D2DBA582317DBB9005A689E /* MJExtensionTests.m in Sources */,
 				010DF01E2761D90A0007EEF0 /* SpecialPropertyTypeTests.swift in Sources */,
 				2D2DBA7E2317DBE0005A689E /* MJBag.m in Sources */,
 				2D2DBA7F2317DBE0005A689E /* MJBaseObject.m in Sources */,
+				01BB00FD277EC1FF002EF5B3 /* DeprecatedAPITests.swift in Sources */,
 				2D2DBA7D2317DBE0005A689E /* MJBook.m in Sources */,
 				0107507E26E890C100AAEA10 /* CoreDataTests.swift in Sources */,
 				0107507826E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
@@ -682,6 +694,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -742,6 +755,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

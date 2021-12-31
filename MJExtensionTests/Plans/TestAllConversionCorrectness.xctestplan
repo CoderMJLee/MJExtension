@@ -20,8 +20,7 @@
     {
       "parallelizable" : true,
       "skippedTests" : [
-        "Benchmark",
-        "MultiThreadTests"
+        "Benchmark"
       ],
       "target" : {
         "containerPath" : "container:MJExtension.xcodeproj",

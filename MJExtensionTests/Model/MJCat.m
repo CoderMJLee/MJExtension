@@ -13,7 +13,7 @@ MJSecureCodingImplementation(MJCat, YES)
 
 @implementation MJCat
 
-+ (NSDictionary *)mj_objectClassInCollection {
++ (NSDictionary *)mj_classInfoInCollection {
     return @{
         @"nicknames" : NSString.class
     };

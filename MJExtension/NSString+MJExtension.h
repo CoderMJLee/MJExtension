@@ -38,4 +38,15 @@
 /// Use `strtold_l` method to convert the string.
 /// @param locale maybe Franch number need this.
 - (long double)mj_longDoubleValueWithLocale:(NSLocale *)locale;
+
+/// Convert `String` to `Date`
+/// @discussion Following formatters are recognized.
+/// @code
+/// "yyyy-MM-dd"
+/// "yyyy-MM-dd'T'HH:mm:ss"
+/// "yyyy-MM-dd'T'HH:mm:ss.SSS"
+/// "yyyy-MM-dd'T'HH:mm:ssZ"
+/// "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+/// @endcode
+- (NSDate *)mj_date;
 @end

@@ -13,7 +13,7 @@
 MJSecureCodingImplementation(MJPerson, YES)
 
 @implementation MJPerson
-+ (NSDictionary *)mj_objectClassInCollection {
++ (NSDictionary *)mj_classInfoInCollection {
     return @{@"friends": MJPerson.class,
              @"books": NSString.class};
 }

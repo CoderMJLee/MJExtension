@@ -64,11 +64,26 @@
 /// @discussion - `key` is collection property name
 ///
 /// - `value` is the class or class string for recongnizing in JSON.
-+ (NSDictionary *)mj_objectClassInCollection;
++ (NSDictionary *)mj_classInfoInCollection;
++ (NSDictionary *)mj_objectClassInArray MJE_API_Deprecated("Use +mj_classInfoCollection instead.");
 
-/// Used in number formatter that covert a string to a number.
++ (Class)mj_modifiedClassForDictionary:(NSDictionary *)dictionary;
+
+/// Used in number formatter that coverts a string to a number.
 /// @discussion Normally "100,000" = 100000. But "100,000" = 100 in France.
 + (NSLocale *)mj_locale;
++ (NSLocale *)mj_numberLocale MJE_API_Deprecated("Use +mj_locale instead.");
+
+/// Used in date formatter that converts a string to a date.
+/// @discussion Following formatters have already been existed by default.
+/// @code
+/// "yyyy-MM-dd"
+/// "yyyy-MM-dd'T'HH:mm:ss"
+/// "yyyy-MM-dd'T'HH:mm:ss.SSS"
+/// "yyyy-MM-dd'T'HH:mm:ssZ"
+/// "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+/// @endcode
++ (NSDateFormatter *)mj_dateFormatter;
 
 /// Inherits configurations from super class or not.
 /// If not configurate, default value is YES.

@@ -11,5 +11,5 @@
 @interface MJDog : NSObject
 @property (copy, nonatomic) NSString *nickName;
 @property (assign, nonatomic) double salePrice;
-@property (assign, nonatomic) double runSpeed;
+@property (assign, nonatomic) float runSpeed;
 @end

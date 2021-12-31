@@ -29,7 +29,7 @@ dispatch_once(&mje_onceTokenSemaphore, ^{ \
 });
 
 // 过期
-#define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
+#define MJE_API_Deprecated(instead) API_DEPRECATED(instead, ios(2.0, 4.0))
 
 // 构建错误
 #define MJExtensionBuildError(clazz, msg) \

@@ -25,7 +25,7 @@ class Benchmark: XCTestCase {
     }
     
     func testPerformanceLargeFile() {
-        // should less than 4s
+        // should about 4.x s in my mac (instead of 17s before refactorring)
         self.measure {
             let model = LargeModel.mj_objectArray(withKeyValuesArray: jsonObject)
             print("MJ")

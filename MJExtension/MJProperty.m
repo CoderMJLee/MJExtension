@@ -211,6 +211,19 @@
     return value;
 }
 
+- (id)valueInDictionary:(NSDictionary *)dictionary {
+    id value;
+    for (NSArray *propertyKeys in _mappedMultiKeys) {
+        value = dictionary;
+        for (MJPropertyKey *key in propertyKeys) {
+            value = [key valueInObject:value];
+            if (!value) break;
+        }
+        if (value) return value;
+    }
+    return nil;
+}
+
 /**
  *  设置成员变量的值
  */
@@ -218,6 +231,7 @@
     if (!_isKVCCompliant || value == nil) return;
     //FIXME: Bottleneck #4: Enhanced
     [object setValue:value forKey:self.name];
+//    mj_msgSendOne(object, _setter, id, value);
 }
 
 /** 对应着字典中的key */

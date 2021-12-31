@@ -121,11 +121,12 @@
                            @"gay" : @"",
                            @"speed" : @"120,5",
                            @"identifier" : @"3443623624362",
-                           @"price" : @"20,3",
+                           @"price" : @"20,313422212",
                            @"like" : @"20个",
                            @"collect" : @"收藏5",
                            @"rich" : @"hehe",
-                           @"money_longDouble": @"120,5"
+                           @"money_longDouble": @"120,5",
+                           @"cls": NSNull.null
                            };
     
     // 2.将字典转为MJFrenchUser模型
@@ -137,7 +138,7 @@
     XCTAssert(user.gay == NO);
     XCTAssert(user.speed == 120);
     XCTAssert(user.identifier == 3443623624362);
-    XCTAssert(user.price == 20.3);
+    XCTAssert(user.price == (double)20.313422212);
     XCTAssert(user.like == 20);
     XCTAssert(user.collect == 0);
     XCTAssert(user.rich == NO);
@@ -520,7 +521,7 @@
     // 3.检测MJUser模型的属性
     XCTAssert([dog.nickName isEqual:@"旺财"]);
     XCTAssert(dog.salePrice == 10.5);
-    XCTAssert(dog.runSpeed == 100.9);
+    XCTAssert(dog.runSpeed == (float)100.9);
 }
 
 #pragma mark 过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）

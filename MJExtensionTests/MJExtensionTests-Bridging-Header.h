@@ -7,3 +7,6 @@
 #import "MJUser.h"
 #import "MJCat.h"
 #import "MJBag.h"
+#import "MJDog.h"
+#import "MJBook.h"
+#import "MJBox.h"
