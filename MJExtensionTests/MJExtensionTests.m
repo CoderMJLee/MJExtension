@@ -85,7 +85,7 @@
                            @"speed" : @"120.5",
                            @"identifier" : @"9223372036854775807",
                            @"identifier2" : @"18446744073709551615",
-                           @"price" : @"20.3",
+                           @"price" : @"20,3",
                            @"rich" : @"2",
                            @"collect" : @"40个",
                            @"alien": @"yr Joking"
@@ -106,7 +106,7 @@
     XCTAssert(user.speed == 120);
     XCTAssert(user.identifier == LONG_LONG_MAX);
     XCTAssert(user.identifier2 == ULONG_LONG_MAX);
-    XCTAssert(user.price == 20.3);
+    XCTAssert(user.price == 20);
     XCTAssert(user.rich);
     XCTAssert(user.collect == 40);
     XCTAssert(!user.alien);

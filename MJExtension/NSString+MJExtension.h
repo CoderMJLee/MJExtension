@@ -13,28 +13,28 @@
 /**
  *  驼峰转下划线（loveYou -> love_you）
  */
-- (NSString *)mj_underlineFromCamel;
+@property (nonatomic, readonly) NSString *mj_underlineFromCamel;
 /**
  *  下划线转驼峰（love_you -> loveYou）
  */
-- (NSString *)mj_camelFromUnderline;
+@property (nonatomic, readonly) NSString *mj_camelFromUnderline;
 /**
  * 首字母变大写
  */
-- (NSString *)mj_firstCharUpper;
+@property (nonatomic, readonly) NSString *mj_firstCharUpper;
 /**
  * 首字母变小写
  */
-- (NSString *)mj_firstCharLower;
+@property (nonatomic, readonly) NSString *mj_firstCharLower;
 
-- (SEL)mj_defaultSetter;
+@property (nonatomic, readonly) SEL mj_defaultSetter;
 
-- (BOOL)mj_isPureInt;
+@property (nonatomic, readonly) BOOL mj_isPureInt;
 
-- (NSURL *)mj_url;
+@property (nonatomic, readonly) NSURL *mj_url;
 
 /// The same with `[self mj_longDoubleValueWithLocale:nil];`
-- (long double)mj_longDoubleValue;
+@property (nonatomic, readonly) long double mj_longDoubleValue;
 /// Use `strtold_l` method to convert the string.
 /// @param locale maybe Franch number need this.
 - (long double)mj_longDoubleValueWithLocale:(NSLocale *)locale;
@@ -48,5 +48,8 @@
 /// "yyyy-MM-dd'T'HH:mm:ssZ"
 /// "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 /// @endcode
-- (NSDate *)mj_date;
+@property (nonatomic, readonly) NSDate *mj_date;
+
+- (double)mj_doubleValueWithLocale:(NSLocale *)locale;
+@property (nonatomic, readonly) double mj_doubleValue;
 @end

@@ -83,7 +83,7 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
         MJEAddSelectorResult2Dictionary(currentClass,
                                         @selector(mj_classInfoInCollection),
                                         genericClasses);
-        // Deprecated API compatible
+        // Deprecated API compatibility
         if (![currentClass respondsToSelector:@selector(mj_classInfoInCollection)]) {
             MJEAddSelectorResult2Dictionary(currentClass,
                                             @selector(mj_objectClassInArray),
@@ -118,16 +118,13 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
                                      inClass:cls];
     
     if ([cls respondsToSelector:@selector(mj_locale)]) {
-        _locale = [(Class<MJEConfiguration>)cls mj_locale];
-    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) { // Deprecated API compatible
-        _locale = [(Class<MJEConfiguration>)cls mj_numberLocale];
+        _locale = [cls mj_locale];
+    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) { //  Deprecated API compatibility
+        _locale = [cls mj_numberLocale];
     }
-    if (_locale) {
-        _numberFormatter = [NSNumberFormatter new];
-        _numberFormatter.locale = _locale;
-    }
+    
     if ([cls respondsToSelector:@selector(mj_dateFormatter)]) {
-        _dateFormatter = [(Class<MJEConfiguration>)cls mj_dateFormatter];
+        _dateFormatter = [cls mj_dateFormatter];
     }
     _hasOld2NewModifier = [cls instancesRespondToSelector:@selector(mj_newValueFromOldValue:property:)];
     _hasDictionary2ObjectModifier = [cls instancesRespondToSelector:@selector(mj_didConvertToObjectWithKeyValues:)];

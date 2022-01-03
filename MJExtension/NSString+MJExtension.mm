@@ -78,6 +78,19 @@
 #pragma clang diagnostic pop
 }
 
+- (double)mj_doubleValueWithLocale:(NSLocale *)locale {
+    const char *str = [self cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *localeIdentifier = [locale.localeIdentifier cStringUsingEncoding:NSUTF8StringEncoding];
+    locale_t loc = newlocale(LC_ALL_MASK, localeIdentifier, nil);
+    double num = strtod_l(str, NULL, loc);
+    freelocale(loc);
+    return num;
+}
+
+- (double)mj_doubleValue {
+    return [self mj_doubleValueWithLocale:nil];
+}
+
 - (long double)mj_longDoubleValueWithLocale:(NSLocale *)locale {
     const char *str = [self cStringUsingEncoding:NSUTF8StringEncoding];
     const char *localeIdentifier = [locale.localeIdentifier cStringUsingEncoding:NSUTF8StringEncoding];

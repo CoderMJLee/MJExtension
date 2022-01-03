@@ -69,8 +69,8 @@
 
 + (Class)mj_modifiedClassForDictionary:(NSDictionary *)dictionary;
 
-/// Used in number formatter that coverts a string to a number.
-/// @discussion Normally "100,000" = 100000. But "100,000" = 100 in France.
+/// Used to coverts a string to a number.
+/// @discussion Normally "100,500" = 100. But "100,500" = 100.5 in France.
 + (NSLocale *)mj_locale;
 + (NSLocale *)mj_numberLocale MJE_API_Deprecated("Use +mj_locale instead.");
 

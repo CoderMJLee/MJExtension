@@ -10,7 +10,7 @@
 
 @interface NSDate (MJExtension)
 
-/// Return date string based on "yyyy-MM-dd'T'HH:mm:ssZ".
-- (NSString *)mj_defaultDateString;
+/// Return date string based on "yyyy-MM-dd'T'HH:mm:ssZ" and "en_US_POSIX" locale.
+@property (nonatomic, readonly) NSString *mj_defaultDateString;
 
 @end

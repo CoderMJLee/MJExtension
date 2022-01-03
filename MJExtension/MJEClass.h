@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
     /// = _allProperties.count
     NSInteger _propertiesCount;
     NSLocale * _Nullable _locale;
-    NSNumberFormatter * _Nullable _numberFormatter;
     NSDateFormatter * _Nullable _dateFormatter;
 }
 

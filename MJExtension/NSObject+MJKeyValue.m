@@ -26,11 +26,10 @@
 
 // Special dealing method. `value` should be NSString or NSNumber
 - (NSNumber *)mj_numberWithValue:(id)value
-                         type:(MJEPropertyType)type
-                       formatter:(NSNumberFormatter *)formatter {
+                            type:(MJEPropertyType)type
+                          locale:(NSLocale *)locale {
     static NSDictionary *boolStrings;
     static dispatch_once_t onceToken;
-    static NSNumberFormatter *defaultFormatter;
     dispatch_once(&onceToken, ^{
         boolStrings = @{
             @"TRUE":   @(YES),
@@ -59,9 +58,6 @@
             @"<Null>": NSNull.null,
             @"<null>": NSNull.null
         };
-        
-        defaultFormatter = [NSNumberFormatter new];
-        defaultFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     });
     if (!value || value == NSNull.null) return nil;
     NSNumber *number;
@@ -72,11 +68,11 @@
         if (num) {
             number = num;
         } else if (type == MJEPropertyTypeDouble) {
-            number = [formatter ?: defaultFormatter numberFromString:string];
+            number = @([string mj_doubleValueWithLocale:locale]);
         } else if (type != MJEPropertyTypeLongDouble) {
-            // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
+            // LongDouble cannot be represented by NSNumber
             number = [NSDecimalNumber
-                      decimalNumberWithString:string locale:formatter.locale];
+                      decimalNumberWithString:string locale:locale];
             if (number == NSDecimalNumber.notANumber) {
                 number = nil;
             }
@@ -150,6 +146,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     withDictionary:(NSDictionary *)dictionary
                         classCache:(MJEClass *)classCache
                            context:(NSManagedObjectContext *)context {
+    NSLocale *locale = classCache->_locale;
     for (MJProperty *property in properties) {
         // get value from dictionary
         id value = nil;
@@ -183,7 +180,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         if (property->_isBasicNumber) {
             NSNumber *number = [self mj_numberWithValue:value
                                                    type:type
-                                              formatter:classCache->_numberFormatter];
+                                                 locale:classCache->_locale];
             switch (type) {
                 case MJEPropertyTypeBool: {
                     mj_selfSet(property, BOOL, number.boolValue);
@@ -220,7 +217,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 } break;
                 case MJEPropertyTypeLongDouble: {
                     if ([value isKindOfClass:NSString.class]) {
-                        long double num = [value mj_longDoubleValueWithLocale:classCache->_locale];
+                        long double num = [value mj_longDoubleValueWithLocale:locale];
                         mj_selfSet(property, long double, num);
                     } else {
                         mj_selfSet(property, long double, (long double)number.doubleValue);
@@ -275,7 +272,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 case MJEBasicTypeNumber: {
                     NSNumber *num = [self mj_numberWithValue:value
                                                         type:type
-                                                   formatter:classCache->_numberFormatter];
+                                                      locale:classCache->_locale];
                     mj_selfSet(property, id, num);
                 } break;
                 case MJEBasicTypeDecimalNumber: {
@@ -285,7 +282,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                         NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithDecimal:[value decimalValue]];
                         mj_selfSet(property, id, decimalNum);
                     } else if ([value isKindOfClass:NSString.class]) {
-                        NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithString:value locale:classCache->_locale];
+                        NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithString:value locale:locale];
                         if (decimalNum == NSDecimalNumber.notANumber) {
                             decimalNum = nil;
                         }
@@ -452,6 +449,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 withDictionary:(NSDictionary *)dictionary
                     classCache:(MJEClass *)classCache
                        context:(NSManagedObjectContext *)context {
+    NSLocale *locale = classCache->_locale;
     for (MJProperty *property in properties) {
         @try {
             // 1.取出属性值
@@ -522,7 +520,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     // 字符串转码
                     value = [value mj_url];
                 } else if (type == MJEPropertyTypeLongDouble) {
-                    long double num = [value mj_longDoubleValueWithLocale:classCache->_locale];
+                    long double num = [value mj_longDoubleValueWithLocale:locale];
                     mj_selfSend(property.setter, long double, num);
                     continue;
                 } else if (type == MJEPropertyTypeDouble) {
@@ -537,7 +535,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     // NSString -> NSDecimalNumber, 使用 DecimalNumber 来转换数字, 避免丢失精度以及溢出
                     NSDecimalNumber *decimalValue = [NSDecimalNumber
                                                      decimalNumberWithString:oldValue
-                                                     locale:classCache->_locale];
+                                                     locale:locale];
                     
                     // 检查特殊情况
                     if (decimalValue == NSDecimalNumber.notANumber) {
