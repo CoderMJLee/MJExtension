@@ -11,5 +11,5 @@
 @import MJExtension;
 
 @implementation MJBox
-MJExtensionCodingImplementation
+MJCodingImplementation
 @end

@@ -18,6 +18,7 @@ class MJSuperTester: NSObject {
     
     var name: String?
     var identifier: String?
+    var nicknames: Set<String>?
 }
 
 @objc(MJTester)

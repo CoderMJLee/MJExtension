@@ -7,9 +7,8 @@
 //
 
 #import "MJEClass.h"
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 #import "MJExtensionProtocols.h"
-#import "MJFoundation.h"
 #import "MJProperty.h"
 
 typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
@@ -20,6 +19,8 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
 @end
 
 @implementation NSObject (MJEClass)
+
+BOOL MJE_isFromFoundation(Class _Nonnull cls);
 + (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration {
     if (enumeration == nil) return;
     BOOL stop = NO;
@@ -27,7 +28,7 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     while (c && !stop) {
         enumeration(c, &stop);
         c = class_getSuperclass(c);
-        if ([MJFoundation isClassFromFoundation:c]) break;
+        if (MJE_isFromFoundation(c)) break;
     }
 }
 @end
@@ -119,7 +120,8 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     
     if ([cls respondsToSelector:@selector(mj_locale)]) {
         _locale = [cls mj_locale];
-    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) { //  Deprecated API compatibility
+    //  Deprecated API compatibility
+    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) {
         _locale = [cls mj_numberLocale];
     }
     
@@ -182,8 +184,6 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
             // e.g.: NSObject default properties `hash`, `superclass`, `description`, `debugDescription`, , which is defined by `NSObject` protocol.
             // Computed property (readonly). It is not a real property, which is just a get method.
             if (!property.setter || !property.getter) continue;
-            // Filter out Foundation classes
-            if ([MJFoundation isClassFromFoundation:property.srcClass]) continue;
             // handle properties for coding
             if (!allowedCodingList.count || [allowedCodingList containsObject:property.name]) {
                 if (![ignoredCodingList containsObject:property.name]) {

@@ -9,9 +9,14 @@
 
 import Foundation
 import CoreData
+import MJExtension
 
 @objc(MJCoreDataTester)
 @objcMembers
-public class MJCoreDataTester: NSManagedObject {
-
+public class MJCoreDataTester: NSManagedObject, MJEConfiguration {
+    public static func mj_classInfoInCollection() -> [AnyHashable : Any]! {
+        return [
+            "relatives": MJCoreDataTester.self
+        ]
+    }
 }

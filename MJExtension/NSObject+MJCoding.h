@@ -7,39 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 #import "MJExtensionProtocols.h"
 
 @interface NSObject (MJCoding) <MJECoding>
-/**
- *  解码（从文件中解析对象）
- */
 - (void)mj_decode:(NSCoder *)decoder;
-/**
- *  编码（将对象写入文件中）
- */
 - (void)mj_encode:(NSCoder *)encoder;
 @end
 
-/**
- 归档的实现
- */
+/// Coding implementation
 #define MJCodingImplementation \
-- (id)initWithCoder:(NSCoder *)decoder \
-{ \
-if (self = [super init]) { \
-[self mj_decode:decoder]; \
-} \
+- (id)initWithCoder:(NSCoder *)decoder { \
+if (self = [super init]) [self mj_decode:decoder]; \
 return self; \
 } \
 \
-- (void)encodeWithCoder:(NSCoder *)encoder \
-{ \
+- (void)encodeWithCoder:(NSCoder *)encoder { \
 [self mj_encode:encoder]; \
 }\
 
 #define MJExtensionCodingImplementation MJCodingImplementation
 
+/// SecureCoding implementation
 #define MJSecureCodingImplementation(CLASS, FLAG) \
 @interface CLASS (MJSecureCoding) <NSSecureCoding> \
 @end \

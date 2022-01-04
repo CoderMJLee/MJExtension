@@ -202,7 +202,7 @@
     XCTAssert([icon2 isEqual:@"nami.png"]);
 }
 
-#pragma mark 复杂的字典 -> 模型 (模型的数组属性里面又装着模型)
+#pragma mark 复杂的字典 -> 模型 (模型的数组属性里面又装着模型) (以及模型的数组属性里面又装着数组的里面才装着模型)
 - (void)testNestedModelArray {
     // 1.定义一个字典
     NSDictionary *dict = @{
@@ -227,7 +227,7 @@
                                    
                                    ],
                            
-                           @"ads" : @[
+                           @"ads" : @[@[
                                    @{
                                        @"image" : @"ad01.png",
                                        @"url" : @"http://www.ad01.com"
@@ -236,7 +236,7 @@
                                        @"image" : @"ad02.png",
                                        @"url" : @"http://www.ad02.com"
                                        }
-                                   ],
+                                   ]],
                            
                            @"totalNumber" : @"2014",
                            @"previousCursor" : @"13476589",
@@ -261,10 +261,10 @@
     XCTAssert([result.statuses[1].user.icon isEqual:@"lufy.png"]);
     
     // 5.检测ads数组中的模型属性
-    XCTAssert([result.ads[0].image isEqual:@"ad01.png"]);
-    XCTAssert([result.ads[0].url.absoluteString isEqual:@"http://www.ad01.com"]);
-    XCTAssert([result.ads[1].image isEqual:@"ad02.png"]);
-    XCTAssert([result.ads[1].url.absoluteString isEqual:@"http://www.ad02.com"]);
+    XCTAssert([result.ads.firstObject[0].image isEqual:@"ad01.png"]);
+    XCTAssert([result.ads.firstObject[0].url.absoluteString isEqual:@"http://www.ad01.com"]);
+    XCTAssert([result.ads.firstObject[1].image isEqual:@"ad02.png"]);
+    XCTAssert([result.ads.firstObject[1].url.absoluteString isEqual:@"http://www.ad02.com"]);
 }
 
 #pragma mark KeyMapping
@@ -537,10 +537,10 @@
                            }
     };
     
-    // 2.将字典转为MJUser模型
+    // 2.将字典转为MJBook模型
     MJBook *book = [MJBook mj_objectWithKeyValues:dict];
     
-    // 3.检测MJUser模型的属性
+    // 3.检测MJBook模型的属性
     XCTAssert([book.name isEqual:@"5分钟突破iOS开发"]);
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     fmt.dateFormat = @"yyyy-MM-dd";

@@ -7,27 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 
 @interface NSString (MJExtension)
-/**
- *  驼峰转下划线（loveYou -> love_you）
- */
-@property (nonatomic, readonly) NSString *mj_underlineFromCamel;
-/**
- *  下划线转驼峰（love_you -> loveYou）
- */
-@property (nonatomic, readonly) NSString *mj_camelFromUnderline;
-/**
- * 首字母变大写
- */
-@property (nonatomic, readonly) NSString *mj_firstCharUpper;
-/**
- * 首字母变小写
- */
-@property (nonatomic, readonly) NSString *mj_firstCharLower;
 
-@property (nonatomic, readonly) SEL mj_defaultSetter;
+/// From camel style to underline. (loveYou -> love_you)
+@property (nonatomic, readonly) NSString *mj_underlineFromCamel;
+/// From underline style to camel . (love_you -> loveYou)
+@property (nonatomic, readonly) NSString *mj_camelFromUnderline;
+/// First character becomes upper case.
+@property (nonatomic, readonly) NSString *mj_firstCharUpper;
+/// First character becomes lower case.
+@property (nonatomic, readonly) NSString *mj_firstCharLower;
 
 @property (nonatomic, readonly) BOOL mj_isPureInt;
 
@@ -50,6 +41,13 @@
 /// @endcode
 @property (nonatomic, readonly) NSDate *mj_date;
 
+/// Convert string to double value based on locale.
+/// @param locale locale should be considered
+/// @discussion 100,3 is 100.3 in French.
+///
+/// 100,3 will be parsed as 100 by default. 100ab3 will be parsed as 100 by default.
 - (double)mj_doubleValueWithLocale:(NSLocale *)locale;
+/// Convert string to double value
+/// @discussion 100,3 will be parsed as 100 by default. 100ab3 will be parsed as 100 by default.
 @property (nonatomic, readonly) double mj_doubleValue;
 @end

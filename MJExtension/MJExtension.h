@@ -16,15 +16,17 @@ FOUNDATION_EXPORT const unsigned char MJExtensionVersionString[];
 #import <MJExtension/NSObject+MJCoding.h>
 #import <MJExtension/NSObject+MJKeyValue.h>
 #import <MJExtension/NSString+MJExtension.h>
-#import <MJExtension/MJExtensionConst.h>
+#import <MJExtension/MJExtensionPredefine.h>
 #import <MJExtension/MJProperty.h>
 #import <MJExtension/MJExtensionProtocols.h>
+#import <MJExtension/NSDate+MJExtension.h>
 #else
 #import "NSObject+MJCoding.h"
 #import "NSObject+MJKeyValue.h"
 #import "NSString+MJExtension.h"
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 #import "MJProperty.h"
 #import "MJExtensionProtocols.h"
+#import "NSDate+MJExtension.h"
 #endif
 

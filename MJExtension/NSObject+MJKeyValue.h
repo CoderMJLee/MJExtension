@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 #import <CoreData/CoreData.h>
 
 

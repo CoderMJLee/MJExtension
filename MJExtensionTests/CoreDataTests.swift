@@ -28,51 +28,79 @@ class CoreDataTests: XCTestCase {
     
     struct Values {
         static let testJSONObject: [String : Any] = [
-            "isJuan": true,
-            "identifier": "7355608",
-            "age": 24,
-            "name": "Niko"
+            "isJuan": isJuan,
+            "identifier": identifier,
+            "age": age,
+            "name": name,
+            "relatives": [
+                [
+                    "isJuan": isJuan,
+                    "identifier": identifier,
+                    "age": broAge,
+                    "name": broName
+                ],
+                [
+                    "isJuan": isJuan,
+                    "identifier": "7355608",
+                    "age": age,
+                    "name": name
+                ]
+            ]
         ]
         
-        static var name: String {
-            testJSONObject["name"] as! String
-        }
-        static var isJuan: Bool {
-            testJSONObject["isJuan"] as! Bool
-        }
-        static var age: Int {
-            testJSONObject["age"] as! Int
-        }
-        static var identifier: String {
-            testJSONObject["identifier"] as! String
-        }
-    }
-
-    func testConversions() {
-        json2CoreDataObject()
+        static let name = "Niko"
+        static let isJuan = true
+        static let age: Int16 = 24
+        static let identifier = "7355608"
+        static var broAge = age + 1
+        static let broName = "huNter"
         
-        coreDataObject2JSON()
-    }
-    
-    func json2CoreDataObject() {
-        context.performAndWait {
-            guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
-                fatalError("conversion to core data object failed")
-            }
-            
+        static func basicAssert(_ tester: MJCoreDataTester) {
             XCTAssert(tester.isJuan == Values.isJuan)
             XCTAssert(tester.identifier == Values.identifier)
             XCTAssert(tester.name == Values.name)
             XCTAssert(tester.age == Values.age)
         }
+        
+        static func coreDataObject(in context: NSManagedObjectContext) -> MJCoreDataTester {
+            return NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
+        }
     }
     
-    func coreDataObject2JSON() {
+    func testJson2CoreDataObject() {
         context.performAndWait {
-            let coreDataObject =  NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
+            guard let tester = MJCoreDataTester.mj_object(withKeyValues: Values.testJSONObject, context: context) else {
+                fatalError("conversion to core data object failed")
+            }
+            
+            Values.basicAssert(tester)
+            
+            guard let relatives = tester.relatives else {
+                fatalError("CoreData data structure damaged!")
+            }
+            XCTAssert(relatives.count != 0)
+            
+            for relative in relatives {
+                switch relative.name {
+                case Values.name:
+                    Values.basicAssert(relative)
+                case Values.broName:
+                    XCTAssert(relative.isJuan == Values.isJuan)
+                    XCTAssert(relative.identifier == Values.identifier)
+                    XCTAssert(relative.name == Values.broName)
+                    XCTAssert(relative.age == Values.broAge)
+                default: break
+                }
+            }
+        }
+    }
+    
+    func testCoreDataObject2JSON() {
+        context.performAndWait {
+            let coreDataObject = Values.coreDataObject(in: context)
             coreDataObject.name = Values.name
-            coreDataObject.age = Int16(Values.age)
             coreDataObject.isJuan = Values.isJuan
+            coreDataObject.age = Values.age
             coreDataObject.identifier = Values.identifier
             
             guard let dict = coreDataObject.mj_keyValues() else {
@@ -82,8 +110,9 @@ class CoreDataTests: XCTestCase {
             XCTAssert(dict["isJuan"] as? Bool == Values.isJuan)
             XCTAssert(dict["identifier"] as? String == Values.identifier)
             XCTAssert(dict["name"] as? String == Values.name)
-            XCTAssert(dict["age"] as? Int == Values.age)
+            XCTAssert(dict["age"] as? Int16 == Values.age)
+            // TODO: objects -> JSON (Set conversion)
+            XCTAssertNotNil(dict["relatives"])
         }
     }
-
 }

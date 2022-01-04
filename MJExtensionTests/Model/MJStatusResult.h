@@ -12,8 +12,8 @@
 @interface MJStatusResult : MJBaseObject
 /** 存放着某一页微博数据（里面都是Status模型） */
 @property (strong, nonatomic) NSMutableArray<MJStatus *> *statuses;
-/** 存放着一堆的广告数据（里面都是MJAd模型） */
-@property (strong, nonatomic) NSArray<MJAd *> *ads;
+/** 存放着一堆的广告数据（里面都是MJAd模型, 假定为怪异数据类型, [array<array<ad>>]） */
+@property (strong, nonatomic) NSArray<NSArray<MJAd *> *> *ads;
 /** 总数 */
 @property (strong, nonatomic) NSNumber *totalNumber;
 /** 上一页的游标 */

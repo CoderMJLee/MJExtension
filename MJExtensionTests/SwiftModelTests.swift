@@ -17,7 +17,13 @@ class SwiftModelTests: XCTestCase {
             "identifier": "007",
             "age": 22,
             "name": "Juan",
-            "child": "im"
+            "child": "im",
+            "nicknames": [
+                "Juan",
+                "尼公子",
+                "夜店小王子",
+                "s1mple✨🔫Niko"
+            ]
         ]
         
         guard let tester1 = MJSuperTester.mj_object(withKeyValues: testerDict) else {
@@ -28,8 +34,17 @@ class SwiftModelTests: XCTestCase {
         XCTAssert(tester1.age == testerDict["age"] as! Int)
         XCTAssert(tester1.name == testerDict["name"] as? String)
         
+        let nicknames = testerDict["nicknames"] as! [String]
+        guard let names = tester1.nicknames else {
+            fatalError("Could not convert to Set")
+        }
+        XCTAssert(names.contains(nicknames[0]))
+        XCTAssert(names.contains(nicknames[1]))
+        XCTAssert(names.contains(nicknames[2]))
+        XCTAssert(names.contains(nicknames[3]))
+        
         guard let tester = MJTester.mj_object(withKeyValues: testerDict) else {
-            fatalError("conversion failed")
+            fatalError("conversion subclass failed")
         }
         
         XCTAssert(tester.isSpecialAgent)
@@ -50,7 +65,6 @@ class SwiftModelTests: XCTestCase {
         
         guard let user = MJUser.mj_object(withKeyValues: userDict) else {
             fatalError("conversion failed")
-            return
         }
         XCTAssert(user.rich)
         XCTAssert(user.price == Double(userDict["price"] as! String))

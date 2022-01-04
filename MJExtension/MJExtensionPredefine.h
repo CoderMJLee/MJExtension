@@ -1,6 +1,6 @@
 
-#ifndef __MJExtensionConst__H__
-#define __MJExtensionConst__H__
+#ifndef __MJExtensionPredefine__H__
+#define __MJExtensionPredefine__H__
 
 #import <Foundation/Foundation.h>
 
@@ -19,14 +19,6 @@
 #ifndef MJ_UNLOCK
 #define MJ_UNLOCK(lock) dispatch_semaphore_signal(lock);
 #endif
-
-// 信号量
-#define MJExtensionSemaphoreCreate \
-extern dispatch_semaphore_t mje_signalSemaphore; \
-extern dispatch_once_t mje_onceTokenSemaphore; \
-dispatch_once(&mje_onceTokenSemaphore, ^{ \
-    mje_signalSemaphore = dispatch_semaphore_create(1); \
-});
 
 // 过期
 #define MJE_API_Deprecated(instead) API_DEPRECATED(instead, ios(2.0, 4.0))
@@ -94,26 +86,5 @@ MJExtensionAssert2((param) != nil, returnValue)
 { \
 return [self mj_keyValues].debugDescription; \
 }
-
-/**
- *  类型（属性类型）
- */
-FOUNDATION_EXPORT NSString *const MJPropertyTypeInt;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeShort;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeFloat;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeDouble;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeLong;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeLongLong;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeChar;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeBOOL1;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeBOOL2;
-FOUNDATION_EXPORT NSString *const MJPropertyTypePointer;
-
-FOUNDATION_EXPORT NSString *const MJPropertyTypeIvar;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeMethod;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeBlock;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeClass;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeSEL;
-FOUNDATION_EXPORT NSString *const MJPropertyTypeId;
 
 #endif

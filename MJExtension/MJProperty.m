@@ -7,11 +7,11 @@
 //
 
 #import "MJProperty.h"
-#import "MJFoundation.h"
-#import "MJExtensionConst.h"
+#import "MJExtensionPredefine.h"
 #import <objc/message.h>
 #include "TargetConditionals.h"
 #import "NSString+MJExtension.h"
+#import "NSString+MJExtension_Private.h"
 
 @interface NSString (MJPropertyKey)
 
@@ -313,6 +313,7 @@ MJEBasicType MJEGetBasicObjectType(Class cls) {
     if ([cls isSubclassOfClass:NSMutableData.class]) return MJEBasicTypeMutableData;
     if ([cls isSubclassOfClass:NSDecimalNumber.class]) return MJEBasicTypeDecimalNumber;
     if ([cls isSubclassOfClass:NSMutableAttributedString.class]) return MJEBasicTypeMutableAttributedString;
+    if ([cls isSubclassOfClass:NSMutableOrderedSet.class]) return MJEBasicTypeMutableOrderedSet;
     
     if ([cls isSubclassOfClass:NSString.class]) return MJEBasicTypeString;
     if ([cls isSubclassOfClass:NSSet.class]) return MJEBasicTypeSet;
@@ -321,6 +322,7 @@ MJEBasicType MJEGetBasicObjectType(Class cls) {
     if ([cls isSubclassOfClass:NSData.class]) return MJEBasicTypeData;
     if ([cls isSubclassOfClass:NSNumber.class]) return MJEBasicTypeNumber;
     if ([cls isSubclassOfClass:NSAttributedString.class]) return MJEBasicTypeAttributedString;
+    if ([cls isSubclassOfClass:NSOrderedSet.class]) return MJEBasicTypeOrderedSet;
     
     if ([cls isSubclassOfClass:NSValue.class]) return MJEBasicTypeValue;
     if ([cls isSubclassOfClass:NSDate.class]) return MJEBasicTypeDate;

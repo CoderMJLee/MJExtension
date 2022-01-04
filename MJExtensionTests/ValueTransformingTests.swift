@@ -71,11 +71,11 @@ class ValueTransformingTests: XCTestCase {
 
 class ValueTransformingBasicFunctionTests: XCTestCase {
     func testString2Double() throws {
-        let value = 123.346789
+        let value = 43.4
         let string: NSString = "\(value)" as NSString
         XCTAssertEqual(value, string.mj_doubleValue)
         
-        let commaValue = 123.4
+        let commaValue = 43.4
         let commaString = "\(commaValue),111234" as NSString
         XCTAssertEqual(commaValue, commaString.mj_doubleValue)
     }

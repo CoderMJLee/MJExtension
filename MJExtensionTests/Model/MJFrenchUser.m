@@ -11,7 +11,7 @@
 @implementation MJFrenchUser
 
 + (NSLocale *)mj_locale {
-    return [NSLocale localeWithLocaleIdentifier:@"fr_FR"];
+    return [NSLocale localeWithLocaleIdentifier:@"fr_FR"];//ru_RU
 }
 
 @end
