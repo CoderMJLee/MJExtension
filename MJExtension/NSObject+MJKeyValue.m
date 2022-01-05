@@ -174,7 +174,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     withDictionary:(NSDictionary *)dictionary
                         classCache:(MJEClass *)classCache
                            context:(NSManagedObjectContext *)context {
-    NSLocale *locale = classCache->_locale;
+    NSLocale *locale = classCache->_numberLocale;
     for (MJProperty *property in properties) {
         // get value from dictionary
         id value = nil;
@@ -208,7 +208,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
         if (property->_isBasicNumber) {
             NSNumber *number = [self mj_numberWithValue:value
                                                    type:type
-                                                 locale:classCache->_locale];
+                                                 locale:locale];
             switch (type) {
                 case MJEPropertyTypeBool: {
                     mj_selfSet(property, BOOL, number.boolValue);
@@ -300,7 +300,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 case MJEBasicTypeNumber: {
                     NSNumber *num = [self mj_numberWithValue:value
                                                         type:type
-                                                      locale:classCache->_locale];
+                                                      locale:locale];
                     mj_selfSet(property, id, num);
                 } break;
                 case MJEBasicTypeDecimalNumber: {
@@ -520,7 +520,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 withDictionary:(NSDictionary *)dictionary
                     classCache:(MJEClass *)classCache
                        context:(NSManagedObjectContext *)context {
-    NSLocale *locale = classCache->_locale;
+    NSLocale *locale = classCache->_numberLocale;
     for (MJProperty *property in properties) {
         @try {
             // 1.取出属性值

@@ -118,11 +118,8 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
                    hasKeyReplacementModifier:hasKeyReplacementModifier
                                      inClass:cls];
     
-    if ([cls respondsToSelector:@selector(mj_locale)]) {
-        _locale = [cls mj_locale];
-    //  Deprecated API compatibility
-    } else if ([cls respondsToSelector:@selector(mj_numberLocale)]) {
-        _locale = [cls mj_numberLocale];
+    if ([cls respondsToSelector:@selector(mj_numberLocale)]) {
+        _numberLocale = [cls mj_numberLocale];
     }
     
     if ([cls respondsToSelector:@selector(mj_dateFormatter)]) {

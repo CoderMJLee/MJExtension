@@ -10,7 +10,7 @@
 
 @implementation MJFrenchUser
 
-+ (NSLocale *)mj_locale {
++ (NSLocale *)mj_numberLocale {
     return [NSLocale localeWithLocaleIdentifier:@"fr_FR"];//ru_RU
 }
 

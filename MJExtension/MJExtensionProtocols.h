@@ -71,8 +71,7 @@
 
 /// Used to coverts a string to a number.
 /// @discussion Normally "100,500" = 100. But "100,500" = 100.5 in France.
-+ (NSLocale *)mj_locale;
-+ (NSLocale *)mj_numberLocale MJE_API_Deprecated("Use +mj_locale instead.");
++ (NSLocale *)mj_numberLocale;
 
 /// Used in date formatter that converts a string to a date.
 /// @discussion Following formatters have already been existed by default.
