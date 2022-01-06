@@ -9,7 +9,7 @@
 #define mj_msgSendOne(obj, sel, type, value) ((void (*)(id, SEL, type))objc_msgSend)(obj, sel, value)
 #endif
 #ifndef mj_msgSendGet
-#define mj_msgSendGet(obj, sel, type) ((type (*)(id, SEL))objc_msgSend)(obj, sel)
+#define mj_msgSendGet(obj, sel, type) (((type (*)(id, SEL))objc_msgSend)(obj, sel))
 #endif
 
 #ifndef MJ_LOCK
@@ -76,7 +76,7 @@ MJExtensionAssert2((param) != nil, returnValue)
 #define MJLogAllIvars \
 - (NSString *)description \
 { \
-    return [self mj_keyValues].description; \
+    return [self.mj_JSONObject description]; \
 }
 #define MJExtensionLogAllProperties MJLogAllIvars
 
@@ -84,7 +84,7 @@ MJExtensionAssert2((param) != nil, returnValue)
 #define MJImplementDebugDescription \
 - (NSString *)debugDescription \
 { \
-return [self mj_keyValues].debugDescription; \
+return [self.mj_JSONObject description]; \
 }
 
 #endif

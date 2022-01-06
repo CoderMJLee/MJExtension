@@ -13,6 +13,8 @@
 #import "NSString+MJExtension.h"
 #import "NSString+MJExtension_Private.h"
 
+#define mj_objGet(obj, type) mj_msgSendGet(obj, _getter, type)
+
 @interface NSString (MJPropertyKey)
 
 ///  If JSON key is "xxx.xxx", so add one more key for it.
@@ -75,6 +77,7 @@
 @import CoreData;
 
 @interface MJProperty()
+
 @end
 
 @implementation MJProperty
@@ -130,6 +133,7 @@
     
     if (_type == MJEPropertyTypeObject) {
         _basicObjectType = MJEGetBasicObjectType(_typeClass);
+        _isCustomModelType = !_basicObjectType && _typeClass;
     }
     // If getter or setter is nil, sets them with property name
     if (_name.length) {
@@ -193,22 +197,51 @@
 /**
  *  获得成员变量的值
  */
-- (id)valueForObject:(id)object
-{
+- (id)valueForObject:(id)object {
     if (!_isKVCCompliant) return NSNull.null;
     
-    id value = [object valueForKey:self.name];
+    id value = [object valueForKey:_name];
     
     // 32位BOOL类型转换json后成Int类型
     /** https://github.com/CoderMJLee/MJExtension/issues/545 */
     // 32 bit device OR 32 bit Simulator
 #if defined(__arm__) || (TARGET_OS_SIMULATOR && !__LP64__)
-    if (_type1 == MJEPropertyTypeBool) {
-        value = @([(NSNumber *)value boolValue]);
+    if (_type == MJEPropertyTypeBool) {
+        value = @([value boolValue]);
     }
 #endif
-    
     return value;
+}
+
+- (NSNumber *)numberForObject:(id)object {
+    switch (_type) {
+        case MJEPropertyTypeBool: {
+            id value = @(mj_objGet(object, BOOL));
+            // 32位BOOL类型转换json后成Int类型
+            /** https://github.com/CoderMJLee/MJExtension/issues/545 */
+            // 32 bit device OR 32 bit Simulator
+#if defined(__arm__) || (TARGET_OS_SIMULATOR && !__LP64__)
+            value = @([value boolValue]);
+#endif
+            return value;
+        }
+        case MJEPropertyTypeInt64: return @(mj_objGet(object, int64_t));
+        case MJEPropertyTypeUInt64: return @(mj_objGet(object, uint64_t));
+        case MJEPropertyTypeFloat:
+        case MJEPropertyTypeDouble: {
+            double num = (double)mj_objGet(object, double);
+            if (isinf(num)) num = 0;
+            if (isnan(num)) return nil;
+            return @(num);
+        }
+        case MJEPropertyTypeLongDouble: {
+            double num = (double)mj_objGet(object, long double);
+            if (isinf(num)) num = 0;
+            if (isnan(num)) return nil;
+            return @(num);
+        }
+        default: return @(mj_objGet(object, int64_t));
+    }
 }
 
 - (id)valueInDictionary:(NSDictionary *)dictionary {
@@ -229,9 +262,7 @@
  */
 - (void)setValue:(id)value forObject:(id)object {
     if (!_isKVCCompliant || value == nil) return;
-    //FIXME: Bottleneck #4: Enhanced
     [object setValue:value forKey:self.name];
-//    mj_msgSendOne(object, _setter, id, value);
 }
 
 /** 对应着字典中的key */

@@ -11,7 +11,7 @@
 @implementation MJStudent
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{
-        @"desc" : @"desciption",
+        @"desc" : @"description",
         @"oldName" : @"name.oldName",
         @"nowName" : @"name.newName",
         @"otherName" : @[@"otherName", @"name.newName", @"name.oldName"],

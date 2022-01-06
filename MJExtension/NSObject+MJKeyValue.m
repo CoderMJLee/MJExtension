@@ -41,7 +41,7 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls) {
                              NSAttributedString.class,
                              NSSet.class,
                              NSOrderedSet.class,
-                             NSError.class,nil];
+                             NSError.class, nil];
     });
     
     for (Class testedClass in foundationClasses) {
@@ -119,30 +119,8 @@ static const char MJErrorKey = '\0';
     objc_setAssociatedObject(self, &MJErrorKey, error, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-#pragma mark - 模型 -> 字典时的参考
-/** 模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法（父类设置了，子类也会继承下来） */
-static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
-
-+ (void)mj_referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference
-{
-    objc_setAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey, @(reference), OBJC_ASSOCIATION_ASSIGN);
-}
-
-+ (BOOL)mj_isReferenceReplacedKeyWhenCreatingKeyValues
-{
-    id value = objc_getAssociatedObject(self, &MJReferenceReplacedKeyWhenCreatingKeyValuesKey);
-    return [value boolValue];
-}
-
-#pragma mark - --常用的对象--
-+ (void)load
-{
-    // 默认设置
-    [self mj_referenceReplacedKeyWhenCreatingKeyValues:YES];
-}
-
 #pragma mark - --公共方法--
-#pragma mark - 字典 -> 模型
+#pragma mark - JSON to Object
 - (instancetype)mj_setKeyValues:(id)keyValues {
     return [self mj_setKeyValues:keyValues context:nil];
 }
@@ -385,7 +363,8 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     // generic
                     if (classInCollecion) {
                         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:result.count];
-                        [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
+                        for (NSString *key in result.allKeys) {
+                            id obj = result[key];
                             if ([obj isKindOfClass:NSDictionary.class]) {
                                 Class cls = classInCollecion;
                                 if (property->_hasClassModifier) {
@@ -398,7 +377,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                                 id object = [classInCollecion mj_objectArrayWithKeyValuesArray:obj context:context];
                                 if (object) dict[key] = object;
                             }
-                        }];
+                        }
                         mj_selfSet(property, id, dict);
                         continue;
                     }
@@ -700,7 +679,7 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     return [self mj_objectWithKeyValues:[NSDictionary dictionaryWithContentsOfFile:file]];
 }
 
-#pragma mark - 字典数组 -> 模型数组
+#pragma mark - JSON -> Model Array
 + (NSMutableArray *)mj_objectArrayWithKeyValuesArray:(NSArray *)keyValuesArray
 {
     return [self mj_objectArrayWithKeyValuesArray:keyValuesArray context:nil];
@@ -747,201 +726,191 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     return [self mj_objectArrayWithKeyValuesArray:[NSArray arrayWithContentsOfFile:file]];
 }
 
-#pragma mark - 模型 -> 字典
-- (NSMutableDictionary *)mj_keyValues
-{
-    return [self mj_keyValuesWithKeys:nil ignoredKeys:nil];
+#pragma mark - Any to JSON
+- (NSData *)mj_JSONData {
+    id object = self.mj_JSONObject;
+    if (!object || object == NSNull.null) return nil;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:object options:kNilOptions error:nil];
+    return data;
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys
-{
-    return [self mj_keyValuesWithKeys:keys ignoredKeys:nil];
+- (NSString *)mj_JSONString {
+    NSData *data = self.mj_JSONData;
+    if (!data.length) return nil;
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys
-{
-    return [self mj_keyValuesWithKeys:nil ignoredKeys:ignoredKeys];
+- (id)mj_JSONObject {
+    return [self mj_JSONObjectWithKeys:nil ignoredKeys:nil];
+}
+- (id)mj_JSONObjectWithKeys:(NSArray *)keys {
+    return [self mj_JSONObjectWithKeys:keys ignoredKeys:nil];
+}
+- (id)mj_JSONObjectWithIgnoredKeys:(NSArray *)ignoredKeys {
+    return [self mj_JSONObjectWithKeys:nil ignoredKeys:ignoredKeys];
 }
 
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
-{
-    // 如果自己不是模型类, 那就返回自己
-    // 模型类过滤掉 NSNull
-    // 唯一一个不返回自己的
-    if (self == NSNull.null) return nil;
-    // 这里虽然返回了自己, 但是其实是有报错信息的.
-    // TODO: 报错机制不好, 需要重做
-    MJExtensionAssertError(!MJE_isFromFoundation(self.class), (NSMutableDictionary *)self, [self class], @"不是自定义的模型类")
-    
-    id keyValues = [NSMutableDictionary dictionary];
-    
-    MJEClass *mjeClass = [MJEClass cachedClass:self.class];
-    NSArray<MJProperty *> *allProperties = mjeClass->_allProperties;
-    
-    for (MJProperty *property in allProperties) {
-        @try {
-            // 0.检测是否被忽略
-            if (keys.count && ![keys containsObject:property.name]) continue;
-            if ([ignoredKeys containsObject:property.name]) continue;
-            
-            // 1.取出属性值
-            id value = [property valueForObject:self];
-            if (!value) continue;
-            
-            // 2.如果是模型属性
-            Class propertyClass = property.typeClass;
-            MJEBasicType basicObjectType = property->_basicObjectType;
-            if (basicObjectType == MJEBasicTypeUndefined && propertyClass) {
-                value = [value mj_keyValues];
-            } else if ([value isKindOfClass:[NSArray class]]) {
-                // 3.处理数组里面有模型的情况
-                value = [NSObject mj_keyValuesArrayWithObjectArray:value];
-            } else if (basicObjectType == MJEBasicTypeURL) {
-                value = [value absoluteString];
-            } else if (basicObjectType == MJEBasicTypeAttributedString || property->_basicObjectType == MJEBasicTypeMutableAttributedString) {
-                value = [(NSAttributedString *)value string];
-            } else if (basicObjectType == MJEBasicTypeDate) {
-                value = [value mj_defaultDateString];
-            }
-            
-            // 4.赋值
-            if ([self.class mj_isReferenceReplacedKeyWhenCreatingKeyValues]) {
-                if (property->_isMultiMapping) {
-                    NSArray *propertyKeys = [property->_mappedMultiKeys firstObject];
-                    NSUInteger keyCount = propertyKeys.count;
-                    // 创建字典
-                    __block id innerContainer = keyValues;
-                    [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
-                        // 下一个属性
-                        MJPropertyKey *nextPropertyKey = nil;
-                        if (idx != keyCount - 1) {
-                            nextPropertyKey = propertyKeys[idx + 1];
-                        }
-                        
-                        if (nextPropertyKey) { // 不是最后一个key
-                            // 当前propertyKey对应的字典或者数组
-                            id tempInnerContainer = [propertyKey valueInObject:innerContainer];
-                            if (tempInnerContainer == nil || tempInnerContainer == NSNull.null) {
-                                if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
-                                    tempInnerContainer = [NSMutableDictionary dictionary];
-                                } else {
-                                    tempInnerContainer = [NSMutableArray array];
-                                }
-                                if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                                    innerContainer[propertyKey.name] = tempInnerContainer;
-                                } else {
-                                    innerContainer[propertyKey.name.intValue] = tempInnerContainer;
-                                }
-                            }
-                            
-                            if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
-                                NSMutableArray *tempInnerContainerArray = tempInnerContainer;
-                                int index = nextPropertyKey.name.intValue;
-                                while (tempInnerContainerArray.count < index + 1) {
-                                    [tempInnerContainerArray addObject:NSNull.null];
-                                }
-                            }
-                            
-                            innerContainer = tempInnerContainer;
-                        } else { // 最后一个key
-                            if (propertyKey.type == MJPropertyKeyTypeDictionary) {
-                                innerContainer[propertyKey.name] = value;
-                            } else {
-                                innerContainer[propertyKey.name.intValue] = value;
-                            }
-                        }
-                    }];
-                } else {
-                    keyValues[property->_mappedKey] = value;
-                }
-            } else {
-                keyValues[property.name] = value;
-            }
-        } @catch (NSException *exception) {
-            MJExtensionBuildError([self class], exception.reason);
-            MJExtensionLog(@"%@", exception);
-#ifdef DEBUG
-            [exception raise];
-#endif
-        }
-    }
-    
-    // 转换完毕
-    if (mjeClass->_hasObject2DictionaryModifier) {
-        [self mj_objectDidConvertToKeyValues:keyValues];
-    }
-    
-    return keyValues;
-}
-#pragma mark - 模型数组 -> 字典数组
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray
-{
-    return [self mj_keyValuesArrayWithObjectArray:objectArray keys:nil ignoredKeys:nil];
-}
-
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys
-{
-    return [self mj_keyValuesArrayWithObjectArray:objectArray keys:keys ignoredKeys:nil];
-}
-
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys
-{
-    return [self mj_keyValuesArrayWithObjectArray:objectArray keys:nil ignoredKeys:ignoredKeys];
-}
-
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys
-{
-    // 0.判断真实性
-    MJExtensionAssertError([objectArray isKindOfClass:NSArray.class], nil, [self class], @"objectArray参数不是一个数组");
-    
-    // 1.创建数组
-    NSMutableArray *keyValuesArray = [NSMutableArray array];
-    for (id object in objectArray) {
-        if (keys) {
-            id convertedObj = [object mj_keyValuesWithKeys:keys];
-            if (!convertedObj) { continue; }
-            [keyValuesArray addObject:convertedObj];
-        } else {
-            id convertedObj = [object mj_keyValuesWithIgnoredKeys:ignoredKeys];
-            if (!convertedObj) { continue; }
-            [keyValuesArray addObject:convertedObj];
-        }
-    }
-    return keyValuesArray;
-}
-
-#pragma mark - 转换为JSON
-- (NSData *)mj_JSONData
-{
-    if ([self isKindOfClass:[NSString class]]) {
-        return [((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding];
-    } else if ([self isKindOfClass:[NSData class]]) {
-        return (NSData *)self;
-    }
-    
-    return [NSJSONSerialization dataWithJSONObject:[self mj_JSONObject] options:kNilOptions error:nil];
-}
-
-- (id)mj_JSONObject
-{
-    if ([self isKindOfClass:[NSString class]]) {
-        return [NSJSONSerialization JSONObjectWithData:[((NSString *)self) dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
-    } else if ([self isKindOfClass:[NSData class]]) {
+- (id)mj_JSONObjectWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys {
+    if ([self isKindOfClass:NSString.class]) {
+        return [NSJSONSerialization JSONObjectWithData:[(NSString *)self dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    } else if ([self isKindOfClass:NSData.class]) {
         return [NSJSONSerialization JSONObjectWithData:(NSData *)self options:kNilOptions error:nil];
     }
     
-    return self.mj_keyValues;
+    id object = [self mj_unsafe_JSONObjectWithRecursiveMode:YES keys:keys ignoredKeys:ignoredKeys];
+    if ([object isKindOfClass:NSArray.class]) return object;
+    if ([object isKindOfClass:NSDictionary.class]) return object;
+    return nil;
 }
 
-- (NSString *)mj_JSONString
-{
-    if ([self isKindOfClass:[NSString class]]) {
-        return (NSString *)self;
-    } else if ([self isKindOfClass:[NSData class]]) {
-        return [[NSString alloc] initWithData:(NSData *)self encoding:NSUTF8StringEncoding];
+- (id)mj_unsafe_JSONObjectWithRecursiveMode:(BOOL)isRecursive keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys {
+    if (self == NSNull.null) return NSNull.null;
+    if ([self isKindOfClass:NSString.class]) return self;
+    if ([self isKindOfClass:NSNumber.class]) {
+        NSNumber *number = (NSNumber *)self;
+        // Inf and NaN should not be in JSON object.
+        if (isinf(number.doubleValue)) return @(0);
+        if ([number isEqualToNumber:NSDecimalNumber.notANumber]) return nil;
+        return self;
+    }
+    if ([self isKindOfClass:NSDictionary.class]) {
+        if (!isRecursive) return self;
+        if ([NSJSONSerialization isValidJSONObject:self]) return self;
+        NSDictionary *dictonary = (NSDictionary *)self;
+        NSMutableDictionary *result = [NSMutableDictionary new];
+        for (id anyKey in dictonary.allKeys) {
+            id obj = dictonary[anyKey];
+            NSString *key = [anyKey isKindOfClass:NSString.class] ? anyKey : [anyKey description];
+            if (!key) continue;
+            id objJSON = [obj mj_unsafe_JSONObjectWithRecursiveMode:YES
+                                                               keys:nil ignoredKeys:nil];
+            if (!objJSON) continue;
+            result[key] = objJSON;
+        }
+        return result;
+    }
+    id array = self;
+    if ([self isKindOfClass:NSSet.class]) {
+        array = [(NSSet *)self allObjects];
+    } else if ([self isKindOfClass:NSOrderedSet.class]) {
+        array = [(NSOrderedSet *)self array];
+    }
+    if ([array isKindOfClass:NSArray.class]) {
+        if (!isRecursive) return self;
+        if ([NSJSONSerialization isValidJSONObject:array]) return array;
+        NSMutableArray *result = [NSMutableArray new];
+        for (id obj in array) {
+            id objJSON = [obj mj_unsafe_JSONObjectWithRecursiveMode:YES
+                                                                 keys:nil ignoredKeys:nil];
+            if (objJSON) [result addObject:objJSON];
+        }
+        return result;
+    }
+    if ([self isKindOfClass:NSURL.class]) return [(NSURL *)self absoluteString];
+    if ([self isKindOfClass:NSAttributedString.class]) return [(NSAttributedString *)self string];
+    if ([self isKindOfClass:NSDate.class]) return [(NSDate *)self mj_defaultDateString];
+    if ([self isKindOfClass:NSData.class]) return nil;
+    
+    // Check if the object is a "Model Object"(we defined) after basic type conversion finished
+    if (MJE_isFromFoundation(self.class)) return nil;
+    
+    MJEClass *classCache = [MJEClass cachedClass:self.class];
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSArray<MJProperty *> *allProperties = classCache->_allProperties;
+    
+    for (MJProperty *property in allProperties) {
+        // 0.检测是否被忽略
+        if (keys.count && ![keys containsObject:property.name]) continue;
+        if ([ignoredKeys containsObject:property.name]) continue;
+        
+        // 1.取出属性值
+        id value;
+        if (!property->_isKVCCompliant) value = NSNull.null;
+        if (!property->_isBasicNumber) {
+            value = mj_selfGet(property, id);
+        } else {
+            value = [property numberForObject:self];
+        }
+        
+        if (!value) continue;
+        
+        if (property.typeClass || property->_isBasicNumber) {
+            value = [value mj_unsafe_JSONObjectWithRecursiveMode:YES
+                                                            keys:nil ignoredKeys:nil];
+        } else {
+            switch (property.type) {
+                case MJEPropertyTypeClass: {
+                    Class cls = mj_selfGet(property, Class);
+                    value = cls ? NSStringFromClass(cls) : nil;
+                } break;
+                case MJEPropertyTypeSEL: {
+                    SEL selector = mj_selfGet(property, SEL);
+                    value = selector ? NSStringFromSelector(selector) : nil;
+                } break;
+                default: break;
+            }
+        }
+        
+        // 4.赋值
+        if (classCache->_shouldReferenceKeyReplacementInJSONExport) {
+            if (property->_isMultiMapping) {
+                NSArray *propertyKeys = [property->_mappedMultiKeys firstObject];
+                NSUInteger keyCount = propertyKeys.count;
+                // 创建字典
+                __block id innerContainer = result;
+                [propertyKeys enumerateObjectsUsingBlock:^(MJPropertyKey *propertyKey, NSUInteger idx, BOOL *stop) {
+                    // 下一个属性
+                    MJPropertyKey *nextPropertyKey = nil;
+                    if (idx != keyCount - 1) {
+                        nextPropertyKey = propertyKeys[idx + 1];
+                    }
+                    
+                    if (nextPropertyKey) { // 不是最后一个key
+                        // 当前propertyKey对应的字典或者数组
+                        id tempInnerContainer = [propertyKey valueInObject:innerContainer];
+                        if (tempInnerContainer == nil || tempInnerContainer == NSNull.null) {
+                            if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
+                                tempInnerContainer = [NSMutableDictionary dictionary];
+                            } else {
+                                tempInnerContainer = [NSMutableArray array];
+                            }
+                            if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                                innerContainer[propertyKey.name] = tempInnerContainer;
+                            } else {
+                                innerContainer[propertyKey.name.intValue] = tempInnerContainer;
+                            }
+                        }
+                        
+                        if ([tempInnerContainer isKindOfClass:[NSMutableArray class]]) {
+                            NSMutableArray *tempInnerContainerArray = tempInnerContainer;
+                            int index = nextPropertyKey.name.intValue;
+                            while (tempInnerContainerArray.count < index + 1) {
+                                [tempInnerContainerArray addObject:NSNull.null];
+                            }
+                        }
+                        
+                        innerContainer = tempInnerContainer;
+                    } else { // 最后一个key
+                        if (propertyKey.type == MJPropertyKeyTypeDictionary) {
+                            innerContainer[propertyKey.name] = value;
+                        } else {
+                            innerContainer[propertyKey.name.intValue] = value;
+                        }
+                    }
+                }];
+            } else {
+                result[property->_mappedKey] = value;
+            }
+        } else {
+            result[property.name] = value;
+        }
     }
     
-    return [[NSString alloc] initWithData:[self mj_JSONData] encoding:NSUTF8StringEncoding];
+    if (classCache->_hasObject2DictionaryModifier) {
+        [self mj_objectDidConvertToKeyValues:result];
+    }
+    return result;
 }
 
 @end

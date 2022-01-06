@@ -17,12 +17,6 @@
  * 字典转模型过程中遇到的错误
  */
 + (NSError *)mj_error;
-
-/**
- *  模型转字典时，字典的key是否参考replacedKeyFromPropertyName等方法（父类设置了，子类也会继承下来）
- */
-+ (void)mj_referenceReplacedKeyWhenCreatingKeyValues:(BOOL)reference;
-
 #pragma mark - 对象方法
 /**
  *  将字典的键值对转成模型属性
@@ -36,14 +30,6 @@
  *  @param context   CoreData上下文
  */
 - (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
-
-/**
- *  将模型转成字典
- *  @return 字典
- */
-- (NSMutableDictionary *)mj_keyValues;
-- (NSMutableDictionary *)mj_keyValuesWithKeys:(NSArray *)keys;
-- (NSMutableDictionary *)mj_keyValuesWithIgnoredKeys:(NSArray *)ignoredKeys;
 
 /**
  *  通过模型数组来创建一个字典数组
@@ -123,6 +109,10 @@
  *  转换为字典或者数组
  */
 - (id)mj_JSONObject;
+- (id)mj_JSONObjectWithKeys:(NSArray *)keys;
+- (id)mj_JSONObjectWithIgnoredKeys:(NSArray *)ignoredKeys;
+
+- (id)mj_JSONObjectWithKeys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys;
 /**
  *  转换为JSON 字符串
  */

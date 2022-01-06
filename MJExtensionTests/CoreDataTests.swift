@@ -103,7 +103,14 @@ class CoreDataTests: XCTestCase {
             coreDataObject.age = Values.age
             coreDataObject.identifier = Values.identifier
             
-            guard let dict = coreDataObject.mj_keyValues() else {
+            let broObject = Values.coreDataObject(in: context)
+            broObject.name = Values.broName
+            broObject.isJuan = Values.isJuan
+            broObject.age = Values.broAge
+            broObject.identifier = Values.identifier
+            coreDataObject.addToRelatives(broObject)
+            
+            guard let dict = coreDataObject.mj_JSONObject() as? [String: Any] else {
                 fatalError("conversion to core data object failed")
             }
             
@@ -111,8 +118,17 @@ class CoreDataTests: XCTestCase {
             XCTAssert(dict["identifier"] as? String == Values.identifier)
             XCTAssert(dict["name"] as? String == Values.name)
             XCTAssert(dict["age"] as? Int16 == Values.age)
-            // TODO: objects -> JSON (Set conversion)
+            
             XCTAssertNotNil(dict["relatives"])
+            XCTAssertEqual((dict["relatives"] as! [Any]).count, 1)
+            guard let relatives = dict["relatives"] as? [[String: Any]] else {
+                fatalError("relatives cast error")
+            }
+            let bro = relatives[0]
+            XCTAssert(bro["isJuan"] as? Bool == Values.isJuan)
+            XCTAssert(bro["identifier"] as? String == Values.identifier)
+            XCTAssert(bro["name"] as? String == Values.broName)
+            XCTAssert(bro["age"] as? Int16 == Values.broAge)
         }
     }
 }

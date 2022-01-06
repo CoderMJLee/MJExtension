@@ -330,7 +330,6 @@
 
 #pragma mark 模型 -> 字典
 - (void)testModel2JSON {
-    // 1.新建模型
     MJUser *user = [[MJUser alloc] init];
     user.name = @"Jack";
     user.icon = @"lufy.png";
@@ -339,12 +338,20 @@
     status.user = user;
     status.text = @"今天的心情不错！";
     
-    // 2.将模型转为字典
-    NSDictionary *statusDict = status.mj_keyValues;
-    MJExtensionLog(@"%@", statusDict);
-    
-    MJExtensionLog(@"%@", [status mj_keyValuesWithKeys:@[@"text"]]);
-    
+    {
+        NSDictionary *statusDict = status.mj_JSONObject;
+        XCTAssertEqual(statusDict[@"text"], status.text);
+        NSDictionary *userDict = statusDict[@"user"];
+        XCTAssertEqual(userDict[@"name"], user.name);
+        XCTAssertEqual(userDict[@"icon"], user.icon);
+    }
+    {
+        NSDictionary *statusDict = [status mj_JSONObjectWithKeys:@[@"text"]];
+        XCTAssertEqual(statusDict.count, 1);
+    }
+}
+
+- (void)testObject2JSON_MultipleMapping {
     // 3.新建多级映射的模型
     MJStudent *stu = [[MJStudent alloc] init];
     stu.ID = @"123";
@@ -357,16 +364,41 @@
     
     MJBag *bag = [[MJBag alloc] init];
     bag.name = @"小书包";
-    bag.price = 205;
+    bag.price = @"inf".mj_doubleValue;
     stu.bag = bag;
     
-    NSDictionary *stuDict = stu.mj_keyValues;
-    MJExtensionLog(@"%@", stuDict);
-    MJExtensionLog(@"%@", [stu mj_keyValuesWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]]);
-    MJExtensionLog(@"%@", stu.mj_JSONString);
+    {
+        NSDictionary *stuDict = stu.mj_JSONObject;
+        XCTAssertEqual(stuDict[@"id"], stu.ID);
+        XCTAssertEqual(stuDict[@"description"], stu.desc);
+        XCTAssertEqual(stuDict[@"isAthlete"], @(stu.isAthlete));
+        XCTAssertEqual(stuDict[@"books"][0], stu.books[0]);
+        XCTAssertEqual(stuDict[@"books"][1], stu.books[1]);
+        XCTAssertEqual(stuDict[@"name"][@"newName"], stu.nowName);
+        XCTAssertEqual(stuDict[@"name"][@"oldName"], stu.oldName);
+        XCTAssertEqual(stuDict[@"name"][@"info"][0], NSNull.null);
+        XCTAssertEqual(stuDict[@"name"][@"info"][1][@"nameChangedTime"], stu.nameChangedTime);
+        NSDictionary *bagDict = stuDict[@"other"][@"bag"];
+        XCTAssertEqual(bagDict[@"name"], bag.name);
+        XCTAssertEqual([bagDict[@"price"] doubleValue], 0);//bag.price
+    }
     
-    [MJStudent mj_referenceReplacedKeyWhenCreatingKeyValues:NO];
-    MJExtensionLog(@"\n模型转字典时，字典的key参考replacedKeyFromPropertyName等方法:\n%@", stu.mj_keyValues);
+    {
+        NSDictionary *stuDict = [stu mj_JSONObjectWithIgnoredKeys:@[@"bag", @"oldName", @"nowName"]];
+        XCTAssertEqual(stuDict[@"id"], stu.ID);
+        XCTAssertEqual(stuDict[@"description"], stu.desc);
+        XCTAssertEqual(stuDict[@"isAthlete"], @(stu.isAthlete));
+        XCTAssertEqual(stuDict[@"books"][0], stu.books[0]);
+        XCTAssertEqual(stuDict[@"books"][1], stu.books[1]);
+        XCTAssertNil(stuDict[@"name"][@"newName"]);
+        XCTAssertNil(stuDict[@"name"][@"oldName"]);
+        XCTAssertEqual(stuDict[@"name"][@"info"][0], NSNull.null);
+        XCTAssertEqual(stuDict[@"name"][@"info"][1][@"nameChangedTime"], stu.nameChangedTime);
+        NSDictionary *bagDict = stuDict[@"other"][@"bag"];
+        XCTAssertNil(bagDict);
+    }
+    
+    MJExtensionLog(@"%@", stu.mj_JSONString);
 }
 
 #pragma mark 模型数组 -> 字典数组
@@ -382,62 +414,93 @@
     NSArray *userArray = @[user1, user2];
     
     // 2.将模型数组转为字典数组
-    NSArray *dictArray = [MJUser mj_keyValuesArrayWithObjectArray:userArray];
-    MJExtensionLog(@"%@", dictArray);
+    {
+        NSArray *dictArray = [userArray mj_JSONObject];
+        NSDictionary *user1Dict = dictArray[0];
+        XCTAssertEqual(user1Dict[@"name"], user1.name);
+        XCTAssertEqual(user1Dict[@"icon"], user1.icon);
+        NSDictionary *user2Dict = dictArray[1];
+        XCTAssertEqual(user2Dict[@"name"], user2.name);
+        XCTAssertEqual(user2Dict[@"icon"], user2.icon);
+    }
 }
 
 #pragma mark NSNull相关的测试
-- (void)testNull {
+- (void)testNullObject2JSON {
     NSNull *null = [NSNull null];
-    id obj2 = [null mj_keyValues];
-    MJExtensionLog(@"%@", obj2);
+    id obj2 = [null mj_JSONObject];
+    XCTAssertNil(obj2);
     
     MJUser *user1 = [[MJUser alloc] init];
     user1.name = @"user1";
     MJUser *user2 = [[MJUser alloc] init];
     user2.name = @"user2";
     NSArray *users = @[user1, [NSNull null], user2];
-    NSArray *usersDictArr = [MJUser mj_keyValuesArrayWithObjectArray:users];
-    MJExtensionLog(@"%@", usersDictArr);
-    NSString *str = [usersDictArr mj_JSONObject];
-    MJExtensionLog(@"%@", str);
+    {
+        NSArray *usersDictArr = [users mj_JSONObject];
+        XCTAssertEqual(usersDictArr.count, 3);
+        NSDictionary *user1Dict = usersDictArr[0];
+        XCTAssertEqual(user1Dict[@"name"], user1.name);
+        XCTAssertEqual(usersDictArr[1], NSNull.null);
+        NSDictionary *user2Dict = usersDictArr[2];
+        XCTAssertEqual(user2Dict[@"name"], user2.name);
+        
+        NSString *str = [usersDictArr mj_JSONString];
+        MJExtensionLog(@"%@", str);
+    }
+}
+
+- (void)testNullJSON2Object {
+    {
+        NSArray *dictArray = @[
+            @{
+                @"name" : @"Jack",
+                @"icon" : @"lufy.png",
+            },
+            [NSNull null],
+            @{
+                @"name" : @"Rose",
+                @"icon" : @"nami.png",
+            }
+        ];
+        
+        NSArray *userArray = [MJUser mj_objectArrayWithKeyValuesArray:dictArray];
+        XCTAssertEqual(userArray.count, 2);
+        MJUser *user1 = userArray[0];
+        XCTAssertEqual(user1.name, dictArray[0][@"name"]);
+        XCTAssertEqual(user1.icon, dictArray[0][@"icon"]);
+        MJUser *user2 = userArray[1];
+        XCTAssertEqual(user2.name, dictArray[2][@"name"]);
+        XCTAssertEqual(user2.icon, dictArray[2][@"icon"]);
+    }
     
+    {
+        NSDictionary *dic = @{
+                              @"name": [NSNull null],
+                              @"icon": @"lufy.png"
+                              };
+        MJUser *user = [MJUser mj_objectWithKeyValues:dic];
+        XCTAssertNil(user.name);
+        XCTAssertEqual(user.icon, dic[@"icon"]);
+    }
     
-    NSArray *dictArray = @[
-                           @{
-                               @"name" : @"Jack",
-                               @"icon" : @"lufy.png",
-                               },
-                           [NSNull null],
-                           @{
-                               @"name" : @"Rose",
-                               @"icon" : @"nami.png",
-                               }
-                           ];
-    
-    NSArray *userArray = [MJUser mj_objectArrayWithKeyValuesArray:dictArray];
-    MJExtensionLog(@"%@", userArray);
-    
-    
-    NSDictionary *dic = @{
-                          @"name": [NSNull null],
-                          @"icon": @"lufy.png"
-                          };
-    MJUser *testNull = [MJUser mj_objectWithKeyValues:dic];
-    MJExtensionLog(@"%@", testNull);
-    
-    
-    NSDictionary *catDict = @{
-        @"name": @"Tom",
-        @"address": [NSNull null],
-        @"nicknames": @[
-                @"Jerry's Heart",
-                [NSNull null],
-                @"Cowboy Tom",
-        ]
-    };
-    MJCat *cat = [MJCat mj_objectWithKeyValues:catDict];
-    MJExtensionLog(@"%@", cat);
+    {
+        NSDictionary *catDict = @{
+            @"name": @"Tom",
+            @"address": [NSNull null],
+            @"nicknames": @[
+                    @"Jerry's Heart",
+                    [NSNull null],
+                    @"Cowboy Tom",
+            ]
+        };
+        MJCat *cat = [MJCat mj_objectWithKeyValues:catDict];
+        XCTAssertEqual(cat.name, catDict[@"name"]);
+        XCTAssertNil(cat.address);
+        XCTAssertEqual(cat.nicknames.count, 2);
+        XCTAssertEqual(cat.nicknames[0], catDict[@"nicknames"][0]);
+        XCTAssertEqual(cat.nicknames[1], catDict[@"nicknames"][2]);
+    }
 }
 
 #pragma mark NSCoding示例
@@ -524,7 +587,7 @@
     XCTAssert(dog.runSpeed == (float)100.9);
 }
 
-#pragma mark 过滤字典的值（比如字符串日期处理为NSDate、字符串nil处理为@""）
+#pragma mark 过滤字典的值（比如字符串nil处理为@""）
 - (void)testNewValueFromOldValue {
     // JSON -> Object
     // 1.定义一个字典
@@ -547,7 +610,7 @@
     XCTAssert([[fmt stringFromDate:book.publishedTime] isEqual:@"2011-09-10"]);
     
     //Object -> JSON
-    NSDictionary *bookDict = [book mj_keyValues];
+    NSDictionary *bookDict = [book mj_JSONObject];
     
     XCTAssert([bookDict[@"name"] isEqualToString:@"5分钟突破iOS开发"]);
     XCTAssert([bookDict[@"publishedTime"] isEqualToString:@"2011-09-10"]);
@@ -592,7 +655,7 @@
     ごこうるり.nicknames = @[@"黑猫", @"我老婆"];
     ごこうるり.color = UIColor.blackColor;
     
-    NSDictionary *JSON = ごこうるり.mj_keyValues;
+    NSDictionary *JSON = ごこうるり.mj_JSONObject;
     XCTAssertEqual(JSON[@"name"], ごこうるり.name);
     XCTAssert(((NSArray *)JSON[@"nicknames"]).count == 2);
 }

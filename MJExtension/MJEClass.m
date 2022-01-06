@@ -44,9 +44,15 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
     if ([cls respondsToSelector:@selector(mj_shouldAutoInheritConfigurations)]) {
         shouldAutoInheritFromSuper = [cls mj_shouldAutoInheritConfigurations];
     }
+    _shouldReferenceKeyReplacementInJSONExport = YES;
+    if ([cls respondsToSelector:@selector(mj_shouldReferenceKeyReplacementInJSONExport)]) {
+        _shouldReferenceKeyReplacementInJSONExport = [cls mj_shouldReferenceKeyReplacementInJSONExport];
+    }
     
     NSMutableSet *ignoredList = [NSMutableSet new];
     NSMutableSet *allowedList = [NSMutableSet new];
+    NSMutableSet *ignoredList2JSON = [NSMutableSet new];
+    NSMutableSet *allowedList2JSON = [NSMutableSet new];
     NSMutableSet *ignoredCodingList = [NSMutableSet new];
     NSMutableSet *allowedCodingList = [NSMutableSet new];
     NSMutableDictionary *genericClasses = [NSMutableDictionary new];
@@ -65,19 +71,29 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
                                  @selector(mj_allowedPropertyNames),
                                  allowedList);
         
-        // get ignored property names
+        // get ignored property names to JSON
+        MJEAddSelectorResult2Set(currentClass,
+                                 @selector(mj_ignoredPropertyNamesToJSON),
+                                 ignoredList2JSON);
+        
+        // get allowed property names to JSON
+        MJEAddSelectorResult2Set(currentClass,
+                                 @selector(mj_allowedPropertyNamesToJSON),
+                                 allowedList2JSON);
+        
+        // get ignored coding property names
         MJEAddSelectorResult2Set(currentClass,
                                  @selector(mj_ignoredCodingPropertyNames),
                                  ignoredCodingList);
         
-        // get allowed property names
+        // get allowed coding property names
         MJEAddSelectorResult2Set(currentClass,
                                  @selector(mj_allowedCodingPropertyNames),
                                  allowedCodingList);
         
         // get old value to new one property name list
         MJEAddSelectorResult2Set(currentClass,
-                                 @selector(mj_modifyOld2NewPropertyNames),
+                                 @selector(mj_modifyOldToNewPropertyNames),
                                  old2NewList);
         
         // get generic classes
@@ -110,6 +126,8 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
     // get the property lists
     [self mj_handlePropertiesWithAllowedList:allowedList
                                  ignoredList:ignoredList
+                            allowedList2JSON:allowedList2JSON
+                            ignoredList2JSON:ignoredList2JSON
                            allowedCodingList:allowedCodingList
                            ignoredCodingList:ignoredCodingList
                                  old2NewList:old2NewList
@@ -141,8 +159,8 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
         classCache = [NSMutableDictionary new];
         lock = dispatch_semaphore_create(1);
     });
-    // uses only 1 lock to avoid concurrent operation from a mess.
-    // too many locks before 4.0.0 version.
+    // Uses only 1 lock to avoid concurrent operation from a mess.
+    // There are too many locks before 4.0.0 version.
     MJ_LOCK(lock);
     MJEClass *cachedClass = classCache[cls];
     if (!cachedClass || cachedClass->_needsUpdate) {
@@ -157,6 +175,8 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
 
 - (void)mj_handlePropertiesWithAllowedList:(NSSet *)allowedList
                                ignoredList:(NSSet *)ignoredList
+                          allowedList2JSON:(NSSet *)allowedList2JSON
+                          ignoredList2JSON:(NSSet *)ignoredList2JSON
                          allowedCodingList:(NSSet *)allowedCodingList
                          ignoredCodingList:(NSSet *)ignoredCodingList
                                old2NewList:(NSSet *)old2NewList
@@ -166,8 +186,7 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
                                    inClass:(Class)cls {
     NSMutableArray<MJProperty *> *allProperties = [NSMutableArray array];
     NSMutableArray<MJProperty *> *codingProperties = [NSMutableArray array];
-    // TODO: 4.0.0 new feature
-//    NSMutableArray<MJProperty *> *allProperties2JSON = [NSMutableArray array];
+    NSMutableArray<MJProperty *> *allProperties2JSON = [NSMutableArray array];
     [cls mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         // 1. get all property list
         unsigned int outCount = 0;
@@ -187,6 +206,12 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
                     [codingProperties addObject:property];
                 }
             }
+            // handle properties for object to JSON conversion.
+            if (!allowedList2JSON.count || [allowedList2JSON containsObject:property.name]) {
+                if (![ignoredList2JSON containsObject:property.name]) {
+                    [allProperties2JSON addObject:property];
+                }
+            }
             // check allowed list
             if (allowedList.count && ![allowedList containsObject:property.name]) continue;
             // check ingored list
@@ -198,30 +223,33 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
                 || !old2NewList.count) {
                 property->_hasValueModifier = YES;
             }
-            
-            id key = property.name;
-            // Modify replaced key using special method
-            if (hasKeyReplacementModifier) {
-                key = [cls mj_replacedKeyFromPropertyName121:key] ?: key;
-            }
-            // serch key in replaced dictionary
-            key = replacedKeys[property.name] ?: key;
-            
-            // handle keypath / keypath array / keypath array(with subkey)
-            [property handleOriginKey:key];
-            
             // handle generic class
-            id clazz = genericClasses[property.name];
-            if ([clazz isKindOfClass:NSString.class]) {
-                clazz = NSClassFromString(clazz);
+            {
+                id genericClass = genericClasses[property.name];
+                if ([genericClass isKindOfClass:NSString.class]) {
+                    genericClass = NSClassFromString(genericClass);
+                }
+                property.classInCollection = genericClass;
+                // check the ability to change class.
+                if (genericClass) { // generic
+                    property->_hasClassModifier = [genericClass respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
+                } else if (property.isCustomModelType) { // for those superclass and subclass customization
+                    property->_hasClassModifier = [property.typeClass respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
+                }
             }
-            property.classInCollection = clazz;
             
-            // check the ability to change class.
-            if (clazz) { // generic
-                property->_hasClassModifier = [clazz respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
-            } else if (property.typeClass && property->_basicObjectType == MJEBasicTypeUndefined) { // common class (base class)
-                property->_hasClassModifier = [property.typeClass respondsToSelector:@selector(mj_modifiedClassForDictionary:)];
+            // handle key modifier and replacement
+            {
+                id key = property.name;
+                // Modify replaced key using special method
+                if (hasKeyReplacementModifier) {
+                    key = [cls mj_replacedKeyFromPropertyName121:key] ?: key;
+                }
+                // serch key in replaced dictionary
+                key = replacedKeys[property.name] ?: key;
+                
+                // handle keypath / keypath array / keypath array(with subkey)
+                [property handleOriginKey:key];
             }
             
             [allProperties addObject:property];
@@ -233,6 +261,7 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls);
     
     _allProperties = allProperties.copy;
     _allCodingProperties = codingProperties.copy;
+    _allProperties2JSON = allProperties2JSON.copy;
     
     _propertiesCount = _allProperties.count;
 }

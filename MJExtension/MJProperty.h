@@ -97,19 +97,21 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _isBasicNumber;
 }
 
-/// Property name that defined by class.
+/// `Property` name that defined by class.
 @property (nonatomic, readonly) NSString *name;
-/// Property ivar name synthesized
+/// `Property` ivar name synthesized
 @property (nonatomic, readonly) NSString *ivarName;
-/// Property value type that defined by class.
+/// `Property` value type that defined by belonged class.
 @property (nonatomic, readonly) MJEPropertyType type;
 /// True if _isBasicNumber or number object(NSNumber, NSDecimalNumber)
 @property (nonatomic, readonly) BOOL isNumber;
-/// This property belonged by what class. It may be from super class.
+/// `Property` belonged by what class. It may be from super class.
 @property (nonatomic, readonly) Class srcClass;
-/// The property type class could be nil if property is a standard value(int / double, Class ...)
+/// The `Property` type class could be nil if `Property` is a standard value(int / double, Class ...)
 @property (nullable, nonatomic, readonly) Class typeClass;
-/// If class type is a collection,  this property is the type of those element in it.
+/// If the `Property` type is a not standard value(typeClass == nil) nor a basic object type(_basicObjectType == .undefined), this value will be true(YES).
+@property (nonatomic, readonly) BOOL isCustomModelType;
+/// If class type is a collection,  this value is the type of those element in it.
 @property (nonatomic) Class classInCollection;
 /// Could be nil if getter is not reponded in srcClass instances.
 @property (nullable, nonatomic) SEL getter;
@@ -121,6 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setValue:(id)value forObject:(id)object;
 - (id)valueForObject:(id)object;
+- (NSNumber *)numberForObject:(id)object;
 
 - (id)valueInDictionary:(NSDictionary *)dictionary;
 
