@@ -22,6 +22,8 @@
 #import <MJExtensionTests-Swift.h>
 #import "MJPerson.h"
 
+@import MJExtension;
+
 @interface MJExtensionTests : XCTestCase
 
 @end
@@ -267,13 +269,58 @@
     XCTAssert([result.ads.firstObject[1].url.absoluteString isEqual:@"http://www.ad02.com"]);
 }
 
+- (void)testUpdatingModel {
+    MJCat *五更琉璃 = [MJCat new];
+    五更琉璃.name = @"五更琉璃";
+    五更琉璃.nicknames = @[
+        @"黑猫",
+        @"我老婆",
+    ];
+    五更琉璃.address = @"";
+    
+    NSDictionary *catDict = @{
+        @"address": @"这能告诉你?"
+    };
+    [五更琉璃 mj_setKeyValues:catDict];
+    
+    XCTAssertEqual(五更琉璃.name, @"五更琉璃");
+    XCTAssertEqual(五更琉璃.address, catDict[@"address"]);
+    XCTAssert(五更琉璃.nicknames.count == 2);
+}
+
+- (void)testUpdatingSubModel {
+    MJBag *bag = [MJBag new];
+    bag.name = @"小葫芦";
+    bag.isBig = YES;
+    bag.price = 9999;
+    
+    MJStudent *student = [MJStudent new];
+    student.nowName = @"葫芦小金刚";
+    student.oldName = @"葫芦娃";
+    student.bag = bag;
+    
+    NSDictionary *dict = @{
+        @"other" : @{
+            @"bag" : @{
+                @"price" : @99
+                
+            }
+        }
+    };
+    [student mj_setKeyValues:dict];
+    
+    XCTAssertEqual(student.bag.name, @"小葫芦");
+    XCTAssert(student.bag.isBig);
+    XCTAssertEqual(student.bag.price, 99);
+}
+
 #pragma mark KeyMapping
 // key替换，比如ID和id。多级映射，比如 oldName 和 name.oldName
 - (void)testKeyMapping {
     // 1.定义一个字典
     NSDictionary *dict = @{
                            @"id" : @"20",
-                           @"desciption" : @"好孩子",
+                           @"description" : @"好孩子",
                            @"name" : @{
                                    @"newName" : @"lufy",
                                    @"oldName" : @"kitty",
