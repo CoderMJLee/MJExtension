@@ -18,10 +18,12 @@
 		0107509B26E8C5A300AAEA10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0107509926E8C5A300AAEA10 /* LaunchScreen.storyboard */; };
 		010DF01E2761D90A0007EEF0 /* SpecialPropertyTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010DF01D2761D90A0007EEF0 /* SpecialPropertyTypeTests.swift */; };
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
-		0130F2032782DFD200800FF3 /* NSString+MJExtension_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 0130F2022782DFA300800FF3 /* NSString+MJExtension_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0130F2032782DFD200800FF3 /* MJExtension_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 0130F2022782DFA300800FF3 /* MJExtension_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0130F2122784442200800FF3 /* MJCoreDataTester+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0130F20F2784441E00800FF3 /* MJCoreDataTester+CoreDataProperties.swift */; };
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
+		018717B52787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */; };
+		018717B62787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */; };
 		01BB00FD277EC1FF002EF5B3 /* DeprecatedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */; };
 		01BB0100277EE8DC002EF5B3 /* NSDate+MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01BB0101277EE8DC002EF5B3 /* NSDate+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */; };
@@ -92,11 +94,13 @@
 		010DF01D2761D90A0007EEF0 /* SpecialPropertyTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialPropertyTypeTests.swift; sourceTree = "<group>"; };
 		0130EE7E233C56D8008D2386 /* MJFrenchUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJFrenchUser.h; sourceTree = "<group>"; };
 		0130EE7F233C56D8008D2386 /* MJFrenchUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJFrenchUser.m; sourceTree = "<group>"; };
-		0130F2022782DFA300800FF3 /* NSString+MJExtension_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+MJExtension_Private.h"; sourceTree = "<group>"; };
+		0130F2022782DFA300800FF3 /* MJExtension_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJExtension_Private.h; sourceTree = "<group>"; };
 		0130F20F2784441E00800FF3 /* MJCoreDataTester+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataTester+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		0179886B24EFA460007F7FBC /* MJTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJTester.swift; sourceTree = "<group>"; };
 		0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModelTests.swift; sourceTree = "<group>"; };
+		018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataPerson+CoreDataClass.swift"; sourceTree = "<group>"; };
+		018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataPerson +CoreDataProperties.swift"; sourceTree = "<group>"; };
 		01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeprecatedAPITests.swift; sourceTree = "<group>"; };
 		01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+MJExtension.h"; sourceTree = "<group>"; };
 		01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MJExtension.m"; sourceTree = "<group>"; };
@@ -187,6 +191,8 @@
 				0107507626E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld */,
 				0107507926E88EAC00AAEA10 /* MJCoreDataTester+CoreDataClass.swift */,
 				0130F20F2784441E00800FF3 /* MJCoreDataTester+CoreDataProperties.swift */,
+				018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */,
+				018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */,
 			);
 			path = CoreDataModel;
 			sourceTree = "<group>";
@@ -267,7 +273,7 @@
 				2D2DBA062317DB32005A689E /* NSObject+MJKeyValue.m */,
 				2D2DBA142317DB33005A689E /* NSString+MJExtension.h */,
 				2D2DBA0B2317DB32005A689E /* NSString+MJExtension.mm */,
-				0130F2022782DFA300800FF3 /* NSString+MJExtension_Private.h */,
+				0130F2022782DFA300800FF3 /* MJExtension_Private.h */,
 				01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */,
 				01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */,
 				2D2DB9F62317DA64005A689E /* MJExtension.h */,
@@ -350,7 +356,7 @@
 				01F5515E2757144500518218 /* MJEClass.h in Headers */,
 				01BB0100277EE8DC002EF5B3 /* NSDate+MJExtension.h in Headers */,
 				2D2DB9F82317DA64005A689E /* MJExtension.h in Headers */,
-				0130F2032782DFD200800FF3 /* NSString+MJExtension_Private.h in Headers */,
+				0130F2032782DFD200800FF3 /* MJExtension_Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +579,9 @@
 				01BB00FD277EC1FF002EF5B3 /* DeprecatedAPITests.swift in Sources */,
 				2D2DBA7D2317DBE0005A689E /* MJBook.m in Sources */,
 				0107507E26E890C100AAEA10 /* CoreDataTests.swift in Sources */,
+				018717B52787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift in Sources */,
 				0107507826E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
+				018717B62787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift in Sources */,
 				2D2DBA7A2317DBE0005A689E /* MJDog.m in Sources */,
 				01052EAD25F872D00049EC6F /* MultiThreadTests.swift in Sources */,
 				01BC91E427741956004E5265 /* MJCredential.swift in Sources */,

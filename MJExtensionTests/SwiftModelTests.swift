@@ -8,11 +8,13 @@
 
 import XCTest
 
+typealias AnyDictType = [String : Any]
+
 class SwiftModelTests: XCTestCase {
     
     // MARK: 🌈 Use Swift model
     func testNormalModel() throws {
-        let testerDict: [String: Any] = [
+        let testerDict: AnyDictType = [
             "isSpecialAgent": true,
             "identifier": "007",
             "age": 22,
@@ -56,7 +58,7 @@ class SwiftModelTests: XCTestCase {
 
     // MARK: 🌈 Use Objective-C model code
     func testOBJCModel() throws {
-        let userDict: [String: Any] = [
+        let userDict: AnyDictType = [
             "rich": true,
             "name": "007",
             "age": 22,

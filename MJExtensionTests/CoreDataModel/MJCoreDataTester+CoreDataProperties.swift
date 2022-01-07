@@ -14,14 +14,14 @@ import CoreData
 extension MJCoreDataTester {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MJCoreDataTester> {
-        return NSFetchRequest<MJCoreDataTester>(entityName: "MJCDTester")
+        return NSFetchRequest<MJCoreDataTester>(entityName: "Tester")
     }
 
     @NSManaged public var age: Int16
     @NSManaged public var identifier: String?
     @NSManaged public var isJuan: Bool
     @NSManaged public var name: String?
-    @NSManaged public var relatives: Set<MJCoreDataTester>?
+    @NSManaged public var relatives: Set<MJCoreDataPerson>?
 
 }
 
@@ -29,10 +29,10 @@ extension MJCoreDataTester {
 extension MJCoreDataTester {
 
     @objc(addRelativesObject:)
-    @NSManaged public func addToRelatives(_ value: MJCoreDataTester)
+    @NSManaged public func addToRelatives(_ value: MJCoreDataPerson)
 
     @objc(removeRelativesObject:)
-    @NSManaged public func removeFromRelatives(_ value: MJCoreDataTester)
+    @NSManaged public func removeFromRelatives(_ value: MJCoreDataPerson)
 
     @objc(addRelatives:)
     @NSManaged public func addToRelatives(_ values: NSSet)

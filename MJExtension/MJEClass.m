@@ -10,6 +10,7 @@
 #import "MJExtensionPredefine.h"
 #import "MJExtensionProtocols.h"
 #import "MJProperty.h"
+#import "MJExtension_Private.h"
 
 typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
 
@@ -20,7 +21,6 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
 
 @implementation NSObject (MJEClass)
 
-BOOL MJE_isFromFoundation(Class _Nonnull cls);
 + (void)mj_enumerateClasses:(MJClassesEnumeration)enumeration {
     if (enumeration == nil) return;
     BOOL stop = NO;

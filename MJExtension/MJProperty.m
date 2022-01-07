@@ -11,68 +11,9 @@
 #import <objc/message.h>
 #include "TargetConditionals.h"
 #import "NSString+MJExtension.h"
-#import "NSString+MJExtension_Private.h"
+#import "MJExtension_Private.h"
 
 #define mj_objGet(obj, type) mj_msgSendGet(obj, _getter, type)
-
-@interface NSString (MJPropertyKey)
-
-///  If JSON key is "xxx.xxx", so add one more key for it.
-- (MJPropertyKey *)propertyKey;
-
-/// Create keys with dot form, which is splitted by dot.
-- (NSArray<MJPropertyKey *> *)mj_multiKeys;
-
-@end
-
-@implementation NSString (MJPropertyKey)
-
-- (MJPropertyKey *)propertyKey {
-    MJPropertyKey *specialKey = [[MJPropertyKey alloc] init];
-    specialKey.name = self;
-    return specialKey;
-}
-
-- (NSArray<MJPropertyKey *> *)mj_multiKeys {
-    if (self.length == 0) return nil;
-    
-    NSMutableArray *multiKeys = [NSMutableArray array];
-    // 如果有多级映射
-    NSArray *oldKeys = [self componentsSeparatedByString:@"."];
-    
-    for (NSString *oldKey in oldKeys) {
-        NSUInteger start = [oldKey rangeOfString:@"["].location;
-        if (start != NSNotFound) { // 有索引的key
-            NSString *prefixKey = [oldKey substringToIndex:start];
-            NSString *indexKey = prefixKey;
-            if (prefixKey.length) {
-                MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-                propertyKey.name = prefixKey;
-                [multiKeys addObject:propertyKey];
-                
-                indexKey = [oldKey stringByReplacingOccurrencesOfString:prefixKey withString:@""];
-            }
-            
-            /** 解析索引 **/
-            // 元素
-            NSArray *cmps = [[indexKey stringByReplacingOccurrencesOfString:@"[" withString:@""] componentsSeparatedByString:@"]"];
-            for (NSInteger i = 0; i<cmps.count - 1; i++) {
-                MJPropertyKey *subPropertyKey = [[MJPropertyKey alloc] init];
-                subPropertyKey.type = MJPropertyKeyTypeArray;
-                subPropertyKey.name = cmps[i];
-                [multiKeys addObject:subPropertyKey];
-            }
-        } else { // 没有索引的key
-            MJPropertyKey *propertyKey = [[MJPropertyKey alloc] init];
-            propertyKey.name = oldKey;
-            [multiKeys addObject:propertyKey];
-        }
-    }
-    
-    return multiKeys;
-}
-
-@end
 
 @import CoreData;
 

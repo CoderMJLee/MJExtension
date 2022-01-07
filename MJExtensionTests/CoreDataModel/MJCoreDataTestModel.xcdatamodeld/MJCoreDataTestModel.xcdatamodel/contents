@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="MJCDTester" representedClassName="MJCoreDataTester" syncable="YES">
+    <entity name="Person" representedClassName="MJCoreDataPerson" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="tester" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tester" inverseName="relatives" inverseEntity="Tester"/>
+    </entity>
+    <entity name="Tester" representedClassName="MJCoreDataTester" syncable="YES">
         <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String"/>
         <attribute name="isJuan" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="relatives" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MJCDTester"/>
+        <relationship name="relatives" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="tester" inverseEntity="Person"/>
     </entity>
     <elements>
-        <element name="MJCDTester" positionX="-63" positionY="-18" width="128" height="104"/>
+        <element name="Tester" positionX="-63" positionY="-18" width="128" height="104"/>
+        <element name="Person" positionX="-45" positionY="45" width="128" height="74"/>
     </elements>
 </model>

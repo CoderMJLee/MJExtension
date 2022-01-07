@@ -31,15 +31,6 @@
  */
 - (instancetype)mj_setKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
 
-/**
- *  通过模型数组来创建一个字典数组
- *  @param objectArray 模型数组
- *  @return 字典数组
- */
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray;
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray keys:(NSArray *)keys;
-+ (NSMutableArray *)mj_keyValuesArrayWithObjectArray:(NSArray *)objectArray ignoredKeys:(NSArray *)ignoredKeys;
-
 #pragma mark - 字典转模型
 /**
  *  通过字典来创建一个模型

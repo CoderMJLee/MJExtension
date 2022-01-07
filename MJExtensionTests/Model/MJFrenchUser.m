@@ -14,4 +14,11 @@
     return [NSLocale localeWithLocaleIdentifier:@"fr_FR"];//ru_RU
 }
 
+/// Depreacated API
++ (NSDictionary *)mj_objectClassInArray {
+    return @{
+        @"cats": MJCat.class
+    };
+}
+
 @end

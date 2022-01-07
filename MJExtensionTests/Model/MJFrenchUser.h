@@ -7,10 +7,13 @@
 //
 
 #import "MJUser.h"
+#import "MJCat.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MJFrenchUser : MJUser
+
+@property (nonatomic) NSSet<MJCat *> *cats;
 
 @property (nonatomic) long double money_longDouble;
 

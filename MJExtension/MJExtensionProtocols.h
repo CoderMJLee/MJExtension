@@ -31,7 +31,7 @@
 
 @end
 
-@protocol MJECoding <NSObject>
+@protocol MJECoding <NSObject, NSCoding>
 @optional
 /// Array for those properties that should only be allowed to coding.
 + (NSArray *)mj_allowedCodingPropertyNames;

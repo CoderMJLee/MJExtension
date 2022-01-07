@@ -62,8 +62,8 @@ class CoreDataTests: XCTestCase {
             XCTAssert(tester.age == Values.age)
         }
         
-        static func coreDataObject(in context: NSManagedObjectContext) -> MJCoreDataTester {
-            return NSEntityDescription.insertNewObject(forEntityName: MJCoreDataTester.entity().name!, into: context) as! MJCoreDataTester
+        static func coreDataObject<T: NSManagedObject>(for type: T.Type, in context: NSManagedObjectContext) -> T {
+            return NSEntityDescription.insertNewObject(forEntityName: T.entity().name!, into: context) as! T
         }
     }
     
@@ -83,10 +83,9 @@ class CoreDataTests: XCTestCase {
             for relative in relatives {
                 switch relative.name {
                 case Values.name:
-                    Values.basicAssert(relative)
+                    XCTAssert(tester.name == Values.name)
+                    XCTAssert(tester.age == Values.age)
                 case Values.broName:
-                    XCTAssert(relative.isJuan == Values.isJuan)
-                    XCTAssert(relative.identifier == Values.identifier)
                     XCTAssert(relative.name == Values.broName)
                     XCTAssert(relative.age == Values.broAge)
                 default: break
@@ -97,17 +96,15 @@ class CoreDataTests: XCTestCase {
     
     func testCoreDataObject2JSON() {
         context.performAndWait {
-            let coreDataObject = Values.coreDataObject(in: context)
+            let coreDataObject = Values.coreDataObject(for: MJCoreDataTester.self, in: context)
             coreDataObject.name = Values.name
             coreDataObject.isJuan = Values.isJuan
             coreDataObject.age = Values.age
             coreDataObject.identifier = Values.identifier
             
-            let broObject = Values.coreDataObject(in: context)
+            let broObject = Values.coreDataObject(for: MJCoreDataPerson.self, in: context)
             broObject.name = Values.broName
-            broObject.isJuan = Values.isJuan
             broObject.age = Values.broAge
-            broObject.identifier = Values.identifier
             coreDataObject.addToRelatives(broObject)
             
             guard let dict = coreDataObject.mj_JSONObject() as? [String: Any] else {

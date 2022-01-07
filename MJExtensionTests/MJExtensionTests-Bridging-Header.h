@@ -10,3 +10,4 @@
 #import "MJDog.h"
 #import "MJBook.h"
 #import "MJBox.h"
+#import "MJFrenchUser.h"

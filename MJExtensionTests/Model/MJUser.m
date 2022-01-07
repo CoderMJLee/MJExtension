@@ -10,6 +10,10 @@
 
 @import MJExtension;
 
+@interface MJUser() <MJEConfiguration>
+
+@end
+
 @implementation MJUser
 //+ (NSArray *)mj_allowedPropertyNames {
 //    return @[@"name", @"icon"];
