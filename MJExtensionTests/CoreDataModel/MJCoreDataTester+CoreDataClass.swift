@@ -16,7 +16,7 @@ import MJExtension
 public class MJCoreDataTester: NSManagedObject, MJEConfiguration {
     public static func mj_classInfoInCollection() -> [AnyHashable : Any]! {
         return [
-            "relatives": MJCoreDataTester.self
+            "relatives": MJCoreDataPerson.self
         ]
     }
 }

@@ -2,7 +2,7 @@
 //  MJCoreDataPerson+CoreDataProperties.swift
 //  MJExtensionTests
 //
-//  Created by Frank on 2022/1/7.
+//  Created by Frank on 2022/1/10.
 //  Copyright © 2022 MJ Lee. All rights reserved.
 //
 //

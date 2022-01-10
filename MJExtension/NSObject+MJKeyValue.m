@@ -111,7 +111,7 @@ static const char MJErrorKey = '\0';
     if (MJE_isFromFoundation(self)) return [NSMutableArray arrayWithArray:keyValuesArray];
     
     // 2.创建数组
-    NSMutableArray *modelArray = [NSMutableArray array];
+    NSMutableArray *modelArray = NSMutableArray.array;
     
     // 3.遍历
     for (NSDictionary *keyValues in keyValuesArray) {
@@ -183,13 +183,13 @@ static const char MJErrorKey = '\0';
         return [NSJSONSerialization JSONObjectWithData:(NSData *)self options:kNilOptions error:nil];
     }
     
-    id object = [self mj_unsafe_JSONObjectWithRecursiveMode:isRecusiveMode keys:keys ignoredKeys:ignoredKeys];
+    id object = [self mj_unsafe_JSONObjectWithRecursiveMode:isRecusiveMode keys:keys ignoredKeys:ignoredKeys managedIDs:nil];
     if ([object isKindOfClass:NSArray.class]) return object;
     if ([object isKindOfClass:NSDictionary.class]) return object;
     return nil;
 }
 
-- (id)mj_unsafe_JSONObjectWithRecursiveMode:(BOOL)isRecursive keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys {
+- (id)mj_unsafe_JSONObjectWithRecursiveMode:(BOOL)isRecursive keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys managedIDs:(NSMutableSet<NSManagedObjectID *> *)managedIDs {
     if (self == NSNull.null) return NSNull.null;
     if ([self isKindOfClass:NSString.class]) return self;
     if ([self isKindOfClass:NSNumber.class]) {
@@ -209,7 +209,8 @@ static const char MJErrorKey = '\0';
             NSString *key = [anyKey isKindOfClass:NSString.class] ? anyKey : [anyKey description];
             if (!key) continue;
             id objJSON = [obj mj_unsafe_JSONObjectWithRecursiveMode:YES
-                                                               keys:nil ignoredKeys:nil];
+                                                               keys:nil ignoredKeys:nil
+                                                     managedIDs:managedIDs];
             if (!objJSON) continue;
             result[key] = objJSON;
         }
@@ -226,8 +227,13 @@ static const char MJErrorKey = '\0';
         if ([NSJSONSerialization isValidJSONObject:array]) return array;
         NSMutableArray *result = [NSMutableArray new];
         for (id obj in array) {
+            if ([obj isKindOfClass:NSManagedObject.class]) {
+                BOOL isloopPoint = [managedIDs containsObject:[obj objectID]];
+                if (isloopPoint) continue;
+            }
             id objJSON = [obj mj_unsafe_JSONObjectWithRecursiveMode:YES
-                                                                 keys:nil ignoredKeys:nil];
+                                                                 keys:nil ignoredKeys:nil
+                                                     managedIDs:managedIDs];
             if (objJSON) [result addObject:objJSON];
         }
         return result;
@@ -241,8 +247,12 @@ static const char MJErrorKey = '\0';
     if (MJE_isFromFoundation(self.class)) return nil;
     
     MJEClass *classCache = [MJEClass cachedClass:self.class];
-    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSMutableDictionary *result = NSMutableDictionary.dictionary;
     NSArray<MJProperty *> *allProperties = classCache->_allProperties;
+    BOOL selfIsManagedObject = classCache->_isNSManaged;
+    
+    NSMutableSet<NSManagedObjectID *> *IDs;
+    if (selfIsManagedObject) IDs = managedIDs ?: NSMutableSet.set;
     
     for (MJProperty *property in allProperties) {
         // 0.检测是否被忽略
@@ -261,8 +271,22 @@ static const char MJErrorKey = '\0';
         if (!value) continue;
         
         if (property.typeClass) {
+            // this is deadloop solution for inverse relationship.
+            // https://github.com/CoderMJLee/MJExtension/issues/839
+            if (selfIsManagedObject) {
+                NSManagedObject *mSelf = (NSManagedObject *)self;
+                BOOL hasRelationship = mSelf.entity.relationshipsByName[property.name].inverseRelationship;
+                if (hasRelationship) {
+                    [IDs addObject:mSelf.objectID];
+                    if ([value isKindOfClass:NSManagedObject.class]) {
+                        BOOL isloopPoint = [IDs containsObject:[value objectID]];
+                        if (isloopPoint) continue;
+                    }
+                }
+            }
             value = [value mj_unsafe_JSONObjectWithRecursiveMode:YES
-                                                            keys:nil ignoredKeys:nil];
+                                                            keys:nil ignoredKeys:nil
+                                                      managedIDs:IDs];
         } else {
             switch (property.type) {
                 case MJEPropertyTypeClass: {
@@ -296,9 +320,9 @@ static const char MJErrorKey = '\0';
                         id tempInnerContainer = [propertyKey valueInObject:innerContainer];
                         if (tempInnerContainer == nil || tempInnerContainer == NSNull.null) {
                             if (nextPropertyKey.type == MJPropertyKeyTypeDictionary) {
-                                tempInnerContainer = [NSMutableDictionary dictionary];
+                                tempInnerContainer = NSMutableDictionary.dictionary;
                             } else {
-                                tempInnerContainer = [NSMutableArray array];
+                                tempInnerContainer = NSMutableArray.array;
                             }
                             if (propertyKey.type == MJPropertyKeyTypeDictionary) {
                                 innerContainer[propertyKey.name] = tempInnerContainer;
@@ -737,7 +761,7 @@ static const char MJErrorKey = '\0';
             } else if (objectClass) {
                 if (objectClass == [NSURL class] && [value isKindOfClass:[NSArray class]]) {
                     // string array -> url array
-                    NSMutableArray *urlArray = [NSMutableArray array];
+                    NSMutableArray *urlArray = NSMutableArray.array;
                     for (NSString *string in value) {
                         if (![string isKindOfClass:[NSString class]]) continue;
                         [urlArray addObject:string.mj_url];

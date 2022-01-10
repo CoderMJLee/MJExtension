@@ -221,7 +221,7 @@
         }
     } else if ([originKey isKindOfClass:NSArray.class]) {
         _isMultiMapping = YES;
-        NSMutableArray *keyses = [NSMutableArray array];
+        NSMutableArray *keyses = NSMutableArray.array;
         for (NSString *stringKey in originKey) {
             NSArray *multiKeys = stringKey.mj_multiKeys;
             if (!multiKeys.count) continue;

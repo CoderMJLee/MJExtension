@@ -29,11 +29,11 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:MJExtensionTests/Plans/TestAllConversionCorrectness.xctestplan">
+            reference = "container:MJExtensionTests/Plans/TestAllConversionCorrectness.xctestplan"
+            default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:MJExtensionTests/Plans/MJExtension.xctestplan"
-            default = "YES">
+            reference = "container:MJExtensionTests/Plans/MJExtension.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

@@ -36,7 +36,7 @@
 - (NSArray<MJPropertyKey *> *)mj_multiKeys {
     if (self.length == 0) return nil;
     
-    NSMutableArray *multiKeys = [NSMutableArray array];
+    NSMutableArray *multiKeys = NSMutableArray.array;
     // 如果有多级映射
     NSArray *oldKeys = [self componentsSeparatedByString:@"."];
     

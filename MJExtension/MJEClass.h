@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSLocale * _Nullable _numberLocale;
     NSDateFormatter * _Nullable _dateFormatter;
     BOOL _shouldReferenceKeyReplacementInJSONExport;
+    /// Core Data class
+    BOOL _isNSManaged;
 }
 
 - (void)setNeedsUpdate;

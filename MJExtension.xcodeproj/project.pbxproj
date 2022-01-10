@@ -23,7 +23,9 @@
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
 		018717B52787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */; };
-		018717B62787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */; };
+		018717B62787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717B42787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataProperties.swift */; };
+		018717C32788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717C12788552B0024B7F9 /* MJCDTesterInverseSelf+CoreDataClass.swift */; };
+		018717C42788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018717C22788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataProperties.swift */; };
 		01BB00FD277EC1FF002EF5B3 /* DeprecatedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */; };
 		01BB0100277EE8DC002EF5B3 /* NSDate+MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01BB0101277EE8DC002EF5B3 /* NSDate+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */; };
@@ -100,7 +102,9 @@
 		0179886B24EFA460007F7FBC /* MJTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJTester.swift; sourceTree = "<group>"; };
 		0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModelTests.swift; sourceTree = "<group>"; };
 		018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataPerson+CoreDataClass.swift"; sourceTree = "<group>"; };
-		018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataPerson +CoreDataProperties.swift"; sourceTree = "<group>"; };
+		018717B42787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCoreDataPerson+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		018717C12788552B0024B7F9 /* MJCDTesterInverseSelf+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCDTesterInverseSelf+CoreDataClass.swift"; sourceTree = "<group>"; };
+		018717C22788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJCDTesterInverseSelf+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		01BB00FC277EC1FF002EF5B3 /* DeprecatedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeprecatedAPITests.swift; sourceTree = "<group>"; };
 		01BB00FE277EE8DB002EF5B3 /* NSDate+MJExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+MJExtension.h"; sourceTree = "<group>"; };
 		01BB00FF277EE8DB002EF5B3 /* NSDate+MJExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MJExtension.m"; sourceTree = "<group>"; };
@@ -192,7 +196,9 @@
 				0107507926E88EAC00AAEA10 /* MJCoreDataTester+CoreDataClass.swift */,
 				0130F20F2784441E00800FF3 /* MJCoreDataTester+CoreDataProperties.swift */,
 				018717B32787E6CB0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift */,
-				018717B42787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift */,
+				018717B42787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataProperties.swift */,
+				018717C12788552B0024B7F9 /* MJCDTesterInverseSelf+CoreDataClass.swift */,
+				018717C22788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataProperties.swift */,
 			);
 			path = CoreDataModel;
 			sourceTree = "<group>";
@@ -556,7 +562,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D2DBA812317DBE0005A689E /* MJStatusResult.m in Sources */,
+				018717C32788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataClass.swift in Sources */,
 				01BC91E627741D8C004E5265 /* MJArticle.swift in Sources */,
+				018717C42788552C0024B7F9 /* MJCDTesterInverseSelf+CoreDataProperties.swift in Sources */,
 				2D2DBA7C2317DBE0005A689E /* MJStudent.m in Sources */,
 				2D2DBA822317DBE0005A689E /* MJStatus.m in Sources */,
 				0130F2122784442200800FF3 /* MJCoreDataTester+CoreDataProperties.swift in Sources */,
@@ -581,7 +589,7 @@
 				0107507E26E890C100AAEA10 /* CoreDataTests.swift in Sources */,
 				018717B52787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataClass.swift in Sources */,
 				0107507826E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld in Sources */,
-				018717B62787E6CC0024B7F9 /* MJCoreDataPerson +CoreDataProperties.swift in Sources */,
+				018717B62787E6CC0024B7F9 /* MJCoreDataPerson+CoreDataProperties.swift in Sources */,
 				2D2DBA7A2317DBE0005A689E /* MJDog.m in Sources */,
 				01052EAD25F872D00049EC6F /* MultiThreadTests.swift in Sources */,
 				01BC91E427741956004E5265 /* MJCredential.swift in Sources */,

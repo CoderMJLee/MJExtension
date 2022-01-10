@@ -34,14 +34,10 @@ class CoreDataTests: XCTestCase {
             "name": name,
             "relatives": [
                 [
-                    "isJuan": isJuan,
-                    "identifier": identifier,
                     "age": broAge,
                     "name": broName
                 ],
                 [
-                    "isJuan": isJuan,
-                    "identifier": "7355608",
                     "age": age,
                     "name": name
                 ]
@@ -122,10 +118,46 @@ class CoreDataTests: XCTestCase {
                 fatalError("relatives cast error")
             }
             let bro = relatives[0]
-            XCTAssert(bro["isJuan"] as? Bool == Values.isJuan)
-            XCTAssert(bro["identifier"] as? String == Values.identifier)
             XCTAssert(bro["name"] as? String == Values.broName)
             XCTAssert(bro["age"] as? Int16 == Values.broAge)
+            XCTAssertNil(bro["tester"])
+        }
+    }
+    
+    func testCoreData2JSON_InverseSelf() {
+        context.performAndWait {
+            let coreDataObject = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            coreDataObject.name = Values.name
+            coreDataObject.isJuan = Values.isJuan
+            coreDataObject.age = Values.age
+            coreDataObject.identifier = Values.identifier
+            
+            let broObject = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            broObject.name = Values.broName
+            broObject.age = Values.broAge
+            broObject.isJuan = Values.isJuan
+            broObject.identifier = Values.identifier
+            coreDataObject.addToRelatives(broObject)
+            
+            guard let dict = coreDataObject.mj_JSONObject() as? [String: Any] else {
+                fatalError("conversion to core data object failed")
+            }
+            
+            XCTAssert(dict["isJuan"] as? Bool == Values.isJuan)
+            XCTAssert(dict["identifier"] as? String == Values.identifier)
+            XCTAssert(dict["name"] as? String == Values.name)
+            XCTAssert(dict["age"] as? Int16 == Values.age)
+            
+            XCTAssertNotNil(dict["relatives"])
+            XCTAssertEqual((dict["relatives"] as! [Any]).count, 1)
+            guard let relatives = dict["relatives"] as? [[String: Any]] else {
+                fatalError("relatives cast error")
+            }
+            let bro = relatives[0]
+            XCTAssert(bro["name"] as? String == Values.broName)
+            XCTAssert(bro["age"] as? Int16 == Values.broAge)
+            XCTAssert(bro["isJuan"] as? Bool == Values.isJuan)
+            XCTAssert(bro["identifier"] as? String == Values.identifier)
         }
     }
 }

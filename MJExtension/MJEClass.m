@@ -39,6 +39,8 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     if (!cls) return nil;
     self = [super init];
     
+    _isNSManaged = [cls isSubclassOfClass:NSManagedObject.class];
+    
     // Check inheritance of configurations
     BOOL shouldAutoInheritFromSuper = YES;
     if ([cls respondsToSelector:@selector(mj_shouldAutoInheritConfigurations)]) {
@@ -184,9 +186,9 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
                               replacedKeys:(NSDictionary *)replacedKeys
                  hasKeyReplacementModifier:(BOOL)hasKeyReplacementModifier
                                    inClass:(Class)cls {
-    NSMutableArray<MJProperty *> *allProperties = [NSMutableArray array];
-    NSMutableArray<MJProperty *> *codingProperties = [NSMutableArray array];
-    NSMutableArray<MJProperty *> *allProperties2JSON = [NSMutableArray array];
+    NSMutableArray<MJProperty *> *allProperties = NSMutableArray.array;
+    NSMutableArray<MJProperty *> *codingProperties = NSMutableArray.array;
+    NSMutableArray<MJProperty *> *allProperties2JSON = NSMutableArray.array;
     [cls mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         // 1. get all property list
         unsigned int outCount = 0;
