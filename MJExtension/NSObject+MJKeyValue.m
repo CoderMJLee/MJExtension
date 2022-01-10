@@ -189,7 +189,7 @@ static const char MJErrorKey = '\0';
     return nil;
 }
 
-- (id)mj_unsafe_JSONObjectWithRecursiveMode:(BOOL)isRecursive keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys managedIDs:(NSMutableSet<NSManagedObjectID *> *)managedIDs {
+- (id)mj_unsafe_JSONObjectWithRecursiveMode:(BOOL)isRecursive keys:(NSArray *)keys ignoredKeys:(NSArray *)ignoredKeys managedIDs:(NSSet<NSManagedObjectID *> *)managedIDs {
     if (self == NSNull.null) return NSNull.null;
     if ([self isKindOfClass:NSString.class]) return self;
     if ([self isKindOfClass:NSNumber.class]) {
@@ -252,7 +252,7 @@ static const char MJErrorKey = '\0';
     BOOL selfIsManagedObject = classCache->_isNSManaged;
     
     NSMutableSet<NSManagedObjectID *> *IDs;
-    if (selfIsManagedObject) IDs = managedIDs ?: NSMutableSet.set;
+    if (selfIsManagedObject) IDs = managedIDs.mutableCopy ?: NSMutableSet.set;
     
     for (MJProperty *property in allProperties) {
         // 0.检测是否被忽略
@@ -275,8 +275,8 @@ static const char MJErrorKey = '\0';
             // https://github.com/CoderMJLee/MJExtension/issues/839
             if (selfIsManagedObject) {
                 NSManagedObject *mSelf = (NSManagedObject *)self;
-                BOOL hasRelationship = mSelf.entity.relationshipsByName[property.name].inverseRelationship;
-                if (hasRelationship) {
+                BOOL hasInverseRelationship = mSelf.entity.relationshipsByName[property.name].inverseRelationship;
+                if (hasInverseRelationship) {
                     [IDs addObject:mSelf.objectID];
                     if ([value isKindOfClass:NSManagedObject.class]) {
                         BOOL isloopPoint = [IDs containsObject:[value objectID]];

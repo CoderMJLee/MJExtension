@@ -34,12 +34,30 @@ class CoreDataTests: XCTestCase {
             "name": name,
             "relatives": [
                 [
-                    "age": broAge,
-                    "name": broName
+                    "age": cousinAge,
+                    "name": cousinName
                 ],
                 [
                     "age": age,
                     "name": name
+                ],
+                [
+                    "age": sisAge,
+                    "name": sisName
+                ],
+                [
+                    "age": broAge,
+                    "name": broName
+                ]
+            ],
+            "blood": [
+                [
+                    "age": cousinAge,
+                    "name": cousinName
+                ],
+                [
+                    "age": sisAge,
+                    "name": sisName
                 ]
             ]
         ]
@@ -48,8 +66,12 @@ class CoreDataTests: XCTestCase {
         static let isJuan = true
         static let age: Int16 = 24
         static let identifier = "7355608"
-        static var broAge = age + 1
-        static let broName = "huNter"
+        static var cousinAge = age + 1
+        static let cousinName = "huNter"
+        static let sisName = "Jovana"
+        static var sisAge = age - 5
+        static let broName = "YNK"
+        static let broAge = age + 5
         
         static func basicAssert(_ tester: MJCoreDataTester) {
             XCTAssert(tester.isJuan == Values.isJuan)
@@ -74,16 +96,18 @@ class CoreDataTests: XCTestCase {
             guard let relatives = tester.relatives else {
                 fatalError("CoreData data structure damaged!")
             }
-            XCTAssert(relatives.count != 0)
+            XCTAssertEqual(relatives.count, 4)
             
             for relative in relatives {
                 switch relative.name {
                 case Values.name:
-                    XCTAssert(tester.name == Values.name)
-                    XCTAssert(tester.age == Values.age)
+                    XCTAssert(relative.age == Values.age)
                 case Values.broName:
-                    XCTAssert(relative.name == Values.broName)
                     XCTAssert(relative.age == Values.broAge)
+                case Values.sisName:
+                    XCTAssert(relative.age == Values.sisAge)
+                case Values.cousinName:
+                    XCTAssert(relative.age == Values.cousinAge)
                 default: break
                 }
             }
@@ -92,18 +116,18 @@ class CoreDataTests: XCTestCase {
     
     func testCoreDataObject2JSON() {
         context.performAndWait {
-            let coreDataObject = Values.coreDataObject(for: MJCoreDataTester.self, in: context)
-            coreDataObject.name = Values.name
-            coreDataObject.isJuan = Values.isJuan
-            coreDataObject.age = Values.age
-            coreDataObject.identifier = Values.identifier
+            let niko = Values.coreDataObject(for: MJCoreDataTester.self, in: context)
+            niko.name = Values.name
+            niko.isJuan = Values.isJuan
+            niko.age = Values.age
+            niko.identifier = Values.identifier
             
-            let broObject = Values.coreDataObject(for: MJCoreDataPerson.self, in: context)
-            broObject.name = Values.broName
-            broObject.age = Values.broAge
-            coreDataObject.addToRelatives(broObject)
+            let cousin = Values.coreDataObject(for: MJCoreDataPerson.self, in: context)
+            cousin.name = Values.broName
+            cousin.age = Values.broAge
+            niko.addToRelatives(cousin)
             
-            guard let dict = coreDataObject.mj_JSONObject() as? [String: Any] else {
+            guard let dict = niko.mj_JSONObject() as? [String: Any] else {
                 fatalError("conversion to core data object failed")
             }
             
@@ -117,47 +141,164 @@ class CoreDataTests: XCTestCase {
             guard let relatives = dict["relatives"] as? [[String: Any]] else {
                 fatalError("relatives cast error")
             }
-            let bro = relatives[0]
-            XCTAssert(bro["name"] as? String == Values.broName)
-            XCTAssert(bro["age"] as? Int16 == Values.broAge)
-            XCTAssertNil(bro["tester"])
+            let cousinInfo = relatives[0]
+            XCTAssert(cousinInfo["name"] as? String == Values.broName)
+            XCTAssert(cousinInfo["age"] as? Int16 == Values.broAge)
+            XCTAssertNil(cousinInfo["tester"])
         }
     }
     
     func testCoreData2JSON_InverseSelf() {
         context.performAndWait {
-            let coreDataObject = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
-            coreDataObject.name = Values.name
-            coreDataObject.isJuan = Values.isJuan
-            coreDataObject.age = Values.age
-            coreDataObject.identifier = Values.identifier
+            let niko = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            niko.name = Values.name
+            niko.isJuan = Values.isJuan
+            niko.age = Values.age
+            niko.identifier = Values.identifier
             
-            let broObject = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
-            broObject.name = Values.broName
-            broObject.age = Values.broAge
-            broObject.isJuan = Values.isJuan
-            broObject.identifier = Values.identifier
-            coreDataObject.addToRelatives(broObject)
+            let bro = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            bro.name = Values.broName
+            bro.age = Values.broAge
+            bro.isJuan = Values.isJuan
+            bro.identifier = Values.identifier
+            niko.addToRelatives(bro)
             
-            guard let dict = coreDataObject.mj_JSONObject() as? [String: Any] else {
+            let sis = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            sis.name = Values.sisName
+            sis.age = Values.sisAge
+            sis.isJuan = !Values.isJuan
+            sis.identifier = Values.identifier
+            niko.addToRelatives(sis)
+            
+            let cousin = Values.coreDataObject(for: MJCDTesterInverseSelf.self, in: context)
+            cousin.name = Values.cousinName
+            cousin.age = Values.cousinAge
+            cousin.isJuan = Values.isJuan
+            cousin.identifier = Values.identifier
+            niko.addToRelatives(cousin)
+            
+            guard let nikoInfo = niko.mj_JSONObject() as? [String: Any] else {
                 fatalError("conversion to core data object failed")
             }
             
-            XCTAssert(dict["isJuan"] as? Bool == Values.isJuan)
-            XCTAssert(dict["identifier"] as? String == Values.identifier)
-            XCTAssert(dict["name"] as? String == Values.name)
-            XCTAssert(dict["age"] as? Int16 == Values.age)
-            
-            XCTAssertNotNil(dict["relatives"])
-            XCTAssertEqual((dict["relatives"] as! [Any]).count, 1)
-            guard let relatives = dict["relatives"] as? [[String: Any]] else {
-                fatalError("relatives cast error")
+            XCTAssert(nikoInfo["isJuan"] as? Bool == Values.isJuan)
+            XCTAssert(nikoInfo["identifier"] as? String == Values.identifier)
+            XCTAssert(nikoInfo["name"] as? String == Values.name)
+            XCTAssert(nikoInfo["age"] as? Int16 == Values.age)
+            // check relatives
+            do {
+                XCTAssertNotNil(nikoInfo["relatives"])
+                XCTAssertEqual((nikoInfo["relatives"] as! [Any]).count, 3)
+                guard let relatives = nikoInfo["relatives"] as? [[String: Any]] else {
+                    fatalError("relatives cast error")
+                }
+                for info in relatives {
+                    let name = info["name"] as! String
+                    switch name {
+                    case Values.sisName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.sisAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, !Values.isJuan)
+                    case Values.cousinName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.cousinAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, Values.isJuan)
+                    case Values.broName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.broAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, Values.isJuan)
+                    default: break
+                    }
+                    
+                    XCTAssertEqual(info["identifier"] as? String, Values.identifier)
+                }
             }
-            let bro = relatives[0]
-            XCTAssert(bro["name"] as? String == Values.broName)
-            XCTAssert(bro["age"] as? Int16 == Values.broAge)
-            XCTAssert(bro["isJuan"] as? Bool == Values.isJuan)
-            XCTAssert(bro["identifier"] as? String == Values.identifier)
+        }
+    }
+    
+    func testCoreData2JSON_Many2Many() {
+        context.performAndWait {
+            let niko = Values.coreDataObject(for: MJCDTesterMany2Many.self, in: context)
+            niko.name = Values.name
+            niko.isJuan = Values.isJuan
+            niko.age = Values.age
+            niko.identifier = Values.identifier
+            
+            let bro = Values.coreDataObject(for: MJCDTesterMany2Many.self, in: context)
+            bro.name = Values.broName
+            bro.age = Values.broAge
+            bro.isJuan = Values.isJuan
+            bro.identifier = Values.identifier
+            niko.addToRelatives(bro)
+            
+            let sis = Values.coreDataObject(for: MJCDTesterMany2Many.self, in: context)
+            sis.name = Values.sisName
+            sis.age = Values.sisAge
+            sis.isJuan = !Values.isJuan
+            sis.identifier = Values.identifier
+            niko.addToRelatives(sis)
+            niko.addToBloods(sis)
+            
+            let cousin = Values.coreDataObject(for: MJCDTesterMany2Many.self, in: context)
+            cousin.name = Values.cousinName
+            cousin.age = Values.cousinAge
+            cousin.isJuan = Values.isJuan
+            cousin.identifier = Values.identifier
+            niko.addToRelatives(cousin)
+            niko.addToBloods(cousin)
+            
+            guard let nikoInfo = niko.mj_JSONObject() as? [String: Any] else {
+                fatalError("conversion to core data object failed")
+            }
+            
+            XCTAssert(nikoInfo["isJuan"] as? Bool == Values.isJuan)
+            XCTAssert(nikoInfo["identifier"] as? String == Values.identifier)
+            XCTAssert(nikoInfo["name"] as? String == Values.name)
+            XCTAssert(nikoInfo["age"] as? Int16 == Values.age)
+            // check relatives
+            do {
+                XCTAssertNotNil(nikoInfo["relatives"])
+                XCTAssertEqual((nikoInfo["relatives"] as! [Any]).count, 3)
+                guard let relatives = nikoInfo["relatives"] as? [[String: Any]] else {
+                    fatalError("relatives cast error")
+                }
+                for info in relatives {
+                    let name = info["name"] as! String
+                    switch name {
+                    case Values.sisName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.sisAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, !Values.isJuan)
+                    case Values.cousinName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.cousinAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, Values.isJuan)
+                    case Values.broName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.broAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, Values.isJuan)
+                    default: break
+                    }
+                    
+                    XCTAssertEqual(info["identifier"] as? String, Values.identifier)
+                }
+            }
+            // check bloods
+            do {
+                XCTAssertNotNil(nikoInfo["bloods"])
+                XCTAssertEqual((nikoInfo["bloods"] as! [Any]).count, 2)
+                guard let bloods = nikoInfo["bloods"] as? [[String: Any]] else {
+                    fatalError("bloods cast error")
+                }
+                for info in bloods {
+                    let name = info["name"] as! String
+                    switch name {
+                    case Values.sisName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.sisAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, !Values.isJuan)
+                    case Values.cousinName:
+                        XCTAssertEqual(info["age"] as? Int16, Values.cousinAge)
+                        XCTAssertEqual(info["isJuan"] as? Bool, Values.isJuan)
+                    default: break
+                    }
+                    
+                    XCTAssertEqual(info["identifier"] as? String, Values.identifier)
+                }
+            }
         }
     }
 }

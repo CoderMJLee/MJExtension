@@ -10,6 +10,17 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="MJCDTesterInverseSelf"/>
         </fetchedProperty>
     </entity>
+    <entity name="MJCDTesterMany2Many" representedClassName="MJCDTesterMany2Many" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String"/>
+        <attribute name="isJuan" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="bloods" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="MJCDTesterMany2Many" inverseName="relatives" inverseEntity="MJCDTesterMany2Many"/>
+        <relationship name="relatives" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="MJCDTesterMany2Many" inverseName="bloods" inverseEntity="MJCDTesterMany2Many"/>
+        <fetchedProperty name="bestJuans" optional="YES" transient="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="MJCDTesterMany2Many"/>
+        </fetchedProperty>
+    </entity>
     <entity name="Person" representedClassName="MJCoreDataPerson" syncable="YES">
         <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -32,5 +43,6 @@
         <element name="MJCDTesterInverseSelf" positionX="-36" positionY="63" width="128" height="125"/>
         <element name="Person" positionX="-45" positionY="45" width="128" height="95"/>
         <element name="Tester" positionX="-63" positionY="-18" width="128" height="125"/>
+        <element name="MJCDTesterMany2Many" positionX="-36" positionY="90" width="128" height="140"/>
     </elements>
 </model>
