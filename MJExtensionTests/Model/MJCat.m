@@ -8,9 +8,6 @@
 
 #import "MJCat.h"
 
-// NSSecureCoding实现
-MJSecureCodingImplementation(MJCat, YES)
-
 @implementation MJCat
 
 + (NSDictionary *)mj_classInfoInCollection {

@@ -23,3 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+// NSSecureCoding实现
+MJSecureCodingImplementation(MJCat, YES)

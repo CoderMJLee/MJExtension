@@ -17,12 +17,12 @@
 
 /// Coding implementation
 #define MJCodingImplementation \
-- (id)initWithCoder:(NSCoder *)decoder { \
+- (nullable instancetype)initWithCoder:(nonnull NSCoder *)decoder { \
 if (self = [super init]) [self mj_decode:decoder]; \
 return self; \
 } \
 \
-- (void)encodeWithCoder:(NSCoder *)encoder { \
+- (void)encodeWithCoder:(nonnull NSCoder *)encoder { \
 [self mj_encode:encoder]; \
 }\
 
