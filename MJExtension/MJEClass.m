@@ -189,6 +189,9 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     NSMutableArray<MJProperty *> *allProperties = NSMutableArray.array;
     NSMutableArray<MJProperty *> *codingProperties = NSMutableArray.array;
     NSMutableArray<MJProperty *> *allProperties2JSON = NSMutableArray.array;
+    NSMutableDictionary *mapper = NSMutableDictionary.dictionary;
+    NSMutableArray<MJProperty *> *multiKeysProperties = NSMutableArray.array;
+
     [cls mj_enumerateClasses:^(__unsafe_unretained Class c, BOOL *stop) {
         // 1. get all property list
         unsigned int outCount = 0;
@@ -252,6 +255,14 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
                 
                 // handle keypath / keypath array / keypath array(with subkey)
                 [property handleOriginKey:key];
+                
+                // The property matched with a singular key is the only condition for dictionary enumeration.
+                if (property->_isMultiMapping) {
+                    [multiKeysProperties addObject:property];
+                } else {
+                    property->_nextSame = mapper[property->_mappedKey] ?: nil;
+                    mapper[property->_mappedKey] = property;
+                }
             }
             
             [allProperties addObject:property];
@@ -264,7 +275,9 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     _allProperties = allProperties.copy;
     _allCodingProperties = codingProperties.copy;
     _allProperties2JSON = allProperties2JSON.copy;
-    
+    _mapper = mapper.copy;
+    _multiKeysProperties = multiKeysProperties.copy;
+
     _propertiesCount = _allProperties.count;
 }
 

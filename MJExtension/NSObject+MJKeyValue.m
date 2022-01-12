@@ -15,7 +15,6 @@
 #import "NSDate+MJExtension.h"
 
 #define mj_selfSend(sel, type, value) mj_msgSendOne(self, sel, type, value)
-#define mj_selfSet(property, type, value) mj_selfSend(property.setter, type, value)
 #define mj_selfGet(property, type) mj_msgSendGet(self, property.getter, type)
 
 @interface NSObject () <MJEConfiguration>
@@ -48,11 +47,30 @@ static const char MJErrorKey = '\0';
     
     MJExtensionAssertError([object isKindOfClass:NSDictionary.class], self, self.class, @"keyValues参数不是一个字典");
     
-    MJEClass *classCache = [MJEClass cachedClass:self.class];
-    NSDictionary *dict = object;
+    __unsafe_unretained MJEClass *classCache = [MJEClass cachedClass:self.class];
+    __unsafe_unretained NSDictionary *dict = object;
 
-    [self mj_enumerateProperties:classCache->_allProperties
-                  withDictionary:dict classCache:classCache context:context];
+    // If only update a few property, boost speed.(test case: Benchmark - testPerformanceLargeFile)
+    if (classCache->_propertiesCount < dict.count) {
+        [self mj_enumerateProperties:classCache->_allProperties
+                   withDictionary:dict classCache:classCache
+                          context:context];
+    } else {
+        __unsafe_unretained NSDictionary *mapper = classCache->_mapper;
+        [dict enumerateKeysAndObjectsUsingBlock:^(__unsafe_unretained NSString * _Nonnull key, __unsafe_unretained id _Nonnull value, BOOL * _Nonnull stop) {
+            __unsafe_unretained MJProperty *property = [mapper objectForKey:key];
+            while (property) {
+                [self mj_setValue:value forProperty:property
+                       classCache:classCache context:context];
+                property = property->_nextSame;
+            }
+        }];
+        
+        if (classCache->_multiKeysProperties.count) {
+            [self mj_enumerateProperties:classCache->_multiKeysProperties
+                          withDictionary:dict classCache:classCache context:context];
+        }
+    }
 
     // 转换完毕
     if (classCache->_hasDictionary2ObjectModifier) {
@@ -363,7 +381,6 @@ static const char MJErrorKey = '\0';
                     withDictionary:(NSDictionary *)dictionary
                         classCache:(MJEClass *)classCache
                            context:(NSManagedObjectContext *)context {
-    NSLocale *locale = classCache->_numberLocale;
     for (MJProperty *property in properties) {
         // get value from dictionary
         id value = nil;
@@ -383,324 +400,333 @@ static const char MJErrorKey = '\0';
             }
         }
         
-        if (!value) continue;
-        if (value == NSNull.null) {
-            mj_selfSet(property, id, nil);
-            continue;
+        [self mj_setValue:value forProperty:property
+               classCache:classCache context:context];
+    }
+}
+
+- (void)mj_setValue:(__unsafe_unretained id)value
+        forProperty:(__unsafe_unretained MJProperty *)property
+         classCache:(__unsafe_unretained MJEClass *)classCache
+            context:(__unsafe_unretained NSManagedObjectContext *)context {
+#define mj_selfSetProperty(type, value) mj_msgSendOne(self, property.setter, type, value)
+    if (!value) return;
+    if (value == NSNull.null) {
+        mj_selfSetProperty(id, nil);
+        return;
+    }
+    // convert as different cases
+    MJEPropertyType type = property.type;
+    Class typeClass = property.typeClass;
+    Class classInCollecion = property.classInCollection;
+    MJEBasicType basicObjectType = property->_basicObjectType;
+    
+    if (property->_isBasicNumber) {
+        NSNumber *number = [self mj_numberWithValue:value
+                                               type:type
+                                             locale:classCache->_numberLocale];
+        switch (type) {
+            case MJEPropertyTypeBool: {
+                mj_selfSetProperty(BOOL, number.boolValue);
+            } break;
+            case MJEPropertyTypeInt8: {
+                mj_selfSetProperty(int8_t, number.charValue);
+            } break;
+            case MJEPropertyTypeUInt8: {
+                mj_selfSetProperty(uint8_t, number.unsignedCharValue);
+            } break;
+            case MJEPropertyTypeInt16: {
+                mj_selfSetProperty(int16_t, number.shortValue);
+            } break;
+            case MJEPropertyTypeUInt16: {
+                mj_selfSetProperty(uint16_t, number.unsignedShortValue);
+            } break;
+            case MJEPropertyTypeInt32: {
+                mj_selfSetProperty(int32_t, number.intValue);
+            } break;
+            case MJEPropertyTypeUInt32: {
+                mj_selfSetProperty(uint32_t, number.unsignedIntValue);
+            } break;
+            case MJEPropertyTypeInt64: {
+                mj_selfSetProperty(int64_t, number.longLongValue);
+            } break;
+            case MJEPropertyTypeUInt64: {
+                mj_selfSetProperty(uint64_t, number.unsignedLongLongValue);
+            } break;
+            case MJEPropertyTypeFloat: {
+                mj_selfSetProperty(float, number.floatValue);
+            } break;
+            case MJEPropertyTypeDouble: {
+                mj_selfSetProperty(double, number.doubleValue);
+            } break;
+            case MJEPropertyTypeLongDouble: {
+                if ([value isKindOfClass:NSString.class]) {
+                    long double num = [value mj_longDoubleValueWithLocale:classCache->_numberLocale];
+                    mj_selfSetProperty(long double, num);
+                } else {
+                    mj_selfSetProperty(long double, (long double)number.doubleValue);
+                }
+            } break;
+            default: break;
         }
-        // convert as different cases
-        MJEPropertyType type = property.type;
-        Class typeClass = property.typeClass;
-        Class classInCollecion = property.classInCollection;
-        MJEBasicType basicObjectType = property->_basicObjectType;
-        
-        if (property->_isBasicNumber) {
-            NSNumber *number = [self mj_numberWithValue:value
-                                                   type:type
-                                                 locale:locale];
-            switch (type) {
-                case MJEPropertyTypeBool: {
-                    mj_selfSet(property, BOOL, number.boolValue);
-                } break;
-                case MJEPropertyTypeInt8: {
-                    mj_selfSet(property, int8_t, number.charValue);
-                } break;
-                case MJEPropertyTypeUInt8: {
-                    mj_selfSet(property, uint8_t, number.unsignedCharValue);
-                } break;
-                case MJEPropertyTypeInt16: {
-                    mj_selfSet(property, int16_t, number.shortValue);
-                } break;
-                case MJEPropertyTypeUInt16: {
-                    mj_selfSet(property, uint16_t, number.unsignedShortValue);
-                } break;
-                case MJEPropertyTypeInt32: {
-                    mj_selfSet(property, int32_t, number.intValue);
-                } break;
-                case MJEPropertyTypeUInt32: {
-                    mj_selfSet(property, uint32_t, number.unsignedIntValue);
-                } break;
-                case MJEPropertyTypeInt64: {
-                    mj_selfSet(property, int64_t, number.longLongValue);
-                } break;
-                case MJEPropertyTypeUInt64: {
-                    mj_selfSet(property, uint64_t, number.unsignedLongLongValue);
-                } break;
-                case MJEPropertyTypeFloat: {
-                    mj_selfSet(property, float, number.floatValue);
-                } break;
-                case MJEPropertyTypeDouble: {
-                    mj_selfSet(property, double, number.doubleValue);
-                } break;
-                case MJEPropertyTypeLongDouble: {
-                    if ([value isKindOfClass:NSString.class]) {
-                        long double num = [value mj_longDoubleValueWithLocale:locale];
-                        mj_selfSet(property, long double, num);
+    } else if (basicObjectType) {
+        switch (basicObjectType) {
+            case MJEBasicTypeString:
+            case MJEBasicTypeMutableString:{
+                NSString *result;
+                if ([value isKindOfClass:NSString.class]) {
+                    result = value;
+                } else if ([value isKindOfClass:NSNumber.class]) {
+                    result = [value stringValue];
+                } else if ([value isKindOfClass:NSData.class]) {
+                    result = [[NSString alloc] initWithData:value encoding:NSUTF8StringEncoding];
+                } else if ([value isKindOfClass:NSURL.class]) {
+                    result = [value absoluteString];
+                } else if ([value isKindOfClass:NSAttributedString.class]) {
+                    result = [value string];
+                }
+                if (basicObjectType == MJEBasicTypeMutableString) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+                
+            case MJEBasicTypeDate:{
+                if ([value isKindOfClass:NSDate.class]) {
+                    mj_selfSetProperty(id, value);
+                } else if ([value isKindOfClass:NSString.class]) {
+                    NSDateFormatter *formatter = classCache->_dateFormatter;
+                    NSDate *date = formatter ? [formatter dateFromString:value] : [value mj_date];
+                    mj_selfSetProperty(id, date);
+                }
+            } break;
+                
+            case MJEBasicTypeURL:{
+                if ([value isKindOfClass:NSURL.class]) {
+                    mj_selfSetProperty(id, value);
+                } else if ([value isKindOfClass:NSString.class]) {
+                    mj_selfSetProperty(id, [value mj_url]);
+                }
+            } break;
+            case MJEBasicTypeValue: {
+                if ([value isKindOfClass:NSValue.class]) {
+                    mj_selfSetProperty(id, value);
+                }
+            } break;
+            case MJEBasicTypeNumber: {
+                NSNumber *num = [self mj_numberWithValue:value
+                                                    type:type
+                                                  locale:classCache->_numberLocale];
+                mj_selfSetProperty(id, num);
+            } break;
+            case MJEBasicTypeDecimalNumber: {
+                if ([value isKindOfClass:NSDecimalNumber.class]) {
+                    mj_selfSetProperty(id, value);
+                } else if ([value isKindOfClass:NSNumber.class]) {
+                    NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithDecimal:[value decimalValue]];
+                    mj_selfSetProperty(id, decimalNum);
+                } else if ([value isKindOfClass:NSString.class]) {
+                    NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithString:value locale:classCache->_numberLocale];
+                    if (decimalNum == NSDecimalNumber.notANumber) {
+                        decimalNum = nil;
+                    }
+                    mj_selfSetProperty(id, decimalNum);
+                }
+            } break;
+            
+            case MJEBasicTypeData:
+            case MJEBasicTypeMutableData:{
+                NSData *result;
+                if ([value isKindOfClass:NSData.class]) {
+                    result = value;
+                } else if ([value isKindOfClass:NSString.class]) {
+                    result = [value dataUsingEncoding:NSUTF8StringEncoding];
+                }
+                if (basicObjectType == MJEBasicTypeMutableData) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+                
+            case MJEBasicTypeArray:
+            case MJEBasicTypeMutableArray:{
+                NSArray *result;
+                if ([value isKindOfClass:NSArray.class]) result = value;
+                else if ([value isKindOfClass:NSSet.class]) result = [value allObjects];
+                // generic
+                if (classInCollecion) {
+                    NSMutableArray *objects = [NSMutableArray new];
+                    // handle URL array
+                    if (classInCollecion == NSURL.class) {
+                        for (id element in result) {
+                            if ([element isKindOfClass:NSString.class]) {
+                                id object = [element mj_url];
+                                if (object) [objects addObject:object];
+                            } else if ([element isKindOfClass:NSArray.class]) {
+                                id object = [NSURL mj_objectArrayWithKeyValuesArray:element context:context];
+                                if (object) [objects addObject:object];
+                            }
+                        }
                     } else {
-                        mj_selfSet(property, long double, (long double)number.doubleValue);
-                    }
-                } break;
-                default: break;
-            }
-        } else if (basicObjectType) {
-            switch (basicObjectType) {
-                case MJEBasicTypeString:
-                case MJEBasicTypeMutableString:{
-                    NSString *result;
-                    if ([value isKindOfClass:NSString.class]) {
-                        result = value;
-                    } else if ([value isKindOfClass:NSNumber.class]) {
-                        result = [value stringValue];
-                    } else if ([value isKindOfClass:NSData.class]) {
-                        result = [[NSString alloc] initWithData:value encoding:NSUTF8StringEncoding];
-                    } else if ([value isKindOfClass:NSURL.class]) {
-                        result = [value absoluteString];
-                    } else if ([value isKindOfClass:NSAttributedString.class]) {
-                        result = [value string];
-                    }
-                    if (basicObjectType == MJEBasicTypeMutableString) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                    
-                case MJEBasicTypeDate:{
-                    if ([value isKindOfClass:NSDate.class]) {
-                        mj_selfSet(property, id, value);
-                    } else if ([value isKindOfClass:NSString.class]) {
-                        NSDateFormatter *formatter = classCache->_dateFormatter;
-                        NSDate *date = formatter ? [formatter dateFromString:value] : [value mj_date];
-                        mj_selfSet(property, id, date);
-                    }
-                } break;
-                    
-                case MJEBasicTypeURL:{
-                    if ([value isKindOfClass:NSURL.class]) {
-                        mj_selfSet(property, id, value);
-                    } else if ([value isKindOfClass:NSString.class]) {
-                        mj_selfSet(property, id, [value mj_url]);
-                    }
-                } break;
-                case MJEBasicTypeValue: {
-                    if ([value isKindOfClass:NSValue.class]) {
-                        mj_selfSet(property, id, value);
-                    }
-                } break;
-                case MJEBasicTypeNumber: {
-                    NSNumber *num = [self mj_numberWithValue:value
-                                                        type:type
-                                                      locale:locale];
-                    mj_selfSet(property, id, num);
-                } break;
-                case MJEBasicTypeDecimalNumber: {
-                    if ([value isKindOfClass:NSDecimalNumber.class]) {
-                        mj_selfSet(property, id, value);
-                    } else if ([value isKindOfClass:NSNumber.class]) {
-                        NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithDecimal:[value decimalValue]];
-                        mj_selfSet(property, id, decimalNum);
-                    } else if ([value isKindOfClass:NSString.class]) {
-                        NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithString:value locale:locale];
-                        if (decimalNum == NSDecimalNumber.notANumber) {
-                            decimalNum = nil;
-                        }
-                        mj_selfSet(property, id, decimalNum);
-                    }
-                } break;
-                
-                case MJEBasicTypeData:
-                case MJEBasicTypeMutableData:{
-                    NSData *result;
-                    if ([value isKindOfClass:NSData.class]) {
-                        result = value;
-                    } else if ([value isKindOfClass:NSString.class]) {
-                        result = [value dataUsingEncoding:NSUTF8StringEncoding];
-                    }
-                    if (basicObjectType == MJEBasicTypeMutableData) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                    
-                case MJEBasicTypeArray:
-                case MJEBasicTypeMutableArray:{
-                    NSArray *result;
-                    if ([value isKindOfClass:NSArray.class]) result = value;
-                    else if ([value isKindOfClass:NSSet.class]) result = [value allObjects];
-                    // generic
-                    if (classInCollecion) {
-                        NSMutableArray *objects = [NSMutableArray new];
-                        // handle URL array
-                        if (classInCollecion == NSURL.class) {
-                            for (id element in result) {
-                                if ([element isKindOfClass:NSString.class]) {
-                                    id object = [element mj_url];
-                                    if (object) [objects addObject:object];
-                                } else if ([element isKindOfClass:NSArray.class]) {
-                                    id object = [NSURL mj_objectArrayWithKeyValuesArray:element context:context];
-                                    if (object) [objects addObject:object];
-                                }
-                            }
-                        } else {
-                            for (id element in result) {
-                                if ([element isKindOfClass:NSDictionary.class]) {
-                                    Class cls = classInCollecion;
-                                    if (property->_hasClassModifier) {
-                                        cls = [cls mj_modifiedClassForDictionary:element];
-                                        if (!cls) cls = classInCollecion;
-                                    }
-                                    id object = [cls mj_objectWithKeyValues:element context:context];
-                                    if (object) [objects addObject:object];
-                                } else if ([element isKindOfClass:classInCollecion]) {
-                                    [objects addObject:element];
-                                } else if ([element isKindOfClass:NSArray.class]) {
-                                    id object = [classInCollecion mj_objectArrayWithKeyValuesArray:element context:context];
-                                    if (object) [objects addObject:object];
-                                }
-                            }
-                        }
-                        mj_selfSet(property, id, objects);
-                        continue;
-                    }
-                    if (basicObjectType == MJEBasicTypeMutableArray) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                
-                case MJEBasicTypeDictionary:
-                case MJEBasicTypeMutableDictionary:{
-                    if (![value isKindOfClass:NSDictionary.class]) continue;
-                    NSDictionary *result = value;
-                    // generic
-                    if (classInCollecion) {
-                        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:result.count];
-                        [result enumerateKeysAndObjectsUsingBlock:^(id _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
-                            if ([obj isKindOfClass:NSDictionary.class]) {
-                                Class cls = classInCollecion;
-                                if (property->_hasClassModifier) {
-                                    cls = [cls mj_modifiedClassForDictionary:obj];
-                                    if (!cls) cls = classInCollecion;
-                                }
-                                id object = [cls mj_objectWithKeyValues:obj context:context];
-                                if (object) dict[key] = object;
-                            } else if ([obj isKindOfClass:NSArray.class]) {
-                                id object = [classInCollecion mj_objectArrayWithKeyValuesArray:obj context:context];
-                                if (object) dict[key] = object;
-                            }
-                        }];
-                        mj_selfSet(property, id, dict);
-                        continue;
-                    }
-                    if (basicObjectType == MJEBasicTypeMutableDictionary) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                    
-                case MJEBasicTypeSet:
-                case MJEBasicTypeMutableSet:{
-                    NSSet *result;
-                    if ([value isKindOfClass:NSArray.class]) result = [NSSet setWithArray:value];
-                    else if ([value isKindOfClass:NSSet.class]) result = value;
-                    // generic
-                    if (classInCollecion) {
-                        NSMutableSet *set = [NSMutableSet setWithCapacity:result.count];
                         for (id element in result) {
-                            if ([element isKindOfClass:classInCollecion]) {
-                                [set addObject:element];
-                            } else if ([element isKindOfClass:NSDictionary.class]) {
+                            if ([element isKindOfClass:NSDictionary.class]) {
                                 Class cls = classInCollecion;
                                 if (property->_hasClassModifier) {
                                     cls = [cls mj_modifiedClassForDictionary:element];
                                     if (!cls) cls = classInCollecion;
                                 }
                                 id object = [cls mj_objectWithKeyValues:element context:context];
-                                if (object) [set addObject:object];
+                                if (object) [objects addObject:object];
+                            } else if ([element isKindOfClass:classInCollecion]) {
+                                [objects addObject:element];
+                            } else if ([element isKindOfClass:NSArray.class]) {
+                                id object = [classInCollecion mj_objectArrayWithKeyValuesArray:element context:context];
+                                if (object) [objects addObject:object];
                             }
                         }
-                        mj_selfSet(property, id, set);
-                        continue;
                     }
-                    if (basicObjectType == MJEBasicTypeMutableSet) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                    
-                case MJEBasicTypeOrderedSet:
-                case MJEBasicTypeMutableOrderedSet:{
-                    NSOrderedSet *result;
-                    if ([value isKindOfClass:NSArray.class]) result = [NSOrderedSet orderedSetWithArray:value];
-                    else if ([value isKindOfClass:NSSet.class]) result = [NSOrderedSet orderedSetWithSet:value];
-                    else if ([value isKindOfClass:NSOrderedSet.class]) result = value;
-                    // generic
-                    if (classInCollecion) {
-                        NSMutableOrderedSet *set = [NSMutableOrderedSet orderedSetWithCapacity:result.count];
-                        for (id element in result) {
-                            if ([element isKindOfClass:classInCollecion]) {
-                                [set addObject:element];
-                            } else if ([element isKindOfClass:NSDictionary.class]) {
-                                Class cls = classInCollecion;
-                                if (property->_hasClassModifier) {
-                                    cls = [cls mj_modifiedClassForDictionary:element];
-                                    if (!cls) cls = classInCollecion;
-                                }
-                                id object = [cls mj_objectWithKeyValues:element context:context];
-                                if (object) [set addObject:object];
-                            }
-                        }
-                        mj_selfSet(property, id, set);
-                        continue;
-                    }
-                    if (basicObjectType == MJEBasicTypeMutableOrderedSet) {
-                        result = result.mutableCopy;
-                    }
-                    mj_selfSet(property, id, result);
-                } break;
-                default: break;
-            }
-        } else {
-            switch (type) {
-                case MJEPropertyTypeObject: {
-                    if ([value isKindOfClass:typeClass] || !typeClass) {
-                        mj_selfSet(property, id, value);
-                    } else if ([value isKindOfClass:NSDictionary.class]) {
-                        NSObject *subObject = mj_selfGet(property, id);
-                        if (subObject) {
-                            [subObject mj_setKeyValues:value context:context];
-                        } else {
-                            Class cls = typeClass;
+                    mj_selfSetProperty(id, objects);
+                    return;
+                }
+                if (basicObjectType == MJEBasicTypeMutableArray) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+            
+            case MJEBasicTypeDictionary:
+            case MJEBasicTypeMutableDictionary:{
+                if (![value isKindOfClass:NSDictionary.class]) return;
+                NSDictionary *result = value;
+                // generic
+                if (classInCollecion) {
+                    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:result.count];
+                    [result enumerateKeysAndObjectsUsingBlock:^(id _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+                        if ([obj isKindOfClass:NSDictionary.class]) {
+                            Class cls = classInCollecion;
                             if (property->_hasClassModifier) {
-                                cls = [cls mj_modifiedClassForDictionary:value];
-                                if (!cls) cls = property.classInCollection;
+                                cls = [cls mj_modifiedClassForDictionary:obj];
+                                if (!cls) cls = classInCollecion;
                             }
-                            subObject = [cls mj_objectWithKeyValues:value
-                                                            context:context];
-                            mj_selfSet(property, id, subObject);
+                            id object = [cls mj_objectWithKeyValues:obj context:context];
+                            if (object) dict[key] = object;
+                        } else if ([obj isKindOfClass:NSArray.class]) {
+                            id object = [classInCollecion mj_objectArrayWithKeyValuesArray:obj context:context];
+                            if (object) dict[key] = object;
+                        }
+                    }];
+                    mj_selfSetProperty(id, dict);
+                    return;
+                }
+                if (basicObjectType == MJEBasicTypeMutableDictionary) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+                
+            case MJEBasicTypeSet:
+            case MJEBasicTypeMutableSet:{
+                NSSet *result;
+                if ([value isKindOfClass:NSArray.class]) result = [NSSet setWithArray:value];
+                else if ([value isKindOfClass:NSSet.class]) result = value;
+                // generic
+                if (classInCollecion) {
+                    NSMutableSet *set = [NSMutableSet setWithCapacity:result.count];
+                    for (id element in result) {
+                        if ([element isKindOfClass:classInCollecion]) {
+                            [set addObject:element];
+                        } else if ([element isKindOfClass:NSDictionary.class]) {
+                            Class cls = classInCollecion;
+                            if (property->_hasClassModifier) {
+                                cls = [cls mj_modifiedClassForDictionary:element];
+                                if (!cls) cls = classInCollecion;
+                            }
+                            id object = [cls mj_objectWithKeyValues:element context:context];
+                            if (object) [set addObject:object];
                         }
                     }
-                } break;
-                case MJEPropertyTypeClass: {
-                    Class cls = nil;
-                    if ([value isKindOfClass:NSString.class]) {
-                        cls = NSClassFromString(value);
-                        if (cls) mj_selfSet(property, Class, cls);
+                    mj_selfSetProperty(id, set);
+                    return;
+                }
+                if (basicObjectType == MJEBasicTypeMutableSet) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+                
+            case MJEBasicTypeOrderedSet:
+            case MJEBasicTypeMutableOrderedSet:{
+                NSOrderedSet *result;
+                if ([value isKindOfClass:NSArray.class]) result = [NSOrderedSet orderedSetWithArray:value];
+                else if ([value isKindOfClass:NSSet.class]) result = [NSOrderedSet orderedSetWithSet:value];
+                else if ([value isKindOfClass:NSOrderedSet.class]) result = value;
+                // generic
+                if (classInCollecion) {
+                    NSMutableOrderedSet *set = [NSMutableOrderedSet orderedSetWithCapacity:result.count];
+                    for (id element in result) {
+                        if ([element isKindOfClass:classInCollecion]) {
+                            [set addObject:element];
+                        } else if ([element isKindOfClass:NSDictionary.class]) {
+                            Class cls = classInCollecion;
+                            if (property->_hasClassModifier) {
+                                cls = [cls mj_modifiedClassForDictionary:element];
+                                if (!cls) cls = classInCollecion;
+                            }
+                            id object = [cls mj_objectWithKeyValues:element context:context];
+                            if (object) [set addObject:object];
+                        }
+                    }
+                    mj_selfSetProperty(id, set);
+                    return;
+                }
+                if (basicObjectType == MJEBasicTypeMutableOrderedSet) {
+                    result = result.mutableCopy;
+                }
+                mj_selfSetProperty(id, result);
+            } break;
+            default: break;
+        }
+    } else {
+        switch (type) {
+            case MJEPropertyTypeObject: {
+                if ([value isKindOfClass:typeClass] || !typeClass) {
+                    mj_selfSetProperty(id, value);
+                } else if ([value isKindOfClass:NSDictionary.class]) {
+                    NSObject *subObject = mj_msgSendGet(self, property.getter, id);
+                    if (subObject) {
+                        [subObject mj_setKeyValues:value context:context];
                     } else {
-                        cls = object_getClass(value);
-                        if (cls && class_isMetaClass(cls)) {
-                            mj_selfSet(property, Class, value);
+                        Class cls = typeClass;
+                        if (property->_hasClassModifier) {
+                            cls = [cls mj_modifiedClassForDictionary:value];
+                            if (!cls) cls = property.classInCollection;
                         }
+                        subObject = [cls mj_objectWithKeyValues:value
+                                                        context:context];
+                        mj_selfSetProperty(id, subObject);
                     }
-                } break;
-                case MJEPropertyTypeSEL: {
-                    if ([value isKindOfClass:NSString.class]) {
-                        SEL selector = NSSelectorFromString(value);
-                        if (selector) mj_selfSet(property, SEL, selector);
+                }
+            } break;
+            case MJEPropertyTypeClass: {
+                Class cls = nil;
+                if ([value isKindOfClass:NSString.class]) {
+                    cls = NSClassFromString(value);
+                    if (cls) mj_selfSetProperty(Class, cls);
+                } else {
+                    cls = object_getClass(value);
+                    if (cls && class_isMetaClass(cls)) {
+                        mj_selfSetProperty(Class, value);
                     }
-                } break;
-                default:
-                    break;
-            }
+                }
+            } break;
+            case MJEPropertyTypeSEL: {
+                if ([value isKindOfClass:NSString.class]) {
+                    SEL selector = NSSelectorFromString(value);
+                    if (selector) mj_selfSetProperty(SEL, selector);
+                }
+            } break;
+            default:
+                break;
         }
     }
 }

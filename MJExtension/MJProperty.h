@@ -95,6 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
     MJEBasicType _basicObjectType;
     /// True if property is a number (e.g: bool, double, int, etc.).
     BOOL _isBasicNumber;
+    /// The property has the same value with it. It's a linked list data structure for different property linked by the same key, which will result to get the same value.
+    MJProperty * _Nullable _nextSame;
 }
 
 /// `Property` name that defined by class.
