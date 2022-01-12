@@ -9,11 +9,21 @@
     }
   ],
   "defaultOptions" : {
-
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {
       "parallelizable" : true,
+      "skippedTests" : [
+        "CoreDataTests",
+        "DeprecatedAPITests",
+        "MJExtensionTests",
+        "MultiThreadTests",
+        "SpecialPropertyTypeTests",
+        "SwiftModelTests",
+        "ValueTransformingBasicFunctionTests",
+        "ValueTransformingTests"
+      ],
       "target" : {
         "containerPath" : "container:MJExtension.xcodeproj",
         "identifier" : "2D2DBA542317DBB9005A689E",

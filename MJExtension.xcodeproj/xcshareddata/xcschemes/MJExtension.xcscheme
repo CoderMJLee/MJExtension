@@ -33,7 +33,7 @@
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:MJExtensionTests/Plans/MJExtension.xctestplan">
+            reference = "container:MJExtensionTests/Plans/MJExtensionPerformance.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

@@ -14,7 +14,9 @@
       "identifier" : "2D2DB9F32317DA64005A689E",
       "name" : "MJExtension"
     },
-    "testTimeoutsEnabled" : true
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
+    "threadSanitizerEnabled" : true
   },
   "testTargets" : [
     {
