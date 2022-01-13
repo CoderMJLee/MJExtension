@@ -46,9 +46,9 @@ typedef void (^MJClassesEnumeration)(Class c, BOOL *stop);
     if ([cls respondsToSelector:@selector(mj_shouldAutoInheritConfigurations)]) {
         shouldAutoInheritFromSuper = [cls mj_shouldAutoInheritConfigurations];
     }
-    _shouldReferenceKeyReplacementInJSONExport = YES;
-    if ([cls respondsToSelector:@selector(mj_shouldReferenceKeyReplacementInJSONExport)]) {
-        _shouldReferenceKeyReplacementInJSONExport = [cls mj_shouldReferenceKeyReplacementInJSONExport];
+    _shouldReferToKeyReplacementInJSONExport = YES;
+    if ([cls respondsToSelector:@selector(mj_shouldReferToKeyReplacementInJSONExport)]) {
+        _shouldReferToKeyReplacementInJSONExport = [cls mj_shouldReferToKeyReplacementInJSONExport];
     }
     
     NSMutableSet *ignoredList = [NSMutableSet new];

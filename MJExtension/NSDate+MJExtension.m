@@ -10,7 +10,7 @@
 
 @implementation NSDate (MJExtension)
 
-- (NSString *)mj_defaultDateString {
+- (NSString *)mj_defaultString {
     static NSDateFormatter *formatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -21,6 +21,10 @@
     });
     NSString *dateString = [formatter stringFromDate:self];
     return dateString;
+}
+
+- (NSString *)mj_stringWithFormatter:(NSDateFormatter *)formatter {
+    return [formatter stringFromDate:self];
 }
 
 @end

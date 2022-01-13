@@ -255,7 +255,7 @@ static const char MJErrorKey = '\0';
     }
     if ([self isKindOfClass:NSURL.class]) return [(NSURL *)self absoluteString];
     if ([self isKindOfClass:NSAttributedString.class]) return [(NSAttributedString *)self string];
-    if ([self isKindOfClass:NSDate.class]) return [(NSDate *)self mj_defaultDateString];
+    if ([self isKindOfClass:NSDate.class]) return [(NSDate *)self mj_defaultString];
     if ([self isKindOfClass:NSData.class]) return nil;
     
     // Check if the object is a "Model Object"(we defined) after basic type conversion finished
@@ -317,7 +317,7 @@ static const char MJErrorKey = '\0';
         }
         
         // 4.赋值
-        if (classCache->_shouldReferenceKeyReplacementInJSONExport) {
+        if (classCache->_shouldReferToKeyReplacementInJSONExport) {
             if (property->_isMultiMapping) {
                 NSArray *propertyKeys = [property->_mappedMultiKeys firstObject];
                 NSUInteger keyCount = propertyKeys.count;

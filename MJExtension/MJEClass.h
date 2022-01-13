@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSInteger _propertiesCount;
     NSLocale * _Nullable _numberLocale;
     NSDateFormatter * _Nullable _dateFormatter;
-    BOOL _shouldReferenceKeyReplacementInJSONExport;
+    BOOL _shouldReferToKeyReplacementInJSONExport;
     /// Core Data class
     BOOL _isNSManaged;
 }

@@ -11,6 +11,8 @@
 @interface NSDate (MJExtension)
 
 /// Return date string based on "yyyy-MM-dd'T'HH:mm:ssZ" and "en_US_POSIX" locale.
-@property (nonatomic, readonly) NSString *mj_defaultDateString;
+@property (nonatomic, readonly) NSString *mj_defaultString;
+
+- (NSString *)mj_stringWithFormatter:(NSDateFormatter *)formatter;
 
 @end

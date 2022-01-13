@@ -81,6 +81,7 @@
 
 /// Used to coverts a string to a number.
 /// @discussion Normally "100,500" = 100. But "100,500" = 100.5 in France.
+/// @remark **This locale is not used from Model to JSON.**
 + (NSLocale *)mj_numberLocale;
 
 /// Used in date formatter that converts a string to a date.
@@ -92,6 +93,7 @@
 /// "yyyy-MM-dd'T'HH:mm:ssZ"
 /// "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 /// @endcode
+/// @remark **This formatter is not used from Model to JSON.**
 + (NSDateFormatter *)mj_dateFormatter;
 
 /// Inherits configurations from super class or not.
@@ -100,5 +102,5 @@
 
 /// Only works in replaced key configuration of JSON to Object. Other configurations are referenced.
 /// @discussion Default value is `true`(YES), if not implements it.
-+ (BOOL)mj_shouldReferenceKeyReplacementInJSONExport;
++ (BOOL)mj_shouldReferToKeyReplacementInJSONExport;
 @end
