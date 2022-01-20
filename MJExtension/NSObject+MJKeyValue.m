@@ -422,7 +422,7 @@ static const char MJErrorKey = '\0';
     MJEBasicType basicObjectType = property->_basicObjectType;
     
     if (property->_isBasicNumber) {
-        NSNumber *number = [self mj_numberWithValue:value
+        NSNumber *number = [NSObject mj_numberWithValue:value
                                                type:type
                                              locale:classCache->_numberLocale];
         switch (type) {
@@ -514,7 +514,7 @@ static const char MJErrorKey = '\0';
                 }
             } break;
             case MJEBasicTypeNumber: {
-                NSNumber *num = [self mj_numberWithValue:value
+                NSNumber *num = [NSObject mj_numberWithValue:value
                                                     type:type
                                                   locale:classCache->_numberLocale];
                 mj_selfSetProperty(id, num);
@@ -759,7 +759,7 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls) {
 }
 
 // Special dealing method. `value` should be NSString or NSNumber
-- (NSNumber *)mj_numberWithValue:(id)value
++ (NSNumber *)mj_numberWithValue:(id)value
                             type:(MJEPropertyType)type
                           locale:(NSLocale *)locale {
     static NSDictionary *boolStrings;
@@ -801,14 +801,16 @@ BOOL MJE_isFromFoundation(Class _Nonnull cls) {
         NSNumber *num = boolStrings[string];
         if (num) {
             number = num;
-        } else if (type == MJEPropertyTypeDouble) {
-            number = @([string mj_doubleValueWithLocale:locale]);
         // LongDouble cannot be represented by NSNumber
         } else if (type != MJEPropertyTypeLongDouble) {
             number = [NSDecimalNumber
                       decimalNumberWithString:string locale:locale];
             if (number == NSDecimalNumber.notANumber) {
-                number = nil;
+                if (type == MJEPropertyTypeDouble) {
+                    number = @([string mj_doubleValueWithLocale:locale]);
+                } else {
+                    number = nil;
+                }
             }
         }
     }

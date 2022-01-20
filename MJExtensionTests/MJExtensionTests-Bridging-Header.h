@@ -11,3 +11,5 @@
 #import "MJBook.h"
 #import "MJBox.h"
 #import "MJFrenchUser.h"
+
+#import "MJExtension_Private.h"

@@ -79,4 +79,25 @@ class ValueTransformingBasicFunctionTests: XCTestCase {
         let commaString = "\(commaValue),111234" as NSString
         XCTAssertEqual(commaValue, commaString.mj_doubleValue)
     }
+    
+    func testString2DoubleOverflow4DecimalNumber() throws {
+        func oneCaseTest(double: Double) {
+            let testDouble = double
+            let number = NSNumber(value: testDouble)
+            let testString = "\(testDouble),11234"
+            
+            let convertedDouble = NSObject.mj_number(withValue: testString, type: .double, locale: nil)
+            XCTAssertEqual(convertedDouble, number, "\(double) value is testing.")
+        }
+        
+        let testDoubles: [Double] = [
+            Double.greatestFiniteMagnitude,
+            1.797693134862315212414553441234433e+200,
+            43.4,
+        ]
+        
+        for testDouble in testDoubles {
+            oneCaseTest(double: testDouble)
+        }
+    }
 }
