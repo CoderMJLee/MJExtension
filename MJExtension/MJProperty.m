@@ -35,7 +35,7 @@
         switch (attributes[i].name[0]) {
             case 'T': { // Type
                 if (attributes[i].value) {
-                    _typeEncoding = [NSString stringWithUTF8String:attributes[i].value];
+                    _typeEncoding = @(attributes[i].value);
                     _type = MJEGetPropertyType(attributes[i].value);
                     
                     if (_type && _typeEncoding.length) {
@@ -51,17 +51,17 @@
             } break;
             case 'V': { // ivar
                 if (attributes[i].value) {
-                    _ivarName = [NSString stringWithUTF8String:attributes[i].value];
+                    _ivarName = @(attributes[i].value);
                 }
             } break;
             case 'G': { // custom getter
                 if (attributes[i].value) {
-                    _getter = NSSelectorFromString([NSString stringWithUTF8String:attributes[i].value]);
+                    _getter = NSSelectorFromString(@(attributes[i].value));
                 }
             } break;
             case 'S': { // custom setter
                 if (attributes[i].value) {
-                    _setter = NSSelectorFromString([NSString stringWithUTF8String:attributes[i].value]);
+                    _setter = NSSelectorFromString(@(attributes[i].value));
                 }
             }
             default: break;
