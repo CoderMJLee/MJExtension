@@ -165,8 +165,9 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                 }
             } else if (propertyClass == [NSString class]) {
                 if ([value isKindOfClass:[NSNumber class]]) {
-                    // NSNumber -> NSString
-                    value = [value description];
+                    // NSNumber -> NSString，直接使用 description 会导致精度丢失
+                    NSString *numberString = [NSString stringWithFormat:@"%lf", [(NSNumber *)value doubleValue]];
+                    value = [NSDecimalNumber decimalNumberWithString:numberString].stringValue;
                 } else if ([value isKindOfClass:[NSURL class]]) {
                     // NSURL -> NSString
                     value = [value absoluteString];
