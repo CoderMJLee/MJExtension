@@ -79,7 +79,10 @@ dispatch_once_t mje_onceTokenSemaphore;
     
     // 查看有没有需要替换的key
     if ((!key || [key isEqual:propertyName]) && [self respondsToSelector:@selector(mj_replacedKeyFromPropertyName)]) {
-        key = [self mj_replacedKeyFromPropertyName][propertyName];
+        [self mj_enumerateAllClasses:^(__unsafe_unretained Class c, BOOL *stop) {
+            key = [c mj_replacedKeyFromPropertyName][propertyName];
+            if (key) *stop = YES;
+        }];
     }
     
     if (!key || [key isEqual:propertyName]) {
