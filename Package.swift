@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -14,6 +14,7 @@ let package = Package(
             dependencies: [],
             path: "MJExtension",
             exclude: ["Info.plist"],
+            resources: [.copy("PrivacyInfo.xcprivacy")],
             publicHeadersPath: ".",
             cxxSettings: [
                 .headerSearchPath("."),

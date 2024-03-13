@@ -18,6 +18,7 @@
 		0107509826E8C5A300AAEA10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0107509726E8C5A300AAEA10 /* Assets.xcassets */; };
 		0107509B26E8C5A300AAEA10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0107509926E8C5A300AAEA10 /* LaunchScreen.storyboard */; };
 		0121B2CE26E9B277008EE973 /* MJCoreDataTestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0107507626E88DD400AAEA10 /* MJCoreDataTestModel.xcdatamodeld */; };
+		012254B52BA1481B007BD496 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 012254B42BA1481B007BD496 /* PrivacyInfo.xcprivacy */; };
 		0130EE80233C56D8008D2386 /* MJFrenchUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0130EE7F233C56D8008D2386 /* MJFrenchUser.m */; };
 		0179886C24EFA460007F7FBC /* MJTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886B24EFA460007F7FBC /* MJTester.swift */; };
 		0179887024EFA58B007F7FBC /* SwiftModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0179886F24EFA58B007F7FBC /* SwiftModelTests.swift */; };
@@ -80,6 +81,7 @@
 		0107509726E8C5A300AAEA10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0107509A26E8C5A300AAEA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0107509C26E8C5A300AAEA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		012254B42BA1481B007BD496 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0130EE7E233C56D8008D2386 /* MJFrenchUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJFrenchUser.h; sourceTree = "<group>"; };
 		0130EE7F233C56D8008D2386 /* MJFrenchUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJFrenchUser.m; sourceTree = "<group>"; };
 		0179886A24EFA460007F7FBC /* MJExtensionTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MJExtensionTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				2D2DBA0B2317DB32005A689E /* NSString+MJExtension.m */,
 				2D2DB9F62317DA64005A689E /* MJExtension.h */,
 				2D2DB9F72317DA64005A689E /* Info.plist */,
+				012254B42BA1481B007BD496 /* PrivacyInfo.xcprivacy */,
 			);
 			path = MJExtension;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				012254B52BA1481B007BD496 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
