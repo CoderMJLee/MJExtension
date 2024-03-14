@@ -290,8 +290,16 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
     MJExtensionAssertError([keyValuesArray isKindOfClass:[NSArray class]], nil, [self class], @"keyValuesArray参数不是一个数组");
     
     // 如果数组里面放的是NSString、NSNumber等数据
-    if ([MJFoundation isClassFromFoundation:self]) return [NSMutableArray arrayWithArray:keyValuesArray];
-    
+    // 则直接判断类型是否一致
+    if ([MJFoundation isClassFromFoundation:self]) {
+        NSMutableArray *modelArray = [NSMutableArray array];
+        [keyValuesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:self]) {
+                [modelArray addObject:obj];
+            }
+        }];
+        return modelArray;
+    }
 
     // 2.创建数组
     NSMutableArray *modelArray = [NSMutableArray array];
